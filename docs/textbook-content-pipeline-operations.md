@@ -2,7 +2,7 @@
 
 ## The one operator entrypoint
 
-Use Actions → QuantaEdge Textbook Content Pipeline → Run workflow. All component workflows are reusable workers; they have no independent push, schedule, or manual trigger. The default task is progress_report; it performs validation/reporting, not visual inference or lesson generation.
+Use Actions → QuantaEdge Textbook Content Pipeline → Run workflow. This is the sole textbook workflow file and operator entrypoint. Cache, extraction, mirror, candidate preparation, Layers 6–8 and audit are separate jobs within this one file; no other textbook workflow file or automatic trigger remains. The default task is progress_report; it performs validation/reporting, not visual inference or lesson generation.
 
 Choose one task deliberately:
 
@@ -49,7 +49,9 @@ Each current.v1.json handoff is a versioned quantaedge.textbook-pipeline-handoff
 - **Work/resource accounting:** attempts, completed batches, expected/processed/failed/unresolved counts, budget, model/prompt, and measured model startup/run durations where available.
 - **Validation/decision:** schema, identity, hash and reference validity; exact blockers; status, reason code, retryability, next action, review requirement and the publication-disabled flag.
 
-created_at is immutable for the saved stage history. last_progress_at changes only when durable work/counters change; an invocation or no-op status update is not progress. checkpoint_at changes only when the artifact checkpoint changes. completed_at is set only for an actually contract-validated COMPLETE stage; NEEDS_REVIEW is a saved review state, not completion. Never overwrite an earlier timestamp with a later poll just because the workflow ran again.
+created_at is immutable for the saved stage history. last_progress_at changes only when durable work/counters change; an invocation or no-op status update is not progress. checkpoint_at marks each durable savepoint, including a budgeted CHECKPOINTED state. completed_at is set only for an actually contract-validated COMPLETE stage; NEEDS_REVIEW is a saved review state, not completion. Never overwrite an earlier timestamp with a later poll just because the workflow ran again.
+
+The generated progress report has one timing row for every source book and each stage 0–8. It includes actual elapsed time, attempt and cumulative durations, expected total time, remaining-time estimate and the last progress timestamp. Layer 4 separately reports summed model-seconds and a remaining model-time estimate after at least five measured asset durations; model-seconds are not wall-clock time. Layers 6–8 share segment-generation calls, so their shared runtime is explicitly marked and must not be summed three times. Expected/remaining time is calibrated from the median of at least two completed measured runs for that layer and source class of work. When older artifacts have no timer or the sample size is too small, the report says Not recorded / estimate withheld; it never guesses elapsed time from file modification dates.
 
 ## Status and retry policy
 
@@ -68,7 +70,7 @@ The workflow does not automatically retry or infer the next action. Network/serv
 - The central workflow serializes resource-heavy work for the selected branch; pair matrix fan-out has max-parallel: 1. Do not increase this until timing data proves safe throughput and output commits are demonstrably conflict-free.
 - This avoids downloading/starting multiple vision models for the same period and avoids pair workers racing to write common catalogue/index files.
 - Workers checkpoint to the caller's selected branch. They do not git pull --rebase origin main or push content checkpoints to a hard-coded main ref.
-- Only the central workflow is operator-dispatchable. Component workflows are workflow_call only. The former five-minute resume coordinator and standalone duplicate visual-analysis workflow are removed.
+- Only the central workflow exists and is operator-dispatchable. Its job conditions select exactly one requested task. The former five-minute resume coordinator, standalone duplicate visual-analysis workflow, and the separate reusable cache/extraction/mirror/candidate/Layers 6–8/audit workflow files are removed.
 - A GitHub Actions result of success is not itself content completion. The artifact contract and the saved handoff must verify it.
 - No automated publication, source-edition substitution, cross-institution approval, or promotion from review-only draft state is performed by this pipeline.
 

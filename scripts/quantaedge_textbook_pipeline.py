@@ -67,6 +67,8 @@ def page_no(row):
     return None
 
 def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effective_path,ledger_path,*,corrections_path=None,repo_root=None):
+    layer5_started_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
+    layer5_started_clock=time.monotonic()
     root=Path(repo_root or Path.cwd()).resolve()
     inv,raw,man=read_json(inventory_path),read_json(raw_path),read_json(manifest_path)
     if inv.get("schema_version")!="quantaedge.visual-inventory.v1" or raw.get("schema_version")!="quantaedge.visual-analysis.v1":
@@ -181,6 +183,11 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
     paths={"inventory":rel(inventory_path,root),"raw_analysis":rel(raw_path,root),"manifest":rel(manifest_path,root),"text_jsonl":rel(text_path,root),"corrections":rel(corrections_path,root) if corrections_path else None,"effective_analysis_output":rel(effective_path,root),"coverage_ledger_output":rel(ledger_path,root)}
     write_json(effective_path,{"schema_version":"quantaedge.visual-analysis-effective.v1","created_at":raw.get("created_at"),"generated_at":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),"last_progress_at":raw.get("last_progress_at"),"source_book_id":bid,"source_pdf_sha256":sha,"raw_analysis_path":paths["raw_analysis"],"raw_analysis_sha256":hashlib.sha256(Path(raw_path).read_bytes()).hexdigest(),"model":raw.get("model"),"prompt_version":raw.get("prompt_version"),"corrections_path":paths["corrections"],"corrections_applied_count":len(accepted),"results":eff,"human_review_required":True,"publication_allowed":False})
     out={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,"generated_at":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),"last_progress_at":raw.get("last_progress_at"),"ledger_status":"COMPLETE" if unresolved==0 else "INCOMPLETE","source":{"class":src.get("class"),"language":src.get("language"),"subject":src.get("subject"),"source_book_id":bid,"source_pdf_sha256":sha,"edition":src.get("edition"),"pdf_page_count":count},"source_paths":paths,"summary":{"source_pdf_page_count":count,"inventory_page_records":len(pages),"page_text_records":sum(map(len,texts.values())),"pages_with_unresolved_text":page_bad,"inventory_asset_rows":len(assets),"eligible_visual_asset_rows":eligible,"raw_analysis_result_rows":len(results),"successful_visual_analyses":sum(x["analysis_status"]=="ANALYZED_REQUIRES_HUMAN_REVIEW" for x in visual_rows),"missing_visual_analyses":sum(x["analysis_status"]=="ANALYSIS_MISSING" for x in visual_rows),"failed_visual_analyses":sum(x["analysis_status"] in {"ANALYSIS_ERROR","ASSET_HASH_MISMATCH","ANALYSIS_STATUS_UNKNOWN","ANALYSIS_STALE_CONTEXT","ANALYSIS_STALE_CHECKPOINT"} for x in visual_rows),"orphan_analysis_results":len(orphans),"corrections_applied":len(accepted),"unresolved_count":unresolved,"mapping_status":"NOT_STARTED","analysis_model":raw.get("model"),"analysis_prompt_version":raw.get("prompt_version"),"publication_allowed":False},"pages":page_rows,"visuals":visual_rows,"orphan_analysis_asset_ids":orphans,"human_review_required":True,"publication_allowed":False}
+    layer5_completed_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
+    layer5_elapsed=round(time.monotonic()-layer5_started_clock,3)
+    out["timing"]={"layer":5,"status":"COMPLETE" if out.get("ledger_status")=="COMPLETE" else "INCOMPLETE",
+        "started_at":layer5_started_at,"completed_at":layer5_completed_at,"last_progress_at":layer5_completed_at,
+        "attempt_elapsed_seconds":layer5_elapsed,"timing_basis":"Monotonic time for effective-analysis and page/visual coverage reconciliation"}
     write_json(ledger_path,out);return out
 
 def git_checkpoint(repo,paths,message):

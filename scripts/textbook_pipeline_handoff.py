@@ -82,7 +82,8 @@ def pair_sources(pair: dict[str, str]) -> list[dict[str, str]]:
 
 
 def extraction_manifest(root: Path, source: dict[str, str]) -> tuple[Path | None, dict[str, Any] | None, list[str]]:
-    grade, book_id, language = source["class_no"], source["book_id"], source["language"]
+    grade, book_id = source["class_no"], source["book_id"]
+    language = source.get("language") or ("english" if "english" in book_id else "hindi")
     folder = root / "data" / "textbook-extractions" / f"class-{grade}" / language / "pages"
     if not folder.is_dir():
         return None, None, [f"{book_id}: extracted-page directory is missing."]
@@ -372,6 +373,51 @@ def validate_book_layer45(root: Path, source: dict[str, str]) -> tuple[bool, lis
     return not problems, sorted(set(problems)), {"source_book_id":book_id,"book_slug":slug,"class_no":grade,"source_pdf_sha256":source_sha or None,"counts":counts}
 
 
+def validate_layer4_book(root:Path,source:dict[str,str])->tuple[bool,list[str],dict[str,Any]]:
+    """Layer 4 contract: validate raw visual analysis without requiring Layer 5."""
+    problems=[];book_id,slug=source["book_id"],source["book_slug"];visual=root/"data"/"textbook-visuals"/slug
+    try:
+        index=load_json(visual/"visual-pipeline-index.v1.json");inventory=load_json(visual/"visual-inventory.v1.json")
+        raw_path=_declared(root,index.get("analysis_path"),f"{book_id} raw analysis",problems)
+        raw=load_json(raw_path) if raw_path else {}
+    except (OSError,ValueError,json.JSONDecodeError):
+        return False,[f"{book_id}: Layer 4 inventory/index/raw artifacts missing or invalid."],{}
+    digest=str(index.get("source_pdf_sha256") or "").lower()
+    if index.get("source_book_id")!=book_id:problems.append(f"{book_id}: Layer 4 source ID mismatch.")
+    if not re.fullmatch(r"[0-9a-f]{64}",digest):problems.append(f"{book_id}: Layer 4 source PDF hash invalid.")
+    if inventory.get("schema_version")!="quantaedge.visual-inventory.v1":problems.append(f"{book_id}: inventory schema mismatch.")
+    inv_source=inventory.get("source") or {}
+    if inv_source.get("book_id")!=book_id or str(inv_source.get("pdf_sha256") or "").lower()!=digest:
+        problems.append(f"{book_id}: inventory source identity/hash mismatch.")
+    eligible={}
+    for asset in inventory.get("assets",[]) if isinstance(inventory.get("assets"),list) else []:
+        if not isinstance(asset,dict) or asset.get("kind") not in ELIGIBLE_KINDS:continue
+        aid=str(asset.get("asset_id") or "")
+        if not aid or aid in eligible:problems.append(f"{book_id}: eligible asset ID missing/duplicated.");continue
+        eligible[aid]=asset
+    if raw.get("schema_version")!="quantaedge.visual-analysis.v1":problems.append(f"{book_id}: raw-analysis schema mismatch.")
+    if raw.get("source_book_id")!=book_id or str(raw.get("source_pdf_sha256") or "").lower()!=digest:
+        problems.append(f"{book_id}: raw-analysis source identity/hash mismatch.")
+    if not raw.get("model") or not raw.get("prompt_version"):problems.append(f"{book_id}: model/prompt missing.")
+    rows=raw.get("results") if isinstance(raw.get("results"),list) else []
+    by_id={}
+    for row in rows:
+        if not isinstance(row,dict):problems.append(f"{book_id}: malformed raw result.");continue
+        aid=str(row.get("asset_id") or "")
+        if not aid or aid in by_id:problems.append(f"{book_id}: raw result asset ID missing/duplicated.");continue
+        by_id[aid]=row
+    for aid,asset in eligible.items():
+        row=by_id.get(aid)
+        if not row:problems.append(f"{book_id}: eligible asset {aid} lacks a raw result.");continue
+        if str(row.get("asset_sha256") or "").lower()!=str(asset.get("asset_sha256") or "").lower():problems.append(f"{book_id}: raw asset hash mismatch for {aid}.")
+        if row.get("analysis_status")!="DRAFT_REQUIRES_REVIEW" or not isinstance(row.get("analysis"),dict):problems.append(f"{book_id}: raw result {aid} is not review-only analysis.")
+    summary=raw.get("summary") if isinstance(raw.get("summary"),dict) else {}
+    expected={"assets_eligible":len(eligible),"assets_analyzed":len(eligible),"assets_failed":0,"assets_remaining":0}
+    for key,value in expected.items():
+        if summary.get(key)!=value:problems.append(f"{book_id}: Layer 4 summary {key} incomplete.")
+    return not problems,sorted(set(problems)),{"counts":expected,"model":raw.get("model"),"prompt_version":raw.get("prompt_version")}
+
+
 def validate_pair_completion(root: Path, pair: dict[str, str]) -> tuple[bool, list[str]]:
     problems = []
     try:
@@ -388,7 +434,7 @@ def validate_pair_completion(root: Path, pair: dict[str, str]) -> tuple[bool, li
 def _paths_for_stage(root: Path, pair: dict[str,str], stage: int, source_book_id: str|None) -> tuple[list[Path],list[str]]:
     problems=[]; paths=[]
     sources=pair_sources(pair)
-    if source_book_id and stage != 5:
+    if source_book_id:
         sources=[s for s in sources if s["book_id"]==source_book_id]
         if not sources: return [],[f"{source_book_id} does not belong to {pair['book_pair_id']}."]
     for source in sources:
@@ -400,7 +446,7 @@ def _paths_for_stage(root: Path, pair: dict[str,str], stage: int, source_book_id
             if mp:
                 paths.append(mp)
                 if doc and isinstance(doc.get("text_jsonl"),str): paths.append(mp.parent/Path(doc["text_jsonl"]).name)
-        elif stage == 1: paths.extend([visual/"visual-inventory.v1.json",visual/"visual-pipeline-index.v1.json"])
+        elif stage == 1: paths.extend([visual/"visual-inventory.v1.json"])
         elif stage == 2: paths.extend([root/"data"/"textbook-visual-candidates-v3"/slug/name for name in ("candidates.v3.json","summary.v3.json","bundle-index.v3.json")])
         elif stage == 3: paths.extend([root/"data"/"textbook-visual-candidates-v3"/"catalogs"/f"{slug}.v3.json",root/"data"/"textbook-visual-candidates-v3"/"index.v1.json"])
         elif stage == 4:
@@ -428,30 +474,57 @@ def _paths_for_stage(root: Path, pair: dict[str,str], stage: int, source_book_id
     return list(dict.fromkeys(x for x in paths if x.is_file())), sorted(set(problems))
 
 
-def artifact_ref(root: Path, path: Path) -> dict[str, Any]:
-    out={"path":path.resolve().relative_to(root.resolve()).as_posix(),"sha256":sha256_file(path),"byte_size":path.stat().st_size}
+def _read_prefix_fields(path:Path, keys:list[str], stop_keys:tuple[str,...]=("results","pages","assets","visuals","segments"), limit:int=512*1024)->dict[str,Any]:
+    """Read small metadata only; stop before arrays with thousands of rows."""
     try:
-        value=load_json(path); out["schema_version"]=value.get("schema_version")
+        with path.open("r",encoding="utf-8") as stream: prefix=stream.read(limit)
+    except (OSError,UnicodeError): return {}
+    for stop in stop_keys:
+        match=re.search(r'"'+re.escape(stop)+r'"\s*:',prefix)
+        if match: prefix=prefix[:match.start()]
+    decoder=json.JSONDecoder(); found={}
+    for key in keys:
+        match=re.search(r'"'+re.escape(key)+r'"\s*:\s*',prefix)
+        if match:
+            try: found[key],_=decoder.raw_decode(prefix,match.end())
+            except json.JSONDecodeError: pass
+    return found
+
+
+def artifact_ref(root:Path,path:Path,*,compute_hash:bool=True)->dict[str,Any]:
+    """Avoid a second full-file read/JSON parse for huge per-asset checkpoints."""
+    size=path.stat().st_size
+    result={"path":path.resolve().relative_to(root.resolve()).as_posix(),"sha256":sha256_file(path) if compute_hash else None,"byte_size":size}
+    if path.suffix==".json" and size>1024*1024 and not compute_hash:
+        result.update(_read_prefix_fields(path,["schema_version"],stop_keys=("results","pages","assets","visuals","segments")))
+        result["row_count_omitted_for_performance"]=True
+        result["hash_deferred_until_completion"]=True
+        return result
+    try:
+        value=load_json(path);result["schema_version"]=value.get("schema_version")
         for key in ("results","assets","candidates","pages","visuals","sources","items","segments"):
-            if isinstance(value.get(key),list): out["row_count"]=len(value[key]); out["row_collection"]=key; break
+            if isinstance(value.get(key),list):result["row_count"]=len(value[key]);result["row_collection"]=key;break
     except (OSError,ValueError,json.JSONDecodeError):
-        if path.suffix==".jsonl":
-            with path.open("r",encoding="utf-8") as stream: out["row_count"]=sum(bool(line.strip()) for line in stream)
-            out["row_collection"]="jsonl_lines"
-    return out
+        if path.suffix==".jsonl" and size<=1024*1024:
+            with path.open("r",encoding="utf-8") as stream:result["row_count"]=sum(bool(line.strip()) for line in stream)
+            result["row_collection"]="jsonl_lines"
+        elif path.suffix==".jsonl":result["row_count_omitted_for_performance"]=True
+    return result
 
 
 def update_timestamps(previous:dict[str,Any],now:str,status:str,processed:int,failed:int,unresolved:Any,checkpoint_changed:bool)->dict[str,str]:
     old=previous.get("timestamps") or {}; work=previous.get("work") or {}
     times=dict(old); times.setdefault("created_at",now)
-    if status not in {"QUEUED"}: times.setdefault("started_at",now)
     old_status=(previous.get("decision") or {}).get("status")
+    if status=="RUNNING" and old_status!="RUNNING": times["started_at"]=now
+    elif status not in {"QUEUED"}: times.setdefault("started_at",now)
     progress=(processed>int(work.get("processed_count",0) or 0)
         or failed!=int(work.get("failed_count",0) or 0)
         or (unresolved is not None and unresolved!=work.get("unresolved_count"))
+        or checkpoint_changed
         or (status in {"COMPLETE","NEEDS_REVIEW"} and old_status not in {"COMPLETE","NEEDS_REVIEW"}))
     if progress: times["last_progress_at"]=now
-    if status=="CHECKPOINTED" and checkpoint_changed: times["checkpoint_at"]=now
+    if status=="CHECKPOINTED" or (status=="RUNNING" and (checkpoint_changed or progress)): times["checkpoint_at"]=now
     if status=="COMPLETE":
         times["completed_at"]=times.get("completed_at") or now
     else:
@@ -466,101 +539,117 @@ def record_handoff(root:Path,pair:dict[str,str],stage:int,status:str,*,source_bo
     message:str="",retryable:bool=False,retry_after:str|None=None,model:str|None=None,prompt_version:str|None=None,
     processed_count:int=0,expected_count:int=0,failed_count:int=0,unresolved_count:int|None=None,completed_batches:int=0,
     budget:int|None=None,extra_artifacts:list[str]|None=None,model_startup_seconds:float|None=None,model_run_seconds:float|None=None)->dict[str,Any]:
-    if status not in STATUSES: raise ValueError(f"Invalid status {status!r}.")
-    if stage not in range(9): raise ValueError("Layer must be 0 through 8.")
+    if status not in STATUSES:raise ValueError(f"Invalid status {status!r}.")
+    if stage not in range(9):raise ValueError("Layer must be 0 through 8.")
     sources=pair_sources(pair)
-    if source_book_id and source_book_id not in {s["book_id"] for s in sources}: raise ValueError("Source book is not a member of selected pair.")
-    paths,problems=_paths_for_stage(root,pair,stage,None if stage==5 else source_book_id)
+    if source_book_id and source_book_id not in {x["book_id"] for x in sources}:raise ValueError("Source book is not a member of selected pair.")
+    paths,problems=_paths_for_stage(root,pair,stage,source_book_id)
     for raw in extra_artifacts or []:
         path=safe_repo_path(root,raw)
-        if not path.is_file(): problems.append(f"Declared output artifact missing: {raw}")
-        else: paths.append(path)
-    if status=="CHECKPOINTED" and stage==5:
-        pair_ok, pair_reasons = validate_pair_completion(root, pair)
-        if not pair_ok:
-            problems.extend(pair_reasons)
-            critical_markers = ("schema mismatch", "hash mismatch", "SHA-256", "identity mismatch",
-                "ID mismatch", "slug mismatch", "unsafe", "orphan", "invalid JSON", "unreadable",
-                "path is missing", "non-canonical", "page mapping", "PDF hash differs")
-            if any(marker.lower() in reason.lower() for reason in pair_reasons for marker in critical_markers):
-                status = "BLOCKED"
+        if not path.is_file():problems.append(f"Declared output artifact missing: {raw}")
+        else:paths.append(path)
     if status=="COMPLETE":
         if stage==5:
-            ok,reasons=validate_pair_completion(root,pair)
-            if not ok: problems.extend(reasons)
+            if source_book_id:
+                selected=next(x for x in sources if x["book_id"]==source_book_id)
+                ok,reasons,_=validate_book_layer45(root,selected)
+            else:ok,reasons=validate_pair_completion(root,pair)
+            if not ok:problems.extend(reasons)
         elif stage==4:
             for source in sources:
-                if source_book_id and source["book_id"]!=source_book_id: continue
-                ok,reasons,_=validate_book_layer45(root,source)
-                if not ok: problems.extend(reasons)
+                if source_book_id and source["book_id"]!=source_book_id:continue
+                ok,reasons,_=validate_layer4_book(root,source)
+                if not ok:problems.extend(reasons)
         elif stage==0:
-            # JSONL is a stream of JSON records, not one JSON document.
-            # extraction_manifest validates every row, page identity, whole-book hash and sequence.
             for source in sources:
-                _,_,reasons=extraction_manifest(root,source)
-                problems.extend(reasons)
-        elif not paths:
-            problems.append(f"Layer {stage} cannot be COMPLETE without output artifacts.")
+                _,_,reasons=extraction_manifest(root,source);problems.extend(reasons)
+        elif not paths:problems.append(f"Layer {stage} cannot be COMPLETE without output artifacts.")
         else:
             for path in paths:
                 try:
                     value=load_json(path)
-                    if not value.get("schema_version"): problems.append(f"{path}: schema_version missing.")
-                except (OSError,ValueError,json.JSONDecodeError): problems.append(f"{path}: invalid JSON.")
-    if status=="NEEDS_REVIEW" and not paths: problems.append(f"Layer {stage} cannot require review without an output artifact.")
-    if problems and status in {"COMPLETE","NEEDS_REVIEW"}: status="BLOCKED"
-    output_refs=[artifact_ref(root,p) for p in dict.fromkeys(paths) if p.is_file()]
+                    if not value.get("schema_version"):problems.append(f"{path}: schema_version missing.")
+                except (OSError,ValueError,json.JSONDecodeError):problems.append(f"{path}: invalid JSON.")
+    if status=="NEEDS_REVIEW" and not paths:problems.append(f"Layer {stage} cannot require review without an output artifact.")
+    if problems and status in {"COMPLETE","NEEDS_REVIEW"}:status="BLOCKED"
+    terminal=status in {"COMPLETE","NEEDS_REVIEW"}
+    output_refs=[artifact_ref(root,p,compute_hash=terminal or p.stat().st_size<=1024*1024) for p in dict.fromkeys(paths) if p.is_file()]
     input_paths=[]
-    for source in sources:
-        grade,slug=source["class_no"],source["book_slug"]; visual=root/"data"/"textbook-visuals"/slug
+    selected_sources=[x for x in sources if not source_book_id or x["book_id"]==source_book_id]
+    for source in selected_sources:
+        grade,slug=source["class_no"],source["book_slug"];visual=root/"data"/"textbook-visuals"/slug
         if stage in (0,1):
             mp,doc,_=extraction_manifest(root,source)
             if mp:
                 input_paths.append(mp)
-                if doc and isinstance(doc.get("text_jsonl"),str): input_paths.append(mp.parent/Path(doc["text_jsonl"]).name)
-        elif stage==2: input_paths.append(visual/"visual-inventory.v1.json")
-        elif stage==3: input_paths += [root/"data"/"textbook-visual-candidates-v3"/slug/"candidates.v3.json",root/"data"/"textbook-visual-candidates-v3"/slug/"bundle-index.v3.json"]
+                if doc and isinstance(doc.get("text_jsonl"),str):input_paths.append(mp.parent/Path(doc["text_jsonl"]).name)
+        elif stage==2:input_paths.append(root/"data"/"textbook-visual-candidates-v3"/slug/"visual-inventory.v1.json")
+        elif stage==3:input_paths += [root/"data"/"textbook-visual-candidates-v3"/slug/"candidates.v3.json",root/"data"/"textbook-visual-candidates-v3"/slug/"bundle-index.v3.json"]
         elif stage in (4,5):
             input_paths.append(visual/"visual-inventory.v1.json")
             try:
                 idx=load_json(visual/"visual-pipeline-index.v1.json")
-                if isinstance(idx.get("analysis_path"),str): input_paths.append(safe_repo_path(root,idx["analysis_path"]))
-            except (OSError,ValueError,json.JSONDecodeError): pass
-        else: input_paths.append(root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/slug/"coverage-ledger.v1.json")
-    input_refs=[artifact_ref(root,p) for p in dict.fromkeys(input_paths) if p.is_file()]
+                if isinstance(idx.get("analysis_path"),str):input_paths.append(safe_repo_path(root,idx["analysis_path"]))
+            except (OSError,ValueError,json.JSONDecodeError):pass
+        else:input_paths.append(root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/slug/"coverage-ledger.v1.json")
+    input_refs=[artifact_ref(root,p,compute_hash=terminal or p.stat().st_size<=1024*1024) for p in dict.fromkeys(input_paths) if p.is_file()]
     source_refs=[]
     for source in sources:
         digest=None
-        try: digest=str(load_json(root/"data"/"textbook-visuals"/source["book_slug"]/"visual-pipeline-index.v1.json").get("source_pdf_sha256") or "").lower() or None
-        except (OSError,ValueError,json.JSONDecodeError): pass
+        try:digest=str(load_json(root/"data"/"textbook-visuals"/source["book_slug"]/"visual-pipeline-index.v1.json").get("source_pdf_sha256") or "").lower() or None
+        except (OSError,ValueError,json.JSONDecodeError):pass
         if not digest:
             _,manifest,_=extraction_manifest(root,source)
-            if manifest: digest=str(manifest.get("original_book_sha256") or manifest.get("asset_pdf_sha256") or manifest.get("source_pdf_sha256") or "").lower() or None
+            if manifest:digest=str(manifest.get("original_book_sha256") or manifest.get("asset_pdf_sha256") or manifest.get("source_pdf_sha256") or "").lower() or None
         source_refs.append({"source_book_id":source["book_id"],"book_slug":source["book_slug"],"language":source["language"],"source_pdf_sha256":digest})
     base=root/"data"/"textbook-content-pipeline"/"handoffs"/f"class-{pair['class_no']}"/pair["book_pair_id"]
-    runs=base/"runs"; runs.mkdir(parents=True,exist_ok=True)
-    events=base/"events.v1.jsonl"; current=base/"current.v1.json"
-    run_id=os.environ.get("GITHUB_RUN_ID","local"); attempt=os.environ.get("GITHUB_RUN_ATTEMPT","1")
+    runs=base/"runs";runs.mkdir(parents=True,exist_ok=True)
+    events=base/"events.v1.jsonl";current=base/"current.v1.json"
+    run_id=os.environ.get("GITHUB_RUN_ID","local");attempt=os.environ.get("GITHUB_RUN_ATTEMPT","1")
     run_path=runs/f"run-{run_id}-attempt-{attempt}.v1.json"
-    old_run={}; old_current={}
-    for path,target in ((run_path,old_run),(current,old_current)):
-        try: target.update(load_json(path))
-        except (OSError,ValueError,json.JSONDecodeError): pass
-    previous=old_run or old_current
+    old_run={};old_current={}
+    for target,file in ((old_run,run_path),(old_current,current)):
+        try:target.update(load_json(file))
+        except (OSError,ValueError,json.JSONDecodeError):pass
     old_statuses=old_current.get("layer_statuses") or {}
-    previous_layer=old_statuses.get(str(stage),{})
-    clock_previous={"timestamps":previous_layer.get("timestamps",{}),"work":previous_layer.get("work",{}),"decision":{"status":previous_layer.get("status")}}
+    old_book_statuses=old_current.get("book_layer_statuses") or {}
+    previous_pair_layer=old_statuses.get(str(stage),{})
+    previous_book_layer=(old_book_statuses.get(source_book_id,{}) or {}).get(str(stage),{}) if source_book_id else {}
+    timing_previous=previous_book_layer if source_book_id else previous_pair_layer
+    clock_previous={"timestamps":timing_previous.get("timestamps",{}),"work":timing_previous.get("work",{}),"decision":{"status":timing_previous.get("status")}}
     now=utcnow()
-    old_hashes=[(x.get("path"),x.get("sha256")) for x in previous_layer.get("output_artifacts",[])]
-    new_hashes=[(x["path"],x["sha256"]) for x in output_refs]
-    checkpoint_changed=old_hashes!=new_hashes
-    times=update_timestamps(clock_previous,now,status,processed_count,failed_count,unresolved_count,checkpoint_changed)
-    if retry_after: times["retry_after"]=retry_after
-    elif status not in {"BLOCKED","RETRYABLE_FAILED"}: times.pop("retry_after",None)
-    layer_statuses=dict(old_statuses)
-    layer_statuses[str(stage)]={"status":status,"timestamps":times,
-        "work":{"expected_count":max(0,expected_count),"processed_count":max(0,processed_count),"failed_count":max(0,failed_count),"unresolved_count":unresolved_count},
-        "output_artifacts":output_refs,"reason_code":reason_code,"retryable":bool(retryable) and status!="BLOCKED"}
+    old_hashes=[(x.get("path"),x.get("sha256")) for x in timing_previous.get("output_artifacts",[])]
+    new_hashes=[(x["path"],x.get("sha256")) for x in output_refs]
+    changed=old_hashes!=new_hashes
+    # A status-only checkpoint/failure update must not erase counters from the last
+    # durable batch. Explicit non-zero counts still replace them when supplied.
+    if status in {"CHECKPOINTED","BLOCKED"} and processed_count==0 and expected_count==0 and failed_count==0 and unresolved_count is None:
+        prior_work=timing_previous.get("work") or {}
+        processed_count=int(prior_work.get("processed_count",0) or 0)
+        expected_count=int(prior_work.get("expected_count",0) or 0)
+        failed_count=int(prior_work.get("failed_count",0) or 0)
+        unresolved_count=prior_work.get("unresolved_count")
+    times=update_timestamps(clock_previous,now,status,processed_count,failed_count,unresolved_count,changed)
+    attempt_elapsed=0.0
+    if timing_previous.get("status")=="RUNNING" and status!="RUNNING":
+        try:
+            start=datetime.fromisoformat(str((timing_previous.get("timestamps") or {}).get("started_at","")).replace("Z","+00:00"))
+            end=datetime.fromisoformat(now.replace("Z","+00:00"))
+            attempt_elapsed=max(0.0,(end-start).total_seconds())
+        except (TypeError,ValueError):pass
+    cumulative=round(float(timing_previous.get("cumulative_elapsed_seconds",0) or 0)+attempt_elapsed,3)
+    if retry_after:times["retry_after"]=retry_after
+    elif status not in {"BLOCKED","RETRYABLE_FAILED"}:times.pop("retry_after",None)
+    stage_record={"status":status,"timestamps":times,"attempt_elapsed_seconds":round(attempt_elapsed,3),
+        "cumulative_elapsed_seconds":cumulative,
+        "work":{"expected_count":max(0,expected_count),"processed_count":max(0,processed_count),
+            "failed_count":max(0,failed_count),"unresolved_count":unresolved_count},
+        "output_artifacts":output_refs,"reason_code":reason_code,"retryable":bool(retryable) and status=="RETRYABLE_FAILED"}
+    layer_statuses=dict(old_statuses);layer_statuses[str(stage)]=stage_record
+    book_statuses=dict(old_book_statuses)
+    if source_book_id:
+        book_stages=dict(book_statuses.get(source_book_id,{}) or {});book_stages[str(stage)]=stage_record
+        book_statuses[source_book_id]=book_stages
     event_path=events.relative_to(root).as_posix()
     run_url=f"{os.environ.get('GITHUB_SERVER_URL','https://github.com')}/{os.environ.get('GITHUB_REPOSITORY','')}/actions/runs/{run_id}"
     document={
@@ -588,7 +677,7 @@ def record_handoff(root:Path,pair:dict[str,str],stage:int,status:str,*,source_bo
         "blockers":sorted(set(problems))},
       "decision":{"status":status,"reason_code":"CONTRACT_VALIDATION_FAILED" if status=="BLOCKED" else reason_code,
         "reason":message or ("; ".join(sorted(set(problems))) if problems else status.lower().replace("_"," ")),
-        "retryable":bool(retryable) and status!="BLOCKED",
+        "retryable":bool(retryable) and status=="RETRYABLE_FAILED",
         "next_action":"Fix the listed contract blockers; do not rerun inference until corrected." if status=="BLOCKED" else
           "Inspect errors and resume only after validating the same source/model/prompt checkpoint." if status=="RETRYABLE_FAILED" else
           "Human review is required before publication." if status=="NEEDS_REVIEW" else
@@ -596,55 +685,58 @@ def record_handoff(root:Path,pair:dict[str,str],stage:int,status:str,*,source_bo
           "Validate this handoff before requesting the next layer." if status=="COMPLETE" else
           "No automatic retry is scheduled; operator action is required.",
         "publication_allowed":False,"human_review_required":True},
-      "layer_statuses":layer_statuses}
-    if old_run and all(old_run.get(k)==document.get(k) for k in ("stage","lineage","work","validation","decision","layer_statuses")):
-        old_times=old_run.get("timestamps",{})
-        if all(old_times.get(k)==times.get(k) for k in ("last_progress_at","checkpoint_at","completed_at","last_error_at","retry_after")):
-            return {"changed":False,"status":status,"run_path":run_path.relative_to(root).as_posix(),"current_path":current.relative_to(root).as_posix()}
+      "layer_statuses":layer_statuses,"book_layer_statuses":book_statuses}
     payload=json.dumps(document,ensure_ascii=False,indent=2)+"\n"
-    for path in (run_path,current):
-        tmp=path.with_suffix(path.suffix+".tmp"); tmp.write_text(payload,encoding="utf-8"); tmp.replace(path)
-    event={"schema_version":"quantaedge.textbook-pipeline-handoff-event.v1","event_id":document["handoff_id"]+":"+now,
-        "occurred_at":now,"stage":stage,"status":status,"reason_code":document["decision"]["reason_code"],
-        "processed_count":max(0,processed_count),"expected_count":max(0,expected_count),"failed_count":max(0,failed_count),
-        "unresolved_count":unresolved_count,"source_hashes":{x["source_book_id"]:x["source_pdf_sha256"] for x in source_refs},
+    for file in (run_path,current):
+        tmp=file.with_suffix(file.suffix+".tmp");tmp.write_text(payload,encoding="utf-8");tmp.replace(file)
+    event={"schema_version":"quantaedge.textbook-pipeline-handoff-event.v1",
+        "event_id":document["handoff_id"]+":"+now,"occurred_at":now,"stage":stage,"status":status,
+        "reason_code":document["decision"]["reason_code"],"processed_count":max(0,processed_count),
+        "expected_count":max(0,expected_count),"failed_count":max(0,failed_count),"unresolved_count":unresolved_count,
+        "source_hashes":{x["source_book_id"]:x["source_pdf_sha256"] for x in source_refs},
         "producer_git_sha":os.environ.get("GITHUB_SHA"),"workflow_run_id":str(run_id),
-        "artifact_sha256":{x["path"]:x["sha256"] for x in output_refs},"retryable":bool(retryable) and status!="BLOCKED"}
-    with events.open("a",encoding="utf-8") as stream:
-        stream.write(json.dumps(event,ensure_ascii=False,separators=(",",":"))+"\n")
-    return {"changed":True,"status":status,"run_path":run_path.relative_to(root).as_posix(),"current_path":current.relative_to(root).as_posix(),"events_path":event_path,"blockers":sorted(set(problems))}
+        "artifact_sha256":{x["path"]:x["sha256"] for x in output_refs},"retryable":bool(retryable) and status=="RETRYABLE_FAILED"}
+    with events.open("a",encoding="utf-8") as stream:stream.write(json.dumps(event,ensure_ascii=False,separators=(",",":"))+"\n")
+    return {"changed":True,"status":status,"run_path":run_path.relative_to(root).as_posix(),
+        "current_path":current.relative_to(root).as_posix(),"events_path":event_path,"blockers":sorted(set(problems))}
 
 
 def record_book_checkpoint(root:Path,slug:str)->list[str]:
     index_path=root/"data"/"textbook-visuals"/slug/"visual-pipeline-index.v1.json"
-    if not index_path.is_file(): return []
-    index=load_json(index_path); book_id=str(index.get("source_book_id") or "")
-    pair=pair_for_book_id(book_id); source=next(x for x in pair_sources(pair) if x["book_id"]==book_id)
+    if not index_path.is_file():return []
+    index=load_json(index_path);book_id=str(index.get("source_book_id") or "")
+    pair=pair_for_book_id(book_id);source=next(x for x in pair_sources(pair) if x["book_id"]==book_id)
     raw_path=_declared(root,index.get("analysis_path"),"raw analysis",[])
-    raw={}
-    if raw_path:
-        try: raw=load_json(raw_path)
-        except (OSError,ValueError,json.JSONDecodeError): pass
+    raw=_read_prefix_fields(raw_path,["schema_version","source_book_id","source_pdf_sha256","model","prompt_version","summary"],("results",)) if raw_path else {}
     summary=raw.get("summary") if isinstance(raw.get("summary"),dict) else {}
-    grade=source["class_no"]
-    ledger_path=root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/slug/"coverage-ledger.v1.json"
-    ledger={}
-    try: ledger=load_json(ledger_path)
-    except (OSError,ValueError,json.JSONDecodeError): pass
-    ledger_summary=ledger.get("summary") if isinstance(ledger.get("summary"),dict) else {}
-    stage=5 if ledger_path.is_file() else 4
-    complete,reasons=validate_pair_completion(root,pair) if stage==5 else (False,[])
-    durations=[float(row.get("duration_seconds",0) or 0) for row in raw.get("results",[]) if isinstance(row,dict)]
-    record_handoff(root,pair,stage,"COMPLETE" if stage==5 and complete else "CHECKPOINTED",
-      source_book_id=book_id,reason_code="DURABLE_LAYER45_CHECKPOINT",
-      message=f"Checkpoint persisted for {book_id}; pair completion requires both language ledgers.",
-      model=raw.get("model"),prompt_version=raw.get("prompt_version"),
-      processed_count=int(summary.get("assets_analyzed",0) or 0)+int(summary.get("assets_failed",0) or 0),
-      expected_count=int(summary.get("assets_eligible",0) or 0),failed_count=int(summary.get("assets_failed",0) or 0),
-      unresolved_count=ledger_summary.get("unresolved_count"),completed_batches=1,model_run_seconds=sum(durations))
+    grade=source["class_no"];ledger_path=root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/slug/"coverage-ledger.v1.json"
+    ledger=_read_prefix_fields(ledger_path,["schema_version","ledger_status","summary"],("pages","visuals")) if ledger_path.is_file() else {}
+    ls=ledger.get("summary") if isinstance(ledger.get("summary"),dict) else {}
+    eligible=int(summary.get("assets_eligible",0) or 0);analyzed=int(summary.get("assets_analyzed",0) or 0)
+    failed=int(summary.get("assets_failed",0) or 0);remaining=int(summary.get("assets_remaining",max(0,eligible-analyzed)) or 0)
+    l4_complete=eligible>0 and analyzed==eligible and failed==0 and remaining==0
+    l4_status="COMPLETE" if l4_complete else "RUNNING"
+    model_seconds=summary.get("total_model_seconds_recorded")
+    record_handoff(root,pair,4,l4_status,source_book_id=book_id,
+        reason_code="LAYER4_ASSETS_RECONCILED" if l4_complete else "DURABLE_LAYER4_CHECKPOINT",
+        message=f"Per-book Layer 4 checkpoint for {book_id}. Large results are validated fully only at completion.",
+        model=raw.get("model"),prompt_version=raw.get("prompt_version"),
+        processed_count=analyzed+failed,expected_count=eligible,failed_count=failed,unresolved_count=remaining,
+        completed_batches=1,model_run_seconds=model_seconds if isinstance(model_seconds,(int,float)) else None)
+    l5_ready=(ledger.get("schema_version")=="quantaedge.textbook-coverage-ledger.v1" and ledger.get("ledger_status")=="COMPLETE" and ls.get("unresolved_count")==0)
+    l5_status="COMPLETE" if l5_ready else "RUNNING"
+    record_handoff(root,pair,5,l5_status,source_book_id=book_id,
+        reason_code="LAYER5_COVERAGE_COMPLETE" if l5_ready else "DURABLE_LAYER5_CHECKPOINT",
+        message=f"Per-book Layer 5 checkpoint for {book_id}. The full crosswalk is validated only when marked complete.",
+        model=raw.get("model"),prompt_version=raw.get("prompt_version"),
+        processed_count=int(ls.get("successful_visual_analyses",analyzed) or 0),
+        expected_count=int(ls.get("eligible_visual_asset_rows",eligible) or eligible),
+        failed_count=int(ls.get("failed_visual_analyses",failed) or 0),unresolved_count=ls.get("unresolved_count"),
+        completed_batches=1,model_run_seconds=model_seconds if isinstance(model_seconds,(int,float)) else None)
     base=root/"data"/"textbook-content-pipeline"/"handoffs"/f"class-{grade}"/pair["book_pair_id"]
-    paths=[base/"current.v1.json",base/"events.v1.jsonl",base/"runs"/f"run-{os.environ.get('GITHUB_RUN_ID','local')}-attempt-{os.environ.get('GITHUB_RUN_ATTEMPT','1')}.v1.json"]
-    return [p.relative_to(root).as_posix() for p in paths if p.is_file()]
+    run_id=os.environ.get("GITHUB_RUN_ID","local");attempt=os.environ.get("GITHUB_RUN_ATTEMPT","1")
+    return [p.relative_to(root).as_posix() for p in (base/"current.v1.json",base/"events.v1.jsonl",
+        base/"runs"/f"run-{run_id}-attempt-{attempt}.v1.json") if p.is_file()]
 
 
 def main(argv=None):

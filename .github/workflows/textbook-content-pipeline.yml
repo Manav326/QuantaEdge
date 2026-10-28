@@ -164,72 +164,1682 @@ jobs:
           [[ "$CLASS_NO" =~ ^(6|7|8|all)$ ]] || { echo "::error::Invalid class selector."; exit 2; }
           [[ "$PAIR_ID" =~ ^(all|class(6|7|8)-(science|maths(-part[12])?)-bilingual)$ ]] || { echo "::error::Invalid bilingual pair ID."; exit 2; }
           if [[ "$CLASS_NO" != "all" && "$PAIR_ID" != "all" && "$PAIR_ID" != class"$CLASS_NO"-* ]]; then echo "::error::The pair does not belong to the selected class."; exit 2; fi
-          if [[ "$TASK" == "layers_6_8" && ( "$CLASS_NO" == "all" || "$PAIR_ID" == "all" ) ]]; then echo "::error::Layers 6–8 requires one specific class and source book."; exit 2; fi
+          if [[ "$TASK" == "layers_6_8" && "$CLASS_NO" == "all" ]]; then echo "::error::Layers 6–8 requires one specific class and source book."; exit 2; fi
           if [[ "$TASK" == "layers_6_8" && "$SOURCE_BOOK_ID" == "" ]]; then echo "::error::Select a source_book_id."; exit 2; fi
+          if [[ "$TASK" == "layers_6_8" ]]; then
+            python - "$CLASS_NO" "$SOURCE_BOOK_ID" <<'PY'
+          import sys
+          from scripts.plan_textbook_layer45_matrix import BOOKS
+          grade, book_id = sys.argv[1:]
+          source = next((item for item in BOOKS if item["book_id"] == book_id), None)
+          if source is None:
+              raise SystemExit(f"Unknown source_book_id: {book_id}")
+          if str(source["class_no"]) != grade:
+              raise SystemExit(f"Source book {book_id} belongs to Class {source['class_no']}, not Class {grade}.")
+          PY
+          fi
           if [[ "$TASK" == "layers_6_8" && ("$L68_MODE" == "run" || "$L68_MODE" == "resume") && "$ALLOW_EXPERIMENTAL" != "true" ]]; then echo "::error::Explicitly enable the experimental model before generating review-only drafts."; exit 2; fi
-          python -m py_compile scripts/plan_textbook_layer45_matrix.py scripts/select_textbook_source_pair.py scripts/textbook_pipeline_handoff.py scripts/quantaedge_textbook_pipeline.py scripts/quantaedge_layers_6_8.py scripts/report_textbook_pair_progress.py
+          python -m py_compile scripts/plan_textbook_layer45_matrix.py scripts/select_textbook_source_pair.py scripts/textbook_pipeline_handoff.py scripts/quantaedge_textbook_pipeline.py scripts/quantaedge_layers_6_8.py scripts/report_textbook_pair_progress.py scripts/extract_textbook_text.py scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidate_batch.py scripts/analyze_visual_inventory_with_ollama.py
+          python -m unittest discover -s tests -p "test_extract_textbook_text.py" -v
+          python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
+          python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
+          python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
           python -m unittest discover -s tests -p "test_plan_textbook_layer45_matrix.py" -v
           python -m unittest discover -s tests -p "test_select_textbook_source_pair.py" -v
           python -m unittest discover -s tests -p "test_textbook_pipeline_handoff.py" -v
           python -m unittest discover -s tests -p "test_report_textbook_pair_progress.py" -v
           python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
           python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
-
-  refresh-cache:
+  cache_textbooks:
     if: ${{ inputs.task == 'refresh_source_cache' || inputs.task == 'repair_source_cache_queue' }}
     needs: validate
-    uses: ./.github/workflows/textbook-cache.yml
-    with:
-      language: ${{ inputs.cache_language }}
-      class_no: ${{ inputs.cache_class_no }}
-      download_artifacts: ${{ inputs.cache_download_artifacts }}
-      book_code: ${{ inputs.cache_book_code }}
-      max_books: ${{ inputs.cache_max_books }}
-      refresh: ${{ inputs.cache_refresh }}
-      download_workers: ${{ inputs.cache_download_workers }}
-      push_batch_size: ${{ inputs.cache_push_batch_size }}
-      retry_rounds: ${{ inputs.cache_retry_rounds }}
-      repair_queue_only: ${{ inputs.task == 'repair_source_cache_queue' }}
+    name: Parallel whole-book downloads and persistent batch pushes
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout caller branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
-  extract:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PDF merge dependency
+        run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+
+      - name: Run textbook registry regression tests
+        run: python -m unittest discover -s tests -p "test_textbook_registry.py"
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Initialize run summary
+        shell: bash
+        run: |
+          {
+            echo "# QuantaEdge textbook cache"
+            echo
+            echo "Fourteen persistent GHCR images: Classes 6–12 × Hindi/English."
+            echo "Each class image is checked before downloading; successful whole-book IDs are skipped on reruns."
+            echo "Books download in parallel; an NCERT entry is cached only when one complete official book bundle validates. Individual chapter URL fallback is disabled."
+            echo "Missing books and chapters are persisted in GHCR indexes and per-class/medium ZIP availability reports; content gaps do not stop other images."
+            echo "Only registry publication or inventory-integrity errors fail the cache run."
+            echo "Each class/medium ZIP and its availability JSON are separate, individually downloadable 90-day artifacts."
+            echo "GHCR :latest images are the persistent store."
+            echo
+            echo "- Repository: ${{ github.repository }}"
+            echo "- Commit: ${{ github.sha }}"
+            echo
+            echo "| Medium | Class | Publisher | Book | Registry ID | SHA-256 |"
+            echo "|---|---:|---|---|---|---|"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish and report all selected class/medium GHCR images
+        id: publish
+        shell: bash
+        env:
+          INPUT_REPAIR_QUEUE_ONLY: ${{ inputs.task == 'repair_source_cache_queue' }}
+          INPUT_DOWNLOAD_ARTIFACTS: ${{ inputs.cache_download_artifacts }}
+          INPUT_LANGUAGE: ${{ inputs.cache_language }}
+          INPUT_CLASS_NO: ${{ inputs.cache_class_no }}
+          INPUT_BOOK_CODE: ${{ inputs.cache_book_code }}
+          INPUT_MAX_BOOKS: ${{ inputs.cache_max_books }}
+          INPUT_REFRESH: ${{ inputs.cache_refresh }}
+          INPUT_DOWNLOAD_WORKERS: ${{ inputs.cache_download_workers }}
+          INPUT_PUSH_BATCH_SIZE: ${{ inputs.cache_push_batch_size }}
+          INPUT_RETRY_ROUNDS: ${{ inputs.cache_retry_rounds }}
+        run: |
+          set -euo pipefail
+          language="$INPUT_LANGUAGE"
+          if [ -z "$language" ]; then language="both"; fi
+          class_no="${INPUT_CLASS_NO:-0}"
+          workers="${INPUT_DOWNLOAD_WORKERS:-8}"
+          batch_size="${INPUT_PUSH_BATCH_SIZE:-8}"
+          retry_rounds="${INPUT_RETRY_ROUNDS:-5}"
+          owner="$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
+          image_prefix="ghcr.io/$owner/quantaedge-textbooks"
+          repair_queue="data/textbook-cache/repair-queue.json"
+          if [ "$INPUT_REPAIR_QUEUE_ONLY" = "true" ]; then
+            # Fail closed: a push-triggered run may ONLY process these five books.
+            # Never fall through to the general publisher for an implicit full-catalog scan.
+            if [ ! -f "$repair_queue" ] || ! jq -e '
+              .enabled == true
+              and (.books | type == "array")
+              and (.books | length == 5)
+              and ([.books[] | "\(.class_no):\(.language):\(.book_code)"] | sort)
+                  == (["7:english:gegp2","8:hindi:hhgp1","8:hindi:hhgp2","8:hindi:hhcu1","8:english:hegp2"] | sort)
+            ' "$repair_queue" >/dev/null; then
+              echo "Refusing an implicit all-books publish on push: repair queue must contain exactly the five approved books."
+              exit 1
+            fi
+            echo "repair_only=true" >> "$GITHUB_OUTPUT"
+            echo "Running targeted NCERT repair queue. Each verified whole book is published to its existing class/medium :latest image before moving to the next title."
+            failures=0
+          processed=0
+            while IFS=$'\t' read -r grade medium code title; do
+              [ -n "$code" ] || continue
+              processed=$((processed + 1))
+              echo "::group::Repair Class $grade $medium — $title ($code)"
+              target_args=(python scripts/textbook_registry.py publish --class-wise --language "$medium" --class-no "$grade" --book-code "$code" --refresh --download-workers 1 --push-batch-size 1 --retry-rounds "$retry_rounds" --image-prefix "$image_prefix")
+              output_file="$RUNNER_TEMP/repair-class-$grade-$medium-$code.log"
+              set +e
+              "${target_args[@]}" 2>&1 | tee "$output_file"
+              command_status=${PIPESTATUS[0]}
+              set -e
+              if [ "$command_status" -ne 0 ] || ! grep -Fq '"content_incomplete": false' "$output_file"; then
+                echo "REPAIR_NOT_VERIFIED class=$grade medium=$medium code=$code; inspect the report above."
+                failures=1
+              else
+                echo "REPAIR_VERIFIED_AND_PUSHED class=$grade medium=$medium code=$code"
+              fi
+              echo "::endgroup::"
+            done < <(jq -r '.books[] | [.class_no, .language, .book_code, .title] | @tsv' "$repair_queue")
+            if [ "$processed" -ne 5 ]; then
+              echo "REPAIR_SCOPE_ERROR: processed $processed entries, expected exactly five approved books."
+              exit 1
+            fi
+            if [ "$failures" -ne 0 ]; then
+              echo "At least one requested textbook remains unresolved. Any books that passed validation were pushed individually to GHCR."
+              exit 1
+            fi
+            echo "All requested missing books were verified and pushed to their existing GHCR images."
+            exit 0
+          fi
+          echo "repair_only=false" >> "$GITHUB_OUTPUT"
+          args=(python scripts/textbook_registry.py publish --class-wise --language "$language" --download-workers "$workers" --push-batch-size "$batch_size" --retry-rounds "$retry_rounds" --image-prefix "$image_prefix")
+          if [ "$class_no" != "0" ] && [ -n "$class_no" ]; then args+=(--class-no "$class_no"); fi
+          if [ -n "${INPUT_BOOK_CODE}" ]; then args+=(--book-code "$INPUT_BOOK_CODE"); fi
+          if [ -n "$INPUT_MAX_BOOKS" ] && [ "$INPUT_MAX_BOOKS" != "0" ]; then args+=(--max-books "$INPUT_MAX_BOOKS"); fi
+          if [ "$INPUT_REFRESH" = "true" ]; then args+=(--refresh); fi
+          "${args[@]}"
+
+      - name: Pull selected class images and create optional browser-download ZIPs
+        if: steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        shell: bash
+        env:
+          INPUT_LANGUAGE: ${{ inputs.cache_language }}
+          INPUT_CLASS_NO: ${{ inputs.cache_class_no }}
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
+          language="$INPUT_LANGUAGE"
+          if [ -z "$language" ] || [ "$language" = "both" ]; then languages=(hindi english); else languages=("$language"); fi
+          class_no="${INPUT_CLASS_NO:-0}"
+          if [ "$class_no" = "0" ] || [ -z "$class_no" ]; then classes=(6 7 8 9 10 11 12); else classes=("$class_no"); fi
+          inv_root="$RUNNER_TEMP/textbook-inventory"
+          out_root="$RUNNER_TEMP/textbook-downloads"
+          mkdir -p "$inv_root" "$out_root"
+          failures=0
+          for grade in "${classes[@]}"; do
+            for medium in "${languages[@]}"; do
+              image="ghcr.io/$owner/quantaedge-textbooks-class-$grade-$medium:latest"
+              target="$inv_root/class-$grade/$medium"
+              echo "Pulling optional downloadable archive from $image"
+              if ! python scripts/textbook_registry.py pull --image "$image" --output-dir "$target"; then
+                echo "ARTIFACT_PULL_FAILED image=$image" | tee -a "$GITHUB_STEP_SUMMARY"
+                failures=1
+                continue
+              fi
+              python - "$target" "$out_root" "$grade" "$medium" <<'PY'
+          import hashlib, json, sys, zipfile
+          from pathlib import Path
+          source = Path(sys.argv[1])
+          out = Path(sys.argv[2])
+          grade = int(sys.argv[3])
+          medium = sys.argv[4]
+          index = json.loads((source / "index.json").read_text(encoding="utf-8"))
+          items = index.get("books", [])
+          statuses = index.get("download_status", {})
+          archive_path = out / f"quantaedge-textbooks-class-{grade}-{medium}.zip"
+          included = []
+          absent = []
+          partial = []
+          incomplete_entries = []
+          valid_files = {}
+          def sha256_file(path):
+              digest = hashlib.sha256()
+              with path.open("rb") as handle:
+                  for block in iter(lambda: handle.read(1024 * 1024), b""):
+                      digest.update(block)
+              return digest.hexdigest()
+          export_index = json.loads(json.dumps(index))
+          export_items = export_index.get("books", [])
+          exported_item_by_id = {str(item.get("book_id", "")): item for item in export_items}
+          for item in items:
+              coverage = item.get("content_availability") or {}
+              coverage_status = str(coverage.get("status", "complete")).casefold()
+              method_partial = "partial" in str(item.get("download_method", "")).casefold()
+              is_partial = coverage_status == "partial" or method_partial
+              row = None
+              if coverage_status == "unavailable":
+                  row = {
+                      "book_id": item.get("book_id"), "title": item.get("title"),
+                      "status": "unavailable",
+                      "available_chapters": coverage.get("available_chapters", []),
+                      "missing_chapters": coverage.get("missing_chapters", []),
+                      "note": coverage.get("note") or "No usable PDF was available from official sources.",
+                      "source_url": item.get("catalog_entry_url") or item.get("source_url"),
+                  }
+                  incomplete_entries.append(row)
+                  continue
+              if is_partial:
+                  row = {
+                      "book_id": item.get("book_id"), "title": item.get("title"),
+                      "status": "partial",
+                      "available_chapters": coverage.get("available_chapters", []),
+                      "missing_chapters": coverage.get("missing_chapters", []),
+                      "note": coverage.get("note") or "PARTIAL PDF; review missing chapters before use.",
+                      "source_url": item.get("catalog_entry_url") or item.get("source_url"),
+                  }
+                  incomplete_entries.append(row)
+                  partial.append(row)
+              relative = Path(str(item.get("file", "")))
+              pdf = source / relative
+              expected_hash = str(item.get("sha256", "")).lower()
+              if (relative.is_absolute() or not relative.parts or ".." in relative.parts
+                      or not pdf.is_file() or len(expected_hash) != 64 or sha256_file(pdf) != expected_hash):
+                  missing_row = {
+                      "book_id": item.get("book_id"), "title": item.get("title"),
+                      "status": "file_missing_or_checksum_mismatch",
+                      "error": f"Indexed PDF is missing, unsafe, or failed SHA-256 verification: {relative}",
+                      "content_availability": coverage,
+                  }
+                  absent.append(missing_row)
+                  if row is not None:
+                      row["pdf_included"] = False
+                      row["pdf_error"] = missing_row["error"]
+              else:
+                  valid_files[str(item.get("book_id", ""))] = (pdf, relative, "partial" if is_partial else "complete")
+                  if row is not None:
+                      row["pdf_included"] = True
+                      row["download_path"] = "partial-books/" + str(item.get("book_id")) + ".pdf"
+                      exported_item_by_id[str(item.get("book_id", ""))]["file"] = row["download_path"]
+          unavailable = []
+          for book_id, status in statuses.items():
+              if not isinstance(status, dict):
+                  continue
+              state = str(status.get("status", ""))
+              coverage = status.get("content_availability") or {}
+              if state in ("failed", "retry_pending", "downloaded_pending_push") or coverage.get("status") == "unavailable":
+                  unavailable.append({
+                      "book_id": book_id, "title": status.get("title", book_id),
+                      "status": state or "unavailable", "last_error": status.get("last_error"),
+                      "content_availability": coverage, "source_url": status.get("source_url"),
+                  })
+          report = {
+              "schema_version": 1,
+              "image": index.get("registry", f"quantaedge-textbooks-class-{grade}-{medium}"),
+              "class": grade, "medium": medium, "registry_book_count": len(items),
+              "complete_books": sum(1 for _pdf, _relative, status in valid_files.values() if status == "complete"),
+              "partial_books": partial, "incomplete_book_entries_reported": incomplete_entries,
+              "unavailable_books": unavailable,
+              "indexed_files_missing_from_export": absent, "download_status": statuses,
+              "note": "ZIP includes verified complete textbooks and separately stored partial PDFs under partial-books/. Every partial book lists missing chapter numbers here and remains excluded from the complete student textbook catalogue.",
+          }
+          report_path = out / f"quantaedge-textbooks-class-{grade}-{medium}.availability.json"
+          report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_STORED, allowZip64=True) as archive:
+              archive.writestr("index.json", json.dumps(export_index, ensure_ascii=False, indent=2) + "\n")
+              archive.writestr("availability-report.json", json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+              for item in items:
+                  book_id = str(item.get("book_id", ""))
+                  if book_id not in valid_files:
+                      continue
+                  pdf, relative, status = valid_files[book_id]
+                  archive_path_in_zip = ("partial-books/" + book_id + ".pdf") if status == "partial" else relative.as_posix()
+                  archive.write(pdf, archive_path_in_zip)
+                  included.append(book_id)
+          complete_included = sum(1 for _pdf, _relative, status in valid_files.values() if status == "complete")
+          partial_included = sum(1 for _pdf, _relative, status in valid_files.values() if status == "partial")
+          print(f"DOWNLOAD_BUNDLE {archive_path.name} index_entries={len(items)} complete_pdfs_included={complete_included} partial_pdfs_included={partial_included} incomplete_entries_reported={len(incomplete_entries)} unavailable={len(unavailable)} missing_files={len(absent)} bytes={archive_path.stat().st_size}")
+          print(f"AVAILABILITY_REPORT {report_path.name}")
+          PY
+            done
+          done
+          if [ "$failures" -ne 0 ]; then exit 1; fi
+
+      - name: Upload Class 6 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-6-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 6 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-6-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 7 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-7-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 7 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-7-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 8 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-8-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 8 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-8-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 9 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-9-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 9 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-9-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 10 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-10-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 10 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-10-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 11 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-11-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 11 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-11-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 12 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-12-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 12 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && inputs.cache_download_artifacts == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-12-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+  extract_textbooks:
     if: ${{ inputs.task == 'extract_and_mirror' }}
     needs: validate
-    uses: ./.github/workflows/textbook-extraction-pilot.yml
-    with:
-      class_no: ${{ inputs.class_no }}
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        class_no: ${{ inputs.class_no == 'all' && fromJSON('[6,7,8]') || fromJSON(format('[{0}]', inputs.class_no)) }}
+    name: Extract selected Class ${{ matrix.class_no }} in English and Hindi
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout caller branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
-  mirror:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PDF parser
+        run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+
+      - name: Test extraction filters and checkpointing
+        run: python -m unittest discover -s tests -p 'test_extract_textbook_text.py' -v
+
+      - name: Test safe GHCR page importer
+        run: python -m unittest discover -s tests -p 'test_import_ghcr_extracted_pages.py' -v
+
+      - name: Test strict source selection and whole-book integrity
+        run: |
+          python -m unittest discover -s tests -p 'test_validate_textbook_extraction_artifacts.py' -v
+          python -m unittest discover -s tests -p 'test_select_textbook_visual_sources.py' -v
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull source caches and extract only the selected class's Science and Maths
+        shell: bash
+        env:
+          GHCR_OWNER: ${{ github.repository_owner }}
+          CLASS_NO: ${{ matrix.class_no }}
+        run: |
+          set -euo pipefail
+          [[ "$CLASS_NO" == "6" || "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 6, Class 7 or Class 8 is supported."; exit 2; }
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          mkdir -p pilot-output/reports
+          for medium in hindi english; do
+            image="ghcr.io/$owner/quantaedge-textbooks-class-$CLASS_NO-$medium:latest"
+            registry_dir="pilot-output/cache/class-$CLASS_NO/$medium"
+            prepared_dir="pilot-output/prepared/class-$CLASS_NO/$medium"
+            extracted_dir="pilot-output/extracted/class-$CLASS_NO/$medium"
+
+            echo "::group::Pull $image"
+            python scripts/textbook_registry.py pull --image "$image" --output-dir "$registry_dir"
+            echo "::endgroup::"
+
+            echo "::group::Prepare complete-book extraction inputs ($medium)"
+            python scripts/textbook_registry.py prepare-library --registry-dir "$registry_dir" --output-dir "$prepared_dir" --extraction-only
+            echo "::endgroup::"
+
+            echo "::group::Extract selected Class $CLASS_NO $medium Maths Parts 1/2 and Science"
+            python scripts/extract_textbook_text.py \
+              --bundle-dir "$prepared_dir/bundles" \
+              --pdf-dir "$prepared_dir/pdfs" \
+              --output-dir "$extracted_dir" \
+              --class-no "$CLASS_NO" \
+              --language "$medium" \
+              --subject Mathematics \
+              --subject Maths \
+              --subject Science \
+              --scope SUBJECT_BOOK
+            echo "::endgroup::"
+
+            echo "::group::Validate exact required source set, page continuity, hashes and metadata"
+            python scripts/validate_textbook_extraction_artifacts.py \
+              --registry-index "$registry_dir/index.json" \
+              --extraction-dir "$extracted_dir" \
+              --class-no "$CLASS_NO" \
+              --language "$medium"
+            echo "::endgroup::"
+
+            cp "$prepared_dir/prepare-report.json" "pilot-output/reports/class-$CLASS_NO-$medium-prepare-report.json"
+            cp "$extracted_dir/extraction-report.json" "pilot-output/reports/class-$CLASS_NO-$medium-extraction-report.json"
+          done
+
+      # Artifact names include the class number and source run ID; the mirror workflow
+      # The central content dispatcher mirrors verified artifacts only after this reusable worker succeeds.
+      - name: Publish extracted page data and reports (not source PDFs)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbook-extraction-pilot-class-${{ matrix.class_no }}-${{ github.run_id }}
+          path: |
+            pilot-output/extracted/
+            pilot-output/reports/
+            pilot-output/cache/class-*/hindi/index.json
+            pilot-output/cache/class-*/english/index.json
+          if-no-files-found: warn
+          retention-days: 90
+          compression-level: 6
+
+  mirror_extraction:
     if: ${{ inputs.task == 'extract_and_mirror' }}
-    needs: [validate, extract]
-    uses: ./.github/workflows/mirror-textbook-extraction-artifact.yml
-    with:
-      class_no: ${{ inputs.class_no }}
-      source_run_id: ${{ github.run_id }}
+    needs: [validate, extract_textbooks]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the task branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Confirm source run and locate exact class artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN_ID: ${{ github.run_id }}
+          CLASS_NO_INPUT: ${{ inputs.class_no }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_RUN_ID" =~ ^[0-9]+$ ]] || { echo "::error::Source run ID must be numeric."; exit 2; }
+          case "$CLASS_NO_INPUT" in
+            all) requested_classes=(6 7 8) ;;
+            6|7|8) requested_classes=("$CLASS_NO_INPUT") ;;
+            *) echo "::error::Invalid class scope."; exit 2 ;;
+          esac
+          metadata="$(gh run view "$SOURCE_RUN_ID" --repo "$GITHUB_REPOSITORY" --json workflowName,status,conclusion,headBranch,url)"
+          if ! jq -e '.workflowName == "QuantaEdge Textbook Content Pipeline" and (.status == "in_progress" or (.status == "completed" and .conclusion == "success"))' >/dev/null <<< "$metadata"; then
+            echo "::error::The artifact source is not this task's explicit central dispatch."
+            jq '{workflowName,status,conclusion,headBranch,url}' <<< "$metadata"
+            exit 1
+          fi
+          available="$(gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN_ID/artifacts?per_page=100" --jq '.artifacts[] | select(.expired == false) | .name')"
+          for grade in "${requested_classes[@]}"; do
+            expected="quantaedge-textbook-extraction-pilot-class-$grade-$SOURCE_RUN_ID"
+            grep -Fxq "$expected" <<< "$available" || { echo "::error::Missing unexpired artifact $expected"; printf '%s\n' "$available"; exit 1; }
+            destination="$RUNNER_TEMP/quantaedge-textbook-artifact/class-$grade"
+            mkdir -p "$destination"
+            gh run download "$SOURCE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "$expected" --dir "$destination"
+          done
+          echo "SOURCE_RUN_ID=$SOURCE_RUN_ID" >> "$GITHUB_ENV"
+          echo "MIRROR_CLASSES=$CLASS_NO_INPUT" >> "$GITHUB_ENV"
+      - name: Validate whole-book manifests and both language editions
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$MIRROR_CLASSES" == "all" ]]; then classes=(6 7 8); else classes=("$MIRROR_CLASSES"); fi
+          for grade in "${classes[@]}"; do
+            artifact_root="$RUNNER_TEMP/quantaedge-textbook-artifact/class-$grade"
+            source_root="$artifact_root/extracted/class-$grade"
+            for medium in english hindi; do
+              test -d "$source_root/$medium/pages" || { echo "::error::Class $grade $medium pages missing."; exit 1; }
+              test -s "$artifact_root/cache/class-$grade/$medium/index.json" || { echo "::error::Class $grade $medium source registry missing."; exit 1; }
+              python scripts/validate_textbook_extraction_artifacts.py \
+                --registry-index "$artifact_root/cache/class-$grade/$medium/index.json" \
+                --extraction-dir "$source_root/$medium" --class-no "$grade" --language "$medium"
+            done
+            rm -rf "data/textbook-extractions/class-$grade"
+            mkdir -p data/textbook-extractions
+            cp -R "$source_root" "data/textbook-extractions/class-$grade"
+            mkdir -p data/textbook-extractions/reports
+            if compgen -G "$artifact_root/reports/*.json" > /dev/null; then cp "$artifact_root/reports/"*.json data/textbook-extractions/reports/; fi
+            printf 'Verified from central dispatch run %s\n' "$SOURCE_RUN_ID" > "data/textbook-extractions/class-$grade/MIRROR-SOURCE.txt"
+          done
+          cat > data/textbook-extractions/README.md <<'EOF'
+          # Textbook extraction artifacts
+          Source-hash-bound whole-book text and manifests are draft extraction inputs only. Original PDFs remain in GHCR. These files are not approved lessons or published content; human review remains mandatory.
+          EOF
+          for grade in "${classes[@]}"; do
+            if [[ "$grade" == "6" ]]; then pairs=(class6-science-bilingual class6-maths-bilingual)
+            elif [[ "$grade" == "7" ]]; then pairs=(class7-science-bilingual class7-maths-part1-bilingual class7-maths-part2-bilingual)
+            else pairs=(class8-science-bilingual class8-maths-part1-bilingual class8-maths-part2-bilingual); fi
+            for pair_id in "${pairs[@]}"; do
+              python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$grade" --book-pair-id "$pair_id" --stage 0 --status COMPLETE --reason-code EXTRACTION_MANIFEST_VALIDATED --message "Both language manifests, whole-book hashes and page sequencing were verified."
+            done
+          done
+      - name: Commit verified extraction and stage-zero handoffs to task branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add data/textbook-extractions data/textbook-content-pipeline/handoffs
+          if git diff --cached --quiet; then echo "Verified extraction output already matches this task branch."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "content(extraction): mirror verified whole-book page artifacts"
+          git push origin "HEAD:$GITHUB_REF_NAME"
 
-  prepare-layers-1-5:
-    if: ${{ inputs.task == 'prepare_layers_1_5' || inputs.task == 'repair_layers_4_5' }}
+  prepare_plan:
+    if: ${{ (inputs.task == 'prepare_layers_1_5' || inputs.task == 'repair_layers_4_5') }}
     needs: validate
-    uses: ./.github/workflows/textbook-visual-candidates-v3.yml
-    with:
-      class_no: ${{ inputs.class_no }}
-      book_pair_id: ${{ inputs.book_pair_id }}
-      analysis_mode: ${{ inputs.task == 'repair_layers_4_5' && 'resume_layers_4_5' || inputs.analysis_mode }}
-      vision_model: ${{ inputs.vision_model }}
-      checkpoint_batch_size: ${{ inputs.checkpoint_batch_size }}
+    name: Plan source-bound Layer 1–5 bilingual pair workers
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan_matrix.outputs.matrix }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Plan one runner per whole book on resume
+        id: plan_matrix
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_MESSAGE: ${{ github.event.head_commit.message || '' }}
+          INPUT_CLASS_NO: ${{ inputs.class_no || '' }}
+          INPUT_ANALYSIS_MODE: ${{ (inputs.task == 'repair_layers_4_5' && 'resume_layers_4_5' || inputs.analysis_mode) }}
+          INPUT_BOOK_PAIR_ID: ${{ inputs.book_pair_id || '' }}
+        run: python scripts/plan_textbook_layer45_matrix.py --github-output "$GITHUB_OUTPUT"
 
-  layers-6-8:
+  prepare_validate:
+    if: ${{ (inputs.task == 'prepare_layers_1_5' || inputs.task == 'repair_layers_4_5') }}
+    needs: validate
+    name: Validate additive v3 preparation scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install extraction dependency
+        run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+      - name: Compile preparation and validation scripts
+        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/plan_textbook_layer45_matrix.py scripts/select_textbook_source_pair.py scripts/textbook_pipeline_handoff.py
+      - name: Test source selection, extraction integrity and candidate preparation
+        run: |
+          python -m unittest discover -s tests -p "test_plan_textbook_layer45_matrix.py" -v
+          python -m unittest discover -s tests -p "test_select_textbook_source_pair.py" -v
+          python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
+          python -m unittest discover -s tests -p "test_textbook_pipeline_handoff.py" -v
+          python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
+          python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
+          python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
+          python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
+          python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
+          python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
+          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
+          python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
+          python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
+          python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
+          python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
+
+  prepare_books:
+    if: ${{ needs.validate.result == 'success' && needs.prepare_plan.result == 'success' && needs.prepare_validate.result == 'success' && needs.prepare_plan.outputs.matrix != '{"include":[]}' }}
+    needs: [validate, prepare_plan, prepare_validate]
+    name: Prepare full bilingual Class ${{ matrix.class_no }} candidate set - ${{ matrix.book_slug }}
+    outputs:
+      yielded: ${{ steps.layer45_run.outputs.yielded || 'false' }}
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.prepare_plan.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      CLASS_NO: ${{ matrix.class_no || inputs.class_no }}
+      BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}
+      SOURCE_SLUGS_CSV: ${{ matrix.source_slugs_csv || '' }}
+      BOOK_PAIR_ID: ${{ matrix.book_pair_id || '' }}
+      BOOK_LABEL: ${{ matrix.book_ids_csv && matrix.book_label || '' }}
+      ANALYSIS_MODE: ${{ (inputs.task == 'repair_layers_4_5' && 'resume_layers_4_5' || inputs.analysis_mode) }}
+      VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}
+      CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}
+      MAX_BATCHES_PER_RUN: 12
+    steps:
+      - name: Checkout main with write permission for review metadata
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate inputs and run regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$CLASS_NO" == "6" || "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 6, Class 7 or Class 8 is supported."; exit 2; }
+          [[ "$ANALYSIS_MODE" == "prepare_only" || "$ANALYSIS_MODE" == "analyze_all" || "$ANALYSIS_MODE" == "resume_preparation" || "$ANALYSIS_MODE" == "resume_layers_4_5" ]] || { echo "Invalid analysis_mode"; exit 2; }
+          [[ -n "$VISION_MODEL" ]] || { echo "vision_model must be non-empty"; exit 2; }
+          [[ "$CHECKPOINT_BATCH_SIZE" == "5" || "$CHECKPOINT_BATCH_SIZE" == "10" ]] || { echo "Invalid checkpoint_batch_size"; exit 2; }
+          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+          python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py scripts/select_textbook_source_pair.py
+          python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
+          python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
+          python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
+          python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
+          python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
+          python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
+          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
+          python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
+          python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
+
+      - name: Authenticate to GHCR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Resolve exact sources and verify mirrored extraction manifests
+        shell: bash
+        env:
+          GHCR_OWNER: ${{ github.repository_owner }}
+          BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}
+          SOURCE_SLUGS_CSV: ${{ matrix.source_slugs_csv || '' }}
+          BOOK_PAIR_ID: ${{ matrix.book_pair_id || '' }}
+          BOOK_LABEL: ${{ matrix.book_ids_csv && matrix.book_label || '' }}
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          source_root="$RUNNER_TEMP/quantaedge-visual-source"
+          mkdir -p "$source_root"
+          for medium in english hindi; do
+            image="ghcr.io/$owner/quantaedge-textbooks-class-$CLASS_NO-$medium:latest"
+            echo "::group::Pull $image"
+            docker pull "$image"
+            container_id="$(docker create "$image" /__quantaedge_source_index_only)"
+            docker cp "$container_id:/index.json" "$source_root/index-$medium.json"
+            python scripts/select_textbook_visual_sources.py \
+              --index "$source_root/index-$medium.json" \
+              --class-no "$CLASS_NO" \
+              --language "$medium" \
+              --output "$source_root/selected-$medium.json"
+            python scripts/validate_textbook_extraction_artifacts.py \
+              --registry-index "$source_root/index-$medium.json" \
+              --extraction-dir "$GITHUB_WORKSPACE/data/textbook-extractions/class-$CLASS_NO/$medium" \
+              --class-no "$CLASS_NO" \
+              --language "$medium"
+            python - "$container_id" "$source_root/selected-$medium.json" "$source_root" "$GITHUB_WORKSPACE" "$CLASS_NO" "$medium" <<'PY'
+          import hashlib, json, os, shutil, subprocess, sys
+          from pathlib import Path
+          from scripts.validate_textbook_extraction_artifacts import normalize_language, normalize_subject
+          container_id, selection_arg, root_arg, repo_arg, class_no, language = sys.argv[1:]
+          selection = json.loads(Path(selection_arg).read_text(encoding="utf-8"))
+          root = Path(root_arg)
+          repo = Path(repo_arg)
+          target_book_ids = [item.strip() for item in os.environ.get("BOOK_IDS_CSV", "").split(",") if item.strip()]
+          target_source_slugs = [item.strip() for item in os.environ.get("SOURCE_SLUGS_CSV", "").split(",") if item.strip()]
+          if bool(target_book_ids) != bool(target_source_slugs):
+              raise SystemExit("Bilingual pair handoff must provide both book IDs and source slugs.")
+          if target_book_ids and (len(target_book_ids) != 2 or len(set(target_book_ids)) != 2 or len(target_source_slugs) != 2 or len(set(target_source_slugs)) != 2):
+              raise SystemExit("Bilingual pair handoff must provide exactly two distinct book IDs and source slugs.")
+          expected_slug_by_id = dict(zip(target_book_ids, target_source_slugs, strict=True))
+          manifest_dir = repo / "data" / "textbook-extractions" / f"class-{class_no}" / language / "pages"
+          if not manifest_dir.is_dir():
+              raise SystemExit(f"Committed extracted pages are missing: {manifest_dir}. Run the extraction pilot and mirror its verified artifact first.")
+          for source in selection.get("sources", []):
+              book_id = source["book_id"]
+              if target_book_ids and book_id not in expected_slug_by_id:
+                  continue
+              if target_book_ids and source.get("book_slug") != expected_slug_by_id[book_id]:
+                  raise SystemExit(f"{book_id}: planner source slug does not match the selected book-pair contract.")
+              book_dir = root / source["book_slug"]
+              book_dir.mkdir(parents=True, exist_ok=False)
+              pdf_path = book_dir / "source.pdf"
+              subprocess.run(["docker", "cp", f"{container_id}:/{source['file']}", str(pdf_path)], check=True)
+              digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
+              if digest != source["sha256"]:
+                  raise SystemExit(f"{book_id}: source PDF SHA-256 differs from the selected GHCR index.")
+              matches = []
+              for manifest_path in manifest_dir.glob("*.manifest.json"):
+                  try:
+                      value = json.loads(manifest_path.read_text(encoding="utf-8"))
+                  except Exception:
+                      continue
+                  if value.get("book_id") == book_id:
+                      matches.append((manifest_path, value))
+              if len(matches) != 1:
+                  raise SystemExit(f"{book_id}: expected one committed source manifest matching this selected source, found {len(matches)}.")
+              manifest_path, manifest = matches[0]
+              manifest_hash = str(manifest.get("original_book_sha256") or manifest.get("asset_pdf_sha256") or "").lower()
+              if manifest_hash != digest:
+                  raise SystemExit(f"{book_id}: committed extraction manifest hash does not match the selected whole-book PDF.")
+              if normalize_language(manifest.get("language")) != language:
+                  raise SystemExit(f"{book_id}: manifest language does not match {language}.")
+              if normalize_subject(manifest.get("subject")) != source["subject"]:
+                  raise SystemExit(f"{book_id}: manifest subject does not match selected subject {source['subject']}.")
+              if manifest.get("scope") != "SUBJECT_BOOK" or manifest.get("content_state") != "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW":
+                  raise SystemExit(f"{book_id}: expected a whole-book draft-only extraction manifest.")
+              page_name = manifest.get("text_jsonl")
+              if not isinstance(page_name, str) or Path(page_name).name != page_name or not page_name.endswith(".jsonl"):
+                  raise SystemExit(f"{book_id}: unsafe/missing text_jsonl filename in manifest.")
+              page_path = manifest_path.parent / page_name
+              if not page_path.is_file():
+                  raise SystemExit(f"{book_id}: sibling page JSONL is missing.")
+              shutil.copy2(manifest_path, book_dir / "source.manifest.json")
+              shutil.copy2(page_path, book_dir / page_name)
+              source["extraction_manifest_repo_path"] = manifest_path.relative_to(repo).as_posix()
+              source["text_jsonl_repo_path"] = page_path.relative_to(repo).as_posix()
+              source["text_jsonl_filename"] = page_name
+              (book_dir / "source-selection.json").write_text(json.dumps(source, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+              print(json.dumps({"book_id": book_id, "language": language, "subject": source["subject"], "slug": source["book_slug"], "sha256": digest}))
+          # Keep original extraction references for correction-only rebuilds.
+          Path(selection_arg).write_text(json.dumps(selection, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          subprocess.run(["docker", "rm", "-f", container_id], check=True)
+          PY
+            echo "::endgroup::"
+          done
+          python scripts/select_textbook_source_pair.py \
+            --english "$source_root/selected-english.json" \
+            --hindi "$source_root/selected-hindi.json" \
+            --class-no "$CLASS_NO" \
+            --book-ids-csv "$BOOK_IDS_CSV" \
+            --source-slugs-csv "$SOURCE_SLUGS_CSV" \
+            --book-pair-id "$BOOK_PAIR_ID" \
+            --book-label "$BOOK_LABEL" \
+            --output-dir "$source_root"
+          echo "VISUAL_SOURCE_ROOT=$source_root" >> "$GITHUB_ENV"
+
+      - name: Install ORAS and authenticate before per-book checkpoint handling
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          oras_archive="$RUNNER_TEMP/oras_1.2.0_linux_amd64.tar.gz"
+          curl --retry 5 --retry-all-errors --retry-delay 2 -fsSL \
+            "https://github.com/oras-project/oras/releases/download/v1.2.0/oras_1.2.0_linux_amd64.tar.gz" \
+            -o "$oras_archive"
+          tar -xzf "$oras_archive" -C "$RUNNER_TEMP" oras
+          sudo install -m 0755 "$RUNNER_TEMP/oras" /usr/local/bin/oras
+          echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Preflight and restore matching Layer 4 checkpoints before loading the vision model
+        if: env.ANALYSIS_MODE == 'resume_layers_4_5'
+        shell: bash
+        env:
+          VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}
+          GHCR_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$GITHUB_WORKSPACE" "$RUNNER_TEMP/layer4-resume-checkpoints" "$VISION_MODEL" "ghcr.io/$owner/quantaedge-textbook-visuals" <<'PY'
+          import json, re, shutil, subprocess, sys
+          from pathlib import Path
+          from scripts.prepare_visual_candidate_batch import missing_artifact
+          selection_path, repo_arg, temp_arg, model, package = sys.argv[1:]
+          repo, temp = Path(repo_arg), Path(temp_arg)
+          temp.mkdir(parents=True, exist_ok=True)
+          safe_model = re.sub(r"[^A-Za-z0-9._-]", "-", model)
+          prompt_version = "visual-analysis-prompt-v2"
+          def valid(path, source):
+              try:
+                  doc = json.loads(path.read_text(encoding="utf-8"))
+                  return (doc.get("schema_version") == "quantaedge.visual-analysis.v1"
+                      and doc.get("source_book_id") == source["book_id"]
+                      and str(doc.get("source_pdf_sha256") or "").lower() == str(source["sha256"]).lower()
+                      and doc.get("model") == model
+                      and doc.get("prompt_version") == prompt_version
+                      and isinstance(doc.get("results"), list))
+              except (OSError, json.JSONDecodeError, AttributeError):
+                  return False
+          selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
+          failures = []
+          for source in selection["sources"]:
+              slug = source["book_slug"]
+              raw = repo / "data" / "textbook-visuals" / slug / f"visual-analysis-{safe_model}.v1.json"
+              if raw.is_file() and valid(raw, source):
+                  print(json.dumps({"book_id": source["book_id"], "checkpoint": "REUSED_FROM_GIT", "results": len(json.loads(raw.read_text(encoding="utf-8")).get("results", []))}))
+                  continue
+              raw_was_present = raw.exists()
+              index_path = repo / "data" / "textbook-visuals" / slug / "visual-pipeline-index.v1.json"
+              prior_index = {}
+              if index_path.is_file():
+                  try:
+                      prior_index = json.loads(index_path.read_text(encoding="utf-8"))
+                  except (OSError, json.JSONDecodeError):
+                      failures.append({"book_id": source["book_id"], "reason": "committed pipeline index is malformed"})
+                      continue
+                  if prior_index.get("source_book_id") == source["book_id"] and str(prior_index.get("source_pdf_sha256") or "").lower() != str(source["sha256"]).lower():
+                      failures.append({"book_id": source["book_id"], "reason": "source edition differs from prior checkpoint; use analyze_all for a new edition"})
+                      continue
+              tag = f"layer4-class{selection['class']}-{slug}-{safe_model}-checkpoint"
+              pull_dir = temp / slug
+              shutil.rmtree(pull_dir, ignore_errors=True)
+              pull_dir.mkdir(parents=True, exist_ok=True)
+              pull = subprocess.run(["oras", "pull", f"{package}:{tag}", "--output", str(pull_dir)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+              candidate = pull_dir / f"visual-analysis-{safe_model}.v1.json"
+              if pull.returncode == 0 and candidate.is_file():
+                  if not valid(candidate, source):
+                      failures.append({"book_id": source["book_id"], "reason": "GHCR checkpoint exists but source/model/prompt fingerprint does not match"})
+                      continue
+                  raw.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copy2(candidate, raw)
+                  print(json.dumps({"book_id": source["book_id"], "checkpoint": "RESTORED_FROM_GHCR", "results": len(json.loads(candidate.read_text(encoding="utf-8")).get("results", []))}))
+                  continue
+              detail = (pull.stdout or "").strip()[-500:]
+              not_found = missing_artifact(detail, f"{package}:{tag}")
+              prior_layers = prior_index.get("layers") if isinstance(prior_index.get("layers"), dict) else {}
+              prior_analysis_path = prior_index.get("analysis_path")
+              expected_raw_path = raw.relative_to(repo).as_posix()
+              prior_analysis_started = prior_index.get("source_book_id") == source["book_id"] and (
+                  prior_layers.get("4") in {"RUNNING", "CHECKPOINTED", "COMPLETE", "INCOMPLETE"}
+                  or prior_analysis_path
+              )
+              if not raw_was_present and not_found and not prior_analysis_started:
+                  print(json.dumps({"book_id": source["book_id"], "checkpoint": "NOT_STARTED", "action": "will analyze this book from the beginning; no prior checkpoint exists"}))
+                  continue
+              if not raw_was_present and not_found and prior_analysis_started:
+                  failures.append({"book_id": source["book_id"], "reason": "prior Layer 4 work is recorded but no checkpoint for the selected model was found", "prior_analysis_path": prior_analysis_path, "requested_analysis_path": expected_raw_path, "action": "resume stopped instead of silently redoing inference; use analyze_all only to deliberately start a new model/edition run"})
+                  continue
+              failures.append({"book_id": source["book_id"], "reason": "checkpoint exists but is invalid, or GHCR could not be checked safely", "detail": detail})
+          if failures:
+              print(json.dumps({"resume_preflight": "FAILED", "failures": failures}, indent=2))
+              raise SystemExit("Resume stopped before model download: an existing checkpoint is invalid or could not be checked safely. No vision model was downloaded; inspect the source/model/prompt fingerprints or GHCR access.")
+          print(json.dumps({"resume_preflight": "PASSED", "book_count": len(selection["sources"]), "model": model, "prompt_version": prompt_version}))
+          PY
+
+      - name: Restore each matching Layer 1 inventory bundle or build only missing inventories
+        if: env.ANALYSIS_MODE == 'resume_layers_4_5'
+        shell: bash
+        env:
+          GHCR_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$VISUAL_SOURCE_ROOT" "$GITHUB_WORKSPACE" "ghcr.io/$owner/quantaedge-textbook-visuals" <<'PY'
+          import hashlib, json, shutil, subprocess, sys, tarfile
+          from pathlib import Path, PurePosixPath
+          from scripts.prepare_visual_candidate_batch import extract_archive, missing_artifact, validate_layer1_bundle
+          selection_path, source_root_arg, repo_arg, expected_package = sys.argv[1:]
+          selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
+          source_root, repo = Path(source_root_arg), Path(repo_arg)
+          def sha(path):
+              h=hashlib.sha256()
+              with path.open("rb") as stream:
+                  for chunk in iter(lambda: stream.read(1024*1024), b""): h.update(chunk)
+              return h.hexdigest()
+          def validate_inventory(work, source):
+              invdir=work/"inventory"
+              invpath=invdir/"visual-inventory.v1.json"
+              inv=json.loads(invpath.read_text(encoding="utf-8"))
+              source_meta=inv.get("source") or {}
+              if inv.get("schema_version")!="quantaedge.visual-inventory.v1" or source_meta.get("book_id")!=source["book_id"] or str(source_meta.get("pdf_sha256") or "").lower()!=str(source["sha256"]).lower():
+                  raise SystemExit(f"{source['book_slug']}: restored inventory identity/schema mismatch.")
+              text_path=work/source["text_jsonl_filename"]
+              if not text_path.is_file():
+                  raise SystemExit(f"{source['book_slug']}: current source page JSONL is missing; cannot verify saved inventory context.")
+              page_text_hashes={}
+              with text_path.open(encoding="utf-8") as stream:
+                  for line_no,line in enumerate(stream,1):
+                      if not line.strip(): continue
+                      try: row=json.loads(line)
+                      except json.JSONDecodeError as exc: raise SystemExit(f"{source['book_slug']}: malformed page JSONL line {line_no}.") from exc
+                      number=row.get("source_book_page_number",row.get("source_pdf_page_number"))
+                      text=row.get("text")
+                      if not isinstance(number,int) or isinstance(number,bool) or number<1 or not isinstance(text,str) or number in page_text_hashes:
+                          raise SystemExit(f"{source['book_slug']}: page JSONL has an invalid/duplicate page identity at line {line_no}.")
+                      page_text_hashes[number]=hashlib.sha256(text.encode("utf-8")).hexdigest()
+              assets=inv.get("assets")
+              if not isinstance(assets,list): raise SystemExit(f"{source['book_slug']}: inventory assets are malformed.")
+              seen=set()
+              for asset in assets:
+                  if not isinstance(asset,dict): raise SystemExit(f"{source['book_slug']}: invalid inventory asset row.")
+                  aid=asset.get("asset_id")
+                  if not isinstance(aid,str) or not aid or aid in seen: raise SystemExit(f"{source['book_slug']}: missing/duplicate inventory asset ID.")
+                  seen.add(aid)
+                  if asset.get("kind") not in {"embedded_image","page_preview"}: continue
+                  page_number=asset.get("source_pdf_page_number")
+                  if page_number not in page_text_hashes or asset.get("page_text_sha256")!=page_text_hashes[page_number]:
+                      raise SystemExit(f"{source['book_slug']}: extracted text changed or is unverifiable for visual {aid}; saved Layer 4 context cannot be resumed safely. Use analyze_all to rebuild the affected inventory/analysis.")
+                  rel=asset.get("asset_path")
+                  if not isinstance(rel,str) or not rel: raise SystemExit(f"{source['book_slug']}: eligible asset path missing.")
+                  target=(invdir/rel).resolve()
+                  if invdir.resolve() not in target.parents or not target.is_file(): raise SystemExit(f"{source['book_slug']}: unsafe/missing restored asset {rel!r}.")
+                  if sha(target)!=asset.get("asset_sha256"): raise SystemExit(f"{source['book_slug']}: restored asset SHA-256 mismatch for {aid}.")
+              return inv
+          for source in selection["sources"]:
+              slug=source["book_slug"]; work=source_root/slug
+              invdir=work/"inventory"
+              repo_index=repo/"data"/"textbook-visuals"/slug/"visual-pipeline-index.v1.json"
+              prior=None
+              if repo_index.is_file():
+                  try: prior=json.loads(repo_index.read_text(encoding="utf-8"))
+                  except json.JSONDecodeError: raise SystemExit(f"{slug}: committed pipeline index is corrupted; refusing unsafe resume.")
+              matching=bool(prior and prior.get("source_book_id")==source["book_id"] and str(prior.get("source_pdf_sha256") or "").lower()==str(source["sha256"]).lower())
+              if prior and prior.get("source_book_id")==source["book_id"] and not matching:
+                  raise SystemExit(f"{slug}: source PDF edition differs from prior pipeline checkpoint. Use analyze_all to start a clean edition-bound run.")
+              bundle=prior.get("inventory_bundle") if matching else None
+              restored=False
+              if isinstance(bundle,dict):
+                  if bundle.get("package")!=expected_package or not isinstance(bundle.get("tag"),str) or not isinstance(bundle.get("tar_sha256"),str):
+                      raise SystemExit(f"{slug}: inventory bundle reference is malformed or belongs to another package.")
+                  pull_dir=work/".inventory-pull"
+                  shutil.rmtree(pull_dir,ignore_errors=True);pull_dir.mkdir(parents=True,exist_ok=True)
+                  pull=subprocess.run(["oras","pull",f"{expected_package}:{bundle['tag']}","--output",str(pull_dir)],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+                  archives=list(pull_dir.glob("*.tar.gz"))
+                  detail=(pull.stdout or "").strip()[-700:]
+                  if pull.returncode==0 and len(archives)==1:
+                      archive=archives[0]
+                      if sha(archive)!=bundle["tar_sha256"]:
+                          raise SystemExit(f"{slug}: inventory bundle tar SHA-256 mismatch; refusing to regenerate over a corrupt checkpoint.")
+                      with tarfile.open(archive,"r:gz") as tar:
+                          members=tar.getmembers()
+                          if not members:
+                              raise SystemExit(f"{slug}: inventory bundle archive is empty.")
+                          # Current Layer 1 preparation bundles use a slug-layer1/ wrapper and
+                          # include a per-file manifest. Older pipeline checkpoints use inventory/
+                          # at archive root. Accept both layouts without weakening path validation.
+                          wrapper=f"{slug}-layer1"
+                          wrapped=[PurePosixPath(m.name).parts[0]==wrapper for m in members if PurePosixPath(m.name).parts]
+                          if any(wrapped):
+                              if not all(wrapped):
+                                  raise SystemExit(f"{slug}: inventory bundle mixes wrapped and root-level paths.")
+                              layer1_root=extract_archive(archive,pull_dir,wrapper)
+                              manifest_path=layer1_root/"layer1-bundle-manifest.v1.json"
+                              if not manifest_path.is_file():
+                                  raise SystemExit(f"{slug}: wrapped Layer 1 inventory bundle manifest is missing.")
+                              layer1_manifest=json.loads(manifest_path.read_text(encoding="utf-8"))
+                              fingerprint=layer1_manifest.get("preparation_fingerprint")
+                              tag_prefix=f"visual-inventory-v1-class{selection['class']}-{slug}-prep-"
+                              tag=bundle["tag"]
+                              tag_fingerprint=tag[len(tag_prefix):] if tag.startswith(tag_prefix) else ""
+                              if (len(tag_fingerprint)!=24
+                                  or any(ch not in "0123456789abcdef" for ch in tag_fingerprint)
+                                  or not isinstance(fingerprint,str)
+                                  or not fingerprint.startswith(tag_fingerprint)):
+                                  raise SystemExit(f"{slug}: Layer 1 bundle tag/fingerprint mismatch.")
+                              validate_layer1_bundle(layer1_root,source,work,fingerprint)
+                              shutil.rmtree(invdir,ignore_errors=True)
+                              shutil.copytree(layer1_root/"inventory",invdir)
+                          else:
+                              for member in members:
+                                  name=PurePosixPath(member.name)
+                                  if name.is_absolute() or ".." in name.parts or not name.parts or name.parts[0] not in {"inventory","source.manifest.json",source["text_jsonl_filename"]}:
+                                      raise SystemExit(f"{slug}: unsafe inventory bundle member {member.name!r}.")
+                                  if member.issym() or member.islnk() or member.isdev() or member.isfifo():
+                                      raise SystemExit(f"{slug}: links/devices are forbidden in inventory bundle.")
+                              inventory_members=[m for m in members if PurePosixPath(m.name).parts[0]=="inventory"]
+                              if not inventory_members: raise SystemExit(f"{slug}: bundle has no inventory directory.")
+                              tar.extractall(path=work,members=inventory_members,filter="data")
+                      inv=validate_inventory(work,source)
+                      if not (work/".inventory-restored-from-ghcr.json").is_file():
+                          (work/".inventory-restored-from-ghcr.json").write_text(json.dumps({"source_pdf_sha256":source["sha256"],"tag":bundle["tag"],"tar_sha256":bundle["tar_sha256"]},indent=2)+"\n",encoding="utf-8")
+                      print(json.dumps({"book_id":source["book_id"],"inventory":"RESTORED_FROM_VERIFIED_GHCR_BUNDLE","asset_count":len(inv["assets"]),"candidate_pack_rebuild":False}))
+                      restored=True
+                  elif pull.returncode!=0 and missing_artifact(detail, f"{expected_package}:{bundle['tag']}"):
+                      print(json.dumps({"book_id":source["book_id"],"inventory":"PRIOR_BUNDLE_NOT_FOUND","fallback":"build Layer 1 only; preserve source-bound Layer 4 checkpoint","detail":detail}))
+                  else:
+                      raise SystemExit(f"{slug}: cannot safely recover prior inventory bundle; resume stopped. {detail}")
+                  shutil.rmtree(pull_dir,ignore_errors=True)
+              if not restored:
+                  invdir.mkdir(parents=True,exist_ok=True)
+                  subprocess.run([sys.executable,"scripts/extract_visual_asset_inventory.py","--pdf",str(work/"source.pdf"),"--manifest",str(work/"source.manifest.json"),"--output-dir",str(invdir),"--preview-width","1200"],cwd=repo,check=True)
+                  inv=validate_inventory(work,source)
+                  if matching:
+                      prior_inventory_path=repo/"data"/"textbook-visuals"/slug/"visual-inventory.v1.json"
+                      if not prior_inventory_path.is_file():
+                          raise SystemExit(f"{slug}: prior Layer 4 work exists but neither its ORAS inventory nor committed inventory is available; refusing unverified resume.")
+                      if sha(prior_inventory_path)!=sha(invdir/"visual-inventory.v1.json"):
+                          raise SystemExit(f"{slug}: rebuilt Layer 1 inventory differs from the inventory bound to the saved checkpoint. Use analyze_all to deliberately rebuild and reanalyze.")
+                  print(json.dumps({"book_id":source["book_id"],"inventory":"BUILT_BECAUSE_NO_VERIFIED_BUNDLE","asset_count":len(inv["assets"]),"prior_inventory_byte_match":bool(matching),"candidate_pack_rebuild":False}))
+              candidate_path=repo/"data"/"textbook-visual-candidates-v3"/slug/"candidates.v3.json"
+              if candidate_path.is_file():
+                  pack=json.loads(candidate_path.read_text(encoding="utf-8"))
+                  if pack.get("schema_version")!="quantaedge.visual-candidate-pack.v3" or (pack.get("source") or {}).get("pdf_sha256")!=source["sha256"]:
+                      raise SystemExit(f"{slug}: existing candidate pack is stale/mismatched; use analyze_all to rebuild it.")
+              else:
+                  raise SystemExit(f"{slug}: no committed v3 candidate pack exists; resume mode will not rebuild candidate packs.")
+          PY
+
+      - name: Restore or build immutable per-book candidate checkpoints
+        if: env.ANALYSIS_MODE != 'resume_layers_4_5'
+        shell: bash
+        env:
+          GHCR_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          package="ghcr.io/$owner/quantaedge-textbook-visuals"
+          python scripts/prepare_visual_candidate_batch.py \
+            --selection "$VISUAL_SOURCE_ROOT/selected-sources.json" \
+            --source-root "$VISUAL_SOURCE_ROOT" \
+            --output-root "$RUNNER_TEMP/visual-candidates-v3" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --package "$package" \
+            --mode "$ANALYSIS_MODE"
+
+      - name: Verify per-book immutable candidate checkpoints before committing the catalog
+        if: env.ANALYSIS_MODE != 'resume_layers_4_5'
+        shell: bash
+        env:
+          GHCR_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$RUNNER_TEMP/visual-candidates-v3" "$GITHUB_WORKSPACE" "ghcr.io/$owner/quantaedge-textbook-visuals" <<'PY'
+          import hashlib, json, sys
+          from pathlib import Path
+          selection_path, work_arg, repo_arg, package = sys.argv[1:]
+          selection=json.loads(Path(selection_path).read_text(encoding="utf-8"))
+          work,repo=Path(work_arg),Path(repo_arg)
+          def digest(path):
+              h=hashlib.sha256()
+              with path.open("rb") as stream:
+                  for chunk in iter(lambda:stream.read(1024*1024),b""): h.update(chunk)
+              return h.hexdigest()
+          for source in selection["sources"]:
+              slug=source["book_slug"]
+              index_path=repo/"data"/"textbook-visual-candidates-v3"/slug/"bundle-index.v3.json"
+              pack_path=repo/"data"/"textbook-visual-candidates-v3"/slug/"candidates.v3.json"
+              archive=work/f"{slug}-candidates-v3.tar.gz"
+              if not index_path.is_file() or not pack_path.is_file() or not archive.is_file():
+                  raise SystemExit(f"{slug}: per-book checkpoint outputs are missing; refusing to commit a partial catalog.")
+              index=json.loads(index_path.read_text(encoding="utf-8"))
+              pack=json.loads(pack_path.read_text(encoding="utf-8"))
+              if index.get("schema_version")!="quantaedge.visual-candidate-bundle-index.v3":
+                  raise SystemExit(f"{slug}: checkpoint index schema mismatch.")
+              if index.get("source_book_id")!=source["book_id"] or str(index.get("source_pdf_sha256") or "").lower()!=str(source["sha256"]).lower():
+                  raise SystemExit(f"{slug}: checkpoint source identity mismatch.")
+              if index.get("ghcr_package")!=package or not isinstance(index.get("version_tag"),str):
+                  raise SystemExit(f"{slug}: checkpoint registry package/tag missing.")
+              if digest(archive)!=index.get("bundle_tar_sha256"):
+                  raise SystemExit(f"{slug}: local per-book archive SHA-256 differs from its committed checkpoint index.")
+              if pack.get("schema_version")!="quantaedge.visual-candidate-pack.v3" or str((pack.get("source") or {}).get("pdf_sha256") or "").lower()!=str(source["sha256"]).lower():
+                  raise SystemExit(f"{slug}: candidate pack source/schema mismatch.")
+              if pack.get("summary",{}).get("publication_allowed") is not False or pack.get("summary",{}).get("selected_candidate_count")!=index.get("candidate_count"):
+                  raise SystemExit(f"{slug}: checkpoint candidate count or publication guard mismatch.")
+              if index.get("candidate_pack_sha256") and index["candidate_pack_sha256"]!=digest(pack_path):
+                  raise SystemExit(f"{slug}: candidate pack SHA-256 differs from checkpoint index.")
+              print(json.dumps({"slug":slug,"checkpoint":"VERIFIED","tag":index["version_tag"],"candidate_count":index["candidate_count"],"archive_sha256":index["bundle_tar_sha256"],"publication_allowed":False}))
+          PY
+
+      - name: Rebuild the catalog, test candidate-to-content contracts, and commit the full batch
+        if: env.ANALYSIS_MODE != 'resume_layers_4_5'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/update_visual_catalog_index.py --catalog-dir data/textbook-visual-candidates-v3/catalogs --output data/textbook-visual-candidates-v3/index.v1.json
+          python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
+          python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
+          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
+          python -m unittest discover -s tests -p "test_pipeline_data_locations.py" -v
+          python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
+          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$BOOK_PAIR_ID" --stage 1 --status COMPLETE --reason-code LAYER1_VALIDATED --model "$VISION_MODEL" --message "Inventory source identity and schema checks passed."
+          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$BOOK_PAIR_ID" --stage 2 --status COMPLETE --reason-code LAYER2_VALIDATED --model "$VISION_MODEL" --message "Candidate pack and immutable bundle checks passed."
+          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$BOOK_PAIR_ID" --stage 3 --status COMPLETE --reason-code LAYER3_VALIDATED --model "$VISION_MODEL" --message "Candidate catalog and index checks passed."
+          git add -A data/textbook-visual-candidates-v3 data/textbook-content-pipeline/handoffs
+          python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "data(ai): prepare Class $CLASS_NO bilingual visual candidate batch"
+          else
+            echo "The candidate metadata and media manifest already match main; no Git commit required."
+            exit 0
+          fi
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+          echo "Persisted review-only visual candidates for every required NCERT Maths and Science source book in English and Hindi. All candidate packs remain non-publishable."
+
+
+      - name: Start per-source-book Layer 4 and Layer 5 clocks
+        if: env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5'
+        shell: bash
+        run: |
+          set -euo pipefail
+          IFS=',' read -r -a books <<< "$BOOK_IDS_CSV"
+          for book_id in "${books[@]}"; do
+            python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$BOOK_PAIR_ID" --source-book-id "$book_id" --stage 4 --status RUNNING --reason-code EXPLICIT_LAYER45_REQUEST --model "$VISION_MODEL" --prompt-version visual-analysis-prompt-v2 --budget 12 --message "Layer 4 started for this source edition, including local model startup."
+            python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$BOOK_PAIR_ID" --source-book-id "$book_id" --stage 5 --status RUNNING --reason-code EXPLICIT_LAYER45_REQUEST --model "$VISION_MODEL" --prompt-version visual-analysis-prompt-v2 --budget 12 --message "Layer 5 coverage reconciliation is coupled to this bounded Layer 4 run."
+          done
+
+
+      - name: Start Ollama container and load vision model for Layer 4
+        if: env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5'
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull ollama/ollama:latest
+          docker volume create quantaedge-ollama-models >/dev/null
+          docker run -d --name quantaedge-ollama -p 11434:11434 -v quantaedge-ollama-models:/root/.ollama ollama/ollama:latest
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then break; fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:11434/api/tags >/dev/null || { docker logs quantaedge-ollama; exit 1; }
+          docker exec quantaedge-ollama ollama pull "$VISION_MODEL"
+
+      - name: Run exhaustive, resumable Layers 4–5 for the selected class
+        id: layer45_run
+        if: env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if python scripts/quantaedge_textbook_pipeline.py run \
+            --selection "$VISUAL_SOURCE_ROOT/selected-sources.json" \
+            --source-root "$VISUAL_SOURCE_ROOT" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --package "ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals" \
+            --run-id "$GITHUB_RUN_ID" \
+            --model "$VISION_MODEL" \
+            --batch-size "$CHECKPOINT_BATCH_SIZE" \
+            --max-batches-per-run "$MAX_BATCHES_PER_RUN" \
+            --request-timeout 300; then
+            echo "yielded=false" >> "$GITHUB_OUTPUT"
+          else
+            result=$?
+            if [[ "$result" -eq 10 ]]; then
+              echo "yielded=true" >> "$GITHUB_OUTPUT"
+              echo "::notice::Layer 4–5 reached its safe batch budget; durable checkpoints are saved. No automatic continuation is scheduled; explicitly dispatch a repair/resume task after reviewing the checkpoint."
+            else
+              exit "$result"
+            fi
+          fi
+
+      - name: Record safe Layer 4–5 budget checkpoint without auto-resume
+        if: success() && steps.layer45_run.outputs.yielded == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          IFS=',' read -r -a books <<< "$BOOK_IDS_CSV"
+          for book_id in "${books[@]}"; do
+            python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$BOOK_PAIR_ID" --source-book-id "$book_id" --stage 4 --status CHECKPOINTED --reason-code SAFE_BATCH_BUDGET --model "$VISION_MODEL" --message "Layer 4 durable batch checkpoint saved; resume only after a new explicit dispatcher request."
+            python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$BOOK_PAIR_ID" --source-book-id "$book_id" --stage 5 --status CHECKPOINTED --reason-code SAFE_BATCH_BUDGET --model "$VISION_MODEL" --message "Layer 5 paired checkpoint saved; resume only after a new explicit dispatcher request."
+          done
+          git add data/textbook-content-pipeline/handoffs
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "status(content): record per-book Layer 4-5 budget checkpoint"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Record failed per-source-book Layer 4–5 task without auto-retry
+        if: failure() && (env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5')
+        shell: bash
+        run: |
+          set +e
+          IFS=',' read -r -a books <<< "$BOOK_IDS_CSV"
+          for book_id in "${books[@]}"; do
+            for stage in 4 5; do
+              python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$BOOK_PAIR_ID" --source-book-id "$book_id" --stage "$stage" --status BLOCKED --reason-code LAYER45_WORKER_FAILURE --model "$VISION_MODEL" --message "Worker failed. Inspect this source-book checkpoint and logs before explicitly retrying; no automatic continuation is scheduled." || true
+            done
+          done
+          git add data/textbook-content-pipeline/handoffs
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "status(content): record per-book Layer 4-5 failure handoff"
+            git push origin "HEAD:${GITHUB_REF_NAME}" || true
+          fi
+
+
+      - name: Stop Ollama container
+        if: always() && (env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5')
+        run: docker rm -f quantaedge-ollama >/dev/null 2>&1 || true
+
+      - name: Summarize integrated eight-layer pipeline
+        if: always() && (env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5')
+        shell: bash
+        run: |
+          {
+            echo "## QuantaEdge eight-layer textbook pipeline"
+            echo "- Executed here: Layers 1–5. Layers 6–8 are implemented in the separate budgeted per-book workflow; benchmark the model first, then generate review-only drafts."
+            echo "- No visual/candidate total cap; checkpoint batch size was $CHECKPOINT_BATCH_SIZE assets. Smaller batches reduce uncheckpointed model work but increase Git/GHCR savepoint traffic."
+            echo "- All generated data remains review-only; publication_allowed=false."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  layers68_validate:
     if: ${{ inputs.task == 'layers_6_8' }}
     needs: validate
-    uses: ./.github/workflows/quantaedge-layers-6-8.yml
-    with:
-      mode: ${{ inputs.layer68_mode }}
-      class_no: ${{ inputs.class_no }}
-      source_book_id: ${{ inputs.source_book_id }}
-      benchmark_models: ${{ inputs.benchmark_models }}
-      generation_model: ${{ inputs.generation_model }}
-      max_model_calls: ${{ inputs.max_model_calls }}
-      checkpoint_every: ${{ inputs.checkpoint_every }}
-      allow_experimental_model: ${{ inputs.allow_experimental_model }}
+    name: Validate Layers 6-8 contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile pipeline and content-contract scripts
+        run: python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py scripts/validate_structured_lesson_artifacts.py scripts/register_structured_lesson_drafts.py
+      - name: Test pipeline contracts, native Ollama, provenance, resume and split safety
+        run: |
+          python -m unittest discover -s tests -p "test_quantaedge_layers_6_8.py" -v
+          python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
+          python -m unittest discover -s tests -p "test_validate_structured_lesson_artifacts.py" -v
+          python -m unittest discover -s tests -p "test_register_structured_lesson_drafts.py" -v
+          python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
+      - name: Validate current canonical lesson store and database-facing IDs
+        run: python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
+
+  layers68_execute:
+    if: ${{ inputs.task == 'layers_6_8' && needs.layers68_validate.result == 'success' }}
+    needs: [validate, layers68_validate]
+    name: Run budgeted local Ollama pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    env:
+      CHECKPOINT_EVERY: ${{ inputs.checkpoint_every || '2' }}
+      MAX_MODEL_CALLS: ${{ inputs.max_model_calls || '6' }}
+    steps:
+      - name: Checkout main with checkpoint write permission
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Repeat checks on the execution checkout
+        run: |
+          [[ "$CHECKPOINT_EVERY" =~ ^[0-9]+$ ]] && (( CHECKPOINT_EVERY >= 1 && CHECKPOINT_EVERY <= 5 )) || { echo "checkpoint_every must be 1..5"; exit 2; }
+          [[ "$MAX_MODEL_CALLS" =~ ^[0-9]+$ ]] && (( MAX_MODEL_CALLS >= 1 && MAX_MODEL_CALLS <= 20 )) || { echo "max_model_calls must be 1..20"; exit 2; }
+          python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py scripts/validate_structured_lesson_artifacts.py scripts/register_structured_lesson_drafts.py
+          python -m unittest discover -s tests -p "test_quantaedge_layers_6_8.py" -v
+          python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
+          python -m unittest discover -s tests -p "test_validate_structured_lesson_artifacts.py" -v
+          python -m unittest discover -s tests -p "test_register_structured_lesson_drafts.py" -v
+          python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
+      - name: Guard fixed Class 6 benchmark and refresh modes
+        if: inputs.layer68_mode == 'benchmark' || inputs.layer68_mode == 'refresh_benchmark'
+        shell: bash
+        env:
+          CLASS_NO: "${{ inputs.class_no }}"
+          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
+        run: |
+          set -euo pipefail
+          [[ "$CLASS_NO" == "6" && "$SOURCE_BOOK_ID" == "ncert-c6-english-fecu1" ]] || {
+            echo "::error::Benchmark and refresh_benchmark are pinned to Class 6 English NCERT Curiosity (ncert-c6-english-fecu1)." >&2
+            exit 2
+          }
+
+      - name: Preflight benchmark source and Layer 5 before model download
+        if: inputs.layer68_mode == 'benchmark' || inputs.layer68_mode == 'refresh_benchmark'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py preflight \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --class-no 6 \
+            --source-book-id ncert-c6-english-fecu1
+
+      - name: Preflight generation checkpoint before model download
+        if: inputs.layer68_mode == 'run' || inputs.layer68_mode == 'resume'
+        id: generation_preflight
+        shell: bash
+        env:
+          MODE: "${{ inputs.layer68_mode }}"
+          CLASS_NO: "${{ inputs.class_no }}"
+          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
+          MODEL: "${{ inputs.generation_model }}"
+          MAX_MODEL_CALLS: "${{ inputs.max_model_calls }}"
+        run: |
+          set -euo pipefail
+          args=(run --repo-root "$GITHUB_WORKSPACE" --class-no "$CLASS_NO"
+            --source-book-id "$SOURCE_BOOK_ID" --endpoint http://127.0.0.1:11434
+            --model "$MODEL" --max-model-calls "$MAX_MODEL_CALLS"
+            --checkpoint-every "$CHECKPOINT_EVERY" --request-timeout 180
+            --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json
+            --allow-experimental-model --preflight-only)
+          if [[ "$MODE" == "resume" ]]; then
+            args+=(--require-existing-checkpoint)
+          fi
+          python scripts/quantaedge_layers_6_8.py "${args[@]}" > "$RUNNER_TEMP/generation-preflight.json"
+          cat "$RUNNER_TEMP/generation-preflight.json"
+          python - "$RUNNER_TEMP/generation-preflight.json" "$GITHUB_OUTPUT" "$MODE" <<'PY'
+          import json, sys
+          from pathlib import Path
+          report=json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+          mode=sys.argv[3]
+          state=report.get("preflight")
+          allowed={"MATCHED_CHECKPOINT"} if mode=="resume" else {"MATCHED_CHECKPOINT","NOT_STARTED"}
+          if state not in allowed:
+              raise SystemExit(f"{mode} preflight returned unsafe checkpoint state: {state!r}")
+          with open(sys.argv[2],"a",encoding="utf-8") as out:
+              out.write(f"preflight_state={state}\n")
+              out.write(f"retryable_segments={int(report['retryable_segments'])}\n")
+          PY
+
+      - name: Require explicit experimental-draft approval before model startup
+        if: (inputs.layer68_mode == 'run' || inputs.layer68_mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0'
+        shell: bash
+        env:
+          ALLOW_EXPERIMENTAL_MODEL: "${{ inputs.allow_experimental_model }}"
+        run: |
+          set -euo pipefail
+          [[ "$ALLOW_EXPERIMENTAL_MODEL" == "true" ]] || { echo "Enable allow_experimental_model before starting Ollama; generated content remains review-only." >&2; exit 2; }
+
+      - name: Reconcile saved Layers 6–8 outputs without model inference
+        if: (inputs.layer68_mode == 'run' || inputs.layer68_mode == 'resume') && steps.generation_preflight.outputs.preflight_state == 'MATCHED_CHECKPOINT' && steps.generation_preflight.outputs.retryable_segments == '0'
+        shell: bash
+        env:
+          CLASS_NO: "${{ inputs.class_no }}"
+          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
+          MODEL: "${{ inputs.generation_model }}"
+          MAX_MODEL_CALLS: "${{ inputs.max_model_calls }}"
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py run \
+            --repo-root "$GITHUB_WORKSPACE" --class-no "$CLASS_NO" \
+            --source-book-id "$SOURCE_BOOK_ID" --endpoint http://127.0.0.1:11434 \
+            --model "$MODEL" --max-model-calls "$MAX_MODEL_CALLS" \
+            --checkpoint-every "$CHECKPOINT_EVERY" --request-timeout 180 \
+            --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --allow-experimental-model --rebuild-outputs-only --commit-checkpoints
+
+      - name: Record explicitly requested Layers 6–8 task start
+        if: (inputs.layer68_mode == 'run' || inputs.layer68_mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0'
+        shell: bash
+        env:
+          CLASS_NO: ${{ inputs.class_no }}
+          SOURCE_BOOK_ID: ${{ inputs.source_book_id }}
+          MODEL: ${{ inputs.generation_model }}
+        run: |
+          set -euo pipefail
+          pair_id="$(python - "$SOURCE_BOOK_ID" <<'PY'
+          import sys
+          from scripts.textbook_pipeline_handoff import pair_for_book_id
+          print(pair_for_book_id(sys.argv[1])["book_pair_id"])
+          PY
+          )"
+          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage 7 --status RUNNING --reason-code EXPLICIT_LAYER6_8_REQUEST --model "$MODEL" --message "Layer 6–8 generation/resume was explicitly requested after a source-bound Layer 5 preflight."
+
+      - name: Start loopback-only Ollama service
+        if: inputs.layer68_mode == 'benchmark' || ((inputs.layer68_mode == 'run' || inputs.layer68_mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0')
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull ollama/ollama:latest
+          docker volume create quantaedge-layers-6-8-models >/dev/null
+          docker run -d --name quantaedge-layers-6-8-ollama \
+            -p 127.0.0.1:11434:11434 \
+            -v quantaedge-layers-6-8-models:/root/.ollama \
+            ollama/ollama:latest
+          ready=false
+          for attempt in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then ready=true; break; fi
+            sleep 2
+          done
+          [[ "$ready" == true ]] || { docker logs quantaedge-layers-6-8-ollama; exit 1; }
+      - name: Pull only candidate models for this invocation
+        if: inputs.layer68_mode == 'benchmark' || ((inputs.layer68_mode == 'run' || inputs.layer68_mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0')
+        shell: bash
+        env:
+          MODE: "${{ inputs.layer68_mode }}"
+          BENCHMARK_MODELS: "${{ inputs.benchmark_models }}"
+          GENERATION_MODEL: "${{ inputs.generation_model }}"
+        run: |
+          set -euo pipefail
+          if [[ "$MODE" == "benchmark" ]]; then
+            IFS=',' read -r -a candidates <<< "$BENCHMARK_MODELS"
+          elif [[ "$MODE" == "run" || "$MODE" == "resume" ]]; then
+            candidates=("$GENERATION_MODEL")
+          fi
+          for model in "${candidates[@]}"; do
+            model="$(printf '%s' "$model" | xargs)"
+            [[ -n "$model" ]] || { echo "Model list contains an empty item"; exit 2; }
+            docker exec quantaedge-layers-6-8-ollama ollama pull "$model"
+          done
+      - name: Benchmark the same Class 6 NCERT excerpts with every model
+        if: inputs.layer68_mode == 'benchmark'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py benchmark \
+            --repo-root "$GITHUB_WORKSPACE" --source-book-id ncert-c6-english-fecu1 \
+            --endpoint http://127.0.0.1:11434 --models "${{ inputs.benchmark_models }}" \
+            --sample-segments 2 --request-timeout 300 \
+            --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --commit-checkpoints
+      - name: Refresh saved benchmark samples without model inference
+        if: inputs.layer68_mode == 'refresh_benchmark'
+        shell: bash
+        env:
+          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py refresh-benchmark \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --source-book-id "$SOURCE_BOOK_ID" \
+            --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --commit-checkpoints
+
+      - name: Run bounded single-book draft generation
+        if: (inputs.layer68_mode == 'run' || inputs.layer68_mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0'
+        shell: bash
+        env:
+          CLASS_NO: "${{ inputs.class_no }}"
+          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
+          MODEL: "${{ inputs.generation_model }}"
+          MAX_MODEL_CALLS: "${{ inputs.max_model_calls }}"
+          ALLOW_EXPERIMENTAL_MODEL: "${{ inputs.allow_experimental_model }}"
+        run: |
+          set -euo pipefail
+          [[ "$ALLOW_EXPERIMENTAL_MODEL" == "true" ]] || { echo "Enable allow_experimental_model for review-only drafts."; exit 2; }
+          [[ "$MAX_MODEL_CALLS" =~ ^[0-9]+$ ]] && (( MAX_MODEL_CALLS >= 1 && MAX_MODEL_CALLS <= 20 )) || { echo "max_model_calls must be 1..20"; exit 2; }
+          python scripts/quantaedge_layers_6_8.py run \
+            --repo-root "$GITHUB_WORKSPACE" --class-no "$CLASS_NO" \
+            --source-book-id "$SOURCE_BOOK_ID" --endpoint http://127.0.0.1:11434 \
+            --model "$MODEL" --max-model-calls "$MAX_MODEL_CALLS" \
+            --checkpoint-every "$CHECKPOINT_EVERY" --request-timeout 180 \
+            --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --allow-experimental-model --commit-checkpoints
+      - name: Record source-bound Layers 6–8 checkpoint and timings
+        if: success() && (inputs.layer68_mode == 'run' || inputs.layer68_mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0'
+        shell: bash
+        env:
+          CLASS_NO: ${{ inputs.class_no }}
+          SOURCE_BOOK_ID: ${{ inputs.source_book_id }}
+          MODEL: ${{ inputs.generation_model }}
+        run: |
+          set -euo pipefail
+          read -r pair_id manifest status processed expected unresolved <<< "$(python - "$GITHUB_WORKSPACE" "$CLASS_NO" "$SOURCE_BOOK_ID" <<'PY'
+          import json,sys
+          from pathlib import Path
+          from scripts.plan_textbook_layer45_matrix import BOOKS
+          from scripts.textbook_pipeline_handoff import pair_for_book_id
+          root=Path(sys.argv[1]); grade=sys.argv[2]; book_id=sys.argv[3]
+          source=next((x for x in BOOKS if x["book_id"]==book_id),None)
+          if source is None or str(source["class_no"])!=grade:
+              raise SystemExit("Source book is not registered in the selected class.")
+          ledger=root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/source["book_slug"]/"coverage-ledger.v1.json"
+          if not ledger.is_file():
+              raise SystemExit(f"Layer 5 prerequisite ledger missing: {ledger}")
+          ledger_doc=json.loads(ledger.read_text(encoding="utf-8"))
+          digest=str((ledger_doc.get("source") or {}).get("source_pdf_sha256") or "")
+          if len(digest)!=64:
+              raise SystemExit("Layer 5 source PDF SHA-256 invalid.")
+          manifest=root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/source["book_slug"]/"layers-6-8"/f"{source['book_slug']}-sha{digest[:8]}-v5"/"layers-6-8-run-manifest.v1.json"
+          if not manifest.is_file():
+              raise SystemExit(f"Layers 6–8 output manifest missing: {manifest}")
+          report=json.loads(manifest.read_text(encoding="utf-8"))
+          if report.get("schema_version")!="quantaedge.layers-6-8-run-manifest.v1" or report.get("source_book_id")!=book_id or report.get("source_pdf_sha256")!=digest:
+              raise SystemExit("Layers 6–8 handoff schema/source identity/hash mismatch.")
+          if report.get("overall_status") not in {"IN_PROGRESS","INCOMPLETE","DRAFT_REQUIRES_HUMAN_REVIEW"}:
+              raise SystemExit("Unexpected Layers 6–8 run-manifest status.")
+          status="NEEDS_REVIEW" if report.get("overall_status")=="DRAFT_REQUIRES_HUMAN_REVIEW" else "CHECKPOINTED"
+          pending=report.get("pending_segments",0)
+          if isinstance(pending,list): pending=len(pending)
+          processed=int(report.get("segments_completed",0) or 0)
+          expected=int(report.get("segments_total",0) or 0)
+          unresolved=sum(int(report.get(k,0) or 0) for k in ("unresolved_source_pages","unresolved_text_pages","unresolved_chapter_segments","unresolved_text_segments"))
+          print(pair_for_book_id(book_id)["book_pair_id"],manifest.relative_to(root).as_posix(),status,processed,expected,unresolved+int(pending or 0))
+          PY
+          )"
+          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage 7 --status "$status" --reason-code BOUNDED_LAYERS6_8_CHECKPOINT --model "$MODEL" --processed-count "$processed" --expected-count "$expected" --unresolved-count "$unresolved" --completed-batches 1 --artifact "$manifest" --message "Validated source-bound Layers 6–8 run manifest; publication remains disabled and human review is mandatory."
+          git add data/textbook-content-pipeline/handoffs
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "status(content): record Layers 6–8 handoff"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Record failed Layers 6–8 task without automatic retry
+        if: failure() && (inputs.layer68_mode == 'run' || inputs.layer68_mode == 'resume')
+        shell: bash
+        env:
+          CLASS_NO: ${{ inputs.class_no }}
+          SOURCE_BOOK_ID: ${{ inputs.source_book_id }}
+          MODEL: ${{ inputs.generation_model }}
+        run: |
+          set +e
+          pair_id="$(python - "$SOURCE_BOOK_ID" <<'PY'
+          import sys
+          from scripts.textbook_pipeline_handoff import pair_for_book_id
+          print(pair_for_book_id(sys.argv[1])["book_pair_id"])
+          PY
+          )"
+          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage 7 --status BLOCKED --reason-code WORKER_FAILURE_REQUIRES_TRIAGE --model "$MODEL" --message "Worker failed; inspect logs/checkpoint before explicitly retrying. No automatic restart is scheduled." || true
+          git add data/textbook-content-pipeline/handoffs
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "status(content): record Layers 6–8 failure"
+            git push origin "HEAD:${GITHUB_REF_NAME}" || true
+          fi
+
+      - name: Run summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## QuantaEdge Layers 6-8"
+            echo "- Provider: native local Ollama /api/chat; no OpenAI API key or hosted endpoint."
+            echo "- One whole-book source per run and a strict model-call budget."
+            echo "- Content checkpoints stay on the selected task branch; resume reuses matching source, edition, model, prompt, contract and visual-evidence fingerprints."
+            if [[ "${{ inputs.layer68_mode }}" == "resume" ]]; then echo "- Explicit RESUME mode selected: completed matching segments are reused; only pending/error segments within the new model-call budget are attempted."; fi
+            if [[ ("${{ inputs.layer68_mode }}" == "resume" || "${{ inputs.layer68_mode }}" == "run") && "${{ steps.generation_preflight.outputs.preflight_state }}" == "MATCHED_CHECKPOINT" && "${{ steps.generation_preflight.outputs.retryable_segments }}" == "0" ]]; then echo "- All segments are already terminal; skipped Ollama startup/model download/inference."; fi
+            echo "- Lessons, retrieval records and SFT examples remain review-only; production selection remains pending human review."
+            echo "- IN_PROGRESS means repeat the same inputs to resume. It is never a false completion."
+          } >> "$GITHUB_STEP_SUMMARY"
+          docker logs --tail 80 quantaedge-layers-6-8-ollama 2>/dev/null || true
+      - name: Stop Ollama service
+        if: always()
+        run: docker rm -f quantaedge-layers-6-8-ollama >/dev/null 2>&1 || true
 
   report-progress:
     if: ${{ inputs.task == 'progress_report' }}
@@ -256,7 +1866,6 @@ jobs:
             ${{ runner.temp }}/textbook-progress.md
           if-no-files-found: error
           retention-days: 30
-
   rebuild-corrections:
     if: ${{ inputs.task == 'rebuild_corrections' }}
     needs: validate
@@ -300,10 +1909,90 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "rebuild(content): refresh Layer 5 from accepted corrections"
           git push origin "HEAD:${{ github.ref_name }}"
-
-  audit-contracts:
+  audit_offline:
     if: ${{ inputs.task == 'audit_contracts' }}
     needs: validate
-    uses: ./.github/workflows/curriculum-pipeline-audit.yml
-    with:
-      pull_live_registry: ${{ inputs.pull_live_registry }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+      - name: Test textbook registry and whole-book-only download safeguards
+        run: python -m unittest discover -s tests -p "test_textbook_registry.py" -v
+      - name: Test page extraction and checksum safeguards
+        run: python -m unittest discover -s tests -p "test_extract_textbook_text.py" -v
+      - name: Test question schema, bilingual source/output gates, and provenance
+        run: python -m unittest discover -s tests -p "test_generate_questions_from_extraction.py" -v
+      - name: Test reviewed-content import and language/edition gates
+        run: python -m unittest discover -s tests -p "test_content_import.py" -v
+      - name: Test static pipeline audit rules
+        run: python -m unittest discover -s tests -p "test_audit_curriculum_pipeline.py" -v
+      - name: Run offline tooling audit (does not claim live content completeness)
+        run: python scripts/audit_curriculum_pipeline.py --skip-registry --strict
+
+  audit_live_registry:
+    if: ${{ inputs.task == 'audit_contracts' && inputs.pull_live_registry == true }}
+    needs: [validate, audit_offline]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+      - name: Pull actual class/medium images
+        shell: bash
+        run: |
+          set -u
+          owner="$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
+          root="source-pdfs/registry-cache"
+          mkdir -p "$root"
+          failures=0
+          for grade in 6 7 8; do
+            for language in hindi english; do
+              image="ghcr.io/${owner}/quantaedge-textbooks-class-${grade}-${language}:latest"
+              output="${root}/class-${grade}/${language}"
+              mkdir -p "$output"
+              if python scripts/textbook_registry.py pull --image "$image" --output-dir "$output"; then
+                echo "PULL_OK ${image}"
+              else
+                echo "PULL_FAILED ${image}"
+                printf '{"registry":"%s","books":[],"pull_error":true}\n' "$image" > "${output}/index.json"
+                failures=1
+              fi
+            done
+          done
+          echo "PULL_FAILURES=${failures}" >> "$GITHUB_ENV"
+      - name: Strict live asset report
+        shell: bash
+        run: |
+          set +e
+          python scripts/audit_curriculum_pipeline.py --cache-root source-pdfs/registry-cache --report curriculum-pipeline-live-audit.json --strict
+          result=$?
+          set -e
+          python - <<'PY'
+          import json
+          r=json.load(open("curriculum-pipeline-live-audit.json",encoding="utf-8"))
+          print("status",r["overall_status"],"blockers",r["summary"]["blockers"],"warnings",r["summary"]["warnings"])
+          for x in r["findings"]:
+              if x["severity"]=="BLOCKER": print(x["stage"],x["code"],x["message"])
+          PY
+          test "$result" -eq 0
+          test "${PULL_FAILURES:-1}" -eq 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quantaedge-curriculum-pipeline-live-audit
+          path: curriculum-pipeline-live-audit.json
+          if-no-files-found: warn
+

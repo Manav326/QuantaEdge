@@ -1,3 +1,4 @@
+import hashlib
 import json
 import tempfile
 import unittest
@@ -19,51 +20,83 @@ class TextbookPairProgressReportTests(unittest.TestCase):
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     def mark_book_complete(self, book_id, slug, sha="a" * 64):
-        grade = next(item["class_no"] for item in BOOKS if item["book_id"] == book_id)
+        source = next(item for item in BOOKS if item["book_id"] == book_id)
+        grade = source["class_no"]
+        language = "english" if "english" in book_id else "hindi"
         visual = self.root / "data" / "textbook-visuals" / slug
         layer = self.root / "data" / "textbook-content-pipeline" / f"class-{grade}" / "books" / slug
-        inventory = {
-            "schema_version": "quantaedge.visual-inventory.v1",
-            "source": {"book_id": book_id, "pdf_sha256": sha, "class": grade},
-            "assets": [
-                {"asset_id": f"asset-{i}", "kind": "page_preview", "asset_sha256": str(i) * 64}
-                for i in range(1, 6)
-            ],
-        }
+        extraction = self.root / "data" / "textbook-extractions" / f"class-{grade}" / language / "pages"
+        extraction.mkdir(parents=True)
+        text_name = f"{sha}.jsonl"
+        self.write_json(extraction / f"{sha}.manifest.json", {
+            "schema_version": 1, "book_id": book_id, "class": grade, "language": language,
+            "scope": "SUBJECT_BOOK", "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
+            "original_book_sha256": sha, "asset_pdf_sha256": sha, "page_count": 1, "text_jsonl": text_name,
+        })
+        (extraction / text_name).write_text(json.dumps({
+            "schema_version": 1, "book_id": book_id, "original_book_sha256": sha, "asset_pdf_sha256": sha,
+            "source_book_page_number": 1, "language": language, "scope": "SUBJECT_BOOK", "text": "source page",
+        }) + "\n", encoding="utf-8")
+
+        asset_rows = [
+            {"asset_id": f"asset-{i}", "kind": "page_preview", "asset_sha256": str(i) * 64,
+             "source_pdf_sha256": sha, "source_pdf_page_number": 1, "asset_path": f"page-{i}.jpg"}
+            for i in range(1, 6)
+        ]
         raw_rel = f"data/textbook-visuals/{slug}/visual-analysis-qwen2.5vl-3b.v1.json"
+        effective_rel = f"data/textbook-content-pipeline/class-{grade}/books/{slug}/visual-analysis-effective.v1.json"
         ledger_rel = f"data/textbook-content-pipeline/class-{grade}/books/{slug}/coverage-ledger.v1.json"
-        index = {
-            "schema_version": "quantaedge.textbook-content-pipeline-index.v1",
-            "source_book_id": book_id,
-            "source_pdf_sha256": sha,
-            "layers": {"4": "CHECKPOINTED", "5": "COMPLETE"},
-            "analysis_path": raw_rel,
-            "coverage_ledger_path": ledger_rel,
-        }
+        raw_results = [
+            {"asset_id": a["asset_id"], "asset_sha256": a["asset_sha256"], "source_book_id": book_id,
+             "source_pdf_sha256": sha, "source_pdf_page_number": 1, "model": "qwen2.5vl:3b",
+             "prompt_version": "visual-analysis-prompt-v2", "analysis_status": "DRAFT_REQUIRES_REVIEW",
+             "analysis": {"visual_summary": "review-only draft"}, "human_review_required": True, "publication_allowed": False}
+            for a in asset_rows
+        ]
         raw = {
-            "schema_version": "quantaedge.visual-analysis.v1",
-            "source_book_id": book_id,
-            "source_pdf_sha256": sha,
-            "model": "qwen2.5vl:3b",
-            "summary": {
-                "assets_eligible": 5,
-                "assets_analyzed": 5,
-                "assets_failed": 0,
-                "assets_remaining": 0,
-                "assets_completion_percent": 100.0,
-            },
-            "results": [],
+            "schema_version": "quantaedge.visual-analysis.v1", "source_book_id": book_id,
+            "source_pdf_sha256": sha, "model": "qwen2.5vl:3b", "prompt_version": "visual-analysis-prompt-v2",
+            "summary": {"assets_eligible": 5, "assets_analyzed": 5, "assets_failed": 0, "assets_remaining": 0, "assets_completion_percent": 100.0},
+            "results": raw_results,
         }
-        ledger = {
-            "schema_version": "quantaedge.textbook-coverage-ledger.v1",
-            "ledger_status": "COMPLETE",
+        raw_path = self.root / raw_rel
+        self.write_json(visual / "visual-inventory.v1.json", {
+            "schema_version": "quantaedge.visual-inventory.v1",
+            "source": {"book_id": book_id, "pdf_sha256": sha, "class": grade, "language": language},
+            "assets": asset_rows,
+        })
+        self.write_json(raw_path, raw)
+        raw_digest = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+        self.write_json(self.root / effective_rel, {
+            "schema_version": "quantaedge.visual-analysis-effective.v1", "source_book_id": book_id,
+            "source_pdf_sha256": sha, "raw_analysis_path": raw_rel, "raw_analysis_sha256": raw_digest,
+            "model": "qwen2.5vl:3b", "prompt_version": "visual-analysis-prompt-v2",
+            "results": [
+                {"asset_id": a["asset_id"], "asset_sha256": a["asset_sha256"],
+                 "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
+                 "effective_analysis": {"visual_summary": "review-only draft"}}
+                for a in asset_rows
+            ],
+        })
+        self.write_json(self.root / ledger_rel, {
+            "schema_version": "quantaedge.textbook-coverage-ledger.v1", "ledger_status": "COMPLETE",
             "source": {"source_book_id": book_id, "source_pdf_sha256": sha},
-            "summary": {"unresolved_count": 0},
-        }
-        self.write_json(visual / "visual-inventory.v1.json", inventory)
-        self.write_json(visual / "visual-pipeline-index.v1.json", index)
-        self.write_json(self.root / raw_rel, raw)
-        self.write_json(self.root / ledger_rel, ledger)
+            "summary": {
+                "source_pdf_page_count": 1, "pages_with_unresolved_text": 0, "unresolved_count": 0,
+                "missing_visual_analyses": 0, "failed_visual_analyses": 0, "orphan_analysis_results": 0,
+                "eligible_visual_asset_rows": 5, "successful_visual_analyses": 5,
+                "analysis_model": "qwen2.5vl:3b", "analysis_prompt_version": "visual-analysis-prompt-v2",
+            },
+            "pages": [{"source_pdf_page_number": 1}],
+            "visuals": [{"asset_id": a["asset_id"], "asset_sha256": a["asset_sha256"],
+                         "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW"} for a in asset_rows],
+        })
+        self.write_json(visual / "visual-pipeline-index.v1.json", {
+            "schema_version": "quantaedge.textbook-content-pipeline-index.v1",
+            "source_book_id": book_id, "book_slug": slug, "source_pdf_sha256": sha,
+            "layers": {"1": "COMPLETE", "2": "COMPLETE", "3": "COMPLETE", "4": "COMPLETE", "5": "COMPLETE"},
+            "analysis_path": raw_rel, "effective_analysis_path": effective_rel, "coverage_ledger_path": ledger_rel,
+        })
 
     def test_large_checkpoint_summary_can_be_read_without_decoding_the_result_payload(self):
         path = self.root / "large-checkpoint.json"
@@ -111,6 +144,31 @@ class TextbookPairProgressReportTests(unittest.TestCase):
         self.assertEqual(10, pair["combined_analysis"]["analyzed_assets"])
         self.assertEqual(100.0, pair["combined_analysis"]["completion_percent"])
         self.assertTrue(all(item["coverage"]["verified_complete"] for item in pair["languages"]))
+
+    def test_each_source_book_reports_all_nine_layers_and_never_invents_legacy_durations(self):
+        ids = self.pair["book_ids_csv"].split(",")
+        slugs = self.pair["source_slugs_csv"].split(",")
+        for book_id, slug in zip(ids, slugs, strict=True):
+            self.mark_book_complete(book_id, slug)
+        report = build_report(self.root)
+        pair = next(item for item in report["classes"][0]["pairs"] if item["book_pair_id"] == self.pair["book_pair_id"])
+        self.assertEqual(2, len(pair["languages"]))
+        for edition in pair["languages"]:
+            rows = edition.get("layer_timings")
+            self.assertEqual(list(range(9)), [row["layer"] for row in rows])
+            for row in rows:
+                self.assertIn("actual_elapsed_seconds", row)
+                self.assertIn("estimated_total_seconds", row)
+                self.assertIn("estimated_remaining_seconds", row)
+                self.assertIn("last_progress_at", row)
+                # This fixture has no historical timers; file creation dates are not runtime.
+                self.assertIsNone(row["actual_elapsed_seconds"])
+                self.assertIsNone(row["estimated_total_seconds"])
+                self.assertIsNone(row["estimated_remaining_seconds"])
+        markdown = render_markdown(report)
+        self.assertIn("Per-source-book, per-layer timing", markdown)
+        self.assertIn("Not recorded", markdown)
+        self.assertIn("model-seconds, not wall-clock time", markdown)
 
     def test_mismatched_language_ledger_hash_blocks_pair_completion(self):
         ids = self.pair["book_ids_csv"].split(",")

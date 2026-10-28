@@ -76,6 +76,148 @@ def valid_sha(value: Any) -> bool:
     return len(digest) == 64 and all(char in VALID_HEX for char in digest)
 
 
+def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str, Any] | None,
+                       raw_path: Path | None, raw_fields: dict[str, Any],
+                       ledger_fields: dict[str, Any]) -> list[dict[str, Any]]:
+    """Read nine layer timing records from small metadata prefixes; do not scan large arrays."""
+    grade, book_id, slug = source["class_no"], source["book_id"], source["book_slug"]
+    language = "english" if "english" in book_id else "hindi"
+    now = datetime.now(timezone.utc)
+    pair = next((p for p in BOOK_PAIRS if book_id in p["book_ids_csv"].split(",")), None)
+    handoff = {}
+    if pair:
+        handoff, _ = read_json_fields(
+            repo_root / "data" / "textbook-content-pipeline" / "handoffs" /
+            f"class-{grade}" / pair["book_pair_id"] / "current.v1.json",
+            ["book_layer_statuses", "layer_statuses"], max_prefix_bytes=2 * 1024 * 1024)
+    saved_layers = (handoff.get("book_layer_statuses") or {}).get(book_id) or {}
+    pair_layers = handoff.get("layer_statuses") or {}
+    visual = repo_root / "data" / "textbook-visuals" / slug
+    layers = (index or {}).get("layers") or {}
+
+    def make(layer: int, name: str, fallback_status: str, timing: dict[str, Any] | None = None, **metrics: Any) -> dict[str, Any]:
+        timing = timing or {}
+        saved = saved_layers.get(str(layer)) or pair_layers.get(str(layer)) or {}
+        clocks = saved.get("timestamps") or {}
+        status = saved.get("status") or timing.get("status") or fallback_status
+        started_at = clocks.get("started_at") or timing.get("started_at")
+        elapsed = _timing_number(saved.get("cumulative_elapsed_seconds"))
+        if elapsed is None:
+            elapsed = _timing_number(timing.get("cumulative_elapsed_seconds",
+                timing.get("total_elapsed_seconds", timing.get("attempt_elapsed_seconds", timing.get("elapsed_seconds")))))
+        attempt = _timing_number(saved.get("attempt_elapsed_seconds"))
+        parsed_start = _parse_timing_utc(started_at)
+        if status == "RUNNING" and parsed_start:
+            attempt = max(0.0, (now - parsed_start).total_seconds())
+            elapsed = (elapsed or 0.0) + attempt
+        return {
+            "layer": layer, "name": name, "status": status,
+            "started_at": started_at,
+            "completed_at": clocks.get("completed_at") or timing.get("completed_at"),
+            "last_progress_at": clocks.get("last_progress_at") or timing.get("last_progress_at"),
+            "checkpoint_at": clocks.get("checkpoint_at"), "last_error_at": clocks.get("last_error_at"),
+            "retry_after": clocks.get("retry_after"), "actual_elapsed_seconds": elapsed,
+            "attempt_elapsed_seconds": attempt, "cumulative_elapsed_seconds": elapsed,
+            "model_runtime_seconds": None, "estimated_model_remaining_seconds": None,
+            "estimated_total_seconds": None, "estimated_remaining_seconds": None,
+            "historical_sample_count": 0, "estimate_basis": "Not enough measured completed runs yet",
+            "timing_available": elapsed is not None,
+            "timing_basis": timing.get("timing_basis") or (
+                "Per-book durable handoff runtime" if elapsed is not None else
+                "Legacy artifact has no elapsed timer; runtime is not inferred from file dates"),
+            **metrics,
+        }
+
+    # Stage 0: find the source-specific extraction manifest; JSONL rows are not re-read here.
+    extraction_dir = repo_root / "data" / "textbook-extractions" / f"class-{grade}" / language / "pages"
+    manifest = {}
+    if extraction_dir.is_dir():
+        for p in sorted(extraction_dir.glob("*.manifest.json")):
+            meta, _ = read_json_fields(p, ["book_id", "scope", "page_count", "completed_pages", "timing", "created_at_utc"], max_prefix_bytes=256 * 1024)
+            if meta.get("book_id") == book_id:
+                manifest = meta
+                break
+    extraction_timing = manifest.get("timing") if isinstance(manifest.get("timing"), dict) else {}
+    rows = [make(0, "Source extraction",
+        "COMPLETE" if manifest.get("scope") == "SUBJECT_BOOK" else ("NOT_STARTED" if not manifest else "BLOCKED"),
+        extraction_timing, pages_total=manifest.get("page_count"), pages_processed=manifest.get("completed_pages"))]
+
+    inventory_path = visual / "visual-inventory.v1.json"
+    inv, _ = read_json_fields(inventory_path, ["schema_version", "timing", "source"], max_prefix_bytes=256 * 1024) if inventory_path.is_file() else ({}, "missing")
+    rows.append(make(1, "Visual inventory", str(layers.get("1") or ("AVAILABLE_LEGACY" if inv else "NOT_STARTED")),
+        inv.get("timing") if isinstance(inv.get("timing"), dict) else {}))
+
+    candidate = repo_root / "data" / "textbook-visual-candidates-v3" / slug
+    summary, _ = read_json_fields(candidate / "summary.v3.json", ["summary", "timing"], max_prefix_bytes=256 * 1024) if (candidate / "summary.v3.json").is_file() else ({}, "missing")
+    bundle, _ = read_json_fields(candidate / "bundle-index.v3.json", ["layer_timings", "timing"], max_prefix_bytes=512 * 1024) if (candidate / "bundle-index.v3.json").is_file() else ({}, "missing")
+    bundle_times = bundle.get("layer_timings") or {}
+    candidates = summary.get("summary") or {}
+    rows.append(make(2, "Visual candidate preparation", "AVAILABLE_LEGACY" if summary else "NOT_STARTED",
+        bundle_times.get("2") or summary.get("timing") or {},
+        units_total=candidates.get("candidate_pool_count"), units_processed=candidates.get("selected_candidate_count")))
+    catalog = candidate.parent / "catalogs" / f"{slug}.v3.json"
+    rows.append(make(3, "Candidate catalogue / attachment handoff",
+        "AVAILABLE_LEGACY" if catalog.is_file() else "NOT_STARTED", bundle_times.get("3") or {}))
+
+    raw_meta, _ = read_json_fields(raw_path, ["started_at", "attempt_started_at", "completed_at", "last_progress_at",
+        "elapsed_seconds_this_attempt", "estimated_model_seconds_remaining", "summary", "layer_status"],
+        max_prefix_bytes=512 * 1024) if raw_path and raw_path.is_file() else ({}, "missing")
+    raw_summary = raw_meta.get("summary") if isinstance(raw_meta.get("summary"), dict) else raw_fields.get("summary") or {}
+    raw_timing = {"started_at": raw_meta.get("attempt_started_at") or raw_meta.get("started_at"),
+        "completed_at": raw_meta.get("completed_at"), "last_progress_at": raw_meta.get("last_progress_at"),
+        "elapsed_seconds": raw_meta.get("elapsed_seconds_this_attempt"),
+        "timing_basis": "Measured attempt wall time in raw-analysis checkpoint"}
+    rows.append(make(4, "Raw visual analysis",
+        str(layers.get("4") or raw_meta.get("layer_status") or ("IN_PROGRESS" if raw_fields else "NOT_STARTED")),
+        raw_timing, assets_total=raw_summary.get("assets_eligible"), assets_processed=raw_summary.get("assets_analyzed"),
+        assets_remaining=raw_summary.get("assets_remaining"),
+        model_runtime_seconds=_timing_number(raw_summary.get("total_model_seconds_recorded")),
+        estimated_model_remaining_seconds=_timing_number(raw_meta.get("estimated_model_seconds_remaining",
+            raw_summary.get("estimated_model_seconds_remaining"))),
+        duration_sample_count=raw_summary.get("duration_sample_count", 0)))
+
+    ledger_path = repo_root / "data" / "textbook-content-pipeline" / f"class-{grade}" / "books" / slug / "coverage-ledger.v1.json"
+    ledger_meta, _ = read_json_fields(ledger_path, ["timing"], max_prefix_bytes=512 * 1024) if ledger_path.is_file() else ({}, "missing")
+    ledger_summary = (ledger_fields or {}).get("summary") or {}
+    layer5_artifact_timing=ledger_meta.get("timing") if isinstance(ledger_meta.get("timing"),dict) else {}
+    layer5_row=make(5, "Effective analysis / coverage ledger",
+        str(layers.get("5") or layer5_artifact_timing.get("status") or (ledger_fields or {}).get("ledger_status") or "NOT_STARTED"),
+        layer5_artifact_timing,
+        eligible_visuals=ledger_summary.get("eligible_visual_asset_rows"),
+        successful_visuals=ledger_summary.get("successful_visual_analyses"),
+        unresolved_count=ledger_summary.get("unresolved_count"))
+    # Layer 5's own elapsed timer measures effective-analysis/ledger reconciliation;
+    # its handoff status clock can overlap Layer 4, so show the direct measured duration.
+    if layer5_artifact_timing:
+        direct=_timing_number(layer5_artifact_timing.get("attempt_elapsed_seconds",
+            layer5_artifact_timing.get("elapsed_seconds")))
+        if direct is not None:
+            layer5_row["actual_elapsed_seconds"]=direct
+            layer5_row["attempt_elapsed_seconds"]=direct
+            layer5_row["cumulative_elapsed_seconds"]=_timing_number(layer5_artifact_timing.get("total_elapsed_seconds")) or direct
+            layer5_row["timing_available"]=True
+            layer5_row["timing_basis"]="Direct monotonic timer inside Layer 5 effective-analysis/coverage-ledger reconciliation"
+    rows.append(layer5_row)
+
+    l68_root = repo_root / "data" / "textbook-content-pipeline" / f"class-{grade}" / "books" / slug / "layers-6-8"
+    manifest68 = {}
+    if l68_root.is_dir():
+        for p in sorted(l68_root.glob("*/layers-6-8-run-manifest.v1.json"), key=lambda p: p.stat().st_mtime, reverse=True):
+            meta, _ = read_json_fields(p, ["source_book_id", "source_pdf_sha256", "layers", "layer_timings", "timing", "segments_total", "segments_completed"], max_prefix_bytes=1024 * 1024)
+            if meta.get("source_book_id") == book_id and str(meta.get("source_pdf_sha256") or "").lower() == str((index or {}).get("source_pdf_sha256") or "").lower():
+                manifest68 = meta
+                break
+    l68_status = manifest68.get("layers") or {}
+    l68_times = manifest68.get("layer_timings") or {}
+    for layer, name in ((6,"Curriculum/concept mapping"),(7,"Structured lesson/question generation"),(8,"Tutor retrieval/training material")):
+        explicit = l68_times.get(str(layer)) or manifest68.get("timing") or {}
+        status = str(l68_status.get(str(layer)) or ("NOT_STARTED" if not manifest68 else "AVAILABLE_LEGACY"))
+        rows.append(make(layer, name, status, explicit, segments_total=manifest68.get("segments_total"),
+            segments_completed=manifest68.get("segments_completed"),
+            shared_runtime_across_layers_6_8=not bool(l68_times.get(str(layer)))))
+    return rows
+
+
 def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
     grade, book_id, slug = source["class_no"], source["book_id"], source["book_slug"]
     visual_dir = repo_root / "data" / "textbook-visuals" / slug
@@ -240,6 +382,7 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
             "verified_complete": ledger_complete,
         },
         "source_pdf_sha256": expected_sha or None,
+        "layer_timings": book_layer_timings(repo_root, source, index, raw_path, raw_fields, ledger_fields),
         "blockers": sorted(set(blockers)),
     }
 
@@ -306,6 +449,60 @@ def build_report(repo_root: Path) -> dict[str, Any]:
         }
         pairs.append(pair)
         class_rows[definition["class_no"]].append(pair)
+
+    # Calibrate expected duration from completed measured runs only. Two samples are
+    # the minimum for an ETA; legacy file dates are never treated as runtime.
+    timing_samples: dict[int, list[float]] = {layer: [] for layer in range(9)}
+    for pair in pairs:
+        for edition in pair["languages"]:
+            for timing in edition.get("layer_timings", []):
+                layer = timing.get("layer")
+                elapsed = timing.get("actual_elapsed_seconds")
+                if not isinstance(layer, int) or not isinstance(elapsed, (int, float)) or elapsed <= 0:
+                    continue
+                if timing.get("status") not in {"COMPLETE", "NEEDS_REVIEW"}:
+                    continue
+                if timing.get("shared_runtime_across_layers_6_8") and layer != 7:
+                    continue
+                timing_samples[layer].append(float(elapsed))
+    medians: dict[int, float] = {}
+    for layer, values in timing_samples.items():
+        values.sort()
+        if len(values) >= 2:
+            mid = len(values) // 2
+            medians[layer] = values[mid] if len(values) % 2 else (values[mid - 1] + values[mid]) / 2
+    for pair in pairs:
+        for edition in pair["languages"]:
+            for timing in edition.get("layer_timings", []):
+                layer = timing["layer"]
+                elapsed = timing.get("actual_elapsed_seconds")
+                status = timing.get("status")
+                samples = timing_samples[layer]
+                expected = float(elapsed) if status in {"COMPLETE", "NEEDS_REVIEW"} and isinstance(elapsed, (int, float)) else medians.get(layer)
+                progress = 0.0
+                for completed_key, total_key in (
+                    ("pages_processed", "pages_total"), ("units_processed", "units_total"),
+                    ("assets_processed", "assets_total"), ("successful_visuals", "eligible_visuals"),
+                    ("segments_completed", "segments_total")
+                ):
+                    total_count = timing.get(total_key)
+                    completed_count = timing.get(completed_key)
+                    if isinstance(total_count, (int, float)) and total_count > 0 and isinstance(completed_count, (int, float)):
+                        progress = max(progress, min(1.0, float(completed_count) / float(total_count)))
+                timing["estimated_total_seconds"] = round(expected, 1) if expected is not None else None
+                timing["estimated_remaining_seconds"] = (
+                    0.0 if status in {"COMPLETE", "NEEDS_REVIEW"} else round(max(0.0, expected * (1.0 - progress)), 1)
+                ) if expected is not None else None
+                timing["historical_sample_count"] = len(samples)
+                timing["estimate_basis"] = (
+                    "Measured duration for this source book/layer"
+                    if status in {"COMPLETE", "NEEDS_REVIEW"} and isinstance(elapsed, (int, float))
+                    else f"Median of {len(samples)} measured completed runs; estimate only"
+                    if len(samples) >= 2
+                    else "Not enough measured completed runs; estimate withheld"
+                )
+                if layer == 4 and timing.get("estimated_model_remaining_seconds") is not None:
+                    timing["model_eta_basis"] = "Sum of per-asset model seconds; not wall-clock remaining time"
 
     classes = []
     for grade in ("6", "7", "8"):
@@ -418,6 +615,32 @@ def render_markdown(report: dict[str, Any]) -> str:
             )
             if pair["blockers"]:
                 lines.append(f"\n> **{pair['subject_book_label']} handoff warnings:** " + "; ".join(pair["blockers"]))
+            lines.extend([
+                "",
+                "**Per-source-book, per-layer timing**",
+                "",
+                "| Edition | Source book ID | Layer | Status | Actual elapsed | Expected total | Remaining | Last progress (UTC) | Model ETA* |",
+                "|---|---|---|---|---:|---:|---:|---|---:|",
+            ])
+            def _duration_text(value):
+                if not isinstance(value, (int, float)) or isinstance(value, bool):
+                    return "Not recorded"
+                seconds = max(0, int(value))
+                hours, rest = divmod(seconds, 3600)
+                minutes, seconds = divmod(rest, 60)
+                return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+            for language in ("english", "hindi"):
+                edition = editions[language]
+                for timing in edition.get("layer_timings", []):
+                    lines.append(
+                        f"| {language.capitalize()} | {edition['book_id']} | L{timing['layer']} {timing['name']} | "
+                        f"{timing['status']} | {_duration_text(timing.get('actual_elapsed_seconds'))} | "
+                        f"{_duration_text(timing.get('estimated_total_seconds'))} | "
+                        f"{_duration_text(timing.get('estimated_remaining_seconds'))} | "
+                        f"{timing.get('last_progress_at') or '—'} | "
+                        f"{_duration_text(timing.get('estimated_model_remaining_seconds'))} |"
+                    )
+            lines.append("*Model ETA is measured in model-seconds, not wall-clock time. Layers 6–8 share runtime unless separate sub-layer timings are present; unknown historical durations remain “Not recorded.”")
         lines.append("")
     lines.extend([
         "## Completion rule",
