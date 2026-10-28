@@ -2212,7 +2212,7 @@ html[data-qe-appearance] .qe-admin-public-page .qe-admin-login-controls .qe-appe
   border-radius: 10px;
   background: var(--qe-color-surface-elevated, #FFFFFF);
   color: var(--qe-color-text, #172033);
-  font: 700 12px/1.3 inherit;
+  font-family: inherit; font-size: 12px; font-weight: 700; line-height: 1.3;
   overflow-wrap: anywhere;
 }
 html[data-qe-appearance] .qe-admin-public-page .qe-admin-login-controls .qe-admin-language-switcher {
@@ -2236,7 +2236,7 @@ html[data-qe-appearance] .qe-admin-public-page .qe-admin-login-controls .qe-admi
   outline-offset: 3px;
   background: transparent;
   color: var(--qe-color-text, #172033);
-  font: 650 12px/1.3 inherit;
+  font-family: inherit; font-size: 12px; font-weight: 650; line-height: 1.3;
 }
 html[data-qe-appearance] .qe-admin-public-page .qe-login-mode-switch {
   display: grid;
@@ -2260,7 +2260,7 @@ html[data-qe-appearance] .qe-admin-public-page .qe-login-mode-switch button {
   border-radius: 9px;
   background: transparent;
   color: var(--qe-color-text-muted, #536176);
-  font: 700 12px/1.35 inherit;
+  font-family: inherit; font-size: 12px; font-weight: 700; line-height: 1.35;
   text-align: center;
   white-space: normal;
   overflow-wrap: anywhere;
@@ -2460,7 +2460,7 @@ html[data-qe-appearance] .qe-admin-public-page .qe-login-primary {
   border-radius: 12px;
   background: var(--qe-color-primary, #F97316);
   color: var(--qe-color-on-primary, #111827);
-  font: 750 13px/1.35 inherit;
+  font-family: inherit; font-size: 13px; font-weight: 750; line-height: 1.35;
   overflow-wrap: anywhere;
 }
 html[data-qe-appearance] .qe-admin-public-page .qe-login-primary:disabled {

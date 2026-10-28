@@ -508,7 +508,7 @@ assert(peopleRootLayout.includes("import './people-appearance.css'") &&
   'HRMS must keep its shared appearance cascade, phone layout and reduced-motion behavior.');
 
 function adminPaletteHex(block, role) {
-  const match = block.match(new RegExp('\\b' + role + '\\s*:\\s*[\\'"]?(#[0-9a-fA-F]{6})[\\'"]?'));
+  const match = block.match(new RegExp("\\b" + role + "\\s*:\\s*['\"](#[0-9a-fA-F]{6})['\"]"));
   return match ? match[1] : null;
 }
 function assertAdminPaletteContrast(mode, block, foregroundRole, backgroundRole) {
