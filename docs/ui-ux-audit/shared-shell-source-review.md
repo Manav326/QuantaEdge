@@ -123,3 +123,16 @@ This source review records existing behavior and tests to run. No CSS, React/Com
 ## Reconciliation note — clean audit branch
 
 The former draft branch accumulated unrelated textbook-pipeline data deletions and is preserved separately; this audit-only branch is cut from current `main`. Source review entries remain source-level observations only. The current CSS/layout source files for the inspected shells were compared against `main` and have matching blob SHAs for the inspected files; runtime visual verification remains pending.
+
+## 5. Route-specific source finding — Admin notification shell
+
+The default legacy Admin route pattern is intentionally accounted for in `apps/admin/app/globals.css`: a direct `main.admin-shell` under `.qe-admin-workspace-page-slot` is reset to a single full-width content column, and its nested sidebar is hidden because the shared `AdminWorkspaceLayout` already owns navigation. `AdminSidebar` also returns `null` inside the workspace unless `persistent` is explicitly set. That source evidence ruled out a blanket fix to every Admin page.
+
+One exception was real at source level: the institution identity branch of `AdminNotificationsPageClient` used a `div.admin-shell`, which did not match the direct `main.admin-shell` compatibility selector. With no child sidebar, that inner grid still reserved its legacy 230px track. The branch now uses a plain `div`; notification studio/inbox components and behavior are unchanged. `scripts/check_admin_nested_shell_contract.mjs` is run in CI to prevent the legacy grid from reappearing.
+
+- Finding: `UX-ADMIN-LAYOUT-001` (P1; fixed in source, runtime verification pending).
+- Source fix: `75e44c8997ce2b8da24da9f8e55debfdaf8a9098`.
+- Regression guard: `scripts/check_admin_nested_shell_contract.mjs`.
+- Remaining acceptance: render both Admin and institution identity branches at 320/390/768/1280px, both themes and supported UI languages; inspect editor, inbox, focus/scroll, console and narrow viewport overflow.
+
+This is a source-verified structural issue, but the corrected visual layout must not be marked passed until runtime evidence is recorded.
