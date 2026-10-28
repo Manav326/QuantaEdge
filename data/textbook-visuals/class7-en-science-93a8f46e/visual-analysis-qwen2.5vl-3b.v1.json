@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2556,
+    "assets_selected": 2558,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "984038c20f542b7dfa33eaef",
-      "685e7f94b17bf04aee6cecd9"
+      "c46f2e9614a739735484f73a",
+      "5f68037e61c1e4d5da8e8023"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2553,
-    "assets_remaining": 4935,
+    "assets_analyzed": 2555,
+    "assets_remaining": 4933,
     "assets_completion_percent": 34.1,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2551,
+    "assets_skipped_from_checkpoint": 2553,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:29:10Z"
+      "checkpointed_at": "2026-10-28T10:32:27Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:29:40Z"
+      "checkpointed_at": "2026-10-28T10:32:57Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:30:18Z"
+      "checkpointed_at": "2026-10-28T10:33:36Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -96257,6 +96257,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
       "checkpointed_at": "2026-10-28T10:31:39Z"
+    },
+    {
+      "asset_id": "c46f2e9614a739735484f73a",
+      "asset_sha256": "a7833c2f27f88418b20665337f77296647e60222f8c51784a7acd68d3356d190",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/a7833c2f27f88418b20665337f77296647e60222f8c51784a7acd68d3356d190.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image illustrates the transformation of ice into water, a chemical change, and the growth of a bud into a flower, a physical change.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of the ice or the flower."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40663544497",
+      "checkpointed_at": "2026-10-28T10:34:18Z"
+    },
+    {
+      "asset_id": "5f68037e61c1e4d5da8e8023",
+      "asset_sha256": "5721e1e23219d4f449fa18cb1b8bb3cba9cef7106067096e5bb46f9926f80e92",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/5721e1e23219d4f449fa18cb1b8bb3cba9cef7106067096e5bb46f9926f80e92.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0777CH05' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0777CH05"
+        ],
+        "concepts": [],
+        "context_relation": "The image is related to the content of the textbook 'Changes Around Us' from the NCERT English course.",
+        "limitations": [
+          "The image does not provide any visual content related to the textbook's content.",
+          "The text '0777CH05' is not directly related to the textbook's content and may be a placeholder or a code for a different resource."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40663544497",
+      "checkpointed_at": "2026-10-28T10:34:59Z"
     }
   ]
 }
