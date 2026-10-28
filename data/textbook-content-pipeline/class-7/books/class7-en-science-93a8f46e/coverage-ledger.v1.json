@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2518,
-    "successful_visual_analyses": 2493,
-    "missing_visual_analyses": 4970,
-    "failed_visual_analyses": 25,
+    "raw_analysis_result_rows": 2523,
+    "successful_visual_analyses": 2497,
+    "missing_visual_analyses": 4965,
+    "failed_visual_analyses": 26,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4995,
+    "unresolved_count": 4991,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -103422,9 +103422,30 @@
       "asset_path": "assets/1636d3b5d8c675c77b8c9f86282b31f32e2e98e4527ae6926466fa6029c97a27.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cube of ice has melted into water, a bud has grown into a flower, and cold water has lost its coldness.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "A bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical changes",
+          "Chemical changes",
+          "Melting",
+          "Growth",
+          "Temperature change"
+        ],
+        "context_relation": "The image illustrates the concepts of physical and chemical changes in nature.",
+        "limitations": [
+          "The image does not provide specific details about the environment or conditions under which these changes occur."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -103440,9 +103461,29 @@
       "asset_path": "assets/caa49319c1dd746741c3690a8ad804857f9c9a373bacad7b2da56714bf4fdb6e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has melted into water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates the process of a physical change, where ice (a solid) has transformed into water (a liquid).",
+        "limitations": [
+          "The image does not provide specific details about the temperature change or the duration of the melting process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -103458,7 +103499,7 @@
       "asset_path": "assets/e95d11fe7cea32889edfd7e88e96c42dcb9c5f00c8c065671919fe275e49ae26.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -103476,9 +103517,26 @@
       "asset_path": "assets/d4341792f7a410d10cd3197d1cdb09574cafb422727dc577bfe2220482b85411.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a red flower bud transforming into a flower.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "Yesterday, I saw some brown",
+          "I placed a cube of ice here half an hour ago. It has now become water!"
+        ],
+        "concepts": [
+          "transformation",
+          "flowering",
+          "chemical change"
+        ],
+        "context_relation": "The image illustrates a physical and chemical change, showing a flower bud transforming into a flower.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or the physical changes involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -103494,9 +103552,30 @@
       "asset_path": "assets/7c83c96f431acad7b2f5e5ab829c0f6138197502a34f5d25d804de20b4e1e91d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A text-based illustration showing a sequence of changes in an object over time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "A bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Time Sequence",
+          "Bud to Flower Transition",
+          "Temperature Change"
+        ],
+        "context_relation": "The text illustrates the concept of changes in physical and chemical states over time.",
+        "limitations": [
+          "The image does not show any visual representation of the changes.",
+          "The text is in a narrative format, not a diagrammatic one."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
