@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "1554b4067d24673fc7b88fc2",
-      "c973477a8cf682ca3f4db4ca",
-      "29c388b0161ccfef7bc70795"
+      "0d1c88ea0154d314c4c70259",
+      "d7da2e4245dce1153447bcf6",
+      "60a0af36b889e75dc7738bcf"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2555,
-    "assets_remaining": 4933,
+    "assets_analyzed": 2556,
+    "assets_remaining": 4932,
     "assets_completion_percent": 34.1,
-    "assets_failed": 22,
+    "assets_failed": 23,
     "assets_skipped_from_checkpoint": 2555,
     "batch_limit": 5,
     "publication_allowed": false
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T12:14:11Z"
+      "checkpointed_at": "2026-10-28T12:26:39Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T12:15:42Z"
+      "checkpointed_at": "2026-10-28T12:28:11Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -90469,7 +90469,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40663544497",
+      "run_id": "40673609365",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -96294,6 +96294,49 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
       "checkpointed_at": "2026-10-28T10:34:59Z"
+    },
+    {
+      "asset_id": "d7da2e4245dce1153447bcf6",
+      "asset_sha256": "f59988f2c36d352182f3a1050e063146b095e19a216a72e232c6c016e0cef3b4",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/f59988f2c36d352182f3a1050e063146b095e19a216a72e232c6c016e0cef3b4.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "60a0af36b889e75dc7738bcf",
+      "asset_sha256": "3975e0a3c5d4ada49762b6e576da461739154d2db0467f4a8e708382e58079e1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/3975e0a3c5d4ada49762b6e576da461739154d2db0467f4a8e708382e58079e1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a magnifying glass, a pipe, and a magnet.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of changes in physical and chemical states.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T12:37:16Z"
     }
   ]
 }
