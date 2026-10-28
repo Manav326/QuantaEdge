@@ -244,7 +244,8 @@ public class AccountProfileController {
     result.put("username", row.get("username"));
     result.put("usernameCanChange", false);
     result.put("usernameCanChangeAt", null);
-    result.put("preferredLocale", row.get("language"));
+    // A child's learning language is content preference, not interface-language preference.
+    result.put("preferredLocale", null);
     result.put("linkedStudentId", row.get("id"));
     result.put("classCode", row.get("class_code"));
     result.put("board", row.get("board"));
