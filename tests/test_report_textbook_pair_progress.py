@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from scripts.plan_textbook_layer45_matrix import BOOKS, BOOK_PAIRS
-from scripts.report_textbook_pair_progress import build_report, render_markdown
+from scripts.report_textbook_pair_progress import build_report, read_json_fields, render_markdown
 
 
 class TextbookPairProgressReportTests(unittest.TestCase):
@@ -64,6 +64,23 @@ class TextbookPairProgressReportTests(unittest.TestCase):
         self.write_json(visual / "visual-pipeline-index.v1.json", index)
         self.write_json(self.root / raw_rel, raw)
         self.write_json(self.root / ledger_rel, ledger)
+
+    def test_large_checkpoint_summary_can_be_read_without_decoding_the_result_payload(self):
+        path = self.root / "large-checkpoint.json"
+        expected = {
+            "schema_version": "quantaedge.visual-analysis.v1",
+            "source_book_id": "book-id",
+            "source_pdf_sha256": "a" * 64,
+            "summary": {"assets_eligible": 100, "assets_analyzed": 25, "assets_failed": 2},
+        }
+        path.write_text(json.dumps({**expected, "results": [], "unused_payload": "x" * 500_000}), encoding="utf-8")
+        fields, error = read_json_fields(
+            path, ["schema_version", "source_book_id", "source_pdf_sha256", "summary"],
+            max_prefix_bytes=128 * 1024,
+        )
+        self.assertIsNone(error)
+        self.assertEqual(expected["source_book_id"], fields["source_book_id"])
+        self.assertEqual(expected["summary"], fields["summary"])
 
     def test_report_groups_classes_and_pairs_and_never_claims_empty_repo_complete(self):
         report = build_report(self.root)
