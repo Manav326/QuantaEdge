@@ -108,10 +108,6 @@ async function inspectApiResponse(response: Response) {
     notifyUser(explicit.message, explicit.tone);
   }
 }
-/** Central request/response path; the caller still receives the original Response.
- * Use caller mode only when the caller intentionally handles expected auth probes or renders
- * the failure inline. All other API requests retain global notification handling by default.
- */
 export type ApiFetchOptions = { notificationMode?: 'global' | 'caller' };
 
 /**
@@ -153,6 +149,9 @@ function inFlightApiGetKey(
       credentials: request.credentials,
       mode: request.mode,
       redirect: request.redirect,
+      referrer: request.referrer,
+      referrerPolicy: request.referrerPolicy,
+      integrity: request.integrity,
       headers,
       notificationMode: notificationMode === 'caller' ? 'caller' : 'global',
     });
