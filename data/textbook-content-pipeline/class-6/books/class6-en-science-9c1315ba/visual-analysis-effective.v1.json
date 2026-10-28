@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4667c90fcf497e6cd648cf780a84fa60c8cdd935ab0bcdac72d728397e94d2aa",
+  "raw_analysis_sha256": "726e43e035ca9fa796f3e85c5409f0e1de2736ac7931086e7bb402f8a9ee1d44",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -66748,7 +66748,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An educational page about Oral Rehydration Solution (ORS) and its preparation.",
+        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
@@ -66767,15 +66767,14 @@
           "Diarrhoea",
           "Health Centres",
           "Preparation of ORS",
-          "Water Solubility",
           "Gases in Water",
-          "Survival of Animals and Plants",
+          "Solubility",
           "Density",
-          "Comparing Density"
+          "Survival of Animals and Plants"
         ],
-        "context_relation": "Introduction to ORS and its preparation, followed by a question about the solubility of gases in water and the importance of ORS in maintaining water balance in the body.",
+        "context_relation": "Explanation and activity related to ORS and its properties",
         "limitations": [
-          "The text does not provide specific instructions for preparing ORS or explaining the solubility of gases in water.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -66783,9 +66782,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
-      "checkpointed_at": "2026-10-28T20:31:30Z",
+      "checkpointed_at": "2026-10-28T20:38:11Z",
       "effective_analysis": {
-        "visual_summary": "An educational page about Oral Rehydration Solution (ORS) and its preparation.",
+        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
@@ -66804,15 +66803,14 @@
           "Diarrhoea",
           "Health Centres",
           "Preparation of ORS",
-          "Water Solubility",
           "Gases in Water",
-          "Survival of Animals and Plants",
+          "Solubility",
           "Density",
-          "Comparing Density"
+          "Survival of Animals and Plants"
         ],
-        "context_relation": "Introduction to ORS and its preparation, followed by a question about the solubility of gases in water and the importance of ORS in maintaining water balance in the body.",
+        "context_relation": "Explanation and activity related to ORS and its properties",
         "limitations": [
-          "The text does not provide specific instructions for preparing ORS or explaining the solubility of gases in water.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -68032,7 +68030,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40686336384",
+      "run_id": "40753605122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -69990,7 +69988,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40686336384",
+      "run_id": "40753605122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -72414,7 +72412,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40686336384",
+      "run_id": "40753605122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -72574,7 +72572,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40686336384",
+      "run_id": "40753605122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
