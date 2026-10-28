@@ -526,8 +526,8 @@ def ensure_course(cur: Any, institution_id: int, course: dict[str, str]) -> tupl
     else:
         cur.execute("""
             INSERT INTO institution_course_identity(
-              source_institution_id,stable_course_key,display_name,course_type_code
-            ) VALUES (%s,%s,%s,'ASSESSMENT') RETURNING id
+              source_institution_id,stable_course_key,display_name,course_type_code,course_expiry_policy_required
+            ) VALUES (%s,%s,%s,'ASSESSMENT',true) RETURNING id
         """, (institution_id, key, course["display_name"]))
         identity_id = int(cur.fetchone()[0])
         course_id = None

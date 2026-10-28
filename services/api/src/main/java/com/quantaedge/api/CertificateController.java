@@ -510,6 +510,7 @@ public class CertificateController {
       return existingOrRejectRevoked(existing);
     }
 
+    requireCourseAccessForIssuance(studentId,courseId,institutionId);
     String sql="""
         SELECT st.display_name AS recipient_name,st.class_code,cc.code AS source_class_code,
                s.id AS subject_id,selected_course.id AS program_id,selected_course.display_name AS course_name,
@@ -603,6 +604,7 @@ public class CertificateController {
     if (existing == null) existing = existingAssessmentCertificate(studentId,attemptId,requestedCourseId,institutionId);
     if (existing != null) return existingOrRejectRevoked(existing);
 
+    requireCourseAccessForIssuance(studentId,requestedCourseId,institutionId);
     Map<String, Object> achievement = queryOptional("""
         SELECT st.display_name AS recipient_name,st.language AS student_language,
                cc.code AS class_code,selected_course.id AS program_id,
@@ -1539,6 +1541,18 @@ public class CertificateController {
     if (courseId == null || courseId < 1L) {
       throw new IllegalArgumentException("Select an enrolled course before accessing certificates.");
     }
+  }
+
+  /**
+   * Issue-new-only gate. Previously issued certificate records and artifacts remain readable
+   * after expiry/block; a new certificate cannot be issued from an inaccessible course.
+   */
+  private void requireCourseAccessForIssuance(long studentId,long courseId,long institutionId) {
+    Boolean allowed=jdbc.queryForObject(
+        "select qe_course_enrollment_access_allowed(?,?,?)",
+        Boolean.class,studentId,institutionId,courseId);
+    if(!Boolean.TRUE.equals(allowed)) throw new ResponseStatusException(
+        HttpStatus.FORBIDDEN,"Course access is blocked or expired. A new certificate cannot be issued.");
   }
 
   private void requireActiveCourseEnrollment(long studentId,long courseId,long institutionId) {

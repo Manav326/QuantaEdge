@@ -926,6 +926,9 @@ export default function MarketplaceLaunchStepper({
   }
 
   function blockerHref(item: LaunchItem, check: LaunchCheck): string | null {
+    if (check.code === 'COURSE_EXPIRY_POLICY' && item.courseIdentityPublicId) {
+      return '/course-access?courseIdentityPublicId=' + encodeURIComponent(item.courseIdentityPublicId);
+    }
     if (check.code === 'SOURCE_RIGHTS_CLEARANCE') return '#marketplace-source-rights';
     if (['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'].includes(check.code)) return '/institutions#hrms-integrations-heading';
     if (check.code === 'EINVOICE_REVIEW' && /requires e-invoicing|REQUIRED/i.test(check.message)) return null;
@@ -1543,7 +1546,14 @@ export default function MarketplaceLaunchStepper({
                 <header className={styles.courseHeader}>
                   <div className={styles.courseIdentity}>
                     <span className={styles.courseMark} aria-hidden="true">QE</span>
-                    <div><h3>{item.courseName}</h3><p>{item.courseCode || 'Course'} · Content v{item.contentVersionNo ?? '—'} · Submission {item.releaseVersion ?? '—'}</p></div>
+                    <div>
+                      <h3>{item.courseName}</h3>
+                      <p>{item.courseCode || 'Course'} · Content v{item.contentVersionNo ?? '—'} · Submission {item.releaseVersion ?? '—'}</p>
+                      {item.courseIdentityPublicId && <a className={styles.expiryPolicyLink}
+                        href={'/course-access?courseIdentityPublicId=' + encodeURIComponent(item.courseIdentityPublicId)}>
+                        Configure shared expiry & access
+                      </a>}
+                    </div>
                   </div>
                   <div className={styles.statusCluster}>
                     <span className={styles.statusPill + ' ' + (status === 'PUBLISHED' ? styles.statusPublished : status === 'NOT_CONFIGURED' ? styles.statusDraft : styles.statusOther)}>{statusText(status)}</span>

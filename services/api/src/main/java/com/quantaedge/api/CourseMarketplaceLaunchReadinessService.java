@@ -57,6 +57,9 @@ public class CourseMarketplaceLaunchReadinessService {
           identity.status as course_identity_status,
           identity.source_institution_id as course_identity_source_institution_id,
           identity.course_type_code as identity_course_type_code,
+          identity.course_expiry_policy_required,
+          exists(select 1 from course_expiry_policy expiry_policy
+            where expiry_policy.course_identity_id=identity.id) as course_expiry_policy_configured,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
              from curriculum_program_subject ps join curriculum_subject s
@@ -109,6 +112,11 @@ public class CourseMarketplaceLaunchReadinessService {
     add(checks,"COURSE_IDENTITY","Course has one active, type-matched source identity",
         identityContractMatches(row),
         "This course version is missing its active stable course identity or the identity source/type does not match the release. Re-create the course through the current source-owned workflow; legacy/orphan courses cannot be published.");
+    boolean expiryPolicyRequired=Boolean.TRUE.equals(row.get("course_expiry_policy_required"));
+    boolean expiryPolicyConfigured=Boolean.TRUE.equals(row.get("course_expiry_policy_configured"));
+    add(checks,"COURSE_EXPIRY_POLICY","HRMS shared course expiry policy is configured",
+        !expiryPolicyRequired||expiryPolicyConfigured,
+        "This newly registered course must have an HRMS-managed expiry duration before a Marketplace offer can be created or published. Open Course expiry & access, configure the shared duration, and return to this checklist.");
     add(checks,"CURRENT_COURSE_RELEASE","Assignment points to the newest eligible release",
         Boolean.TRUE.equals(row.get("current_release_assignment")),
         "This assignment is not the newest eligible release for this course identity. Use the current HRMS assignment instead of creating an offer against an older release.");
@@ -204,6 +212,9 @@ public class CourseMarketplaceLaunchReadinessService {
           identity.status as course_identity_status,
           identity.source_institution_id as course_identity_source_institution_id,
           identity.course_type_code as identity_course_type_code,
+          identity.course_expiry_policy_required,
+          exists(select 1 from course_expiry_policy expiry_policy
+            where expiry_policy.course_identity_id=identity.id) as course_expiry_policy_configured,
           course_marketplace_content_type_ready(p.id) as course_type_publish_ready,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
@@ -260,6 +271,11 @@ public class CourseMarketplaceLaunchReadinessService {
     add(checks,"COURSE_IDENTITY","Course has one active, type-matched source identity",
         identityContractMatches(offer),
         "This course version is missing its active stable course identity or the identity source/type does not match the release. Re-create the course through the current source-owned workflow; legacy/orphan courses cannot be published.");
+    boolean expiryPolicyRequired=Boolean.TRUE.equals(offer.get("course_expiry_policy_required"));
+    boolean expiryPolicyConfigured=Boolean.TRUE.equals(offer.get("course_expiry_policy_configured"));
+    add(checks,"COURSE_EXPIRY_POLICY","HRMS shared course expiry policy is configured",
+        !expiryPolicyRequired||expiryPolicyConfigured,
+        "This newly registered course must have an HRMS-managed expiry duration before a Marketplace offer can be created or published. Open Course expiry & access, configure the shared duration, and return to this checklist.");
     add(checks,"CURRENT_COURSE_RELEASE","Assignment/offer points to the newest eligible release",
         Boolean.TRUE.equals(offer.get("current_offer_version")),
         "This offer is obsolete or no longer points to the current eligible release. Use the current HRMS assignment and create or configure its offer instead.");

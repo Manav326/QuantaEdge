@@ -12,10 +12,10 @@
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
-      "a2890b3458baf46be1b64d1a",
       "35f32b476dc5977bc161e8e8",
-      "fc310253031bd2210d27a7e7",
-      "414a0224c90f14c01c7da9e7"
+      "f492c50e9c7d7ef8d140ae06",
+      "e03a02c3fc37627f873ab044",
+      "4fdef3a69f918bffeb046522"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1342,
@@ -1188,7 +1188,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their importance in encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1202,19 +1202,26 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
+          "inclusive education",
+          "safety",
           "peer interactions",
+          "understanding concepts",
           "assessing understanding",
           "analyzing concepts",
-          "safety precautions",
+          "sustaining interest",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "engaging materials",
+          "Ever heard of",
           "fascinating facts",
           "interesting observations",
-          "scientific principles"
+          "curiosity-driven questions",
+          "A step further"
         ],
-        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
+          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -1222,7 +1229,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608667133",
-      "checkpointed_at": "2026-10-28T00:33:29Z"
+      "checkpointed_at": "2026-10-28T01:21:00Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20137,33 +20144,34 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgments for the book's publication.",
-        "visual_type": "uncertain",
+        "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript. The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
+          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgments",
-          "Book Publication",
-          "Meticulous Editing",
-          "Support",
-          "Administrative Staff",
+          "Acknowledgment",
+          "Textbook",
+          "Contributors",
+          "Freelance Language Editor",
+          "DTP Cell",
           "Publication Division",
-          "Contractual Roles"
+          "Contractual",
+          "Proofreaders"
         ],
-        "context_relation": "Acknowledgments for the book's publication",
+        "context_relation": "Acknowledgment and appreciation for contributors",
         "limitations": [
-          "No specific visual elements are described.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "No specific limitations mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608667133",
-      "checkpointed_at": "2026-10-28T00:40:55Z"
+      "checkpointed_at": "2026-10-28T01:21:54Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -26003,9 +26011,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -30190,9 +30198,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -30634,7 +30642,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38109,9 +38117,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -38415,8 +38423,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
+        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -38432,16 +38440,16 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
+          "The image does not provide specific examples or explanations for each type of force."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
-      "checkpointed_at": "2026-10-28T00:21:14Z"
+      "run_id": "40608667133",
+      "checkpointed_at": "2026-10-28T01:22:52Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39062,7 +39070,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -40123,7 +40131,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -42334,7 +42342,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,

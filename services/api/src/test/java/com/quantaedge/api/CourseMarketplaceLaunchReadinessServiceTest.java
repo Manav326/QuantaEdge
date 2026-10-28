@@ -75,6 +75,8 @@ class CourseMarketplaceLaunchReadinessServiceTest {
     offer.put("course_identity_id",6L);
     offer.put("course_identity_public_id","CLS6-TEST-PUBLIC");
     offer.put("course_identity_status","ACTIVE");
+    offer.put("course_expiry_policy_required",false);
+    offer.put("course_expiry_policy_configured",false);
     offer.put("course_identity_source_institution_id",2L);
     offer.put("release_source_institution_id",2L);
     offer.put("identity_course_type_code","K12");
@@ -112,6 +114,10 @@ class CourseMarketplaceLaunchReadinessServiceTest {
         "CURRENT_COURSE_RELEASE".equals(check.get("code"))
             && Boolean.FALSE.equals(check.get("passed"))));
     assertTrue(checks.stream().anyMatch(check ->
+        "COURSE_EXPIRY_POLICY".equals(check.get("code"))
+            && Boolean.TRUE.equals(check.get("passed"))),
+        "Legacy course identities remain compatible when expiry is not configured.");
+    assertTrue(checks.stream().anyMatch(check ->
         "CONTENT_REVIEW_CURRENT".equals(check.get("code"))
             && Boolean.FALSE.equals(check.get("passed"))));
     assertTrue(checks.stream().anyMatch(check ->
@@ -141,6 +147,8 @@ class CourseMarketplaceLaunchReadinessServiceTest {
     assignment.put("course_identity_id",14L);
     assignment.put("course_identity_public_id","TRE4-TEST-PUBLIC");
     assignment.put("course_identity_status","ACTIVE");
+    assignment.put("course_expiry_policy_required",true);
+    assignment.put("course_expiry_policy_configured",false);
     assignment.put("course_identity_source_institution_id",2L);
     assignment.put("release_source_institution_id",2L);
     assignment.put("identity_course_type_code","ASSESSMENT");
@@ -173,6 +181,10 @@ class CourseMarketplaceLaunchReadinessServiceTest {
     assertTrue(checks.stream().anyMatch(check ->
         "CURRENT_COURSE_RELEASE".equals(check.get("code"))
             && Boolean.FALSE.equals(check.get("passed"))));
+    assertTrue(checks.stream().anyMatch(check ->
+        "COURSE_EXPIRY_POLICY".equals(check.get("code"))
+            && Boolean.FALSE.equals(check.get("passed"))),
+        "A newly registered course must have an HRMS expiry policy before launch.");
     assertTrue(checks.stream().anyMatch(check ->
         "SOURCE_RIGHTS_CLEARANCE".equals(check.get("code"))
             && Boolean.TRUE.equals(check.get("passed"))

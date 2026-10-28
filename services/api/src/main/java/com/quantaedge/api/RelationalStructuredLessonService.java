@@ -116,6 +116,8 @@ public class RelationalStructuredLessonService {
       join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
       join student_program_enrollment spe on spe.student_id=m.student_id
         and spe.institution_id=m.institution_id and spe.program_id=p.id and spe.status='ACTIVE'
+        and spe.course_access_blocked=false
+        and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
       join institution_course_assignment assignment on assignment.institution_id=m.institution_id
         and assignment.status='ASSIGNED'
       join institution_course_release release on release.id=assignment.course_release_id
@@ -219,6 +221,8 @@ public class RelationalStructuredLessonService {
       join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
       join student_program_enrollment spe on spe.student_id=m.student_id
         and spe.institution_id=m.institution_id and spe.program_id=p.id and spe.status='ACTIVE'
+        and spe.course_access_blocked=false
+        and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
       join institution_course_assignment assignment on assignment.institution_id=m.institution_id
         and assignment.status='ASSIGNED'
       join institution_course_release release on release.id=assignment.course_release_id
