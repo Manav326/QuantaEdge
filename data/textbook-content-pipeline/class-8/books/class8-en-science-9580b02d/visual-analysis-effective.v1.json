@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a9d483479c35f0250e2c684a5f2982f886dfd1be5f5fe99e0ae05d28666aa63e",
+  "raw_analysis_sha256": "5aec8a39b2ca57fbd2b0fd1e1faa9051ce4bfa40853a4cb622e0ebdf6750ed59",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40640550567",
-      "checkpointed_at": "2026-10-28T06:59:43Z",
+      "checkpointed_at": "2026-10-28T07:03:45Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40640550567",
-      "checkpointed_at": "2026-10-28T07:00:09Z",
+      "checkpointed_at": "2026-10-28T07:04:12Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40640550567",
-      "checkpointed_at": "2026-10-28T07:00:40Z",
+      "checkpointed_at": "2026-10-28T07:04:44Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40640550567",
-      "checkpointed_at": "2026-10-28T07:01:27Z",
+      "checkpointed_at": "2026-10-28T07:05:31Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -67889,6 +67889,66 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5d2d00f7dcd3d5740067ecac",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 114,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d968384b40647acbfac39b370818be7f3c29ed2785ab736c4de0f0e26bfc247d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "Pressure",
+          "SI unit of pressure",
+          "Newton/metre2",
+          "Pascal",
+          "Liquids and gases",
+          "Atmospheric pressure",
+          "Winds",
+          "Warm air",
+          "Cooler air"
+        ],
+        "context_relation": "The image is a black page with no visible content.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40640550567",
+      "checkpointed_at": "2026-10-28T07:05:44Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "Pressure",
+          "SI unit of pressure",
+          "Newton/metre2",
+          "Pascal",
+          "Liquids and gases",
+          "Atmospheric pressure",
+          "Winds",
+          "Warm air",
+          "Cooler air"
+        ],
+        "context_relation": "The image is a black page with no visible content.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
