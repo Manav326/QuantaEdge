@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1423,
+    "assets_selected": 1424,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "ebb5098d6fd7abb8521e2684",
-      "6333fd35b5de4c52b03510d8"
+      "66e8b28da04a402f4a9999a4",
+      "b0fddf5e7971c56a13f5fa6b"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1419,
-    "assets_remaining": 659,
-    "assets_completion_percent": 68.3,
+    "assets_analyzed": 1421,
+    "assets_remaining": 657,
+    "assets_completion_percent": 68.4,
     "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1418,
+    "assets_skipped_from_checkpoint": 1419,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:15:01Z"
+      "checkpointed_at": "2026-10-28T04:22:36Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:16:00Z"
+      "checkpointed_at": "2026-10-28T04:23:35Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:16:48Z"
+      "checkpointed_at": "2026-10-28T04:24:23Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -47927,6 +47927,70 @@
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "66e8b28da04a402f4a9999a4",
+      "asset_sha256": "9b1daf422bbe0c2230216a91645a979aa4ab046d593f7263c4cd48f2ef1df5ef",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 153,
+      "asset_path": "assets/9b1daf422bbe0c2230216a91645a979aa4ab046d593f7263c4cd48f2ef1df5ef.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4a8d34068b4c249b5c16298eb33bb7cbd1b2ec897c685e7f7b762a55e86f870d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a weather instrument, possibly a barometer, against a dark background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "weather",
+          "temperature",
+          "measurement",
+          "weather station",
+          "summer season",
+          "winter season",
+          "air temperature",
+          "techniques for measuring air temperature"
+        ],
+        "context_relation": "The image illustrates a person using a weather instrument, which is relevant to the discussion about measuring air temperature and weather conditions.",
+        "limitations": [
+          "The image does not provide specific details about the weather instrument being used.",
+          "The image does not show the actual measurement of air temperature."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40621809658",
+      "checkpointed_at": "2026-10-28T04:26:03Z"
+    },
+    {
+      "asset_id": "b0fddf5e7971c56a13f5fa6b",
+      "asset_sha256": "d2c5f7bc3c5d03743d37a481fcb3d3f87b3cc6955786a54915713a08181153f6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 153,
+      "asset_path": "assets/d2c5f7bc3c5d03743d37a481fcb3d3f87b3cc6955786a54915713a08181153f6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4a8d34068b4c249b5c16298eb33bb7cbd1b2ec897c685e7f7b762a55e86f870d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A large, solid block of yellow color.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40621809658",
+      "checkpointed_at": "2026-10-28T04:27:32Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "613127250590c0a73551cc99d68f3453258b2cb0547e8d6f489f4e53792cc15b",
+  "raw_analysis_sha256": "0a95921418c674c693a822baae6690fe539a7c3f63335c3918c657ae43ecce37",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:15:01Z",
+      "checkpointed_at": "2026-10-28T04:22:36Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:16:00Z",
+      "checkpointed_at": "2026-10-28T04:23:35Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:16:48Z",
+      "checkpointed_at": "2026-10-28T04:24:23Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -72833,6 +72833,102 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "66e8b28da04a402f4a9999a4",
+      "asset_sha256": "9b1daf422bbe0c2230216a91645a979aa4ab046d593f7263c4cd48f2ef1df5ef",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 153,
+      "asset_path": "assets/9b1daf422bbe0c2230216a91645a979aa4ab046d593f7263c4cd48f2ef1df5ef.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4a8d34068b4c249b5c16298eb33bb7cbd1b2ec897c685e7f7b762a55e86f870d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a weather instrument, possibly a barometer, against a dark background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "weather",
+          "temperature",
+          "measurement",
+          "weather station",
+          "summer season",
+          "winter season",
+          "air temperature",
+          "techniques for measuring air temperature"
+        ],
+        "context_relation": "The image illustrates a person using a weather instrument, which is relevant to the discussion about measuring air temperature and weather conditions.",
+        "limitations": [
+          "The image does not provide specific details about the weather instrument being used.",
+          "The image does not show the actual measurement of air temperature."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40621809658",
+      "checkpointed_at": "2026-10-28T04:26:03Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a weather instrument, possibly a barometer, against a dark background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "weather",
+          "temperature",
+          "measurement",
+          "weather station",
+          "summer season",
+          "winter season",
+          "air temperature",
+          "techniques for measuring air temperature"
+        ],
+        "context_relation": "The image illustrates a person using a weather instrument, which is relevant to the discussion about measuring air temperature and weather conditions.",
+        "limitations": [
+          "The image does not provide specific details about the weather instrument being used.",
+          "The image does not show the actual measurement of air temperature."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b0fddf5e7971c56a13f5fa6b",
+      "asset_sha256": "d2c5f7bc3c5d03743d37a481fcb3d3f87b3cc6955786a54915713a08181153f6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 153,
+      "asset_path": "assets/d2c5f7bc3c5d03743d37a481fcb3d3f87b3cc6955786a54915713a08181153f6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4a8d34068b4c249b5c16298eb33bb7cbd1b2ec897c685e7f7b762a55e86f870d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A large, solid block of yellow color.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40621809658",
+      "checkpointed_at": "2026-10-28T04:27:32Z",
+      "effective_analysis": {
+        "visual_summary": "A large, solid block of yellow color.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
