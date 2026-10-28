@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2498,
+    "assets_selected": 2502,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "85c341ee8826f7015e269214",
-      "6578ed65559b99be70290cdf",
-      "1a235b35df790cede17f95a1",
-      "cb4307fda8c6676179327a16",
-      "3164d7cd3d1563d0191cbab7"
+      "2dbee905d6a6de363287a3ea",
+      "bcd0a792712db56e039255dc",
+      "2669e92536d4e028427c28f9",
+      "37a021c238299bc1c6fe0ede",
+      "f2e8bd8e2ce891543402b7b6"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2497,
-    "assets_remaining": 4991,
-    "assets_completion_percent": 33.3,
+    "assets_analyzed": 2502,
+    "assets_remaining": 4986,
+    "assets_completion_percent": 33.4,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 2493,
+    "assets_skipped_from_checkpoint": 2497,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -94180,6 +94180,178 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608460262",
       "checkpointed_at": "2026-10-28T04:33:12Z"
+    },
+    {
+      "asset_id": "2dbee905d6a6de363287a3ea",
+      "asset_sha256": "96fb4ff5af7267874328784a4f7b61e0eddbedf5938044e6dfcd64cf3b18c1fe",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/96fb4ff5af7267874328784a4f7b61e0eddbedf5938044e6dfcd64cf3b18c1fe.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a hand holding a green arrow pointing upwards, with a purple and red object in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of physical and chemical changes, as indicated by the text 'Changes Around Us: Physical and Chemical'.",
+        "limitations": [
+          "The image does not provide specific details about the changes being described.",
+          "The text in the image is incomplete and does not provide a complete context for the changes being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T04:35:00Z"
+    },
+    {
+      "asset_id": "bcd0a792712db56e039255dc",
+      "asset_sha256": "a98b2f2816d2d8d24117beedfa7bc18f4f080819dd03913be6ed46a14b6f343f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/a98b2f2816d2d8d24117beedfa7bc18f4f080819dd03913be6ed46a14b6f343f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has melted into water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower Transition",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates the physical and chemical changes that occur when ice melts into water.",
+        "limitations": [
+          "The image does not provide specific details about the temperature or conditions under which the changes occurred."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T04:36:42Z"
+    },
+    {
+      "asset_id": "2669e92536d4e028427c28f9",
+      "asset_sha256": "8d261428e3b787b3937773a3ec8eb28b08346a8935ae02a3e0c5617ba09cb409",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/8d261428e3b787b3937773a3ec8eb28b08346a8935ae02a3e0c5617ba09cb409.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T04:38:11Z"
+    },
+    {
+      "asset_id": "37a021c238299bc1c6fe0ede",
+      "asset_sha256": "1dcafb315df803c1562eca10c04f87299f979c2be475b6aa1ead4382107cf542",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/1dcafb315df803c1562eca10c04f87299f979c2be475b6aa1ead4382107cf542.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image illustrates changes in physical and chemical states.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T04:39:54Z"
+    },
+    {
+      "asset_id": "f2e8bd8e2ce891543402b7b6",
+      "asset_sha256": "726ae1c5198fe729d15418e6d770fd2def16dfbf786126dc99ede189fc63f023",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/726ae1c5198fe729d15418e6d770fd2def16dfbf786126dc99ede189fc63f023.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image illustrates the transformation of ice into water, a chemical change, and the growth of a bud into a flower, a physical change.",
+        "limitations": [
+          "The image does not provide specific details about the temperature or conditions under which the changes occurred."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T04:41:39Z"
     }
   ]
 }

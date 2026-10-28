@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2523,
-    "successful_visual_analyses": 2497,
-    "missing_visual_analyses": 4965,
+    "raw_analysis_result_rows": 2528,
+    "successful_visual_analyses": 2502,
+    "missing_visual_analyses": 4960,
     "failed_visual_analyses": 26,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4991,
+    "unresolved_count": 4986,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -103591,9 +103591,19 @@
       "asset_path": "assets/96fb4ff5af7267874328784a4f7b61e0eddbedf5938044e6dfcd64cf3b18c1fe.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a hand holding a green arrow pointing upwards, with a purple and red object in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of physical and chemical changes, as indicated by the text 'Changes Around Us: Physical and Chemical'.",
+        "limitations": [
+          "The image does not provide specific details about the changes being described.",
+          "The text in the image is incomplete and does not provide a complete context for the changes being discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -103609,9 +103619,29 @@
       "asset_path": "assets/a98b2f2816d2d8d24117beedfa7bc18f4f080819dd03913be6ed46a14b6f343f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has melted into water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower Transition",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates the physical and chemical changes that occur when ice melts into water.",
+        "limitations": [
+          "The image does not provide specific details about the temperature or conditions under which the changes occurred."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -103627,9 +103657,16 @@
       "asset_path": "assets/8d261428e3b787b3937773a3ec8eb28b08346a8935ae02a3e0c5617ba09cb409.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -103645,9 +103682,29 @@
       "asset_path": "assets/1dcafb315df803c1562eca10c04f87299f979c2be475b6aa1ead4382107cf542.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image illustrates changes in physical and chemical states.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -103663,9 +103720,29 @@
       "asset_path": "assets/726ae1c5198fe729d15418e6d770fd2def16dfbf786126dc99ede189fc63f023.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image illustrates the transformation of ice into water, a chemical change, and the growth of a bud into a flower, a physical change.",
+        "limitations": [
+          "The image does not provide specific details about the temperature or conditions under which the changes occurred."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
