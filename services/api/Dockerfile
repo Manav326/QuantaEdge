@@ -2,7 +2,9 @@
 FROM maven:3.9.12-eclipse-temurin-21 AS build
 # The build-only publication gate filters draft content before it enters the JAR.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends python3 \
+    && apt-get install -y --no-install-recommends python3 fontconfig fonts-noto-core \
+    && fc-cache -f \
+    && fc-match --format='%{family}\\n' 'Noto Sans Devanagari' | grep -qi 'Noto Sans Devanagari' \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY services/api/pom.xml ./pom.xml
