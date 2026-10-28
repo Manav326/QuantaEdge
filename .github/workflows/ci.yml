@@ -31,7 +31,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          # PR refs are synthetic merge commits; shallow history is enough for the base diff.
+          fetch-depth: 2
 
       - name: Set up Node.js for localization route inventory
         uses: actions/setup-node@v4
@@ -147,7 +148,7 @@ jobs:
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             files="$(git ls-files)"
           elif [ "$EVENT_NAME" = "pull_request" ]; then
-            git fetch --no-tags origin "$BASE_REF"
+            git fetch --no-tags --depth=1 origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
             base="$(git merge-base HEAD "origin/$BASE_REF")"
             files="$(git diff --name-only "$base" HEAD)"
           elif [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
