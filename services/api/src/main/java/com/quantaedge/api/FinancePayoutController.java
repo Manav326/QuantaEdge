@@ -22,9 +22,13 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -41,6 +45,8 @@ public class FinancePayoutController {
   private final AuthorizationService authorization;
   private final CourseOrderFinancialService financialService;
   private final ObjectMapper mapper;
+  private final PayoutSettlementPdfRenderer settlementPdfRenderer;
+  private final FiscalDocumentStorage fiscalDocumentStorage;
   private final String keyId;
   private final String keySecret;
   private final String sourceAccountNumber;
@@ -50,12 +56,14 @@ public class FinancePayoutController {
 
   public FinancePayoutController(JdbcTemplate jdbc,AuthorizationService authorization,
       CourseOrderFinancialService financialService,ObjectMapper mapper,
+      PayoutSettlementPdfRenderer settlementPdfRenderer,FiscalDocumentStorage fiscalDocumentStorage,
       @Value("\u0024{app.razorpayx.key-id:\u0024{app.razorpay.key-id:}}") String keyId,
       @Value("\u0024{app.razorpayx.key-secret:\u0024{app.razorpay.key-secret:}}") String keySecret,
       @Value("\u0024{app.razorpayx.account-number:}") String sourceAccountNumber,
       @Value("\u0024{app.razorpayx.webhook-secret:}") String webhookSecret,
       @Value("\u0024{app.razorpayx.base-url:\u0024{app.razorpay.base-url:https://api.razorpay.com/v1}}") String baseUrl) {
     this.jdbc=jdbc;this.authorization=authorization;this.financialService=financialService;this.mapper=mapper;
+    this.settlementPdfRenderer=settlementPdfRenderer;this.fiscalDocumentStorage=fiscalDocumentStorage;
     this.keyId=keyId==null?"":keyId.trim();this.keySecret=keySecret==null?"":keySecret.trim();
     this.sourceAccountNumber=sourceAccountNumber==null?"":sourceAccountNumber.trim();
     this.webhookSecret=webhookSecret==null?"":webhookSecret.trim();
@@ -810,14 +818,76 @@ public class FinancePayoutController {
       """,actorStaffId,action,Long.toString(adjustmentId),json(details),orderId);
   }
 
+  @GetMapping("/payout-tax-overview")
+  public Map<String,Object> payoutTaxOverview(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    long verifiedSales=amount("""
+      select coalesce(sum(captured_amount_paise),0) from course_payment_order where status='VERIFIED' and upper(currency)='INR'
+      """);
+    long verifiedOrders=count("select count(*) from course_payment_order where status='VERIFIED' and upper(currency)='INR'");
+    long recordedOutputTax=amount("""
+      select coalesce(sum(output_tax_paise),0) from course_payment_order where status='VERIFIED' and upper(currency)='INR'
+      """);
+    long processedCreditNoteTax=amount("""
+      select coalesce(sum(d.tax_value_paise),0)
+      from fiscal_document d
+      join course_payment_refund r on r.credit_note_document_id=d.id
+      where d.document_type='CREDIT_NOTE' and d.source_type='COURSE_ORDER' and r.status='PROCESSED' and upper(d.currency)='INR'
+      """);
+    long recordedProcessorFeeTax=amount("select coalesce(sum(fee_tax_paise),0) from course_payment_order_fee where upper(currency)='INR'");
+    long netOutputTaxBeforeCredits=Math.subtractExact(recordedOutputTax,processedCreditNoteTax);
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("currency","INR");
+    result.put("verifiedSalesPaise",verifiedSales);
+    result.put("nonInrCurrencies",jdbc.queryForList("""
+      select distinct upper(currency) as currency from course_payment_order
+      where status='VERIFIED' and upper(currency)<>'INR' order by upper(currency)
+      """,String.class));
+    result.put("verifiedOrderCount",verifiedOrders);
+    result.put("recordedOutputTaxPaise",recordedOutputTax);
+    result.put("processedCreditNoteTaxPaise",processedCreditNoteTax);
+    result.put("netOutputTaxBeforeInputCreditsPaise",netOutputTaxBeforeCredits);
+    result.put("recordedProcessorFeeTaxPaise",recordedProcessorFeeTax);
+    result.put("approvedTaxProfiles",count("select count(*) from course_tax_profile where status='APPROVED'"));
+    result.put("pendingTaxProfiles",count("select count(*) from course_tax_profile where status='PENDING_APPROVAL'"));
+    // These are intentionally not reported as zero: no recipient-level TCS/TDS liability
+    // ledger is implemented/approved, so no statutory withholding total can be asserted.
+    result.put("gstTcsLedgerStatus","NOT_REPRESENTED");
+    result.put("incomeTaxTdsLedgerStatus","NOT_REPRESENTED");
+    result.put("finalGovernmentTaxPayableStatus","REVIEW_REQUIRED");
+    result.put("finalTaxAmountIncludesInputCredits",false);
+    return result;
+  }
+
   @GetMapping("/payout-balances")
   public Map<String,Object> payoutBalances(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
-    Map<String,Object> settings=one("select refund_reserve_basis_points from billing_finance_payout_settings where id=1");
+    Map<String,Object> settings=one("select refund_reserve_basis_points,payout_minimum_paise from billing_finance_payout_settings where id=1");
     int reserveBps=settings.get("refund_reserve_basis_points")==null?0:Math.toIntExact(number(settings.get("refund_reserve_basis_points")));
+    long minimumPayoutPaise=settings.get("payout_minimum_paise")==null?0L:number(settings.get("payout_minimum_paise"));
+    boolean providerReady=providerConfigured()&&!webhookSecret.isBlank();
+    boolean legalArrangementReady=payoutReadyFromDatabase();
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      with ledger as (
-        select a.id as allocation_id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency,
+      with recipients as (
+        select 'INSTITUTION'::varchar as recipient_type,t.id as institution_id,
+          null::bigint as legal_entity_id,t.display_name as recipient_name,t.status as recipient_status
+        from institution_tenant t where t.status='ACTIVE'
+        union
+        select 'COMPANY'::varchar as recipient_type,null::bigint as institution_id,
+          le.id as legal_entity_id,le.legal_name as recipient_name,le.status as recipient_status
+        from billing_legal_entity le
+        where le.status='ACTIVE' and le.entity_kind in ('PLATFORM','COMPANY')
+        union
+        -- Keep historic liabilities visible even after a recipient is suspended or deactivated.
+        select a.recipient_type,a.institution_id,a.legal_entity_id,
+          coalesce(t.display_name,le.legal_name,'Unresolved recipient') as recipient_name,
+          coalesce(t.status,le.status,'UNKNOWN') as recipient_status
+        from revenue_share_allocation a
+        left join institution_tenant t on t.id=a.institution_id
+        left join billing_legal_entity le on le.id=a.legal_entity_id
+        where a.recipient_type in ('INSTITUTION','COMPANY')
+      ), ledger as (
+        select a.id as allocation_id,a.course_payment_order_id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency,
           coalesce(sum(e.amount_paise) filter(where e.event_type='EARNED'),0) as earned_paise,
           coalesce(sum(e.amount_paise) filter(where e.event_type='REFUNDED'),0) as refunded_paise,
           coalesce(sum(e.amount_paise) filter(where e.event_type='PROCESSING_FEE_DEDUCTED'),0)
@@ -827,33 +897,54 @@ public class FinancePayoutController {
         from revenue_share_allocation a
         join course_payment_order o on o.id=a.course_payment_order_id and o.status='VERIFIED'
         left join revenue_share_allocation_event e on e.allocation_id=a.id
-        group by a.id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency
+        group by a.id,a.course_payment_order_id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency
       ), reservations as (
         select i.allocation_id,coalesce(sum(i.amount_paise),0) as reserved_paise
         from finance_payout_item i join finance_payout p on p.id=i.payout_id
         where p.status in ('PENDING_APPROVAL','APPROVED','SUBMITTING','PENDING','QUEUED','PROCESSING','RECONCILIATION_REQUIRED')
         group by i.allocation_id
+      ), balance_by_currency as (
+        select l.recipient_type,l.institution_id,l.legal_entity_id,l.currency,
+          coalesce(sum(l.earned_paise),0) as earned_paise,
+          coalesce(sum(l.refunded_paise),0) as refunded_paise,
+          coalesce(sum(l.charges_paise),0) as charges_paise,
+          coalesce(sum(l.paid_paise),0) as paid_paise,
+          coalesce(sum(l.reversed_paise),0) as reversed_paise,
+          coalesce(sum(r.reserved_paise),0) as reserved_paise,
+          count(distinct l.course_payment_order_id) filter(where l.earned_paise>0) as source_sale_count,
+          count(distinct l.course_payment_order_id) filter(where l.earned_paise>0 and f.id is null) as unreconciled_fee_order_count
+        from ledger l
+        left join reservations r on r.allocation_id=l.allocation_id
+        left join course_payment_order_fee f on f.course_payment_order_id=l.course_payment_order_id
+        group by l.recipient_type,l.institution_id,l.legal_entity_id,l.currency
       )
-      select l.recipient_type,l.institution_id,l.legal_entity_id,l.currency,
-        coalesce(t.display_name,le.legal_name) as recipient_name,
+      select r.recipient_type,r.institution_id,r.legal_entity_id,
+        coalesce(fin.currency,'INR') as currency,r.recipient_name,r.recipient_status,
         coalesce(b.status,'MISSING') as beneficiary_status,b.bank_ifsc,b.bank_account_last4,
-        coalesce(sum(l.earned_paise),0) as earned_paise,
-        coalesce(sum(l.refunded_paise),0) as refunded_paise,
-        coalesce(sum(l.charges_paise),0) as charges_paise,
-        coalesce(sum(l.paid_paise),0) as paid_paise,
-        coalesce(sum(l.reversed_paise),0) as reversed_paise,
-        coalesce(sum(r.reserved_paise),0) as reserved_paise
-      from ledger l
-      left join reservations r on r.allocation_id=l.allocation_id
-      left join institution_tenant t on t.id=l.institution_id
-      left join billing_legal_entity le on le.id=l.legal_entity_id
-      left join finance_payout_beneficiary b on b.status='ACTIVE' and (
-        (l.recipient_type='INSTITUTION' and b.beneficiary_type='INSTITUTION' and b.institution_id=l.institution_id)
-        or (l.recipient_type='COMPANY' and b.beneficiary_type='COMPANY' and b.legal_entity_id=l.legal_entity_id)
-      )
-      group by l.recipient_type,l.institution_id,l.legal_entity_id,l.currency,t.display_name,le.legal_name,
-        b.status,b.bank_ifsc,b.bank_account_last4
-      order by recipient_name,l.recipient_type
+        coalesce(fin.earned_paise,0) as earned_paise,
+        coalesce(fin.refunded_paise,0) as refunded_paise,
+        coalesce(fin.charges_paise,0) as charges_paise,
+        coalesce(fin.paid_paise,0) as paid_paise,
+        coalesce(fin.reversed_paise,0) as reversed_paise,
+        coalesce(fin.reserved_paise,0) as reserved_paise,
+        coalesce(fin.source_sale_count,0) as source_sale_count,
+        coalesce(fin.unreconciled_fee_order_count,0) as unreconciled_fee_order_count
+      from recipients r
+      left join balance_by_currency fin on fin.recipient_type=r.recipient_type
+        and ((r.recipient_type='INSTITUTION' and fin.institution_id=r.institution_id)
+          or (r.recipient_type='COMPANY' and fin.legal_entity_id=r.legal_entity_id))
+      left join lateral (
+        select fpb.status,fpb.bank_ifsc,fpb.bank_account_last4
+        from finance_payout_beneficiary fpb
+        where ((r.recipient_type='INSTITUTION' and fpb.beneficiary_type='INSTITUTION' and fpb.institution_id=r.institution_id)
+          or (r.recipient_type='COMPANY' and fpb.beneficiary_type='COMPANY' and fpb.legal_entity_id=r.legal_entity_id))
+        order by case fpb.status
+          when 'ACTIVE' then 0 when 'PENDING_APPROVAL' then 1 when 'PROVISIONING' then 2
+          when 'RECONCILIATION_REQUIRED' then 3 when 'SUSPENDED' then 4 else 5 end,
+          fpb.created_at desc,fpb.id desc
+        limit 1
+      ) b on true
+      order by lower(r.recipient_name),r.recipient_type,coalesce(fin.currency,'INR')
       """);
     long totalEarned=0L,totalRefunded=0L,totalCharges=0L,totalPaid=0L,totalReversed=0L,totalReserved=0L,totalPayable=0L,totalRecovery=0L,totalReserve=0L;
     Set<String> unsupportedCurrencies=new java.util.TreeSet<>();
@@ -879,6 +970,45 @@ public class FinancePayoutController {
       row.put("refund_reserve_paise",refundReserve);
       row.put("payable_paise",payable);
       row.put("recovery_due_paise",recovery);
+      long sourceSales=number(row.get("source_sale_count"));
+      long unreconciledFeeOrders=number(row.get("unreconciled_fee_order_count"));
+      String readinessStatus;
+      String readinessReason;
+      if(!payoutSupported) {
+        readinessStatus="BLOCKED";
+        readinessReason="This currency has no configured payout route.";
+      } else if(recovery>0) {
+        readinessStatus="BLOCKED";
+        readinessReason="A recovery balance is due; reconcile the recovery before any further transfer.";
+      } else if(payable<=0) {
+        readinessStatus="NO_PAYABLE_BALANCE";
+        readinessReason="No positive payable balance remains after refunds, payments, reservations and holdback.";
+      } else if(!"ACTIVE".equals(string(row.get("recipient_status")))) {
+        readinessStatus="BLOCKED";
+        readinessReason="The recipient entity is not active. Its historical balance remains visible, but transfers are blocked until its status is reviewed.";
+      } else if(!"ACTIVE".equals(string(row.get("beneficiary_status")))) {
+        readinessStatus="BLOCKED";
+        readinessReason="The recipient does not have an approved active bank beneficiary.";
+      } else if(payable<minimumPayoutPaise) {
+        readinessStatus="BELOW_MINIMUM";
+        readinessReason="Below the configured minimum payout of "+minimumPayoutPaise+" paise.";
+      } else if(unreconciledFeeOrders>0) {
+        readinessStatus="BLOCKED";
+        readinessReason=unreconciledFeeOrders+" source sale(s) still need actual collection-fee reconciliation.";
+      } else if(!providerReady) {
+        readinessStatus="BLOCKED";
+        readinessReason="RazorpayX credentials, source-account identifier or payout webhook are not fully configured.";
+      } else if(!legalArrangementReady) {
+        readinessStatus="BLOCKED";
+        readinessReason="The legal seller, collection entity and RazorpayX funding-owner arrangement is not verified.";
+      } else {
+        readinessStatus="READY_FOR_BATCH_REVIEW";
+        readinessReason="Existing payout controls pass for batch preparation, but this status does not assess GST TCS or income-tax TDS. Confirm sale/recipient tax treatment before approving a live transfer; server-side batch checks and independent approval still apply.";
+      }
+      row.put("source_sale_count",sourceSales);
+      row.put("unreconciled_fee_order_count",unreconciledFeeOrders);
+      row.put("payout_readiness_status",readinessStatus);
+      row.put("payout_readiness_reason",readinessReason);
       if(!payoutSupported) {
         // These values are retained only for reconciliation. The UI must not render non-INR
         // minor units as rupees or blend them into INR summary totals.
@@ -929,6 +1059,8 @@ public class FinancePayoutController {
       select e.id,e.event_type,e.amount_paise,e.currency,e.payment_reference,e.created_at,
         a.id as allocation_id,a.course_payment_order_id as order_id,o.provider_payment_id,
         coalesce(nullif(offer.title_override,''),course.display_name) as course_title,
+        marketplace_t.id as marketplace_institution_id,marketplace_t.display_name as marketplace_institution_name,
+        source_release.source_institution_id,source_t.display_name as source_institution_name,
         p.id as payout_id,p.public_id as payout_public_id,p.status as payout_status,p.transfer_reference,
         b.id as payout_batch_id,b.period_start as payout_period_start,
         e.details->>'feeAdjustmentId' as fee_adjustment_id,
@@ -937,7 +1069,11 @@ public class FinancePayoutController {
       from revenue_share_allocation a
       join revenue_share_allocation_event e on e.allocation_id=a.id
       join course_payment_order o on o.id=a.course_payment_order_id
-      left join institution_marketplace_offer offer on offer.id=o.institution_offer_id
+      left join institution_marketplace_offer offer on offer.id=o.institution_offer_id and offer.institution_id=o.institution_id
+      left join institution_course_release source_release
+        on source_release.id=offer.course_release_id and source_release.program_id=o.course_id
+      left join institution_tenant source_t on source_t.id=source_release.source_institution_id
+      left join institution_tenant marketplace_t on marketplace_t.id=o.institution_id
       left join curriculum_program course on course.id=o.course_id
       left join finance_payout p on p.id::text=e.details->>'payoutId'
       left join finance_payout_batch b on b.id=p.batch_id
@@ -1043,6 +1179,181 @@ public class FinancePayoutController {
       where p.batch_id=? order by recipient_name,p.id
       """,batchId));
     return batch;
+  }
+
+  @PostMapping("/payout-batches/{batchId}/statements")
+  @org.springframework.transaction.annotation.Transactional
+  public ResponseEntity<Map<String,Object>> generatePayoutStatement(
+      @PathVariable long batchId,@RequestBody(required=false) Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireManage(context);
+    if(context.staffId()==null)throw new SecurityException("An authenticated HRMS staff identity is required to generate payout statements.");
+    // Serialize revision allocation for a batch so concurrent requests cannot race the unique revision index.
+    List<Map<String,Object>> lockedBatch=jdbc.queryForList(
+        "select id from finance_payout_batch where id=? for update",batchId);
+    if(lockedBatch.isEmpty())throw notFound("Payout batch was not found.");
+    String type=body==null?"BATCH_SUMMARY":optionalText(body.get("documentType"));
+    if(type==null)type="BATCH_SUMMARY";
+    type=type.trim().toUpperCase(Locale.ROOT);
+    if(!List.of("BATCH_SUMMARY","RECIPIENT_STATEMENT").contains(type))
+      throw bad("Choose a batch summary or a recipient payout statement.");
+    Long recipientPayoutId=null;
+    if("RECIPIENT_STATEMENT".equals(type)) {
+      if(body==null)throw bad("Choose a valid payout in this batch.");
+      recipientPayoutId=requiredLong(body.get("payoutId"),"payoutId");
+      if(recipientPayoutId<=0)throw bad("Choose a valid payout in this batch.");
+    }
+    Map<String,Object> batch=batchDetail(batchId,context);
+    @SuppressWarnings("unchecked")
+    List<Map<String,Object>> allPayouts=(List<Map<String,Object>>)batch.getOrDefault("payouts",List.of());
+    List<Map<String,Object>> selectedPayouts=allPayouts;
+    if(recipientPayoutId!=null) {
+      final long selectedPayoutId=recipientPayoutId;
+      selectedPayouts=allPayouts.stream().filter(p->number(p.get("id"))==selectedPayoutId).toList();
+      if(selectedPayouts.isEmpty())throw notFound("The selected payout does not belong to this batch.");
+    }
+    List<Map<String,Object>> allocations=jdbc.queryForList("""
+      select i.payout_id,i.amount_paise as payout_item_amount_paise,a.id as allocation_id,
+        a.currency,o.id as order_id,o.provider_payment_id,
+        coalesce(nullif(offer.title_override,''),course.display_name) as course_title,
+        source_t.display_name as source_institution_name,
+        marketplace_t.display_name as marketplace_institution_name,
+        invoice.document_number as invoice_number,seller.legal_name as legal_seller_name,
+        b.beneficiary_name,b.beneficiary_type
+      from finance_payout_item i
+      join finance_payout p on p.id=i.payout_id and p.batch_id=?
+      join revenue_share_allocation a on a.id=i.allocation_id
+      join course_payment_order o on o.id=a.course_payment_order_id
+      left join institution_marketplace_offer offer on offer.id=o.institution_offer_id and offer.institution_id=o.institution_id
+      left join curriculum_program course on course.id=o.course_id
+      left join institution_course_release source_release
+        on source_release.id=offer.course_release_id and source_release.program_id=o.course_id
+      left join institution_tenant source_t on source_t.id=source_release.source_institution_id
+      left join institution_tenant marketplace_t on marketplace_t.id=o.institution_id
+      left join fiscal_document invoice on invoice.id=o.fiscal_document_id
+      left join billing_legal_entity seller on seller.id=invoice.legal_entity_id
+      left join finance_payout_beneficiary b on b.id=p.beneficiary_id
+      where (?::bigint is null or p.id=?)
+      order by lower(coalesce(nullif(offer.title_override,''),course.display_name,'')),o.id,a.id
+      """,batchId,recipientPayoutId,recipientPayoutId);
+    Map<String,Object> batchSnapshot=new LinkedHashMap<>(batch);
+    batchSnapshot.remove("payouts");
+    Map<String,Object> fundingContext=one("""
+      select collection.collection_arrangement_status,collection.collection_arrangement_verified_at,
+        collectionEntity.legal_name as payment_collection_legal_name,
+        fundingEntity.legal_name as razorpayx_funding_legal_name
+      from billing_finance_payout_settings collection
+      left join billing_legal_entity collectionEntity on collectionEntity.id=collection.payment_collection_legal_entity_id
+      left join billing_legal_entity fundingEntity on fundingEntity.id=collection.razorpayx_funding_legal_entity_id
+      where collection.id=1
+      """);
+    batchSnapshot.putAll(fundingContext);
+    final Long selectedPayoutFilter=recipientPayoutId;
+    List<Map<String,Object>> selectedAllocations=selectedPayoutFilter==null?allocations
+        :allocations.stream().filter(row->number(row.get("payout_id"))==selectedPayoutFilter.longValue()).toList();
+    int prior=selectedPayoutFilter==null
+      ?Math.toIntExact(count("select coalesce(max(revision),0)::bigint from finance_payout_statement_document where batch_id=? and document_type='BATCH_SUMMARY'",batchId))
+      :Math.toIntExact(count("select coalesce(max(revision),0)::bigint from finance_payout_statement_document where batch_id=? and document_type='RECIPIENT_STATEMENT' and payout_id=?",batchId,selectedPayoutFilter));
+    int revision=Math.addExact(prior,1);
+    String documentNumber="QE-PS-"+batchId+(recipientPayoutId==null?"-B":"-P"+recipientPayoutId)+"-R"+revision;
+    java.time.Instant generatedAt=java.time.Instant.now();
+    Map<String,Object> snapshot=new LinkedHashMap<>();
+    snapshot.put("schemaVersion",1);snapshot.put("documentNumber",documentNumber);
+    snapshot.put("documentType",type);snapshot.put("revision",revision);
+    snapshot.put("generatedAt",generatedAt.toString());snapshot.put("generatedByStaffId",context.staffId());
+    snapshot.put("batch",batchSnapshot);snapshot.put("payouts",selectedPayouts);
+    snapshot.put("allocations",selectedAllocations);
+    PayoutSettlementPdfRenderer.RenderedStatement rendered="BATCH_SUMMARY".equals(type)
+        ?settlementPdfRenderer.renderBatchReport(batchSnapshot,selectedPayouts,selectedAllocations,documentNumber,generatedAt)
+        :settlementPdfRenderer.renderRecipientAdvice(batchSnapshot,selectedPayouts.getFirst(),selectedAllocations,documentNumber,generatedAt);
+    FiscalDocumentStorage.StoredDocument stored=fiscalDocumentStorage.storePdf(rendered.pdf());
+    if(TransactionSynchronizationManager.isSynchronizationActive()) {
+      String storageKey=stored.storageKey();
+      TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+        @Override public void afterCompletion(int status) {
+          if(status!=TransactionSynchronization.STATUS_COMMITTED)fiscalDocumentStorage.deleteQuietly(storageKey);
+        }
+      });
+    }
+    Long statementId;
+    try {
+      statementId=jdbc.queryForObject("""
+        insert into finance_payout_statement_document(
+          document_number,batch_id,payout_id,document_type,revision,snapshot_json,storage_key,sha256,byte_length,generated_by_staff_id
+        ) values(?,?,?,?,?,?::jsonb,?,?,?,?) returning id
+        """,Long.class,documentNumber,batchId,recipientPayoutId,type,revision,json(snapshot),
+            stored.storageKey(),stored.sha256(),stored.sizeBytes(),context.staffId());
+      if(statementId==null)throw new IllegalStateException("The payout statement archive did not return its document ID.");
+      jdbc.update("""
+        insert into finance_payout_statement_event(statement_document_id,event_type,idempotency_key,actor_staff_id,details)
+        values(?,'GENERATED',?,?,?::jsonb)
+        """,statementId,"payout-statement:"+statementId+":generated",context.staffId(),
+            json(Map.of("documentNumber",documentNumber,"documentType",type,"revision",revision,
+              "pageCount",rendered.pageCount(),"sha256",stored.sha256())));
+    } catch(RuntimeException ex) {
+      if(!TransactionSynchronizationManager.isSynchronizationActive())fiscalDocumentStorage.deleteQuietly(stored.storageKey());
+      throw ex;
+    }
+    Map<String,Object> result=one("""
+      select d.id,d.public_id,d.document_number,d.batch_id,d.payout_id,d.document_type,d.revision,
+        d.sha256,d.byte_length,d.created_at,d.generated_by_staff_id,s.display_name as generated_by_name
+      from finance_payout_statement_document d left join staff_account s on s.id=d.generated_by_staff_id
+      where d.id=?
+      """,statementId);
+    result.put("page_count",rendered.pageCount());
+    result.put("message","The PDF is archived with a checksum and generation audit event. Download it from this batch's statement history.");
+    return ResponseEntity.status(HttpStatus.CREATED).body(result);
+  }
+
+  @GetMapping("/payout-batches/{batchId}/statements")
+  public List<Map<String,Object>> listPayoutStatements(@PathVariable long batchId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    if(!exists("select exists(select 1 from finance_payout_batch where id=?)",batchId))
+      throw notFound("Payout batch was not found.");
+    return jdbc.queryForList("""
+      select d.id,d.public_id,d.document_number,d.batch_id,d.payout_id,d.document_type,d.revision,
+        d.sha256,d.byte_length,d.created_at,d.generated_by_staff_id,s.display_name as generated_by_name,
+        coalesce(t.display_name,le.legal_name,b.beneficiary_name) as recipient_name
+      from finance_payout_statement_document d
+      left join staff_account s on s.id=d.generated_by_staff_id
+      left join finance_payout p on p.id=d.payout_id
+      left join finance_payout_beneficiary b on b.id=p.beneficiary_id
+      left join institution_tenant t on t.id=b.institution_id
+      left join billing_legal_entity le on le.id=b.legal_entity_id
+      where d.batch_id=? order by d.created_at desc,d.id desc
+      """,batchId);
+  }
+
+  @GetMapping(value="/payout-statements/{statementId}/download",produces=MediaType.APPLICATION_PDF_VALUE)
+  @org.springframework.transaction.annotation.Transactional
+  public ResponseEntity<byte[]> downloadPayoutStatement(@PathVariable long statementId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireManage(context);
+    if(context.staffId()==null)throw new SecurityException("An authenticated HRMS staff identity is required to download payout statements.");
+    Map<String,Object> row=one("""
+      select id,batch_id,payout_id,document_number,storage_key,sha256,byte_length,document_type,revision
+      from finance_payout_statement_document where id=?
+      """,statementId);
+    if(row.isEmpty())throw notFound("The payout statement was not found.");
+    byte[] bytes=fiscalDocumentStorage.readPdf(string(row.get("storage_key")));
+    if(bytes.length!=number(row.get("byte_length"))||!FiscalDocumentStorage.sha256(bytes).equals(string(row.get("sha256"))))
+      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+          "The archived payout statement did not pass its integrity check.");
+    jdbc.update("""
+      insert into finance_payout_statement_event(statement_document_id,event_type,idempotency_key,actor_staff_id,details)
+      values(?,'DOWNLOADED',?,?,?::jsonb)
+      """,statementId,"payout-statement:"+statementId+":download:"+UUID.randomUUID(),
+        context.staffId(),json(Map.of("batchId",number(row.get("batch_id")),
+          "payoutId",row.get("payout_id")==null?0L:number(row.get("payout_id")),
+          "documentNumber",string(row.get("document_number")))));
+    String safeName=string(row.get("document_number")).replaceAll("[^A-Za-z0-9_-]","-");
+    return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+        .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+safeName+".pdf\"")
+        .header(HttpHeaders.CACHE_CONTROL,"private, no-store, max-age=0")
+        .header("X-Content-Type-Options","nosniff")
+        .header("X-QE-Statement-SHA256",string(row.get("sha256")))
+        .body(bytes);
   }
 
   @PostMapping("/payout-batches")
