@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "cc8791d6a2e7f0543d99273b951fb45b02ceb6ed46becb5a8424cc1231daeda7",
+  "raw_analysis_sha256": "d5a968244189c1007414eecf1656b04e166fd47fc19c3a7c9586bacb1592b3dc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:33:43Z",
+      "checkpointed_at": "2026-10-28T12:39:49Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:34:32Z",
+      "checkpointed_at": "2026-10-28T12:40:37Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:35:32Z",
+      "checkpointed_at": "2026-10-28T12:41:36Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -67147,7 +67147,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:36:50Z",
+      "checkpointed_at": "2026-10-28T12:42:53Z",
       "effective_analysis": {
         "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds, with a caption indicating that the positively charged particles move upwards and the negatively charged particles move downwards.",
         "visual_type": "diagram",
@@ -68194,6 +68194,50 @@
         "context_relation": "The image is related to the question about increasing water pressure in a building.",
         "limitations": [
           "The image does not provide specific numerical values for 'H'."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b7b9aba9249984a162aec5f6",
+      "asset_sha256": "1afd3a3fd4f6601f7c496bc8381ee03cc90aefd19ca69b1a94dcde8d4f9e0a33",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/1afd3a3fd4f6601f7c496bc8381ee03cc90aefd19ca69b1a94dcde8d4f9e0a33.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person lying on the ground in a dry, arid landscape with a tree and some bushes in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or question related to the textbook content.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context for the question.",
+          "The image is a static illustration and does not depict any dynamic actions or changes.",
+          "The image does not show any specific educational content or question related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40671359148",
+      "checkpointed_at": "2026-10-28T12:44:39Z",
+      "effective_analysis": {
+        "visual_summary": "A person lying on the ground in a dry, arid landscape with a tree and some bushes in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or question related to the textbook content.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context for the question.",
+          "The image is a static illustration and does not depict any dynamic actions or changes.",
+          "The image does not show any specific educational content or question related to the textbook content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1355,
+    "assets_selected": 1356,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "52885281ae21238e9ccc031f",
-      "21bcc6d28296e366e8920e96"
+      "b7b9aba9249984a162aec5f6"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1351,
-    "assets_remaining": 940,
+    "assets_analyzed": 1352,
+    "assets_remaining": 939,
     "assets_completion_percent": 59.0,
     "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1350,
+    "assets_skipped_from_checkpoint": 1351,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:33:43Z"
+      "checkpointed_at": "2026-10-28T12:39:49Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:34:32Z"
+      "checkpointed_at": "2026-10-28T12:40:37Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:35:32Z"
+      "checkpointed_at": "2026-10-28T12:41:36Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -44424,7 +44424,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:36:50Z"
+      "checkpointed_at": "2026-10-28T12:42:53Z"
     },
     {
       "asset_id": "02cdb1f955dd51e569c06039",
@@ -45073,6 +45073,36 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
       "checkpointed_at": "2026-10-28T12:38:31Z"
+    },
+    {
+      "asset_id": "b7b9aba9249984a162aec5f6",
+      "asset_sha256": "1afd3a3fd4f6601f7c496bc8381ee03cc90aefd19ca69b1a94dcde8d4f9e0a33",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/1afd3a3fd4f6601f7c496bc8381ee03cc90aefd19ca69b1a94dcde8d4f9e0a33.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person lying on the ground in a dry, arid landscape with a tree and some bushes in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or question related to the textbook content.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context for the question.",
+          "The image is a static illustration and does not depict any dynamic actions or changes.",
+          "The image does not show any specific educational content or question related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40671359148",
+      "checkpointed_at": "2026-10-28T12:44:39Z"
     }
   ]
 }
