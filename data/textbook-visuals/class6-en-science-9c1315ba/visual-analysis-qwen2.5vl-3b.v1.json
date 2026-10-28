@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1440,
+    "assets_selected": 1443,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "00291007ebaf3445d74236e8",
-      "2d4b5f8ff9b0fb331fe33504",
-      "57203a4994f3a5b40fbebd53"
+      "3ad791c0cc820daf0281f803",
+      "83132294b72ab8610d5e9076",
+      "f01f3b4bfc983900314fddc6"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1438,
-    "assets_remaining": 640,
-    "assets_completion_percent": 69.2,
+    "assets_analyzed": 1441,
+    "assets_remaining": 637,
+    "assets_completion_percent": 69.3,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1435,
+    "assets_skipped_from_checkpoint": 1438,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:58:22Z"
+      "checkpointed_at": "2026-10-28T07:08:33Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:59:14Z"
+      "checkpointed_at": "2026-10-28T07:09:28Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -48631,6 +48631,97 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
       "checkpointed_at": "2026-10-28T07:07:19Z"
+    },
+    {
+      "asset_id": "3ad791c0cc820daf0281f803",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 156,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02c848a053bd9291a35f92fa4e1c2239cb5db94f1895bc7c484d97883cf7e32f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any relevant content for the given question or image description."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:09:46Z"
+    },
+    {
+      "asset_id": "83132294b72ab8610d5e9076",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 156,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02c848a053bd9291a35f92fa4e1c2239cb5db94f1895bc7c484d97883cf7e32f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:10:00Z"
+    },
+    {
+      "asset_id": "f01f3b4bfc983900314fddc6",
+      "asset_sha256": "1a87a50dda32951fb83236fefe3df1c0dd7a4674abd74269d0f00d1a8ff7aebc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 156,
+      "asset_path": "page-0156.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "02c848a053bd9291a35f92fa4e1c2239cb5db94f1895bc7c484d97883cf7e32f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about temperature measurement and a diagram of thermometers.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Who do you think followed the correct way for measuring\ntemperature?\n(i) Student 1\n(ii) Student 2\n(iii) Student 3\n(iv) Student 4\n6. Colour to show the red column on the drawings of\nthermometers (Fig. 7.7) as per the temperatures written\nbelow:\n14 °C           17 °C              7.5 °C\nFig. 7.7\n7. Ob",
+          "Curiosity | Textbooks of Science | Grade 6"
+        ],
+        "concepts": [
+          "temperature measurement",
+          "thermometer",
+          "reading thermometer",
+          "laboratory thermometer",
+          "body temperature"
+        ],
+        "context_relation": "The image is a question and answer set related to temperature measurement using thermometers.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:14:23Z"
     }
   ]
 }
