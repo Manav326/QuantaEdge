@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "476e8089da3add17f404e023570f2170be2d0fcd5483d0d1b637dbb83fc9b55e",
+  "raw_analysis_sha256": "bb7d4a2ae4604c8abf87f8e84acb0e98e3b469c17dd319068ad1ea219afbe63e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T12:26:39Z",
+      "checkpointed_at": "2026-10-28T12:38:37Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T12:28:11Z",
+      "checkpointed_at": "2026-10-28T12:40:09Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -151379,6 +151379,150 @@
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "133a86c65525322db9ffcc93",
+      "asset_sha256": "5bf44cb8f98230dcdca1430eafad03e1b7d9236beb1143a15e775aab6289c20b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/5bf44cb8f98230dcdca1430eafad03e1b7d9236beb1143a15e775aab6289c20b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a cube of ice and a bud of a rose, with text describing changes in the ice and the bud.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Changes Around Us:",
+          "5     Physical and Chemical",
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "A bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown",
+          "b"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image illustrates the concepts of physical and chemical changes, specifically showing the transformation of ice to water and a bud to a flower.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved in the transformation of ice to water.",
+          "The text mentions 'cold water' but does not specify the temperature or the chemical composition of the water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T12:42:04Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a cube of ice and a bud of a rose, with text describing changes in the ice and the bud.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Changes Around Us:",
+          "5     Physical and Chemical",
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "A bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown",
+          "b"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image illustrates the concepts of physical and chemical changes, specifically showing the transformation of ice to water and a bud to a flower.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved in the transformation of ice to water.",
+          "The text mentions 'cold water' but does not specify the temperature or the chemical composition of the water."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "04e8b2aa1ab26194146be3ef",
+      "asset_sha256": "c68579918fb32dc46d1d22f5c715cd3bb2dba0bf591a680ad61218cd96b63ecc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/c68579918fb32dc46d1d22f5c715cd3bb2dba0bf591a680ad61218cd96b63ecc.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of various objects and symbols related to science and nature, including a microscope, a plant, a bottle, and a city.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "nature",
+          "microscope",
+          "plant",
+          "bottle",
+          "city"
+        ],
+        "context_relation": "The image is related to the topic of 'Changes Around Us' in the context of physical and chemical changes.",
+        "limitations": [
+          "The image does not contain any specific formulas or quantities."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T12:43:44Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of various objects and symbols related to science and nature, including a microscope, a plant, a bottle, and a city.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "nature",
+          "microscope",
+          "plant",
+          "bottle",
+          "city"
+        ],
+        "context_relation": "The image is related to the topic of 'Changes Around Us' in the context of physical and chemical changes.",
+        "limitations": [
+          "The image does not contain any specific formulas or quantities."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d456527f98b45c7ff5c257c7",
+      "asset_sha256": "54cbb1667488e4d14b507f6d2494632c10df3769dc01d9163590feef90385431",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/54cbb1667488e4d14b507f6d2494632c10df3769dc01d9163590feef90385431.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
