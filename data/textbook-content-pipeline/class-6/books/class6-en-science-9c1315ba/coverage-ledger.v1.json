@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1474,
-    "successful_visual_analyses": 1454,
-    "missing_visual_analyses": 604,
+    "raw_analysis_result_rows": 1477,
+    "successful_visual_analyses": 1457,
+    "missing_visual_analyses": 601,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 624,
+    "unresolved_count": 621,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -55543,9 +55543,31 @@
       "asset_path": "assets/82538a58460ab13d3438f72fe82556d64755ae5b237d1e9625599b77ce05370d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A setup to measure the temperature of water and room temperature using laboratory and room thermometers.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Thermometer 1 (Room thermometer)",
+          "Thermometer 2 (Laboratory thermometer)",
+          "Beaker",
+          "Water",
+          "Fig. 7.11: Set up to measure temperature of water and room temperature",
+          "The temperature at the core of the Sun reaches as high as 15 mil"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Laboratory thermometer",
+          "Room thermometer",
+          "Water temperature",
+          "Sun temperature"
+        ],
+        "context_relation": "The image shows a setup for measuring temperature, which is related to the concept of temperature measurement.",
+        "limitations": [
+          "The image does not provide specific temperature readings or measurements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55561,9 +55583,36 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing two thermometers, one labeled 'Room thermometer' and the other 'Laboratory thermometer', both placed next to a beaker containing water. The text below the diagram mentions 'Thermometer 1' and 'Thermometer 2', indicating they are being used to measure temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Thermometer 1",
+          "(Room thermometer)",
+          "Thermometer 2",
+          "(Laboratory thermometer)",
+          "Beaker",
+          "Water",
+          "Fig. 7.11: Set up to measure temperature of water and room temperature",
+          "The temperature at the core of the Sun reaches",
+          "as high as 15 mil"
+        ],
+        "concepts": [
+          "Thermometer",
+          "Room temperature",
+          "Laboratory thermometer",
+          "Temperature measurement",
+          "Water temperature",
+          "Sun temperature"
+        ],
+        "context_relation": "The image is a diagram used to explain the concept of temperature measurement using different types of thermometers.",
+        "limitations": [
+          "The image does not show the actual measurement of temperature.",
+          "The image does not provide specific details about the temperature readings."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55579,9 +55628,34 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing two thermometers, one labeled 'Room thermometer' and the other 'Laboratory thermometer', alongside a beaker containing water. The setup is used to measure the temperature of water and the room temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Thermometer 1",
+          "(Room thermometer)",
+          "Thermometer 2",
+          "(Laboratory thermometer)",
+          "Beaker",
+          "Water",
+          "Fig. 7.11: Set up to measure temperature of water and room temperature",
+          "The temperature at the core of the Sun reaches",
+          "as high as 15 mil"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Room thermometer",
+          "Laboratory thermometer",
+          "Water temperature",
+          "Sun's core temperature"
+        ],
+        "context_relation": "The image is a part of a textbook discussing temperature measurement using different types of thermometers.",
+        "limitations": [
+          "The image does not provide specific measurements or temperatures."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

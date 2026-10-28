@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1454,
+    "assets_selected": 1457,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "e626e758e417a4ed22932016",
-      "e92369d56b2441558773418b",
-      "7a6cd277f28ef073a589f5f4"
+      "04fc771a809e1e474468cae6",
+      "04eac06f0a793dea630b4a5e",
+      "96d09470ddacc0b8aa0e7571"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1452,
-    "assets_remaining": 626,
-    "assets_completion_percent": 69.9,
+    "assets_analyzed": 1455,
+    "assets_remaining": 623,
+    "assets_completion_percent": 70.0,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1449,
+    "assets_skipped_from_checkpoint": 1452,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:18:30Z"
+      "checkpointed_at": "2026-10-28T14:27:09Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:19:22Z"
+      "checkpointed_at": "2026-10-28T14:27:58Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -49161,6 +49161,137 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
       "checkpointed_at": "2026-10-28T14:26:03Z"
+    },
+    {
+      "asset_id": "04fc771a809e1e474468cae6",
+      "asset_sha256": "82538a58460ab13d3438f72fe82556d64755ae5b237d1e9625599b77ce05370d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 159,
+      "asset_path": "assets/82538a58460ab13d3438f72fe82556d64755ae5b237d1e9625599b77ce05370d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "701337724c0410e5687100ab0bf7dea732441253cecc9b85a7c37ee74cb0788e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A setup to measure the temperature of water and room temperature using laboratory and room thermometers.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Thermometer 1 (Room thermometer)",
+          "Thermometer 2 (Laboratory thermometer)",
+          "Beaker",
+          "Water",
+          "Fig. 7.11: Set up to measure temperature of water and room temperature",
+          "The temperature at the core of the Sun reaches as high as 15 mil"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Laboratory thermometer",
+          "Room thermometer",
+          "Water temperature",
+          "Sun temperature"
+        ],
+        "context_relation": "The image shows a setup for measuring temperature, which is related to the concept of temperature measurement.",
+        "limitations": [
+          "The image does not provide specific temperature readings or measurements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:29:44Z"
+    },
+    {
+      "asset_id": "04eac06f0a793dea630b4a5e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 159,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "701337724c0410e5687100ab0bf7dea732441253cecc9b85a7c37ee74cb0788e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing two thermometers, one labeled 'Room thermometer' and the other 'Laboratory thermometer', both placed next to a beaker containing water. The text below the diagram mentions 'Thermometer 1' and 'Thermometer 2', indicating they are being used to measure temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Thermometer 1",
+          "(Room thermometer)",
+          "Thermometer 2",
+          "(Laboratory thermometer)",
+          "Beaker",
+          "Water",
+          "Fig. 7.11: Set up to measure temperature of water and room temperature",
+          "The temperature at the core of the Sun reaches",
+          "as high as 15 mil"
+        ],
+        "concepts": [
+          "Thermometer",
+          "Room temperature",
+          "Laboratory thermometer",
+          "Temperature measurement",
+          "Water temperature",
+          "Sun temperature"
+        ],
+        "context_relation": "The image is a diagram used to explain the concept of temperature measurement using different types of thermometers.",
+        "limitations": [
+          "The image does not show the actual measurement of temperature.",
+          "The image does not provide specific details about the temperature readings."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:30:27Z"
+    },
+    {
+      "asset_id": "96d09470ddacc0b8aa0e7571",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 159,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "701337724c0410e5687100ab0bf7dea732441253cecc9b85a7c37ee74cb0788e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing two thermometers, one labeled 'Room thermometer' and the other 'Laboratory thermometer', alongside a beaker containing water. The setup is used to measure the temperature of water and the room temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Thermometer 1",
+          "(Room thermometer)",
+          "Thermometer 2",
+          "(Laboratory thermometer)",
+          "Beaker",
+          "Water",
+          "Fig. 7.11: Set up to measure temperature of water and room temperature",
+          "The temperature at the core of the Sun reaches",
+          "as high as 15 mil"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Room thermometer",
+          "Laboratory thermometer",
+          "Water temperature",
+          "Sun's core temperature"
+        ],
+        "context_relation": "The image is a part of a textbook discussing temperature measurement using different types of thermometers.",
+        "limitations": [
+          "The image does not provide specific measurements or temperatures."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:31:05Z"
     }
   ]
 }
