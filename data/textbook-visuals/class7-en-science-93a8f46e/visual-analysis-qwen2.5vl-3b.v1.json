@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2584,
+    "assets_selected": 2585,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "4ba0a80240d4a7102bb8906b",
-      "2f4943ab77cd3ea7e3263d2a"
+      "2df591983d4dc6555ffaf677",
+      "8161b492d4f9d35cc76f5559"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2580,
-    "assets_remaining": 4908,
+    "assets_analyzed": 2582,
+    "assets_remaining": 4906,
     "assets_completion_percent": 34.5,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 2579,
+    "assets_skipped_from_checkpoint": 2580,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40766837431",
-      "checkpointed_at": "2026-10-28T22:14:45Z"
+      "checkpointed_at": "2026-10-28T22:19:00Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40766837431",
-      "checkpointed_at": "2026-10-28T22:15:14Z"
+      "checkpointed_at": "2026-10-28T22:19:35Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40766837431",
-      "checkpointed_at": "2026-10-28T22:15:53Z"
+      "checkpointed_at": "2026-10-28T22:20:15Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -97256,6 +97256,62 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40766837431",
       "checkpointed_at": "2026-10-28T22:18:10Z"
+    },
+    {
+      "asset_id": "2df591983d4dc6555ffaf677",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observation of changes around the user.",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40766837431",
+      "checkpointed_at": "2026-10-28T22:23:03Z"
+    },
+    {
+      "asset_id": "8161b492d4f9d35cc76f5559",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observations and reflections on changes in ice cubes",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40766837431",
+      "checkpointed_at": "2026-10-28T22:23:12Z"
     }
   ]
 }
