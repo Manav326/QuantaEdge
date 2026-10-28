@@ -14,7 +14,7 @@ test('literal import scanner follows source imports and ignores comments and ren
     "import React from 'react';",
     "// import Ghost from './comment-only';",
     "/* export { missing } from './block-comment'; */",
-    "const label = \\"import Fake from './rendered-copy'\\";",
+    `const label = "import Fake from './rendered-copy'";`,
   ].join('\n');
   assert.deepEqual(localImportSpecifiers(source), [
     '../legacy', '../shared/index', './components/Panel', './lazy/Panel'
