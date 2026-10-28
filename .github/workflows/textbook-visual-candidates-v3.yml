@@ -109,11 +109,13 @@ jobs:
       - name: Install extraction dependency
         run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
       - name: Compile preparation and validation scripts
-        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/plan_textbook_layer45_matrix.py
+        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/plan_textbook_layer45_matrix.py scripts/select_textbook_source_pair.py
       - name: Test source selection, extraction integrity and candidate preparation
         run: |
           python -m unittest discover -s tests -p "test_plan_textbook_layer45_matrix.py" -v
+          python -m unittest discover -s tests -p "test_select_textbook_source_pair.py" -v
           python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
+          python -m unittest discover -s tests -p "test_select_textbook_source_pair.py" -v
           python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
           python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
@@ -134,13 +136,16 @@ jobs:
       yielded: ${{ steps.layer45_run.outputs.yielded || 'false' }}
     strategy:
       fail-fast: false
-      max-parallel: 16
+      max-parallel: 8
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:
       CLASS_NO: ${{ matrix.class_no || inputs.class_no }}
-      BOOK_ID: ${{ matrix.book_id || '' }}
+      BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}
+      SOURCE_SLUGS_CSV: ${{ matrix.source_slugs_csv || '' }}
+      BOOK_PAIR_ID: ${{ matrix.book_pair_id || '' }}
+      BOOK_LABEL: ${{ matrix.book_ids_csv && matrix.book_label || '' }}
       ANALYSIS_MODE: ${{ inputs.analysis_mode || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')) && 'analyze_all') || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')) && 'resume_layers_4_5') }}
       VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}
       CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}
@@ -166,7 +171,7 @@ jobs:
           [[ -n "$VISION_MODEL" ]] || { echo "vision_model must be non-empty"; exit 2; }
           [[ "$CHECKPOINT_BATCH_SIZE" == "5" || "$CHECKPOINT_BATCH_SIZE" == "10" ]] || { echo "Invalid checkpoint_batch_size"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
-          python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
+          python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py scripts/select_textbook_source_pair.py
           python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
           python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
@@ -188,7 +193,10 @@ jobs:
         shell: bash
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
-          BOOK_ID: ${{ matrix.book_id || '' }}
+          BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}
+          SOURCE_SLUGS_CSV: ${{ matrix.source_slugs_csv || '' }}
+          BOOK_PAIR_ID: ${{ matrix.book_pair_id || '' }}
+          BOOK_LABEL: ${{ matrix.book_ids_csv && matrix.book_label || '' }}
         run: |
           set -euo pipefail
           owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
@@ -218,14 +226,22 @@ jobs:
           selection = json.loads(Path(selection_arg).read_text(encoding="utf-8"))
           root = Path(root_arg)
           repo = Path(repo_arg)
-          target_book_id = os.environ.get("BOOK_ID", "").strip()
+          target_book_ids = [item.strip() for item in os.environ.get("BOOK_IDS_CSV", "").split(",") if item.strip()]
+          target_source_slugs = [item.strip() for item in os.environ.get("SOURCE_SLUGS_CSV", "").split(",") if item.strip()]
+          if bool(target_book_ids) != bool(target_source_slugs):
+              raise SystemExit("Bilingual pair handoff must provide both book IDs and source slugs.")
+          if target_book_ids and (len(target_book_ids) != 2 or len(set(target_book_ids)) != 2 or len(target_source_slugs) != 2 or len(set(target_source_slugs)) != 2):
+              raise SystemExit("Bilingual pair handoff must provide exactly two distinct book IDs and source slugs.")
+          expected_slug_by_id = dict(zip(target_book_ids, target_source_slugs, strict=True))
           manifest_dir = repo / "data" / "textbook-extractions" / f"class-{class_no}" / language / "pages"
           if not manifest_dir.is_dir():
               raise SystemExit(f"Committed extracted pages are missing: {manifest_dir}. Run the extraction pilot and mirror its verified artifact first.")
           for source in selection.get("sources", []):
               book_id = source["book_id"]
-              if target_book_id and book_id != target_book_id:
+              if target_book_ids and book_id not in expected_slug_by_id:
                   continue
+              if target_book_ids and source.get("book_slug") != expected_slug_by_id[book_id]:
+                  raise SystemExit(f"{book_id}: planner source slug does not match the selected book-pair contract.")
               book_dir = root / source["book_slug"]
               book_dir.mkdir(parents=True, exist_ok=False)
               pdf_path = book_dir / "source.pdf"
@@ -272,34 +288,15 @@ jobs:
           PY
             echo "::endgroup::"
           done
-          python - "$source_root" "$CLASS_NO" <<'PY'
-          import json, sys
-          from pathlib import Path
-          root = Path(sys.argv[1])
-          grade = int(sys.argv[2])
-          all_sources = []
-          expected_per_language = 2 if grade == 6 else 3
-          for language in ("english", "hindi"):
-              value = json.loads((root / f"selected-{language}.json").read_text(encoding="utf-8"))
-              if value.get("class") != grade or value.get("language") != language or len(value.get("sources", [])) != expected_per_language:
-                  raise SystemExit(f"Invalid source set for Class {grade} {language}; expected {expected_per_language} books.")
-              all_sources.extend(value["sources"])
-          expected_total = expected_per_language * 2
-          if len(all_sources) != expected_total or len({x["book_slug"] for x in all_sources}) != expected_total:
-              raise SystemExit(f"Expected {expected_total} unique Class {grade} source books across English and Hindi; found {len(all_sources)}.")
-          full_selection = {"class": grade, "sources": all_sources, "publication_allowed": False, "review_required": True}
-          (root / "selected-sources-all.json").write_text(json.dumps(full_selection, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          target_book_id = __import__("os").environ.get("BOOK_ID", "").strip()
-          if target_book_id:
-              selected_sources = [source for source in all_sources if source.get("book_id") == target_book_id]
-              if len(selected_sources) != 1:
-                  raise SystemExit(f"Worker must select exactly one book_id={target_book_id}; found {len(selected_sources)}.")
-          else:
-              selected_sources = all_sources
-          worker_selection = dict(full_selection, sources=selected_sources)
-          (root / "selected-sources.json").write_text(json.dumps(worker_selection, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          print(json.dumps({"class": grade, "full_class_source_count": len(all_sources), "selected_worker_source_count": len(selected_sources), "target_book_id": target_book_id or None, "maths_books_per_language": 1 if grade == 6 else 2, "science_books_per_language": 1, "languages": ["english", "hindi"], "publication_allowed": False}, indent=2))
-          PY
+          python scripts/select_textbook_source_pair.py \
+            --english "$source_root/selected-english.json" \
+            --hindi "$source_root/selected-hindi.json" \
+            --class-no "$CLASS_NO" \
+            --book-ids-csv "$BOOK_IDS_CSV" \
+            --source-slugs-csv "$SOURCE_SLUGS_CSV" \
+            --book-pair-id "$BOOK_PAIR_ID" \
+            --book-label "$BOOK_LABEL" \
+            --output-dir "$source_root"
           echo "VISUAL_SOURCE_ROOT=$source_root" >> "$GITHUB_ENV"
 
       - name: Install ORAS and authenticate before per-book checkpoint handling
