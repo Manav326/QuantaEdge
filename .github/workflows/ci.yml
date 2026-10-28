@@ -62,6 +62,9 @@ jobs:
       - name: Generate machine-readable route/component source graph
         run: node scripts/inventory_ui_component_imports.mjs --output "$RUNNER_TEMP/ui-component-import-inventory.json"
 
+      - name: Verify Admin shared-workspace shell contract
+        run: node scripts/check_admin_nested_shell_contract.mjs
+
       - name: Test QA register validator
         run: node --test scripts/validate_qa_registers.test.mjs
 
