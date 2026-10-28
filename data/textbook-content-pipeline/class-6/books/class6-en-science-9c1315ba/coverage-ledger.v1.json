@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1444,
-    "successful_visual_analyses": 1427,
-    "missing_visual_analyses": 634,
+    "raw_analysis_result_rows": 1446,
+    "successful_visual_analyses": 1429,
+    "missing_visual_analyses": 632,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 651,
+    "unresolved_count": 649,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -54511,9 +54511,22 @@
       "asset_path": "assets/dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it.",
+        "visual_type": "other",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "Key Points"
+        ],
+        "context_relation": "The image is related to educational content, specifically focusing on key points or important information.",
+        "limitations": [
+          "The image does not provide specific details about the content or context of the educational material."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -54529,9 +54542,23 @@
       "asset_path": "assets/58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Investigate"
+        ],
+        "concepts": [
+          "Investigation",
+          "Magnifying Glass"
+        ],
+        "context_relation": "Education",
+        "limitations": [
+          "No specific text or data is provided within the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

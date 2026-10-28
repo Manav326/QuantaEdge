@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1428,
+    "assets_selected": 1429,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "1280720f709f81c588a84ef0",
-      "6ad1a44c4439dad27d3403c2"
+      "6023cd022e39d2ac961563fd",
+      "0adb47e2f7ff21c33a3af9d6"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1424,
-    "assets_remaining": 654,
-    "assets_completion_percent": 68.5,
+    "assets_analyzed": 1426,
+    "assets_remaining": 652,
+    "assets_completion_percent": 68.6,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1423,
+    "assets_skipped_from_checkpoint": 1424,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:33:56Z"
+      "checkpointed_at": "2026-10-28T04:41:19Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:34:56Z"
+      "checkpointed_at": "2026-10-28T04:42:19Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:35:45Z"
+      "checkpointed_at": "2026-10-28T04:43:08Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -48105,6 +48105,71 @@
       "error": "limitations must be a list of strings.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "6023cd022e39d2ac961563fd",
+      "asset_sha256": "dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 154,
+      "asset_path": "assets/dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d8a978efdc3916deccdf2297702a3ec80af954e31af26a34234bc994d835ea7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it.",
+        "visual_type": "other",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "Key Points"
+        ],
+        "context_relation": "The image is related to educational content, specifically focusing on key points or important information.",
+        "limitations": [
+          "The image does not provide specific details about the content or context of the educational material."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40621809658",
+      "checkpointed_at": "2026-10-28T04:44:42Z"
+    },
+    {
+      "asset_id": "0adb47e2f7ff21c33a3af9d6",
+      "asset_sha256": "58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 154,
+      "asset_path": "assets/58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d8a978efdc3916deccdf2297702a3ec80af954e31af26a34234bc994d835ea7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Investigate"
+        ],
+        "concepts": [
+          "Investigation",
+          "Magnifying Glass"
+        ],
+        "context_relation": "Education",
+        "limitations": [
+          "No specific text or data is provided within the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40621809658",
+      "checkpointed_at": "2026-10-28T04:46:16Z"
     }
   ]
 }
