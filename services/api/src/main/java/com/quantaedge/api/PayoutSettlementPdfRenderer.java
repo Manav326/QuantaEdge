@@ -156,7 +156,7 @@ public class PayoutSettlementPdfRenderer {
         c.tableRow(new String[]{
           twoLine(firstNonBlank(row,"recipient_name","beneficiary_name")+"\n"+label(string(row.get("beneficiary_type"))),25),
           money(row.get("amount_paise"),currency(row)),
-          twoLine(label(string(row.get("status")))+"\n"+safeText(row.get("status_details")),24),
+          twoLine(label(string(row.get("status")))+"\nProvider: "+label(string(row.get("provider_status"))),24),
           safeBank(row),
           safeText(row.get("provider_payout_id")),
           utr(row)
