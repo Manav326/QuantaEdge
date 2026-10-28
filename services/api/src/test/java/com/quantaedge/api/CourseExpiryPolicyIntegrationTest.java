@@ -1,6 +1,7 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -161,6 +162,10 @@ class CourseExpiryPolicyIntegrationTest {
       """, (rs, row) -> new long[]{rs.getLong(1), rs.getLong(2)});
     long identityId=course[0];
     long programId=course[1];
+    assertFalse(Boolean.TRUE.equals(jdbc.queryForObject("""
+      select course_expiry_policy_required from institution_course_identity where id=?
+      """,Boolean.class,identityId)),
+      "Existing identities must be grandfathered by the migration.");
 
     // Simulate a new registration inside this transaction. Existing production identities stay
     // grandfathered; a newly registered identity carries the policy-required flag.
