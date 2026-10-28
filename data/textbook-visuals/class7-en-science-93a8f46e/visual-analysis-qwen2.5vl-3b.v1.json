@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2479,
+    "assets_selected": 2484,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "723270e7ac053086fab1a30f",
-      "b4d213bf55f2e8f16146f2db",
-      "8b3acf0866221a690ab86c3c",
-      "ffbdb2e78f5e160cca76d9c9",
-      "fbd7e602b838a03e5065c2be"
+      "c95a61e8854a360db8cf9017",
+      "3ca162949ac5c5f9341d5e19",
+      "d4439460c52fbbfe1faaaf87",
+      "fab1a2f1dedeae114f8278d2",
+      "6b565277a566a8d7eb7a8708"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2479,
-    "assets_remaining": 5009,
-    "assets_completion_percent": 33.1,
-    "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2474,
+    "assets_analyzed": 2483,
+    "assets_remaining": 5005,
+    "assets_completion_percent": 33.2,
+    "assets_failed": 25,
+    "assets_skipped_from_checkpoint": 2479,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -93479,6 +93479,152 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608460262",
       "checkpointed_at": "2026-10-28T03:53:00Z"
+    },
+    {
+      "asset_id": "c95a61e8854a360db8cf9017",
+      "asset_sha256": "a9bc8bc17ae67a27b45c9cdc51523fb03b16ea18fcebcec46e97a991f39ea91b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/a9bc8bc17ae67a27b45c9cdc51523fb03b16ea18fcebcec46e97a991f39ea91b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A flowchart with three main branches: INNOVATION, DISCOVERY, and ENQUIRY. Each branch leads to a subtask involving blue and red litmus solutions and a change in blue color.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Add blue and red litmus solutions separately",
+          "Change in blue"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Blue litmus solution",
+          "Red litmus solution",
+          "Change in color"
+        ],
+        "context_relation": "The flowchart represents a sequence of steps in a scientific inquiry process.",
+        "limitations": [
+          "The image is blurred and not clearly visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:54:48Z"
+    },
+    {
+      "asset_id": "3ca162949ac5c5f9341d5e19",
+      "asset_sha256": "27852bf4199ca938d2d30d681c62570f1a92fd8a0ec72b13637687b3def0d8ef",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/27852bf4199ca938d2d30d681c62570f1a92fd8a0ec72b13637687b3def0d8ef.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A flowchart with the steps 'INNOVATION', 'DISCOVERY', and 'ENQUIRY'.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY"
+        ],
+        "context_relation": "The flowchart is a visual representation of the steps in the scientific method.",
+        "limitations": [
+          "The flowchart does not include specific steps or actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:56:25Z"
+    },
+    {
+      "asset_id": "d4439460c52fbbfe1faaaf87",
+      "asset_sha256": "952711d47620ba393fab414b3a0bdfd2c15097e3df1d9edf1c50dc1b9e16423f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/952711d47620ba393fab414b3a0bdfd2c15097e3df1d9edf1c50dc1b9e16423f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with blue rings at both ends.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:57:52Z"
+    },
+    {
+      "asset_id": "fab1a2f1dedeae114f8278d2",
+      "asset_sha256": "4c67c08a14f53ec24008a6dd5d053df36b8c8f857fb3fc305b18867899ad5cba",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/4c67c08a14f53ec24008a6dd5d053df36b8c8f857fb3fc305b18867899ad5cba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with blue rings attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:59:19Z"
+    },
+    {
+      "asset_id": "6b565277a566a8d7eb7a8708",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }

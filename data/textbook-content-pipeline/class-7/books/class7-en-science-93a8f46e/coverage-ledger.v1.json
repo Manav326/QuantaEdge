@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2503,
-    "successful_visual_analyses": 2479,
-    "missing_visual_analyses": 4985,
-    "failed_visual_analyses": 24,
+    "raw_analysis_result_rows": 2508,
+    "successful_visual_analyses": 2483,
+    "missing_visual_analyses": 4980,
+    "failed_visual_analyses": 25,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5009,
+    "unresolved_count": 5005,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -102906,9 +102906,31 @@
       "asset_path": "assets/a9bc8bc17ae67a27b45c9cdc51523fb03b16ea18fcebcec46e97a991f39ea91b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A flowchart with three main branches: INNOVATION, DISCOVERY, and ENQUIRY. Each branch leads to a subtask involving blue and red litmus solutions and a change in blue color.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Add blue and red litmus solutions separately",
+          "Change in blue"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Blue litmus solution",
+          "Red litmus solution",
+          "Change in color"
+        ],
+        "context_relation": "The flowchart represents a sequence of steps in a scientific inquiry process.",
+        "limitations": [
+          "The image is blurred and not clearly visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -102924,9 +102946,26 @@
       "asset_path": "assets/27852bf4199ca938d2d30d681c62570f1a92fd8a0ec72b13637687b3def0d8ef.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A flowchart with the steps 'INNOVATION', 'DISCOVERY', and 'ENQUIRY'.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY"
+        ],
+        "context_relation": "The flowchart is a visual representation of the steps in the scientific method.",
+        "limitations": [
+          "The flowchart does not include specific steps or actions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -102942,9 +102981,16 @@
       "asset_path": "assets/952711d47620ba393fab414b3a0bdfd2c15097e3df1d9edf1c50dc1b9e16423f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with blue rings at both ends.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -102960,9 +103006,16 @@
       "asset_path": "assets/4c67c08a14f53ec24008a6dd5d053df36b8c8f857fb3fc305b18867899ad5cba.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with blue rings attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -102978,7 +103031,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
