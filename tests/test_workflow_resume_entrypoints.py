@@ -1,299 +1,182 @@
 from pathlib import Path
+import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github" / "workflows"
 
-
-def read(name: str) -> str:
-    return (WORKFLOWS / name).read_text(encoding="utf-8")
-
+def read(name):
+    path = WORKFLOWS / name
+    if not path.is_file():
+        raise AssertionError("Required workflow component is missing: " + name)
+    return path.read_text(encoding="utf-8")
 
 class WorkflowResumeEntrypointTests(unittest.TestCase):
-    def test_marked_push_can_reextract_one_class_without_rebuilding_the_other_class(self):
-        workflow = read("textbook-extraction-pilot.yml")
-        self.assertIn("[reextract-textbook-class-7]", workflow)
-        self.assertIn("[reextract-textbook-class-8]", workflow)
-        self.assertIn(
-            "contains(github.event.head_commit.message || '', '[reextract-textbook-class-7]') && fromJSON('[7]')",
-            workflow,
-        )
-        self.assertIn(
-            "contains(github.event.head_commit.message || '', '[reextract-textbook-class-8]') && fromJSON('[8]')",
-            workflow,
-        )
+    def test_one_user_facing_content_workflow_is_dispatchable(self):
+        master=read("textbook-content-pipeline.yml")
+        self.assertIn("workflow_dispatch:",master)
+        self.assertNotIn("workflow_run:",master)
+        self.assertNotIn("  schedule:",master)
+        self.assertIn("default: progress_report",master)
+        self.assertIn("repair_layers_4_5",master)
+        self.assertIn("repair_source_cache_queue",master)
+        self.assertIn("cancel-in-progress: false",master)
 
-
-    def test_targeted_analyze_all_markers_rebuild_stale_books_per_class(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
-        for grade in ("7", "8"):
-            marker = f"[analyze-all-visual-layers-4-5-class-{grade}]"
-            self.assertIn(marker, workflow)
-            self.assertIn(marker, planner)
-        self.assertIn("matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}", workflow)
-        self.assertIn("&& 'analyze_all') || (github.event_name == 'push'", workflow)
-        self.assertIn("cancel-in-progress:", workflow)
-        coordinator = read("resume-textbook-layers-4-5-automatically.yml")
-        self.assertIn('"Mirror verified textbook extraction artifact to main"', coordinator)
-        self.assertIn("TRIGGER_CONCLUSION", coordinator)
-        self.assertIn("textbook-extraction-pilot.yml/runs", coordinator)
-        self.assertIn("active source extraction or Layer 4–5 work", coordinator)
-
-    def test_class8_rebuild_uses_fresh_verified_source_and_keeps_publication_disabled(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
-        marker = "[analyze-all-visual-layers-4-5-class-8]"
-        self.assertIn(marker, workflow)
-        self.assertIn(marker, planner)
-        self.assertIn("&& 'analyze_all') || (github.event_name == 'push'", workflow)
-        self.assertIn("source PDF SHA-256 differs", workflow)
-        self.assertIn('"publication_allowed": False', workflow)
-
-    def test_class8_targeted_rebuild_replaces_only_the_class8_resume_lane(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
-        self.assertIn("&& '8')", workflow)
-        self.assertIn("[analyze-all-visual-layers-4-5-class-8]", workflow)
-        self.assertIn("[analyze-all-visual-layers-4-5-class-8]", planner)
-        self.assertIn("cancel-in-progress:", workflow)
-        self.assertIn("publication_allowed", workflow)
-        self.assertIn("source PDF SHA-256 differs", workflow)
-    def test_layers_1_to_5_has_all_execution_and_resume_modes_in_one_entrypoint(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        self.assertIn("workflow_dispatch:", workflow)
-        self.assertIn("workflow_call:", workflow)
-        self.assertIn('options: ["prepare_only", "analyze_all", "resume_preparation", "resume_layers_4_5"]', workflow)
-        self.assertIn("github.event_name == 'workflow_call'", workflow)
-        self.assertIn("resume_layers_4_5", workflow)
-        self.assertIn("resume_preparation", workflow)
-
-
-    def test_marked_push_runs_resume_mode_for_both_classes_in_the_core_workflow(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
-        for marker in (
-            "[resume-visual-layers-4-5-classes-7-8]",
-            "[resume-visual-layers-4-5-classes-6-8]",
-            "[resume-visual-layers-4-5-class-6]",
-            "[resume-visual-layers-4-5-class-7]",
-            "[resume-visual-layers-4-5-class-8]",
+    def test_unified_dispatcher_coexists_with_legacy_automation_and_no_local_workflow_calls(self):
+        master = read("textbook-content-pipeline.yml")
+        workflow_names = {
+            path.name for path in WORKFLOWS.iterdir()
+            if path.is_file() and (
+                "textbook" in path.name.lower()
+                or path.name in {"curriculum-pipeline-audit.yml", "quantaedge-layers-6-8.yml"}
+            )
+        }
+        self.assertIn("textbook-content-pipeline.yml", workflow_names)
+        for legacy in (
+            "curriculum-pipeline-audit.yml",
+            "mirror-textbook-extraction-artifact.yml",
+            "quantaedge-layers-6-8.yml",
+            "resume-textbook-layers-4-5-automatically.yml",
+            "textbook-cache.yml",
+            "textbook-extraction-pilot.yml",
+            "textbook-visual-analysis.yml",
+            "textbook-visual-candidates-v3.yml",
         ):
-            self.assertIn(marker, workflow)
-            self.assertIn(marker, planner)
-        self.assertIn("matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}", workflow)
-        self.assertIn("max-parallel: 16", workflow)
-        self.assertIn("inputs.analysis_mode || (github.event_name == 'push'", workflow)
-        self.assertIn("VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}", workflow)
-        self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}", workflow)
-        self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
-        self.assertIn("'classes-7-8-resume'", workflow)
-        self.assertIn("BOOK_ID: ${{ matrix.book_id || '' }}", workflow)
+            self.assertIn(legacy, workflow_names, f"Legacy workflow must remain available: {legacy}")
+        self.assertNotIn("uses: ./.github/workflows/", master)
+        self.assertIn("cache_textbooks:", master)
+        self.assertIn("extract_textbooks:", master)
+        self.assertIn("mirror_extraction:", master)
+        self.assertIn("prepare_books:", master)
+        self.assertIn("layers68_execute:", master)
+        self.assertIn("audit_offline:", master)
 
-    def test_marked_push_can_resume_class7_and_class8_independently(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
-        for marker in (
-            "[resume-visual-layers-4-5-class-7]",
-            "[resume-visual-layers-4-5-class-8]",
-            "[resume-visual-layers-4-5-classes-7-8]",
-        ):
-            self.assertIn(marker, workflow)
-            self.assertIn(marker, planner)
-        self.assertIn("matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}", workflow)
-        self.assertIn("max-parallel: 16", workflow)
-        self.assertIn("&& '7')", workflow)
-        self.assertIn("&& '8')", workflow)
+    def test_every_dispatch_task_is_wired_to_an_explicit_job(self):
+        master = read("textbook-content-pipeline.yml")
+        task_section = re.search(
+            r"(?ms)^      task:\n.*?^        options:\s*\[([^\]]+)\]",
+            master,
+        )
+        self.assertIsNotNone(task_section, "The visible task dropdown must be explicit.")
+        options = [value.strip().strip("'\"") for value in task_section.group(1).split(",")]
+        self.assertEqual([
+            "refresh_source_cache", "repair_source_cache_queue", "extract_and_mirror",
+            "prepare_layers_1_5", "repair_layers_4_5", "rebuild_corrections",
+            "layers_6_8", "progress_report", "audit_contracts",
+        ], options)
 
-    def test_cancelled_class6_to8_run_is_resumed_by_separate_coordinator(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
-        self.assertNotIn("workflow_run:", workflow)
-        self.assertIn("data/textbook-content-pipeline/resume-control.v1.json", workflow)
-        self.assertIn("[resume-visual-layers-4-5-classes-6-8]", workflow)
-        self.assertIn("[resume-visual-layers-4-5-classes-6-8]", planner)
-        self.assertIn("matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}", workflow)
-        self.assertIn("max-parallel: 16", workflow)
-        self.assertIn("Wake checkpoint coordinator after each book-worker round", workflow)
-        coordinator = read("resume-textbook-layers-4-5-automatically.yml")
-        self.assertIn("push:", coordinator)
-        self.assertIn('".github/workflows/resume-textbook-layers-4-5-automatically.yml"', coordinator)
-        self.assertIn("schedule:", coordinator)
-        self.assertIn('cron: "*/5 * * * *"', coordinator)
-        self.assertIn("workflow_run:", coordinator)
-        self.assertIn("types: [completed]", coordinator)
-        self.assertIn("branches: [main]", coordinator)
-        self.assertIn("actions: write", coordinator)
-        self.assertIn("/actions/workflows/textbook-visual-candidates-v3.yml/dispatches", coordinator)
-        self.assertIn("resume_layers_4_5", coordinator)
-        self.assertIn("for grade in (6,7,8)", coordinator)
-        self.assertIn('p=root/f"class-{grade}.v1.json"', coordinator)
-        self.assertIn("active_classes", coordinator)
-        self.assertIn("already has active source extraction or Layer 4–5 work", coordinator)
-        self.assertIn('else job.get("started_at")', coordinator)
-        self.assertIn("checkpoint_baseline=", coordinator)
+        jobs_section = master.split("\njobs:\n", 1)[1]
+        parts = re.split(r"(?m)^  ([A-Za-z0-9_-]+):\s*$", jobs_section)
+        job_blocks = {
+            parts[index]: parts[index + 1]
+            for index in range(1, len(parts) - 1, 2)
+        }
+        expected_routes = {
+            "refresh_source_cache": ("cache_textbooks",),
+            "repair_source_cache_queue": ("cache_textbooks",),
+            "extract_and_mirror": ("extract_textbooks", "mirror_extraction"),
+            "prepare_layers_1_5": ("prepare_plan", "prepare_validate", "finalize-catalog"),
+            "repair_layers_4_5": ("prepare_plan", "prepare_validate"),
+            "rebuild_corrections": ("rebuild-corrections",),
+            "layers_6_8": ("layers68_validate", "layers68_execute"),
+            "progress_report": ("report-progress",),
+            "audit_contracts": ("audit_offline",),
+        }
+        self.assertEqual(set(options), set(expected_routes))
+        for task, expected_jobs in expected_routes.items():
+            for job in expected_jobs:
+                with self.subTest(task=task, job=job):
+                    self.assertIn(job, job_blocks, f"{task} has a dangling job route.")
+                    self.assertRegex(
+                        job_blocks[job],
+                        rf"inputs\.task\s*==\s*'{re.escape(task)}'",
+                        f"{job} must be gated by task={task}.",
+                    )
 
-    def test_layer45_resume_uses_finite_request_timeout_and_replaces_only_matching_class_runner(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
-        self.assertIn("--request-timeout 300", workflow)
-        self.assertIn('q.add_argument("--request-timeout",type=int,default=300', pipeline)
-        self.assertIn('"--timeout",str(args.request_timeout)', pipeline)
-        self.assertIn("max-parallel: 16", workflow)
-        self.assertIn("BOOK_ID: ${{ matrix.book_id || '' }}", workflow)
-        coordinator = read("resume-textbook-layers-4-5-automatically.yml")
-        self.assertIn("age >= 1800", coordinator)
-        self.assertIn("/actions/runs/$run_id/cancel", coordinator)
-        self.assertIn("stale runner cancellation requested", coordinator.lower())
-        self.assertIn("baseline=latest or started", coordinator)
-        self.assertIn("checkpoint(content): Layer 4-5", coordinator)
-        self.assertIn("all_processing_steps_stale", coordinator)
-        self.assertIn("source_ledgers", coordinator)
-        self.assertIn("ledger_sha256", coordinator)
-        self.assertIn('summary.get("unresolved_count")!=0', coordinator)
-    def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        restore = workflow[workflow.index("- name: Restore each matching Layer 1 inventory bundle or build only missing inventories"):workflow.index("- name: Restore or build immutable per-book candidate checkpoints")]
-        self.assertIn("from scripts.prepare_visual_candidate_batch import extract_archive, missing_artifact, validate_layer1_bundle", restore)
-        self.assertIn('wrapper=f"{slug}-layer1"', restore)
-        self.assertIn("validate_layer1_bundle(layer1_root,source,work,fingerprint)", restore)
-        self.assertIn("tag_fingerprint", restore)
-        self.assertIn("inventory bundle mixes wrapped and root-level paths", restore)
-        preflight = workflow.index("- name: Preflight and restore matching Layer 4 checkpoints before loading the vision model")
-        inventory = workflow.index("- name: Restore each matching Layer 1 inventory bundle or build only missing inventories")
-        self.assertLess(preflight, inventory, "Do not rebuild missing Layer 1 inventory before validating saved Layer 4 checkpoints.")
-        preflight_step = workflow[preflight:inventory]
-        self.assertIn("VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}", preflight_step)
-        self.assertIn("resume_preflight", preflight_step)
-        self.assertIn("prior_analysis_started", preflight_step)
-        self.assertIn("resume stopped instead of silently redoing inference", preflight_step)
-        self.assertIn("from scripts.prepare_visual_candidate_batch import missing_artifact", preflight_step)
-        self.assertIn('not_found = missing_artifact(detail, f"{package}:{tag}")', preflight_step)
-        self.assertIn("missing_artifact(detail, f", workflow)
+        # Expensive/live registry work is an opt-in subtask of the audit only.
+        self.assertIn("inputs.task == 'audit_contracts' && inputs.pull_live_registry == true",
+                      job_blocks["audit_live_registry"])
+        self.assertIn("needs: [validate, prepare_plan, prepare_validate]",
+                      job_blocks["prepare_books"])
+        self.assertIn("fromJSON(needs.prepare_plan.outputs.matrix)",
+                      job_blocks["prepare_books"])
+        self.assertIn("max-parallel: 8", job_blocks["prepare_books"])
+        self.assertIn("finalize-catalog", job_blocks)
+        self.assertIn("needs: [validate, prepare_plan, prepare_validate, prepare_books]",
+                      job_blocks["finalize-catalog"])
+        self.assertIn("default: prepare_only", master)
+        self.assertIn("default: progress_report", master)
+        self.assertNotIn("uses: ./.github/workflows/", master)
+        self.assertNotRegex(master, r"(?m)^\s*(push|schedule|workflow_run):")
 
-    def test_layers_6_to_8_has_all_modes_in_one_entrypoint(self):
-        workflow = read("quantaedge-layers-6-8.yml")
-        self.assertIn("workflow_dispatch:", workflow)
-        self.assertIn("workflow_call:", workflow)
-        self.assertIn('options: ["benchmark", "run", "resume", "refresh_benchmark"]', workflow)
-        self.assertIn("github.event_name == 'workflow_call'", workflow)
+    def test_every_choice_input_has_the_expected_supported_values(self):
+        master = read("textbook-content-pipeline.yml")
 
-    def test_refresh_benchmark_is_in_core_workflow_and_does_not_start_ollama(self):
-        workflow = read("quantaedge-layers-6-8.yml")
-        refresh = workflow.index("- name: Refresh saved benchmark samples without model inference")
-        generation = workflow.index("- name: Run bounded single-book draft generation")
-        ollama = workflow.index("- name: Start loopback-only Ollama service")
-        self.assertLess(refresh, generation)
-        refresh_step = workflow[refresh:generation]
-        self.assertIn("if: inputs.mode == 'refresh_benchmark'", refresh_step)
-        self.assertIn("python scripts/quantaedge_layers_6_8.py refresh-benchmark", refresh_step)
-        self.assertIn("--commit-checkpoints", refresh_step)
-        self.assertIn("Guard fixed Class 6 benchmark and refresh modes", workflow)
-        self.assertIn("ncert-c6-english-fecu1", workflow)
-        ollama_step = workflow[ollama:workflow.index("- name: Pull only candidate models", ollama)]
-        self.assertIn("inputs.mode == 'benchmark'", ollama_step)
-        self.assertNotIn("refresh_benchmark", ollama_step)
+        def choices_for(field):
+            match = re.search(
+                rf"(?ms)^      {re.escape(field)}:\n(.*?)(?=^      [A-Za-z0-9_-]+:\s*$|^permissions:)",
+                master,
+            )
+            self.assertIsNotNone(match, f"Missing workflow_dispatch input: {field}")
+            options = re.search(r"(?m)^        options:\s*\[([^\]]+)\]\s*$", match.group(1))
+            self.assertIsNotNone(options, f"Input {field} must use an explicit finite choice list")
+            return [item.strip().strip("'").strip('"') for item in options.group(1).split(",")]
 
-    def test_benchmark_checks_layer5_before_starting_or_downloading_models(self):
-        workflow = read("quantaedge-layers-6-8.yml")
-        preflight = workflow.index("- name: Preflight benchmark source and Layer 5 before model download")
-        ollama = workflow.index("- name: Start loopback-only Ollama service")
-        pull = workflow.index("- name: Pull only candidate models for this invocation")
-        self.assertLess(preflight, ollama)
-        self.assertLess(preflight, pull)
-        step = workflow[preflight:workflow.index("- name: Preflight generation checkpoint before model download", preflight)]
-        self.assertIn("if: inputs.mode == 'benchmark' || inputs.mode == 'refresh_benchmark'", step)
-        self.assertIn("python scripts/quantaedge_layers_6_8.py preflight", step)
-        self.assertIn("--source-book-id ncert-c6-english-fecu1", step)
+        expected = {
+            "class_no": ["6", "7", "8", "all"],
+            "book_pair_id": [
+                "all", "class6-science-bilingual", "class6-maths-bilingual",
+                "class7-science-bilingual", "class7-maths-part1-bilingual",
+                "class7-maths-part2-bilingual", "class8-science-bilingual",
+                "class8-maths-part1-bilingual", "class8-maths-part2-bilingual",
+            ],
+            "analysis_mode": ["prepare_only", "analyze_all", "resume_preparation", "resume_layers_4_5"],
+            "checkpoint_batch_size": ["5", "10"],
+            "cache_language": ["both", "hindi", "english"],
+            "layer68_mode": ["benchmark", "run", "resume", "refresh_benchmark"],
+            "checkpoint_every": ["1", "2", "3", "5"],
+        }
+        for field, values in expected.items():
+            with self.subTest(field=field):
+                self.assertEqual(values, choices_for(field))
 
-    def test_layers_6_to_8_preflights_run_and_resume_before_model_download(self):
-        workflow = read("quantaedge-layers-6-8.yml")
-        preflight = workflow.index("- name: Preflight generation checkpoint before model download")
-        output_only = workflow.index("- name: Reconcile saved Layers 6–8 outputs without model inference")
-        ollama_start = workflow.index("- name: Start loopback-only Ollama service")
-        model_pull = workflow.index("- name: Pull only candidate models for this invocation")
-        self.assertLess(preflight, output_only)
-        self.assertLess(preflight, ollama_start)
-        self.assertLess(preflight, model_pull)
-        preflight_step = workflow[preflight:output_only]
-        self.assertIn("if: inputs.mode == 'run' || inputs.mode == 'resume'", preflight_step)
-        self.assertIn('if [[ "$MODE" == "resume" ]]; then', preflight_step)
-        self.assertIn("args+=(--require-existing-checkpoint)", preflight_step)
-        self.assertIn('{"MATCHED_CHECKPOINT","NOT_STARTED"}', preflight_step)
-        self.assertIn("preflight_state=", preflight_step)
-        self.assertIn("steps.generation_preflight.outputs.preflight_state == 'MATCHED_CHECKPOINT'", workflow)
+        self.assertIn("default: progress_report", master)
+        self.assertIn("default: prepare_only", master)
+        self.assertNotIn("name: Checkout main", master)
+        self.assertNotRegex(master, r"(?m)^\s*(push|schedule|workflow_run):")
+        self.assertNotIn("uses: ./.github/workflows/", master)
+        self.assertNotIn("match main; no Git commit required", master)
 
-    def test_layers_6_to_8_checks_draft_acknowledgement_before_model_startup(self):
-        workflow = read("quantaedge-layers-6-8.yml")
-        approval = workflow.index("- name: Require explicit experimental-draft approval before model startup")
-        ollama_start = workflow.index("- name: Start loopback-only Ollama service")
-        model_pull = workflow.index("- name: Pull only candidate models for this invocation")
-        generation = workflow.index("- name: Run bounded single-book draft generation")
-        self.assertLess(approval, ollama_start)
-        self.assertLess(approval, model_pull)
-        self.assertLess(approval, generation)
-        approval_step = workflow[approval:ollama_start]
-        self.assertIn("inputs.mode == 'run'", approval_step)
-        self.assertIn("steps.generation_preflight.outputs.retryable_segments != '0'", approval_step)
-        self.assertIn("ALLOW_EXPERIMENTAL_MODEL", approval_step)
+        dispatch = master.split("  workflow_dispatch:\n", 1)[1].split("\npermissions:\n", 1)[0]
+        declared_inputs = re.findall(r"(?m)^      ([A-Za-z0-9_-]+):\s*$", dispatch)
+        self.assertEqual(23, len(declared_inputs), "All 23 dispatch inputs must remain intentional and inventoried.")
+        for field in declared_inputs:
+            with self.subTest(input=field):
+                self.assertRegex(master, rf"inputs\.{re.escape(field)}\b",
+                                 f"Dispatch input {field} is declared but has no consumer.")
 
-    def test_retired_duplicate_entrypoints_are_absent(self):
-        retired = [
-            "agent-4-validation.yml",
-            "android-build.yml",
-            "commit-class6-extraction-artifact.yml",
-            "dispatch-visual-layers-4-5-classes-7-8.yml",
-            "benchmark-class6-curiosity-after-layer5.yml",
-            "quantaedge-layers-1-5-resume.yml",
-            "quantaedge-layers-6-8-generate-once.yml",
-            "quantaedge-layers-6-8-refresh-benchmark.yml",
-            "resume-quantaedge-layers-6-8.yml",
-            "resume-textbook-visual-layers-1-3.yml",
-            "resume-textbook-visual-layers-4-5.yml",
-        ]
-        for name in retired:
-            with self.subTest(name=name):
-                self.assertFalse((WORKFLOWS / name).exists(), f"{name} is a retired duplicate entrypoint")
-        self.assertFalse((ROOT / ".github" / "triggers" / "layers1-5-class6-curiosity.trigger").exists())
-        self.assertTrue((WORKFLOWS / "mirror-textbook-extraction-artifact.yml").is_file())
+    def test_legacy_resume_coordinator_and_active_control_are_preserved(self):
+        self.assertTrue((WORKFLOWS/"resume-textbook-layers-4-5-automatically.yml").is_file())
+        self.assertTrue((WORKFLOWS/"textbook-visual-analysis.yml").is_file())
+        state=(ROOT/"data/textbook-content-pipeline/resume-control.v1.json").read_text(encoding="utf-8")
+        self.assertIn('"active": true', state)
 
-    def test_layers_6_to_8_core_accepts_reusable_workflow_calls(self):
-        workflow = read("quantaedge-layers-6-8.yml")
-        self.assertIn("workflow_call:", workflow)
-        self.assertIn("github.event_name == 'workflow_call'", workflow)
-        self.assertIn("require-existing-checkpoint", workflow)
-        self.assertIn("retryable_segments", workflow)
+    def test_layer45_matrix_is_pair_scoped_and_checkpoint_writes_are_safe(self):
+        master=read("textbook-content-pipeline.yml")
+        self.assertIn("INPUT_BOOK_PAIR_ID",master)
+        self.assertIn("max-parallel: 8",master)
+        self.assertIn("textbook_pipeline_handoff.py",master)
+        self.assertIn("git_checkpoint.py",master)
+        self.assertIn("Rebuild shared catalogue after all pair checkpoints are durable", master)
+        self.assertIn("inputs.task == 'progress_report' && 'progress'", master)
+        self.assertIn("ref: " + "$" + "{{ github.ref }}",master)
+        self.assertNotIn("wake-resume-coordinator",master)
 
+    def test_checkpoint_code_never_retargets_main(self):
+        for name in ("quantaedge_textbook_pipeline.py","quantaedge_layers_6_8.py"):
+            value=(ROOT/"scripts"/name).read_text(encoding="utf-8")
+            self.assertNotIn('"pull","--rebase","origin","main"',value)
+            self.assertNotIn('"HEAD:main"',value)
 
-    def test_layer45_run_budget_yields_safely_and_is_resumable(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
-        self.assertIn("--max-batches-per-run", pipeline)
-        self.assertIn("RUN_BUDGET_REACHED", pipeline)
-        self.assertIn("YIELDED_FOR_RESUME", pipeline)
-        self.assertIn("if processed > 0: total_batches += 1", pipeline)
-        self.assertIn("id: layer45_run", workflow)
-        self.assertIn("MAX_BATCHES_PER_RUN: 12", workflow)
-        self.assertIn('--max-batches-per-run "$MAX_BATCHES_PER_RUN"', workflow)
-        self.assertIn('result" -eq 10', workflow)
-        self.assertIn("needs: [plan, prepare]", workflow)
-    def test_layer45_no_progress_guard_and_inventory_source_identity_recovery_exist(self):
-        analyzer = (ROOT / "scripts" / "analyze_visual_inventory_with_ollama.py").read_text(encoding="utf-8")
-        pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
-        self.assertIn("SOURCE_IDENTITY_NORMALIZED", analyzer)
-        self.assertIn("assets_processed_ids", analyzer)
-        self.assertIn("repeated prior successful asset IDs without increasing analyzed/failed counts", pipeline)
-
-
-    def test_layer45_cancel_only_marker_skips_work_and_class_resume_markers_cancel_stale_runs(self):
-        workflow = read("textbook-visual-candidates-v3.yml")
-        self.assertIn("[cancel-layer45-matrix]", workflow)
-        self.assertIn("!contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]')", workflow)
-        self.assertIn("needs.plan.result == 'success' && needs.plan.outputs.matrix != '{\"include\":[]}'", workflow)
-        self.assertIn("needs.prepare.result != 'skipped'", workflow)
-        self.assertIn("github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]'", workflow)
-        self.assertIn("github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]'", workflow)
-        self.assertIn("Plan source-bound Layer 4–5 workers", workflow)
-
-if __name__ == "__main__":
+if __name__=="__main__":
     unittest.main()

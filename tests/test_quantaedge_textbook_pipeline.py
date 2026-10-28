@@ -34,6 +34,14 @@ class PipelineTests(unittest.TestCase):
  def build(self,c=None):return build_coverage_ledger(self.inv,self.raw,self.man,self.txt,self.eff,self.ledger,corrections_path=c,repo_root=self.root)
  def test_complete_inventory(self):
   r=self.build();self.assertEqual("COMPLETE",r["ledger_status"]);self.assertEqual(1,len(r["pages"]));self.assertEqual(1,len(r["visuals"]))
+  self.assertEqual(5,r["timing"]["layer"]);self.assertEqual("COMPLETE",r["timing"]["status"])
+  self.assertTrue(r["timing"]["started_at"].endswith("Z"));self.assertTrue(r["timing"]["completed_at"].endswith("Z"))
+  self.assertGreaterEqual(r["timing"]["total_elapsed_seconds"],r["timing"]["attempt_elapsed_seconds"])
+ def test_layer5_cumulative_timing_survives_checkpoint_rebuild(self):
+  first=self.build();before=first["timing"]["cumulative_elapsed_seconds"]
+  second=self.build()
+  self.assertGreaterEqual(second["timing"]["cumulative_elapsed_seconds"],before)
+  self.assertEqual("COMPLETE",second["timing"]["status"])
  def test_missing_analysis_is_not_dropped(self):
   r=json.loads(self.raw.read_text());r["results"]=[];w(self.raw,r);out=self.build();self.assertEqual("INCOMPLETE",out["ledger_status"]);self.assertEqual("ANALYSIS_MISSING",out["visuals"][0]["analysis_status"])
  def test_correction_changes_effective_not_raw(self):
