@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1429,
+    "assets_selected": 1431,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "6023cd022e39d2ac961563fd",
-      "0adb47e2f7ff21c33a3af9d6"
+      "25f9651c09fc9aac9ff50eef",
+      "29703747cc1fe62e046cd6e3"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1426,
-    "assets_remaining": 652,
-    "assets_completion_percent": 68.6,
+    "assets_analyzed": 1428,
+    "assets_remaining": 650,
+    "assets_completion_percent": 68.7,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1424,
+    "assets_skipped_from_checkpoint": 1426,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:41:19Z"
+      "checkpointed_at": "2026-10-28T04:47:32Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:42:19Z"
+      "checkpointed_at": "2026-10-28T04:48:31Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:43:08Z"
+      "checkpointed_at": "2026-10-28T04:49:20Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -48170,6 +48170,64 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
       "checkpointed_at": "2026-10-28T04:46:16Z"
+    },
+    {
+      "asset_id": "25f9651c09fc9aac9ff50eef",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 154,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d8a978efdc3916deccdf2297702a3ec80af954e31af26a34234bc994d835ea7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40621809658",
+      "checkpointed_at": "2026-10-28T04:49:35Z"
+    },
+    {
+      "asset_id": "29703747cc1fe62e046cd6e3",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 154,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4d8a978efdc3916deccdf2297702a3ec80af954e31af26a34234bc994d835ea7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40621809658",
+      "checkpointed_at": "2026-10-28T04:49:50Z"
     }
   ]
 }
