@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -27,6 +28,48 @@ def read_json(path: Path) -> tuple[dict[str, Any] | None, str | None]:
     return value, None
 
 
+def read_json_fields(
+    path: Path, keys: list[str], *, max_prefix_bytes: int = 4 * 1024 * 1024
+) -> tuple[dict[str, Any], str | None]:
+    """Decode only selected fields near the start of a large JSON checkpoint.
+
+    Inventory, raw-analysis and coverage-ledger documents can contain thousands of
+    assets/pages. Their identity and summary objects are near the beginning; reading
+    those fields avoids loading the entire document just to calculate progress.
+    """
+    values: dict[str, Any] = {}
+    decoder = json.JSONDecoder()
+    patterns = {key: re.compile(r'"' + re.escape(key) + r'"\\s*:\\s*') for key in keys}
+    try:
+        with path.open("r", encoding="utf-8") as stream:
+            prefix = ""
+            eof = False
+            while len(prefix.encode("utf-8")) < max_prefix_bytes and not eof:
+                chunk = stream.read(64 * 1024)
+                if not chunk:
+                    eof = True
+                else:
+                    prefix += chunk
+                for key in keys:
+                    if key in values:
+                        continue
+                    match = patterns[key].search(prefix)
+                    if match is None:
+                        continue
+                    try:
+                        values[key], _ = decoder.raw_decode(prefix, match.end())
+                    except json.JSONDecodeError:
+                        # The object may be cut at the current read boundary; read more.
+                        continue
+                if all(key in values for key in keys):
+                    return values, None
+    except FileNotFoundError:
+        return {}, "missing"
+    except (OSError, UnicodeError) as exc:
+        return {}, f"unreadable: {type(exc).__name__}"
+    return values, "required fields missing or beyond the bounded JSON prefix"
+
+
 def valid_sha(value: Any) -> bool:
     digest = str(value or "").lower()
     return len(digest) == 64 and all(char in VALID_HEX for char in digest)
@@ -41,14 +84,18 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
         repo_root / "data" / "textbook-content-pipeline" / f"class-{grade}"
         / "books" / slug / "coverage-ledger.v1.json"
     )
-    inventory, inventory_error = read_json(inventory_path)
+
+    # The index is small. Read identity/summary fields only from large checkpoint JSONs.
     index, index_error = read_json(index_path)
-    ledger, ledger_error = read_json(ledger_path)
+    ledger_fields, ledger_error = read_json_fields(
+        ledger_path, ["schema_version", "ledger_status", "source", "summary"]
+    )
+    inventory_present = inventory_path.is_file()
     blockers: list[str] = []
-    existing = any(path.exists() for path in (inventory_path, index_path, ledger_path))
+    existing = inventory_present or index_path.exists() or ledger_path.exists()
     expected_sha = ""
     raw_path: Path | None = None
-    raw: dict[str, Any] | None = None
+    raw_fields: dict[str, Any] = {}
     raw_error: str | None = "missing"
 
     if index is not None:
@@ -67,74 +114,72 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
             blockers.append("pipeline index has an unsafe or invalid analysis path")
         else:
             raw_path = repo_root / declared_path
-            raw, raw_error = read_json(raw_path)
-            if raw is not None and (
-                raw.get("source_book_id") != book_id
-                or str(raw.get("source_pdf_sha256") or "").lower() != expected_sha
-            ):
-                blockers.append("raw analysis identity does not match its source-bound index")
+            raw_fields, raw_error = read_json_fields(
+                raw_path, ["schema_version", "source_book_id", "source_pdf_sha256", "summary"]
+            )
+            if raw_fields and raw_fields.get("source_book_id") != book_id:
+                blockers.append("raw analysis identity does not match its source-book ID")
+            if raw_fields and str(raw_fields.get("source_pdf_sha256") or "").lower() != expected_sha:
+                blockers.append("raw analysis PDF hash differs from the pipeline index")
 
-    if inventory is not None:
-        inv_identity = inventory.get("source") or {}
-        inv_book_id = inv_identity.get("book_id") or inventory.get("source_book_id")
-        inv_sha = str(inv_identity.get("pdf_sha256") or inv_identity.get("source_pdf_sha256") or "").lower()
-        if inv_book_id and inv_book_id != book_id:
-            blockers.append("visual inventory book ID does not match the planner")
-        if expected_sha and inv_sha and inv_sha != expected_sha:
-            blockers.append("visual inventory PDF hash differs from the pipeline index")
+    if not inventory_present and existing:
+        blockers.append("visual inventory file is missing")
 
-    expected_ledger_rel = ledger_path.relative_to(repo_root).as_posix()
-    if ledger is not None:
-        identity = ledger.get("source") or {}
-        if identity.get("source_book_id") != book_id:
-            blockers.append("coverage ledger book ID does not match the planner")
-        ledger_sha = str(identity.get("source_pdf_sha256") or "").lower()
-        if expected_sha and ledger_sha and ledger_sha != expected_sha:
-            blockers.append("coverage ledger PDF hash differs from the pipeline index")
-        if ledger.get("schema_version") != "quantaedge.textbook-coverage-ledger.v1":
+    ledger_source = ledger_fields.get("source") or {}
+    ledger_summary = ledger_fields.get("summary") or {}
+    if ledger_fields:
+        if ledger_fields.get("schema_version") != "quantaedge.textbook-coverage-ledger.v1":
             blockers.append("coverage ledger schema mismatch")
+        if ledger_source.get("source_book_id") != book_id:
+            blockers.append("coverage ledger book ID does not match the planner")
+        ledger_sha = str(ledger_source.get("source_pdf_sha256") or "").lower()
+        if expected_sha and ledger_sha != expected_sha:
+            blockers.append("coverage ledger PDF hash differs from the pipeline index")
+        expected_ledger_rel = ledger_path.relative_to(repo_root).as_posix()
         if index is not None and str(index.get("coverage_ledger_path") or "") != expected_ledger_rel:
             blockers.append("pipeline index points to a different coverage ledger")
+    elif ledger_error not in (None, "missing"):
+        blockers.append("coverage ledger is unreadable or its summary is beyond the bounded prefix")
 
-    inventory_assets = 0
-    if inventory is not None and isinstance(inventory.get("assets"), list):
-        inventory_assets = sum(
-            1 for row in inventory["assets"]
-            if isinstance(row, dict)
-            and row.get("kind") in ANALYZABLE_KINDS
-            and isinstance(row.get("asset_id"), str)
-            and bool(row.get("asset_id"))
-        )
-    raw_summary = (raw or {}).get("summary") or {}
+    raw_summary = raw_fields.get("summary") or {}
     eligible = raw_summary.get("assets_eligible")
     if not isinstance(eligible, int) or eligible < 0:
-        eligible = inventory_assets
-    analyzed = raw_summary.get("assets_analyzed", 0)
-    failed = raw_summary.get("assets_failed", 0)
-    remaining = raw_summary.get("assets_remaining")
+        eligible = ledger_summary.get("eligible_visual_asset_rows", 0)
+    eligible = eligible if isinstance(eligible, int) and eligible >= 0 else 0
+    analyzed = raw_summary.get("assets_analyzed")
+    if not isinstance(analyzed, int) or analyzed < 0:
+        analyzed = ledger_summary.get("successful_visual_analyses", 0)
     analyzed = analyzed if isinstance(analyzed, int) and analyzed >= 0 else 0
+    failed = raw_summary.get("assets_failed")
+    if not isinstance(failed, int) or failed < 0:
+        failed = ledger_summary.get("failed_visual_analyses", 0)
     failed = failed if isinstance(failed, int) and failed >= 0 else 0
-    remaining = remaining if isinstance(remaining, int) and remaining >= 0 else max(0, eligible - analyzed)
+    remaining = raw_summary.get("assets_remaining")
+    if not isinstance(remaining, int) or remaining < 0:
+        remaining = max(0, eligible - analyzed)
     percent = raw_summary.get("assets_completion_percent")
     if not isinstance(percent, (int, float)):
         percent = round(100 * analyzed / eligible, 1) if eligible else 0.0
     percent = max(0.0, min(100.0, float(percent)))
-    if raw is not None and inventory is not None and eligible != inventory_assets:
-        blockers.append("raw analysis eligible asset count differs from the current inventory")
 
     layers = (index or {}).get("layers") or {}
-    ledger_summary = (ledger or {}).get("summary") or {}
-    ledger_identity = (ledger or {}).get("source") or {}
     ledger_complete = (
-        ledger is not None
-        and index is not None
-        and ledger.get("ledger_status") == "COMPLETE"
+        bool(index)
+        and bool(ledger_fields)
+        and inventory_present
+        and bool(raw_fields)
+        and ledger_fields.get("ledger_status") == "COMPLETE"
         and ledger_summary.get("unresolved_count") == 0
-        and ledger_identity.get("source_book_id") == book_id
+        and ledger_source.get("source_book_id") == book_id
         and valid_sha(expected_sha)
-        and str(ledger_identity.get("source_pdf_sha256") or "").lower() == expected_sha
+        and str(ledger_source.get("source_pdf_sha256") or "").lower() == expected_sha
+        and index.get("source_book_id") == book_id
+        and str(index.get("source_pdf_sha256") or "").lower() == expected_sha
+        and raw_fields.get("source_book_id") == book_id
+        and str(raw_fields.get("source_pdf_sha256") or "").lower() == expected_sha
         and layers.get("5") == "COMPLETE"
-        and str(index.get("coverage_ledger_path") or "") == expected_ledger_rel
+        and str(index.get("coverage_ledger_path") or "")
+            == ledger_path.relative_to(repo_root).as_posix()
         and not blockers
     )
 
@@ -142,21 +187,15 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
         status = "COMPLETE"
     elif blockers:
         status = "BLOCKED"
-    elif existing or raw is not None or inventory is not None:
+    elif existing or raw_fields or inventory_present:
         status = "IN_PROGRESS"
     else:
         status = "NOT_STARTED"
 
-    if inventory_error not in (None, "missing"):
-        blockers.append("visual inventory is unreadable")
-    if index_error not in (None, "missing"):
-        blockers.append("pipeline index is unreadable")
-    if ledger_error not in (None, "missing"):
-        blockers.append("coverage ledger is unreadable")
-    if raw_error not in (None, "missing") and raw_path is not None:
-        blockers.append("raw analysis checkpoint is unreadable")
-    if blockers:
-        status = "BLOCKED"
+    if raw_path is not None and raw_path.exists() and raw_error not in (None, "missing"):
+        blockers.append("raw analysis checkpoint is unreadable or its summary is beyond the bounded prefix")
+        if status != "COMPLETE":
+            status = "BLOCKED"
 
     return {
         "class_no": grade,
@@ -167,9 +206,9 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
         "maths_part": 2 if "maths-part2" in slug else 1 if "maths" in slug else None,
         "status": status,
         "layers": {
-            "inventory": "AVAILABLE" if inventory is not None else "MISSING",
-            "layer4": str(layers.get("4") or ("AVAILABLE" if raw is not None else "NOT_STARTED")),
-            "layer5": str(layers.get("5") or (ledger or {}).get("ledger_status") or "NOT_STARTED"),
+            "inventory": "AVAILABLE" if inventory_present else "MISSING",
+            "layer4": str(layers.get("4") or ("AVAILABLE" if raw_fields else "NOT_STARTED")),
+            "layer5": str(layers.get("5") or ledger_fields.get("ledger_status") or "NOT_STARTED"),
         },
         "analysis": {
             "eligible_assets": eligible,
@@ -179,14 +218,13 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
             "completion_percent": percent,
         },
         "coverage": {
-            "ledger_status": (ledger or {}).get("ledger_status", "MISSING"),
+            "ledger_status": ledger_fields.get("ledger_status", "MISSING"),
             "unresolved_count": ledger_summary.get("unresolved_count"),
             "verified_complete": ledger_complete,
         },
         "source_pdf_sha256": expected_sha or None,
         "blockers": sorted(set(blockers)),
     }
-
 
 def build_report(repo_root: Path) -> dict[str, Any]:
     repo_root = Path(repo_root).resolve()
