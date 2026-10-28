@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1480,
-    "successful_visual_analyses": 1460,
-    "missing_visual_analyses": 598,
+    "raw_analysis_result_rows": 1483,
+    "successful_visual_analyses": 1463,
+    "missing_visual_analyses": 595,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 618,
+    "unresolved_count": 615,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -55769,9 +55769,25 @@
       "asset_path": "page-0160.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Blank page with the word 'Notes' at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Notes",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Blank page",
+          "Notes",
+          "Reprint date"
+        ],
+        "context_relation": "The page is likely a blank page for notes or annotations.",
+        "limitations": [
+          "No specific content or information is provided on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55787,9 +55803,18 @@
       "asset_path": "assets/ea2ead1e8d69c536a1bc78bc57e61aa935ec5bcd59f2bb62b39e91b48bd41e1a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue, textured surface with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a blue, textured surface with a torn edge, possibly representing a piece of paper or fabric.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the visual elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55805,9 +55830,18 @@
       "asset_path": "assets/7bfdbdb7692f3d27f13d6e8f25aae9241c7fd69b2c402e8a96686e9f77a9e450.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy with short dark hair and a light blue shirt.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the states of water, specifically focusing on ice and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the educational content, such as the names of the substances or the specific properties being discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

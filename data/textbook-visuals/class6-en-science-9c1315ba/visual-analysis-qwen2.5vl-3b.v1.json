@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1460,
+    "assets_selected": 1463,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "1fc43abae187816ea0f07378",
-      "6be5734a94879ed0cc787bc7",
-      "9a57299d659dc52efb7e7ed9"
+      "71b571964d286b481f157ce1",
+      "4ff0e8b6da564a7f0e1f8339",
+      "d73a085e0d5cd98348c6ff45"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1458,
-    "assets_remaining": 620,
-    "assets_completion_percent": 70.2,
+    "assets_analyzed": 1461,
+    "assets_remaining": 617,
+    "assets_completion_percent": 70.3,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1455,
+    "assets_skipped_from_checkpoint": 1458,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:32:19Z"
+      "checkpointed_at": "2026-10-28T14:39:04Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:33:14Z"
+      "checkpointed_at": "2026-10-28T14:39:56Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -49393,6 +49393,97 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
       "checkpointed_at": "2026-10-28T14:37:50Z"
+    },
+    {
+      "asset_id": "71b571964d286b481f157ce1",
+      "asset_sha256": "993e95138c476e761196bb7bbf988b2685c8092ae86e5e216254ac69b9fa9db4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 160,
+      "asset_path": "page-0160.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "703891ff822e86dc37c600ad387fa23756d80ab6c25d4305c76f2556446bcb6c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Blank page with the word 'Notes' at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Notes",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Blank page",
+          "Notes",
+          "Reprint date"
+        ],
+        "context_relation": "The page is likely a blank page for notes or annotations.",
+        "limitations": [
+          "No specific content or information is provided on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:43:46Z"
+    },
+    {
+      "asset_id": "4ff0e8b6da564a7f0e1f8339",
+      "asset_sha256": "ea2ead1e8d69c536a1bc78bc57e61aa935ec5bcd59f2bb62b39e91b48bd41e1a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/ea2ead1e8d69c536a1bc78bc57e61aa935ec5bcd59f2bb62b39e91b48bd41e1a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue, textured surface with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a blue, textured surface with a torn edge, possibly representing a piece of paper or fabric.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:45:24Z"
+    },
+    {
+      "asset_id": "d73a085e0d5cd98348c6ff45",
+      "asset_sha256": "7bfdbdb7692f3d27f13d6e8f25aae9241c7fd69b2c402e8a96686e9f77a9e450",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/7bfdbdb7692f3d27f13d6e8f25aae9241c7fd69b2c402e8a96686e9f77a9e450.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a boy with short dark hair and a light blue shirt.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the states of water, specifically focusing on ice and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the educational content, such as the names of the substances or the specific properties being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:47:04Z"
     }
   ]
 }
