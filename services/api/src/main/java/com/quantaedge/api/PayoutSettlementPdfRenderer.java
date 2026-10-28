@@ -342,12 +342,13 @@ public class PayoutSettlementPdfRenderer {
               PDExtendedGraphicsState invisibleText=new PDExtendedGraphicsState();
               invisibleText.setNonStrokingAlphaConstant(0f);
               textStream.setGraphicsStateParameters(invisibleText);
-              textStream.setRenderingMode(RenderingMode.FILL);
               for(TextRun run:textRuns) {
                 if(run.pageIndex()!=pageIndex)continue;
                 String text=pdfSafeText(run.text(),searchableFont);
                 if(text.isEmpty())continue;
                 textStream.beginText();
+                // Tr is a text-state operator and must be inside a BT/ET text object.
+                textStream.setRenderingMode(RenderingMode.FILL);
                 textStream.setFont(searchableFont,Math.max(3f,run.size()*scale));
                 textStream.newLineAtOffset(run.x()*scale,pdfPage.getMediaBox().getHeight()-run.baselineY()*scale);
                 textStream.showText(text);
