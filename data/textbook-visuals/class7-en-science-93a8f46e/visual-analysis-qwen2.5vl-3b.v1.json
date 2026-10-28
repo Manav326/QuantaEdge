@@ -14,12 +14,12 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "d456527f98b45c7ff5c257c7",
-      "fa82e8570d7b6993a6b58eeb"
+      "c624acf44710020729ec021e",
+      "63ecac7dbc8c07483033037e"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2575,
-    "assets_remaining": 4913,
+    "assets_analyzed": 2577,
+    "assets_remaining": 4911,
     "assets_completion_percent": 34.4,
     "assets_failed": 24,
     "assets_skipped_from_checkpoint": 2575,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:34:51Z"
+      "checkpointed_at": "2026-10-28T20:39:51Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:35:20Z"
+      "checkpointed_at": "2026-10-28T20:40:19Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:35:58Z"
+      "checkpointed_at": "2026-10-28T20:40:57Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -97090,6 +97090,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40716293473",
       "checkpointed_at": "2026-10-28T16:48:07Z"
+    },
+    {
+      "asset_id": "c624acf44710020729ec021e",
+      "asset_sha256": "b46e93df238a58207b4c7397f1fb3e095f8dda856f05c7398b30262aeb3e917e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/b46e93df238a58207b4c7397f1fb3e095f8dda856f05c7398b30262aeb3e917e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly representing a historical or ancient document.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of a textbook discussing changes around the observer.",
+        "limitations": [
+          "The image does not provide any specific information about the content of the scroll or its historical context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753608319",
+      "checkpointed_at": "2026-10-28T20:41:34Z"
+    },
+    {
+      "asset_id": "63ecac7dbc8c07483033037e",
+      "asset_sha256": "0ea81494140b78f472f11ab360fae9b0503963437087baeb8f66c5ff0a6483a9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/0ea81494140b78f472f11ab360fae9b0503963437087baeb8f66c5ff0a6483a9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen or marker, possibly used for writing or drawing.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None of the visible text is related to the image.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753608319",
+      "checkpointed_at": "2026-10-28T20:42:11Z"
     }
   ]
 }

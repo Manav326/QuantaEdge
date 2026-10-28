@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "23948ed8d7d73269c7f8c81a843d3341a7b253bef94fc84d24e388acb0e3a1fa",
+  "raw_analysis_sha256": "61fbe4149ac6af1ff7b80787b3bcda9d98852905cd5ad5b8ce448224be9c2e5a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:34:51Z",
+      "checkpointed_at": "2026-10-28T20:39:51Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:35:20Z",
+      "checkpointed_at": "2026-10-28T20:40:19Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:35:58Z",
+      "checkpointed_at": "2026-10-28T20:40:57Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -152549,6 +152549,82 @@
         "limitations": [
           "No specific visual elements are provided."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c624acf44710020729ec021e",
+      "asset_sha256": "b46e93df238a58207b4c7397f1fb3e095f8dda856f05c7398b30262aeb3e917e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/b46e93df238a58207b4c7397f1fb3e095f8dda856f05c7398b30262aeb3e917e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly representing a historical or ancient document.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of a textbook discussing changes around the observer.",
+        "limitations": [
+          "The image does not provide any specific information about the content of the scroll or its historical context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753608319",
+      "checkpointed_at": "2026-10-28T20:41:34Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly representing a historical or ancient document.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of a textbook discussing changes around the observer.",
+        "limitations": [
+          "The image does not provide any specific information about the content of the scroll or its historical context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "63ecac7dbc8c07483033037e",
+      "asset_sha256": "0ea81494140b78f472f11ab360fae9b0503963437087baeb8f66c5ff0a6483a9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/0ea81494140b78f472f11ab360fae9b0503963437087baeb8f66c5ff0a6483a9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen or marker, possibly used for writing or drawing.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None of the visible text is related to the image.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753608319",
+      "checkpointed_at": "2026-10-28T20:42:11Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen or marker, possibly used for writing or drawing.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None of the visible text is related to the image.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
