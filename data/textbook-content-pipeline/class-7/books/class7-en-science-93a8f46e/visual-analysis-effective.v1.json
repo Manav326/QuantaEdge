@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3d641af08da071aba5124b692a20ab444de90115952f30590074386ca6ee296d",
+  "raw_analysis_sha256": "eea3a905bb92acaa1ae6a8a5e273307630fe66219b66b8b966a9528ed962cca6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:38:35Z",
+      "checkpointed_at": "2026-10-29T21:45:34Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:39:15Z",
+      "checkpointed_at": "2026-10-29T21:46:14Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:40:05Z",
+      "checkpointed_at": "2026-10-29T21:47:04Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -161439,6 +161439,120 @@
         "concepts": [],
         "context_relation": "The image is unrelated to the text about the candle experiment.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "59c060936c9da551ff8202f8",
+      "asset_sha256": "8ab18b5fcb3ace9dd257e8d1b5e77adf97aa563a4ed485eb5b6830e1b8aa1d5d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/8ab18b5fcb3ace9dd257e8d1b5e77adf97aa563a4ed485eb5b6830e1b8aa1d5d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a flame or a combustion process.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "63",
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen? Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame g",
+          "The component of air that supports combustion"
+        ],
+        "concepts": [
+          "Combustion",
+          "Flame",
+          "Air Supply"
+        ],
+        "context_relation": "The image is related to the text discussing the effect of covering a candle with a glass tumbler on its burning.",
+        "limitations": [
+          "The image does not provide specific details about the components of air that support combustion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40945587644",
+      "checkpointed_at": "2026-10-29T21:48:19Z",
+      "effective_analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a flame or a combustion process.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "63",
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen? Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame g",
+          "The component of air that supports combustion"
+        ],
+        "concepts": [
+          "Combustion",
+          "Flame",
+          "Air Supply"
+        ],
+        "context_relation": "The image is related to the text discussing the effect of covering a candle with a glass tumbler on its burning.",
+        "limitations": [
+          "The image does not provide specific details about the components of air that support combustion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3f27b890c03ce0a9aae2ede7",
+      "asset_sha256": "0e8e0b2fce926d974508ff89da0902d5b6b6e133985e82bbc64ee213c868d7c3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/0e8e0b2fce926d974508ff89da0902d5b6b6e133985e82bbc64ee213c868d7c3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A candle burning in a glass tumbler and another candle not covered by a glass tumbler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a)",
+          "continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time.",
+          "Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "The image illustrates the concept of combustion and the role of air in sustaining a flame.",
+        "limitations": [
+          "The image does not provide a detailed explanation of the chemical components of air that support combustion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40945587644",
+      "checkpointed_at": "2026-10-29T21:49:35Z",
+      "effective_analysis": {
+        "visual_summary": "A candle burning in a glass tumbler and another candle not covered by a glass tumbler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a)",
+          "continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time.",
+          "Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "The image illustrates the concept of combustion and the role of air in sustaining a flame.",
+        "limitations": [
+          "The image does not provide a detailed explanation of the chemical components of air that support combustion."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
