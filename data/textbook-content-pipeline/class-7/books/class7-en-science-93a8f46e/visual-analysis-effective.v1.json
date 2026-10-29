@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c6f249f2e54a84105f5391563777a337405b928535946bc3816875de77fa3781",
+  "raw_analysis_sha256": "71230ae7b6a538dfe84b40b0a034ee154b2ef8f5359a391ffe21eda9b3919054",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:45:37Z",
+      "checkpointed_at": "2026-10-29T10:50:21Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:46:04Z",
+      "checkpointed_at": "2026-10-29T10:50:49Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:46:41Z",
+      "checkpointed_at": "2026-10-29T10:51:25Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -151674,7 +151674,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40843204457",
+      "run_id": "40853001770",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -155672,6 +155672,68 @@
         "limitations": [
           "The image does not show any objects or actions.",
           "The text is not fully visible or readable."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b5c507fdc58aa03fc3dbe5a3",
+      "asset_sha256": "0b7b2c42a8194b784820cf38802f30caa569b08301fa36be48f47047714688b7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/0b7b2c42a8194b784820cf38802f30caa569b08301fa36be48f47047714688b7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of a substance changing in appearance while remaining the same chemically.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "substance",
+          "appearance",
+          "chemical change"
+        ],
+        "context_relation": "The page is discussing a concept in chemistry related to the appearance of substances and their chemical properties.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or equations.",
+          "The text is in English and does not include any images or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40853001770",
+      "checkpointed_at": "2026-10-29T10:53:34Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of a substance changing in appearance while remaining the same chemically.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "substance",
+          "appearance",
+          "chemical change"
+        ],
+        "context_relation": "The page is discussing a concept in chemistry related to the appearance of substances and their chemical properties.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or equations.",
+          "The text is in English and does not include any images or illustrations."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
