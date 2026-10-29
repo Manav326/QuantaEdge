@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2619,
-    "successful_visual_analyses": 2597,
-    "missing_visual_analyses": 4869,
+    "raw_analysis_result_rows": 2622,
+    "successful_visual_analyses": 2600,
+    "missing_visual_analyses": 4866,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4891,
+    "unresolved_count": 4888,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -106983,9 +106983,29 @@
       "asset_path": "assets/9340dfc2a3bae06a76dce940ed397fcfd6476613d95c0fced8dce65f8d151fcb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellowish object, possibly a piece of paper or a similar material.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Substance",
+          "Paper"
+        ],
+        "context_relation": "The image is a close-up of a yellowish object, possibly a piece of paper or a similar material.",
+        "limitations": [
+          "The image is a close-up, so the context is limited to the object in focus."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -107001,9 +107021,29 @@
       "asset_path": "assets/2415c73668c8380b27a0aa417fb5d6b02511fad513062c5fb1c5416d9981a3c2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of a substance changing in appearance while remaining the same chemically.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "substance",
+          "appearance",
+          "chemical change"
+        ],
+        "context_relation": "The page is discussing a concept in chemistry, specifically about substances that change in appearance but remain chemically the same.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or other visual aids.",
+          "The text is in English and does not include any images or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -107019,9 +107059,16 @@
       "asset_path": "assets/521b5e717540a0f67b4c0e55c54ea2cb2479e4ba1cfcde06b4bb592bb28855da.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

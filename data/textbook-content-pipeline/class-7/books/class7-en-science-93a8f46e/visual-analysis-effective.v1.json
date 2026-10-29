@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3b2e6a09791c34cb5b790eefbd6bb81eb3ceda3a87ea550a6cfe9b244593a720",
+  "raw_analysis_sha256": "ad3b925e5beb0e3965112268a13e8c2b55dc65e312344b469d80fc40036827d7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
-      "checkpointed_at": "2026-10-29T01:44:30Z",
+      "checkpointed_at": "2026-10-29T01:50:21Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
-      "checkpointed_at": "2026-10-29T01:45:31Z",
+      "checkpointed_at": "2026-10-29T01:51:22Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -153438,6 +153438,166 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
       "checkpointed_at": "2026-10-29T01:48:49Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d9b8d8a6a5af22f5d7e3831c",
+      "asset_sha256": "9340dfc2a3bae06a76dce940ed397fcfd6476613d95c0fced8dce65f8d151fcb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/9340dfc2a3bae06a76dce940ed397fcfd6476613d95c0fced8dce65f8d151fcb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellowish object, possibly a piece of paper or a similar material.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Substance",
+          "Paper"
+        ],
+        "context_relation": "The image is a close-up of a yellowish object, possibly a piece of paper or a similar material.",
+        "limitations": [
+          "The image is a close-up, so the context is limited to the object in focus."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40789318652",
+      "checkpointed_at": "2026-10-29T01:52:32Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellowish object, possibly a piece of paper or a similar material.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Substance",
+          "Paper"
+        ],
+        "context_relation": "The image is a close-up of a yellowish object, possibly a piece of paper or a similar material.",
+        "limitations": [
+          "The image is a close-up, so the context is limited to the object in focus."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1054b24fb181798d90c4dfc0",
+      "asset_sha256": "2415c73668c8380b27a0aa417fb5d6b02511fad513062c5fb1c5416d9981a3c2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/2415c73668c8380b27a0aa417fb5d6b02511fad513062c5fb1c5416d9981a3c2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of a substance changing in appearance while remaining the same chemically.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "substance",
+          "appearance",
+          "chemical change"
+        ],
+        "context_relation": "The page is discussing a concept in chemistry, specifically about substances that change in appearance but remain chemically the same.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or other visual aids.",
+          "The text is in English and does not include any images or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40789318652",
+      "checkpointed_at": "2026-10-29T01:53:48Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of a substance changing in appearance while remaining the same chemically.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "substance",
+          "appearance",
+          "chemical change"
+        ],
+        "context_relation": "The page is discussing a concept in chemistry, specifically about substances that change in appearance but remain chemically the same.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or other visual aids.",
+          "The text is in English and does not include any images or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1324f9e4000c0fcd906edd5a",
+      "asset_sha256": "521b5e717540a0f67b4c0e55c54ea2cb2479e4ba1cfcde06b4bb592bb28855da",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/521b5e717540a0f67b4c0e55c54ea2cb2479e4ba1cfcde06b4bb592bb28855da.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40789318652",
+      "checkpointed_at": "2026-10-29T01:54:46Z",
       "effective_analysis": {
         "visual_summary": "A black page with no visible content.",
         "visual_type": "uncertain",
