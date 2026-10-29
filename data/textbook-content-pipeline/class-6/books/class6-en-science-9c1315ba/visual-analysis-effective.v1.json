@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "965487675c2d5c4f053a3cde01d0dbe8f347df20bf3c05d26566f5675a74f11e",
+  "raw_analysis_sha256": "06dcb9fa61ea72003e74217f9346138a5f4f8b0411af226571cbe4ba143d49fb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:20:34Z",
+      "checkpointed_at": "2026-10-29T01:29:58Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:21:34Z",
+      "checkpointed_at": "2026-10-29T01:30:59Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:22:23Z",
+      "checkpointed_at": "2026-10-29T01:31:50Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -77095,6 +77095,106 @@
           "The image does not provide specific details about the educational content or the reasons mentioned in the text.",
           "The image is a cartoon and may not represent the exact appearance of water droplets on a glass tumbler."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9bea1739a0207cd8ff11e251",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing reasons for water droplets on a glass tumbler.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Discuss with your friends. Write down the possible reasons in Fig. 8.3.",
+          "May be ice has come out of the glass tumbler and melted.",
+          "Fig. 8.3: Provide your possible reasons explaining the appearance of water droplets on the outer surface of the glass tumbler.",
+          "You may have various possible reasons. You may agree or disagree with the reasons of others.",
+          "Aavi and Thirav argued with a chain of reasons.",
+          "What do you think about the possible reasons mentioned in Fig. 8.4?",
+          "I think that some of the water may have"
+        ],
+        "concepts": [
+          "Reasons for water droplets on a glass tumbler",
+          "Ice melting",
+          "Chain of reasoning"
+        ],
+        "context_relation": "Discussion and reasoning about water droplets on a glass tumbler",
+        "limitations": [
+          "The image does not show the actual glass tumbler or the water droplets."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40785541263",
+      "checkpointed_at": "2026-10-29T01:32:32Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing reasons for water droplets on a glass tumbler.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Discuss with your friends. Write down the possible reasons in Fig. 8.3.",
+          "May be ice has come out of the glass tumbler and melted.",
+          "Fig. 8.3: Provide your possible reasons explaining the appearance of water droplets on the outer surface of the glass tumbler.",
+          "You may have various possible reasons. You may agree or disagree with the reasons of others.",
+          "Aavi and Thirav argued with a chain of reasons.",
+          "What do you think about the possible reasons mentioned in Fig. 8.4?",
+          "I think that some of the water may have"
+        ],
+        "concepts": [
+          "Reasons for water droplets on a glass tumbler",
+          "Ice melting",
+          "Chain of reasoning"
+        ],
+        "context_relation": "Discussion and reasoning about water droplets on a glass tumbler",
+        "limitations": [
+          "The image does not show the actual glass tumbler or the water droplets."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "63d5f48304db6a80f15e3510",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40785541263",
+      "checkpointed_at": "2026-10-29T01:32:46Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

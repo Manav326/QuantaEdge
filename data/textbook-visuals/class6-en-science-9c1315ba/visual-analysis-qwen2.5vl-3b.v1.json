@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1496,
+    "assets_selected": 1498,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "9aafc2d512540d2b5045b0d9",
-      "391681ceedeceddf96aae984"
+      "9bea1739a0207cd8ff11e251",
+      "63d5f48304db6a80f15e3510"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1493,
-    "assets_remaining": 585,
-    "assets_completion_percent": 71.8,
+    "assets_analyzed": 1495,
+    "assets_remaining": 583,
+    "assets_completion_percent": 71.9,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1491,
+    "assets_skipped_from_checkpoint": 1493,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:20:34Z"
+      "checkpointed_at": "2026-10-29T01:29:58Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:21:34Z"
+      "checkpointed_at": "2026-10-29T01:30:59Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:22:23Z"
+      "checkpointed_at": "2026-10-29T01:31:50Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -50672,6 +50672,72 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
       "checkpointed_at": "2026-10-29T01:28:41Z"
+    },
+    {
+      "asset_id": "9bea1739a0207cd8ff11e251",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing reasons for water droplets on a glass tumbler.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Discuss with your friends. Write down the possible reasons in Fig. 8.3.",
+          "May be ice has come out of the glass tumbler and melted.",
+          "Fig. 8.3: Provide your possible reasons explaining the appearance of water droplets on the outer surface of the glass tumbler.",
+          "You may have various possible reasons. You may agree or disagree with the reasons of others.",
+          "Aavi and Thirav argued with a chain of reasons.",
+          "What do you think about the possible reasons mentioned in Fig. 8.4?",
+          "I think that some of the water may have"
+        ],
+        "concepts": [
+          "Reasons for water droplets on a glass tumbler",
+          "Ice melting",
+          "Chain of reasoning"
+        ],
+        "context_relation": "Discussion and reasoning about water droplets on a glass tumbler",
+        "limitations": [
+          "The image does not show the actual glass tumbler or the water droplets."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40785541263",
+      "checkpointed_at": "2026-10-29T01:32:32Z"
+    },
+    {
+      "asset_id": "63d5f48304db6a80f15e3510",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40785541263",
+      "checkpointed_at": "2026-10-29T01:32:46Z"
     }
   ]
 }
