@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1378,
-    "successful_visual_analyses": 1363,
+    "successful_visual_analyses": 1364,
     "missing_visual_analyses": 913,
-    "failed_visual_analyses": 15,
+    "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 928,
+    "unresolved_count": 927,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49487,9 +49487,33 @@
       "asset_path": "page-0106.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "the folded chart paper sheet—big enough for the\nstick to come out. Place the folded sheet on top\nof the inverted paper plate as shown in Fig. 6.9b.\n\n• Now, try to lift the paper plate covered with a\nfolded sheet using the stick.\n\n• Observe how much effort is needed to lift it.\n\n• Now, place the seco",
+          "Fig. 6.9: (b) Inverted paper plate\nwith two folds of chart paper",
+          "Fig. 6.9: (c) Inverted paper plate\nwith unfolded chart paper",
+          "You would have observed that more effort is\nneeded to lift the paper plate when it is covered with\nthe unfolded chart paper, than with the folded chart\npaper. When we cover the paper plate with unfolded\nchart paper, the area of the covering sheet increases.\nThe effort needed to lift the paper plate "
+        ],
+        "concepts": [
+          "lifting effort",
+          "chart paper",
+          "paper plate",
+          "atmospheric pressure",
+          "force",
+          "pressure",
+          "area",
+          "balloon",
+          "inflation"
+        ],
+        "context_relation": "The image is a diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
+        "limitations": [
+          "The image does not provide specific instructions or steps for lifting the paper plate."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
