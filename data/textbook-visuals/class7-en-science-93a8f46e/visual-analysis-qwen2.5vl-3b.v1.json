@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2712,
+    "assets_selected": 2717,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "376fd64547bbd589f870e150",
-      "d30df966f880670f07d04c15",
-      "0b77f4aece10a1056f0bac42",
-      "e47fd65891d769d69b426013",
-      "b5509500a0e23efabf7737e6"
+      "8664d017ac03f71ea930f7b5",
+      "8cae026cdb475f16cd09c68d",
+      "74cbd276b0b487fe0f1f49af",
+      "e180c7757cc1f0cadc444ddb",
+      "c09a9393f75f8099941622dd"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2712,
-    "assets_remaining": 4776,
-    "assets_completion_percent": 36.2,
+    "assets_analyzed": 2717,
+    "assets_remaining": 4771,
+    "assets_completion_percent": 36.3,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 2707,
+    "assets_skipped_from_checkpoint": 2712,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -101915,6 +101915,161 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40921514282",
       "checkpointed_at": "2026-10-29T19:29:04Z"
+    },
+    {
+      "asset_id": "8664d017ac03f71ea930f7b5",
+      "asset_sha256": "e44bd035c94008984ba8783354523c89a2c8ad4379e42a360afb8b580ac20af8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/e44bd035c94008984ba8783354523c89a2c8ad4379e42a360afb8b580ac20af8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:30:47Z"
+    },
+    {
+      "asset_id": "8cae026cdb475f16cd09c68d",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content.",
+          "The image is a close-up of a twisted rope or cable, not a diagram or chart related to the textbook's topic.",
+          "The image does not show any text or labels that would help in identifying the textbook's page or chapter."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:32:25Z"
+    },
+    {
+      "asset_id": "74cbd276b0b487fe0f1f49af",
+      "asset_sha256": "0be0f141bc9dd12e0d5ae8beddcdbed3c95446f63bdb3315a0cf7e88a0cfa32e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/0be0f141bc9dd12e0d5ae8beddcdbed3c95446f63bdb3315a0cf7e88a0cfa32e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the chemical change of rusting in iron, showing a diagram of the process.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "formation of a new substance"
+        ],
+        "context_relation": "The text is discussing the chemical process of rusting in iron, which is a part of the chapter 'The World of Metals and Non-metals'.",
+        "limitations": [
+          "The image does not show the actual process of rusting, only the description and the concept of a chemical change."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:34:20Z"
+    },
+    {
+      "asset_id": "e180c7757cc1f0cadc444ddb",
+      "asset_sha256": "911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a rope with a yellowish-brown color, possibly made of metal or synthetic material.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content.",
+          "The image is a close-up of a rope, not a diagram or chart related to the textbook's topic.",
+          "The image does not show any chemical reaction or process involving rusting as described in the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:34:39Z"
+    },
+    {
+      "asset_id": "c09a9393f75f8099941622dd",
+      "asset_sha256": "911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a rope with a yellowish-brown color, possibly made of metal or synthetic material.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook, which discusses chemical changes and rusting of iron.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content.",
+          "The image is a close-up of a rope, not a diagram or chart related to the textbook's topic."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:34:50Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2735,
-    "successful_visual_analyses": 2712,
-    "missing_visual_analyses": 4753,
+    "raw_analysis_result_rows": 2740,
+    "successful_visual_analyses": 2717,
+    "missing_visual_analyses": 4748,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4776,
+    "unresolved_count": 4771,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -111108,9 +111108,18 @@
       "asset_path": "assets/e44bd035c94008984ba8783354523c89a2c8ad4379e42a360afb8b580ac20af8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111126,9 +111135,20 @@
       "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content.",
+          "The image is a close-up of a twisted rope or cable, not a diagram or chart related to the textbook's topic.",
+          "The image does not show any text or labels that would help in identifying the textbook's page or chapter."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111144,9 +111164,28 @@
       "asset_path": "assets/0be0f141bc9dd12e0d5ae8beddcdbed3c95446f63bdb3315a0cf7e88a0cfa32e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the chemical change of rusting in iron, showing a diagram of the process.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "formation of a new substance"
+        ],
+        "context_relation": "The text is discussing the chemical process of rusting in iron, which is a part of the chapter 'The World of Metals and Non-metals'.",
+        "limitations": [
+          "The image does not show the actual process of rusting, only the description and the concept of a chemical change."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111162,9 +111201,20 @@
       "asset_path": "assets/911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a rope with a yellowish-brown color, possibly made of metal or synthetic material.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content.",
+          "The image is a close-up of a rope, not a diagram or chart related to the textbook's topic.",
+          "The image does not show any chemical reaction or process involving rusting as described in the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111180,9 +111230,19 @@
       "asset_path": "assets/911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a rope with a yellowish-brown color, possibly made of metal or synthetic material.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook, which discusses chemical changes and rusting of iron.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content.",
+          "The image is a close-up of a rope, not a diagram or chart related to the textbook's topic."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
