@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "df4593843e9d2bf13b4e7f16f93c68cd32f15faa95104f7c263c5fbf182aade5",
+  "raw_analysis_sha256": "d8a5ebdb9f8d5cf1a5ce58496fa84be9c45e43f0250c3e5f64f6708db57882fb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -159815,6 +159815,242 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40921514282",
       "checkpointed_at": "2026-10-29T19:21:47Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the formation of rust from iron.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "Rusting",
+          "Chemical change",
+          "Iron oxide"
+        ],
+        "context_relation": "The image is a visual representation of the chemical process of rusting, which is a part of the chapter 'The World of Metals and Non-metals'.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or the formation of rust."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "376fd64547bbd589f870e150",
+      "asset_sha256": "88da9b6dca99c51318dac0616ff419b098885cbf5350818fbab28101e6b2a5fa",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/88da9b6dca99c51318dac0616ff419b098885cbf5350818fbab28101e6b2a5fa.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:23:32Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d30df966f880670f07d04c15",
+      "asset_sha256": "c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a blue handle, possibly representing a rope or a tool.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the chapter 'The World of Metals and Non-metals' and the topic of rusting in iron.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its use.",
+          "The visible text is incomplete and does not provide additional context or information about the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:25:13Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a blue handle, possibly representing a rope or a tool.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the chapter 'The World of Metals and Non-metals' and the topic of rusting in iron.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its use.",
+          "The visible text is incomplete and does not provide additional context or information about the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0b77f4aece10a1056f0bac42",
+      "asset_sha256": "c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a blue handle, possibly representing a rope or a tool.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the chapter 'The World of Metals and Non-metals' and the topic of rusting in iron.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its use."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:25:22Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a blue handle, possibly representing a rope or a tool.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the chapter 'The World of Metals and Non-metals' and the topic of rusting in iron.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its use."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e47fd65891d769d69b426013",
+      "asset_sha256": "3b5ebea6a3dadf266e53a3cd69d40ec9f6f0bfef2367ed2c52ed922b22ed8187",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/3b5ebea6a3dadf266e53a3cd69d40ec9f6f0bfef2367ed2c52ed922b22ed8187.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the chemical change of rusting in iron, showing a new brown-coloured substance called rust formed.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "formation of a new substance"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the chemical change of rusting in iron.",
+        "limitations": [
+          "The image does not show any visual representation of the rusting process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:27:13Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the chemical change of rusting in iron, showing a new brown-coloured substance called rust formed.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "formation of a new substance"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the chemical change of rusting in iron.",
+        "limitations": [
+          "The image does not show any visual representation of the rusting process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b5509500a0e23efabf7737e6",
+      "asset_sha256": "2126304da11b14263f59ab7401fd66f43668dcf5be8a980413f5faed711af709",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/2126304da11b14263f59ab7401fd66f43668dcf5be8a980413f5faed711af709.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the formation of rust from iron.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "Rusting",
+          "Chemical change",
+          "Iron oxide"
+        ],
+        "context_relation": "The image is a visual representation of the chemical process of rusting, which is a part of the chapter 'The World of Metals and Non-metals'.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or the formation of rust."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:29:04Z",
       "effective_analysis": {
         "visual_summary": "A diagram showing the formation of rust from iron.",
         "visual_type": "diagram",
