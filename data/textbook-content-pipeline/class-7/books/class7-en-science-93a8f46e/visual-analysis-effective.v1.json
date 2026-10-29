@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2d864df0314dad64ee37889b9c8e55797a0e08258c8a54d179510bb510074b01",
+  "raw_analysis_sha256": "f1e6bf2dd17087faa3d1b00a7fe7b600e8d9e9f5fdd17a130d7395f39c741fd7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40803456766",
-      "checkpointed_at": "2026-10-29T03:04:06Z",
+      "checkpointed_at": "2026-10-29T03:07:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40803456766",
-      "checkpointed_at": "2026-10-29T03:04:35Z",
+      "checkpointed_at": "2026-10-29T03:08:00Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40803456766",
-      "checkpointed_at": "2026-10-29T03:05:13Z",
+      "checkpointed_at": "2026-10-29T03:08:38Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -153992,6 +153992,126 @@
         "context_relation": "The page is discussing a practical activity related to chemical activity and paper.",
         "limitations": [
           "The page does not provide specific instructions or details on how to create objects with paper."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a030933c1f4ac3420d2f23ec",
+      "asset_sha256": "a20ebc9983b807b824a8bba00a08acaa55a29be6b61d2ffb09bbe7ae3e325942",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/a20ebc9983b807b824a8bba00a08acaa55a29be6b61d2ffb09bbe7ae3e325942.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellowish object, possibly paper, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Paper"
+        ],
+        "context_relation": "The image is related to the text discussing the creation and discussion of objects with paper.",
+        "limitations": [
+          "The image is blurry and lacks clarity.",
+          "The text is partially visible and incomplete."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40803456766",
+      "checkpointed_at": "2026-10-29T03:09:19Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellowish object, possibly paper, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Paper"
+        ],
+        "context_relation": "The image is related to the text discussing the creation and discussion of objects with paper.",
+        "limitations": [
+          "The image is blurry and lacks clarity.",
+          "The text is partially visible and incomplete."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4260a3fd69c34c26f831989b",
+      "asset_sha256": "2f2516f8b3bd6cad4a122ed40da1a628504645292cc3ab1044b8440034f4c819",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/2f2516f8b3bd6cad4a122ed40da1a628504645292cc3ab1044b8440034f4c819.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing chemical activity and creating objects with paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "appearance",
+          "creating objects with paper"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show any diagrams, charts, graphs, tables, maps, cartoons, photos, illustrations, equations, or other visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40803456766",
+      "checkpointed_at": "2026-10-29T03:10:00Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing chemical activity and creating objects with paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "appearance",
+          "creating objects with paper"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show any diagrams, charts, graphs, tables, maps, cartoons, photos, illustrations, equations, or other visual elements."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
