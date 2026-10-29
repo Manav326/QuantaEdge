@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2590,
+    "assets_selected": 2591,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "8604e838b1f1e41398ca72dd",
-      "1554b4067d24673fc7b88fc2",
-      "c973477a8cf682ca3f4db4ca"
+      "29c388b0161ccfef7bc70795",
+      "0d1c88ea0154d314c4c70259",
+      "d7da2e4245dce1153447bcf6"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2586,
-    "assets_remaining": 4902,
+    "assets_analyzed": 2587,
+    "assets_remaining": 4901,
     "assets_completion_percent": 34.5,
-    "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 2585,
+    "assets_failed": 24,
+    "assets_skipped_from_checkpoint": 2586,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
-      "checkpointed_at": "2026-10-29T01:11:34Z"
+      "checkpointed_at": "2026-10-29T01:21:22Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
-      "checkpointed_at": "2026-10-29T01:12:35Z"
+      "checkpointed_at": "2026-10-29T01:22:23Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -86162,7 +86162,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
+      "run_id": "40789318652",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -90481,7 +90481,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
+      "run_id": "40789318652",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -96310,19 +96310,42 @@
     {
       "asset_id": "d7da2e4245dce1153447bcf6",
       "asset_sha256": "f59988f2c36d352182f3a1050e063146b095e19a216a72e232c6c016e0cef3b4",
-      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 77,
       "asset_path": "assets/f59988f2c36d352182f3a1050e063146b095e19a216a72e232c6c016e0cef3b4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice has melted into water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates the process of a physical change, specifically the melting of ice into water.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes that occur during melting.",
+          "The image does not show the chemical composition of the ice or water."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40789318652",
+      "checkpointed_at": "2026-10-29T01:28:48Z"
     },
     {
       "asset_id": "60a0af36b889e75dc7738bcf",

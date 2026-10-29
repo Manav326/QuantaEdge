@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "28db2949c38d4ebd4f42460edcce4e67ee4f0eef7ceafa3ac66f753a94441a3e",
+  "raw_analysis_sha256": "6b91b2e1453ce4132c9dd148fde016b84ce3ed4db66a491316f013f5c905156c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
-      "checkpointed_at": "2026-10-29T01:11:34Z",
+      "checkpointed_at": "2026-10-29T01:21:22Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
-      "checkpointed_at": "2026-10-29T01:12:35Z",
+      "checkpointed_at": "2026-10-29T01:22:23Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -135506,7 +135506,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
+      "run_id": "40789318652",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -142242,7 +142242,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
+      "run_id": "40789318652",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -151350,21 +151350,65 @@
     {
       "asset_id": "d7da2e4245dce1153447bcf6",
       "asset_sha256": "f59988f2c36d352182f3a1050e063146b095e19a216a72e232c6c016e0cef3b4",
-      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 77,
       "asset_path": "assets/f59988f2c36d352182f3a1050e063146b095e19a216a72e232c6c016e0cef3b4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice has melted into water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates the process of a physical change, specifically the melting of ice into water.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes that occur during melting.",
+          "The image does not show the chemical composition of the ice or water."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40789318652",
+      "checkpointed_at": "2026-10-29T01:28:48Z",
+      "effective_analysis": {
+        "visual_summary": "A cube of ice has melted into water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates the process of a physical change, specifically the melting of ice into water.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes that occur during melting.",
+          "The image does not show the chemical composition of the ice or water."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
