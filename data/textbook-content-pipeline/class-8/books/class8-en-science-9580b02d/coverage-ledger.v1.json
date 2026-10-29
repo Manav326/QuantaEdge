@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1387,
-    "successful_visual_analyses": 1371,
+    "successful_visual_analyses": 1372,
     "missing_visual_analyses": 904,
-    "failed_visual_analyses": 16,
+    "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 920,
+    "unresolved_count": 919,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8669,8 +8669,8 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
-        "visual_type": "uncertain",
+        "visual_summary": "The image shows a page from a textbook discussing open-ended questions and their importance in encouraging critical thinking and curiosity.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
@@ -8683,27 +8683,21 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety",
+          "inclusive nature",
+          "special needs",
           "peer interactions",
-          "understanding concepts",
           "assessing understanding",
+          "reflecting on ideas",
           "analyzing concepts",
-          "sustaining interest",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
+          "safety precautions",
           "fascinating facts",
           "interesting observations",
-          "curiosity-driven questions",
-          "A step further"
+          "scientific principles",
+          "real-life applications"
         ],
-        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
+        "context_relation": "The image shows a page from a textbook discussing the importance of open-ended questions in encouraging critical thinking and curiosity, as well as the various activities and features included in the textbook to support this goal.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not provide specific details about the textbook or its content."
         ]
       },
       "chapter_id": null,
@@ -26978,8 +26972,8 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgment page for a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
           "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
@@ -26989,16 +26983,16 @@
         "concepts": [
           "Acknowledgment",
           "Textbook",
-          "Contributors",
           "Freelance Language Editor",
           "DTP Cell",
           "Publication Division",
           "Contractual",
           "Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors",
+        "context_relation": "Acknowledgment and appreciation for various contributors involved in the publication of a textbook.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific visual elements are described.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "chapter_id": null,
@@ -32508,9 +32502,39 @@
       "asset_path": "page-0040.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook discussing the impact of microorganisms on Earth's environment and their role in biogas production.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Now, think what would have happened if microorganisms did not exist on Earth?",
+          "A step further",
+          "Microbes as a source of biogas",
+          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily composed of ca",
+          "Ananda Mohan Chakrabarty (1938-2020) was a scientist who studied bacteria. In 1971, he developed a special bacterium that could break down oil spills, helping to clean the environment. His discovery received a patent in 1980. Patent is a copyright given to a person so that no one else can copy, use ",
+          "How does the diversity of microorganisms help in our kitchen?",
+          "2.4.2 Microorganisms and food",
+          "Let us try to understand by performing activities in the kitchen.",
+          "Activity 2.8: Let us perform",
+          "Take two bowls A and B.",
+          "In each, take 200 g of flour (atta or maida) and add a pinch of sugar.",
+          "Now, in bowl A, add a small amount of yeast powder and mix it well with the flour.",
+          "In bowl B, do not add any yeast, so that we can compare the results of the two bowls.",
+          "Knead the flour of the two bowls with warm water to make soft dough (Fig. 2.11)."
+        ],
+        "concepts": [
+          "microorganisms",
+          "biogas",
+          "environmental problems",
+          "patent",
+          "microorganisms in the kitchen"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text does not provide specific details about the activities or the results of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
