@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "996973649bdfde465736ca15b4075edc1d1cabb0e435f5cfde0b8f448e99ad57",
+  "raw_analysis_sha256": "86938cc27e0d5d77e2e13a009fe2f56a7f9bf44a80a9c53cafc7c704dfa30138",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:11:31Z",
+      "checkpointed_at": "2026-10-29T17:14:49Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:11:57Z",
+      "checkpointed_at": "2026-10-29T17:15:16Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:12:31Z",
+      "checkpointed_at": "2026-10-29T17:15:50Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -159221,6 +159221,104 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "85a87ffa2149535a0bd4f1c0",
+      "asset_sha256": "19eeea5cd87f6f09a0cd6e9a28fc74bbb681c73c3cbced46f36a5a6059ef7784",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/19eeea5cd87f6f09a0cd6e9a28fc74bbb681c73c3cbced46f36a5a6059ef7784.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a bottle with a green cap, partially visible.",
+        "visual_type": "photo",
+        "visible_text": [
+          "61",
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "(Insoluble substance)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide. Let us explore this with another activity usingsome substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "Bottle with a green cap, partially visible."
+        ],
+        "concepts": [
+          "Calcium hydroxide",
+          "Carbon dioxide",
+          "Lime water",
+          "Insoluble substance",
+          "Test for carbon dioxide",
+          "Chemical activity",
+          "Bottle with a green cap"
+        ],
+        "context_relation": "The image is a close-up of a bottle with a green cap, partially visible, which is related to the chemical activity described in the text.",
+        "limitations": [
+          "The image does not show the entire bottle or the activity being performed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40909580964",
+      "checkpointed_at": "2026-10-29T17:16:32Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a bottle with a green cap, partially visible.",
+        "visual_type": "photo",
+        "visible_text": [
+          "61",
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "(Insoluble substance)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide. Let us explore this with another activity usingsome substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "Bottle with a green cap, partially visible."
+        ],
+        "concepts": [
+          "Calcium hydroxide",
+          "Carbon dioxide",
+          "Lime water",
+          "Insoluble substance",
+          "Test for carbon dioxide",
+          "Chemical activity",
+          "Bottle with a green cap"
+        ],
+        "context_relation": "The image is a close-up of a bottle with a green cap, partially visible, which is related to the chemical activity described in the text.",
+        "limitations": [
+          "The image does not show the entire bottle or the activity being performed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a85c66e314c55aec3b44a7b3",
+      "asset_sha256": "62188cfac29c8e9e8cbaf7f2049e04dbe49a1a5c2b84fcec630a688dc90b69dc",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/62188cfac29c8e9e8cbaf7f2049e04dbe49a1a5c2b84fcec630a688dc90b69dc.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40909580964",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
