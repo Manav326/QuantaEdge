@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2678,
-    "successful_visual_analyses": 2656,
-    "missing_visual_analyses": 4810,
+    "raw_analysis_result_rows": 2683,
+    "successful_visual_analyses": 2661,
+    "missing_visual_analyses": 4805,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4832,
+    "unresolved_count": 4827,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -109085,9 +109085,16 @@
       "asset_path": "assets/1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -109103,9 +109110,27 @@
       "asset_path": "assets/3b506f3e72ef656b9bc5f9e900bf2ae44006bf1bbd1cc47760e6523dcfa455b4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two glass tumblers filled with water and lime water, with air being blown into them.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observation of chemical reactions",
+          "Effect of air on water and lime water"
+        ],
+        "context_relation": "The image is related to the activity described in the visible text.",
+        "limitations": [
+          "The image is blurry and not clearly visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -109121,9 +109146,29 @@
       "asset_path": "assets/c08f9435dfd9538f5e3f8ca3477d452a9dfc6da34858914a36128c3ba5fe48d6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Activity instructions for exploring the effect of blowing air into glass tumblers containing water and lime water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observing changes in appearance",
+          "Effect of blowing air on substances",
+          "Comparing water and lime water"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity designed to help students observe and understand the effects of blowing air on different substances.",
+        "limitations": [
+          "The image does not provide specific instructions or steps for the activity.",
+          "The image does not show the actual results of blowing air into the tumblers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -109139,9 +109184,29 @@
       "asset_path": "assets/e14026ea2ae7831676daec6f77da2112f9ca8987237fabe4a05f2e38d68b507b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing two glass tumblers labeled A and B, with one filled with tap water and the other with lime water. Air is blown into each tumbler using separate straws.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observation of changes in appearance",
+          "Comparison of substances",
+          "Effect of air on substances"
+        ],
+        "context_relation": "The image is related to an educational activity involving the observation of changes in appearance of substances when exposed to air.",
+        "limitations": [
+          "The image does not provide specific details about the changes observed in the substances.",
+          "The image does not show the results of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -109157,9 +109222,16 @@
       "asset_path": "assets/828542eb9e3baf978f60eab444fa0ea38dafada73f1fa9847e6b2d545f529e33.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person drinking from a glass using a straw.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the activity described in the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "055e2b589f66c52f43c2a3deeca6d06118f4ccfcb185aab247c1927eeb2eb72f",
+  "raw_analysis_sha256": "681b1c163effb7fb9756a3993e6a2bff7d56f3061c965b2c8ef8f9c18bce610f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -156823,6 +156823,260 @@
           "The image does not show the actual experiment, only a conceptual representation.",
           "The image does not include any text or labels that would clarify the experiment further."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3f6cc267c5d44d57f9d190f3",
+      "asset_sha256": "1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:08:04Z",
+      "effective_analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "668767556f15272a5ca5ab4f",
+      "asset_sha256": "3b506f3e72ef656b9bc5f9e900bf2ae44006bf1bbd1cc47760e6523dcfa455b4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/3b506f3e72ef656b9bc5f9e900bf2ae44006bf1bbd1cc47760e6523dcfa455b4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two glass tumblers filled with water and lime water, with air being blown into them.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observation of chemical reactions",
+          "Effect of air on water and lime water"
+        ],
+        "context_relation": "The image is related to the activity described in the visible text.",
+        "limitations": [
+          "The image is blurry and not clearly visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:09:53Z",
+      "effective_analysis": {
+        "visual_summary": "Two glass tumblers filled with water and lime water, with air being blown into them.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observation of chemical reactions",
+          "Effect of air on water and lime water"
+        ],
+        "context_relation": "The image is related to the activity described in the visible text.",
+        "limitations": [
+          "The image is blurry and not clearly visible."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e559895d75273835f6421040",
+      "asset_sha256": "c08f9435dfd9538f5e3f8ca3477d452a9dfc6da34858914a36128c3ba5fe48d6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/c08f9435dfd9538f5e3f8ca3477d452a9dfc6da34858914a36128c3ba5fe48d6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity instructions for exploring the effect of blowing air into glass tumblers containing water and lime water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observing changes in appearance",
+          "Effect of blowing air on substances",
+          "Comparing water and lime water"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity designed to help students observe and understand the effects of blowing air on different substances.",
+        "limitations": [
+          "The image does not provide specific instructions or steps for the activity.",
+          "The image does not show the actual results of blowing air into the tumblers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:11:45Z",
+      "effective_analysis": {
+        "visual_summary": "Activity instructions for exploring the effect of blowing air into glass tumblers containing water and lime water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observing changes in appearance",
+          "Effect of blowing air on substances",
+          "Comparing water and lime water"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity designed to help students observe and understand the effects of blowing air on different substances.",
+        "limitations": [
+          "The image does not provide specific instructions or steps for the activity.",
+          "The image does not show the actual results of blowing air into the tumblers."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7aa0c4ce5fe7b8ba2f0407f8",
+      "asset_sha256": "e14026ea2ae7831676daec6f77da2112f9ca8987237fabe4a05f2e38d68b507b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/e14026ea2ae7831676daec6f77da2112f9ca8987237fabe4a05f2e38d68b507b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing two glass tumblers labeled A and B, with one filled with tap water and the other with lime water. Air is blown into each tumbler using separate straws.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observation of changes in appearance",
+          "Comparison of substances",
+          "Effect of air on substances"
+        ],
+        "context_relation": "The image is related to an educational activity involving the observation of changes in appearance of substances when exposed to air.",
+        "limitations": [
+          "The image does not provide specific details about the changes observed in the substances.",
+          "The image does not show the results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:13:40Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing two glass tumblers labeled A and B, with one filled with tap water and the other with lime water. Air is blown into each tumbler using separate straws.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observation of changes in appearance",
+          "Comparison of substances",
+          "Effect of air on substances"
+        ],
+        "context_relation": "The image is related to an educational activity involving the observation of changes in appearance of substances when exposed to air.",
+        "limitations": [
+          "The image does not provide specific details about the changes observed in the substances.",
+          "The image does not show the results of the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "41417cd7f514a6087e5729f5",
+      "asset_sha256": "828542eb9e3baf978f60eab444fa0ea38dafada73f1fa9847e6b2d545f529e33",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/828542eb9e3baf978f60eab444fa0ea38dafada73f1fa9847e6b2d545f529e33.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person drinking from a glass using a straw.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the activity described in the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:15:12Z",
+      "effective_analysis": {
+        "visual_summary": "A person drinking from a glass using a straw.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the activity described in the text.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
