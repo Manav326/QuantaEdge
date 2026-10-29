@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2742,
+    "assets_selected": 2744,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
+      "e904eb84e607d05c01b9eca9",
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "647c2218dab5482dd1c1758e",
-      "fdec9e03ec78cebb890a265e",
-      "f0f8f7d21c309ff35139c86d"
+      "79bbc448b9853ba138d248e2",
+      "c85f41bbf274ff0251ebf3e6"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 2739,
     "assets_remaining": 4749,
     "assets_completion_percent": 36.6,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2737,
+    "assets_skipped_from_checkpoint": 2739,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -4829,9 +4829,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40945587644",
+      "run_id": "40962118311",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -9959,7 +9959,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "uncertain",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
@@ -9969,9 +9969,10 @@
         "concepts": [
           "science",
           "curiosity",
-          "questioning",
+          "open-mindedness",
+          "exploration",
           "environment",
-          "responsibility",
+          "society",
           "science as a process",
           "environmental challenges",
           "sustainable world",
@@ -9980,21 +9981,21 @@
           "interconnectedness",
           "scientific ideas",
           "discoveries",
-          "asking questions"
+          "questions",
+          "environmental challenges",
+          "sustainable world"
         ],
-        "context_relation": "exploration and questioning in science",
+        "context_relation": "exploration and curiosity in science",
         "limitations": [
-          "limited to Grade 7",
-          "focus on nature and environment",
-          "emphasis on responsibility and sustainability",
+          "The text does not provide specific examples or activities for Grade 7 students to engage with.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:50:38Z"
+      "run_id": "40962118311",
+      "checkpointed_at": "2026-10-29T22:08:08Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13460,41 +13461,31 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "A diagram showing the Earth and the Moon casting shadows during a solar eclipse.",
+        "visual_type": "diagram",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
           "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
           "1.1 Happy Exploring!",
-          "Activity 1.1: Question the Answer",
-          "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
+          "Activity 1.1: Question the Answer"
         ],
         "concepts": [
-          "light",
           "eclipse",
-          "Earth",
-          "Moon",
-          "rotation",
-          "axis",
+          "Earth's rotation",
+          "Moon's orbit",
           "day and night",
-          "experiments",
-          "questions",
-          "thinking",
-          "experiments that confirm what we think will happen",
-          "additional questions that might need more experiments and more questions",
-          "questions and answers",
-          "turning around"
+          "scientific inquiry"
         ],
-        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically and conduct experiments.",
+        "context_relation": "The text discusses the role of light and shadows in understanding the universe, specifically focusing on eclipses and the movements of the Earth, Moon, and Sun.",
         "limitations": [
-          "The text does not provide specific images or diagrams related to the concepts discussed."
+          "The text does not provide specific details about the diagrams or experiments mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:51:18Z"
+      "run_id": "40962118311",
+      "checkpointed_at": "2026-10-29T22:09:44Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -45673,7 +45664,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40945587644",
+      "run_id": "40962118311",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -49963,7 +49954,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40945587644",
+      "run_id": "40962118311",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
