@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2693,
+    "assets_selected": 2694,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "0d1c88ea0154d314c4c70259",
-      "ad7faad990b09c17cb2b6992"
+      "a8a782a35001bd63b508a6b5",
+      "493a597c6cacf3033d8f6f9a"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2689,
-    "assets_remaining": 4799,
+    "assets_analyzed": 2690,
+    "assets_remaining": 4798,
     "assets_completion_percent": 35.9,
-    "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2688,
+    "assets_failed": 20,
+    "assets_skipped_from_checkpoint": 2689,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:05:41Z"
+      "checkpointed_at": "2026-10-29T17:11:31Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:06:07Z"
+      "checkpointed_at": "2026-10-29T17:11:57Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:06:41Z"
+      "checkpointed_at": "2026-10-29T17:12:31Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -101063,7 +101063,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40882266088",
+      "run_id": "40909580964",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -101072,19 +101072,48 @@
     {
       "asset_id": "493a597c6cacf3033d8f6f9a",
       "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
-      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 81,
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40882266088",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A chemical reaction involving calcium hydroxide and carbon dioxide forming calcium carbonate and water, with a visual representation of the reaction.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide.",
+          "Let us explore this with another activity using some substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "61"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Calcium hydroxide",
+          "Carbon dioxide",
+          "Calcium carbonate",
+          "Water",
+          "Lime water",
+          "Test for carbon dioxide"
+        ],
+        "context_relation": "The image is a visual representation of a chemical reaction used as a test for carbon dioxide.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the substances used."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40909580964",
+      "checkpointed_at": "2026-10-29T17:14:05Z"
     },
     {
       "asset_id": "fd2a66a1d30f6266b08f377d",
