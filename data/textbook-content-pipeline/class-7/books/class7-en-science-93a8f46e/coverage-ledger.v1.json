@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2634,
-    "successful_visual_analyses": 2613,
-    "missing_visual_analyses": 4854,
+    "raw_analysis_result_rows": 2636,
+    "successful_visual_analyses": 2615,
+    "missing_visual_analyses": 4852,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4875,
+    "unresolved_count": 4873,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -107556,9 +107556,27 @@
       "asset_path": "assets/5af6c6230a7ed5b750328ec873518db36a7844251882452e226a9519c6975db8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing chemical activity and creating objects with paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "creating objects with paper"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "unclear if the page is a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or other"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -107574,9 +107592,26 @@
       "asset_path": "assets/3b5ebea6a3dadf266e53a3cd69d40ec9f6f0bfef2367ed2c52ed922b22ed8187.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing chemical activity and creating objects with paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "creating objects with paper"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show any diagrams, charts, graphs, tables, maps, cartoons, photos, illustrations, equations, or other visual elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
