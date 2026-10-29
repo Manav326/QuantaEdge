@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2646,
-    "successful_visual_analyses": 2625,
-    "missing_visual_analyses": 4842,
+    "raw_analysis_result_rows": 2648,
+    "successful_visual_analyses": 2627,
+    "missing_visual_analyses": 4840,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4863,
+    "unresolved_count": 4861,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -107957,9 +107957,30 @@
       "asset_path": "assets/4373e9a98092678c8bc4a17133970a9f4f9daaf504fe47b4f9f9b2bb57364350.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing chemical activity and creating objects with paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "appearance",
+          "substance",
+          "paper"
+        ],
+        "context_relation": "The page is discussing the concept of chemical activity and how substances can change in appearance while remaining the same.",
+        "limitations": [
+          "The page does not provide specific examples or details about the objects created with paper."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -107975,9 +107996,28 @@
       "asset_path": "assets/fc9f4bd45baecf8932292420030a58460a07d6c56469484a625ebfb137af611d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of chemical activity and creating objects with paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss and",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "appearance",
+          "substance",
+          "paper"
+        ],
+        "context_relation": "The page is discussing the concept of chemical activity and creating objects with paper.",
+        "limitations": [
+          "The page does not show any visual aids or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
