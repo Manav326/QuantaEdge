@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "326678ba2ea7ea29226fd738469e6ba190a0638d12cd31624cd1654c551e8d2a",
+  "raw_analysis_sha256": "6ebd12b3f879b7d4bda5c15dcc12423df93697602e9b2688b5c8e0895ce2a6b7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785667568",
-      "checkpointed_at": "2026-10-28T23:58:55Z",
+      "checkpointed_at": "2026-10-29T00:15:15Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785667568",
-      "checkpointed_at": "2026-10-28T23:59:39Z",
+      "checkpointed_at": "2026-10-29T00:16:00Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57834,8 +57834,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
-        "visual_type": "uncertain",
+        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57849,22 +57849,22 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The page does not provide specific examples of contact forces or muscular force.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785667568",
-      "checkpointed_at": "2026-10-29T00:09:02Z",
+      "checkpointed_at": "2026-10-29T00:16:54Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
-        "visual_type": "uncertain",
+        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57878,12 +57878,12 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The page does not provide specific examples of contact forces or muscular force.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -60472,7 +60472,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40772164307",
+      "run_id": "40785667568",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -63920,7 +63920,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40772164307",
+      "run_id": "40785667568",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
