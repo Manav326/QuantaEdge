@@ -15,11 +15,11 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "d6a3b284f120b97594630433"
+      "66e3d6417b987edd5fdb22cb"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1358,
-    "assets_remaining": 933,
+    "assets_analyzed": 1359,
+    "assets_remaining": 932,
     "assets_completion_percent": 59.3,
     "assets_failed": 16,
     "assets_skipped_from_checkpoint": 1358,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40796296285",
-      "checkpointed_at": "2026-10-29T02:23:44Z"
+      "checkpointed_at": "2026-10-29T02:29:29Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40796296285",
-      "checkpointed_at": "2026-10-29T02:24:21Z"
+      "checkpointed_at": "2026-10-29T02:30:05Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40796296285",
-      "checkpointed_at": "2026-10-29T02:25:04Z"
+      "checkpointed_at": "2026-10-29T02:30:47Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40796296285",
-      "checkpointed_at": "2026-10-29T02:26:07Z"
+      "checkpointed_at": "2026-10-29T02:31:49Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -45288,6 +45288,45 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753612267",
       "checkpointed_at": "2026-10-28T21:24:48Z"
+    },
+    {
+      "asset_id": "66e3d6417b987edd5fdb22cb",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about increasing water pressure in a water tank.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(iii) A water tank is placed on the roof of a building at a height 'H'. To get water with more pressure on the ground floor, one has to",
+          "(a) increase the height 'H' at which the tank is placed.",
+          "(b) decrease the height 'H' at which the tank is placed.",
+          "(c) replace the tank with another tank of the same height that can hold more water.",
+          "(d) replace the tank with another tank of the same height that can hold less water."
+        ],
+        "concepts": [
+          "Pressure",
+          "Water tank",
+          "Height",
+          "Ground floor"
+        ],
+        "context_relation": "The question is about increasing water pressure in a water tank, which is a concept related to physics and fluid dynamics.",
+        "limitations": [
+          "The question does not provide a diagram or illustration."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40796296285",
+      "checkpointed_at": "2026-10-29T02:32:18Z"
     }
   ]
 }
