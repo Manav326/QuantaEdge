@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2700,
+    "assets_selected": 2702,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "1554b4067d24673fc7b88fc2",
-      "0d1c88ea0154d314c4c70259",
-      "a8a782a35001bd63b508a6b5",
-      "a85c66e314c55aec3b44a7b3",
-      "9937c3e1a450bc1c1b1b6190"
+      "64c6b5d0c980158cb2350850",
+      "efb5b9efb815b9559c42d972",
+      "34047bfb4c06ff23710d9834",
+      "3759bf15470ace614f52521c",
+      "57ca1eea0b83d801182c7d7f"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2697,
-    "assets_remaining": 4791,
-    "assets_completion_percent": 36.0,
+    "assets_analyzed": 2702,
+    "assets_remaining": 4786,
+    "assets_completion_percent": 36.1,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 2695,
+    "assets_skipped_from_checkpoint": 2697,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -101449,6 +101449,152 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40921514282",
       "checkpointed_at": "2026-10-29T19:04:49Z"
+    },
+    {
+      "asset_id": "64c6b5d0c980158cb2350850",
+      "asset_sha256": "1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green, hand-drawn butterfly with two antennae.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about rusting.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:06:30Z"
+    },
+    {
+      "asset_id": "efb5b9efb815b9559c42d972",
+      "asset_sha256": "521b5e717540a0f67b4c0e55c54ea2cb2479e4ba1cfcde06b4bb592bb28855da",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/521b5e717540a0f67b4c0e55c54ea2cb2479e4ba1cfcde06b4bb592bb28855da.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:08:06Z"
+    },
+    {
+      "asset_id": "34047bfb4c06ff23710d9834",
+      "asset_sha256": "7ae5a0ef2c23bbca934c3f757f51597d8a611a73b2143ba91843296d5fca8414",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/7ae5a0ef2c23bbca934c3f757f51597d8a611a73b2143ba91843296d5fca8414.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cable, possibly made of metal or synthetic material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about rusting in iron.",
+        "limitations": [
+          "The image does not provide specific details about the rusting process or iron oxide formation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:09:42Z"
+    },
+    {
+      "asset_id": "3759bf15470ace614f52521c",
+      "asset_sha256": "00cb91809c08d9e98b4bdb7a613696d80a3a61894e781e302c8697c96aaa526f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/00cb91809c08d9e98b4bdb7a613696d80a3a61894e781e302c8697c96aaa526f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page discussing the chemical change of rusting in iron, showing a figure related to the topic.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "chemical reaction"
+        ],
+        "context_relation": "The page discusses the chemical change of rusting in iron, which is a process involving the formation of a new substance, iron oxide.",
+        "limitations": [
+          "The image is not visible, so the figure cannot be described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:11:35Z"
+    },
+    {
+      "asset_id": "57ca1eea0b83d801182c7d7f",
+      "asset_sha256": "34c11133855f1e960efe88c0cba37ef61e9fcee99938e6e1f6d190fa9904bdbd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/34c11133855f1e960efe88c0cba37ef61e9fcee99938e6e1f6d190fa9904bdbd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or visual content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:13:12Z"
     }
   ]
 }
