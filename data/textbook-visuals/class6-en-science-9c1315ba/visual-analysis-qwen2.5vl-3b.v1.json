@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
-      "b90b1ccd2f380e4a35f9f791",
-      "055ba61cf9184b7284850138",
-      "2185c15c0a88a108ea516878"
+      "7648bdfd0ca00b2a9aab1c0d",
+      "264647961a857697afa5e279",
+      "b90b1ccd2f380e4a35f9f791"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1499,
@@ -434,24 +434,29 @@
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
           "pañchakośhas",
-          "Middle Stage",
           "Foundational and Preparatory Stages",
-          "Analytical, descriptive, and narrative capabilities",
-          "Transformative learning culture",
-          "Classroom arrangement",
-          "Teacher preparation",
-          "Curricular Area Groups"
+          "Middle Stage",
+          "Secondary Stages",
+          "holistic development",
+          "transformative learning culture",
+          "appropriate textbooks",
+          "curricular areas",
+          "content and pedagogy",
+          "classroom arrangement",
+          "teacher preparation",
+          "conceptual connections",
+          "National Council of Educational Research and Training"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic educational development.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40856931006",
-      "checkpointed_at": "2026-10-29T11:33:13Z"
+      "run_id": "40868741426",
+      "checkpointed_at": "2026-10-29T12:01:01Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20116,20 +20121,19 @@
           "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Contractual",
-          "Final shape"
+          "Contractual"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "No specific limitations mentioned.",
+          "The image may be a full page, not a cropped figure.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40856931006",
-      "checkpointed_at": "2026-10-29T11:34:35Z"
+      "run_id": "40868741426",
+      "checkpointed_at": "2026-10-29T12:04:47Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -21411,7 +21415,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40856931006",
+      "run_id": "40868741426",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -22010,9 +22014,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40856931006",
+      "run_id": "40868741426",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -23771,24 +23775,24 @@
           "colour",
           "size",
           "arrangement",
+          "height",
+          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "height",
-          "types of stem",
-          "features of plants",
-          "nature walk"
+          "nature walk",
+          "observations"
         ],
-        "context_relation": "exploration",
+        "context_relation": "The text is a part of a larger educational content, specifically discussing the criteria for grouping plants and animals.",
         "limitations": [
-          "The image does not provide specific details about the criteria for grouping plants and animals."
+          "The text does not provide specific examples or details for each criterion."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40856931006",
-      "checkpointed_at": "2026-10-29T11:35:43Z"
+      "run_id": "40868741426",
+      "checkpointed_at": "2026-10-29T12:16:54Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
