@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2650,
-    "successful_visual_analyses": 2629,
-    "missing_visual_analyses": 4838,
+    "raw_analysis_result_rows": 2651,
+    "successful_visual_analyses": 2630,
+    "missing_visual_analyses": 4837,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4859,
+    "unresolved_count": 4858,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -108105,9 +108105,28 @@
       "asset_path": "assets/c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue handle, possibly made of metal or plastic, with a yellowish-brown color.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Substance May Change in Appearance but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Substance",
+          "Paper"
+        ],
+        "context_relation": "The image is related to the educational content about chemical activity and the creation of objects with paper.",
+        "limitations": [
+          "The image does not provide specific details about the chemical activity or the objects created."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

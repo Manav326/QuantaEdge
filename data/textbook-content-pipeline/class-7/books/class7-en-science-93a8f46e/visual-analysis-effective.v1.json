@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e6615d4922829e326a0e4a976ad3c6e5e3ab4459da63f75469158b82c9dc8d96",
+  "raw_analysis_sha256": "672f7c2d53fad1e768ecf938bb2cc8f96dca1086c62dc832a8d3d66b99ccb52f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40843204457",
-      "checkpointed_at": "2026-10-29T09:30:48Z",
+      "checkpointed_at": "2026-10-29T09:35:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40843204457",
-      "checkpointed_at": "2026-10-29T09:31:17Z",
+      "checkpointed_at": "2026-10-29T09:36:22Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40843204457",
-      "checkpointed_at": "2026-10-29T09:31:54Z",
+      "checkpointed_at": "2026-10-29T09:36:59Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -151674,7 +151674,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40831329841",
+      "run_id": "40843204457",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -155256,6 +155256,66 @@
         "context_relation": "The image is related to the educational content about chemical activity and paper.",
         "limitations": [
           "The image is a close-up of a rope-like object, not a full page or diagram."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "809b072968e8d7176d20cdce",
+      "asset_sha256": "c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue handle, possibly made of metal or plastic, with a yellowish-brown color.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Substance May Change in Appearance but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Substance",
+          "Paper"
+        ],
+        "context_relation": "The image is related to the educational content about chemical activity and the creation of objects with paper.",
+        "limitations": [
+          "The image does not provide specific details about the chemical activity or the objects created."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40843204457",
+      "checkpointed_at": "2026-10-29T09:39:15Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue handle, possibly made of metal or plastic, with a yellowish-brown color.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Substance May Change in Appearance but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Substance",
+          "Paper"
+        ],
+        "context_relation": "The image is related to the educational content about chemical activity and the creation of objects with paper.",
+        "limitations": [
+          "The image does not provide specific details about the chemical activity or the objects created."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
