@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2624,
+    "assets_selected": 2625,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "d456527f98b45c7ff5c257c7",
-      "6933b813211b2f9f57816fe7"
+      "4e8d13b88f8fdd8b6b61109c",
+      "dc656daf7afcb4a2864f08ae"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2620,
-    "assets_remaining": 4868,
+    "assets_analyzed": 2622,
+    "assets_remaining": 4866,
     "assets_completion_percent": 35.0,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2619,
+    "assets_skipped_from_checkpoint": 2620,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40831329841",
-      "checkpointed_at": "2026-10-29T08:14:04Z"
+      "checkpointed_at": "2026-10-29T08:19:57Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40831329841",
-      "checkpointed_at": "2026-10-29T08:14:42Z"
+      "checkpointed_at": "2026-10-29T08:20:36Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40831329841",
-      "checkpointed_at": "2026-10-29T08:15:32Z"
+      "checkpointed_at": "2026-10-29T08:21:26Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -98616,6 +98616,69 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40831329841",
       "checkpointed_at": "2026-10-29T08:18:56Z"
+    },
+    {
+      "asset_id": "4e8d13b88f8fdd8b6b61109c",
+      "asset_sha256": "b0859ae781e47c91456d8da9b4896104df4bb0f65f4a1d70ba671c3a3d83d20e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/b0859ae781e47c91456d8da9b4896104df4bb0f65f4a1d70ba671c3a3d83d20e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40831329841",
+      "checkpointed_at": "2026-10-29T08:21:29Z"
+    },
+    {
+      "asset_id": "dc656daf7afcb4a2864f08ae",
+      "asset_sha256": "fe787c7c033dd2550d76b1c9162d746e71d927602cccfb093984eba63a60b50a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/fe787c7c033dd2550d76b1c9162d746e71d927602cccfb093984eba63a60b50a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or string, possibly made of a natural fiber.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Substance May Change in Appearance but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Natural Fiber"
+        ],
+        "context_relation": "The image is related to the educational content about chemical activity and appearance changes.",
+        "limitations": [
+          "The image does not provide specific details about the chemical activity or appearance changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40831329841",
+      "checkpointed_at": "2026-10-29T08:22:42Z"
     }
   ]
 }
