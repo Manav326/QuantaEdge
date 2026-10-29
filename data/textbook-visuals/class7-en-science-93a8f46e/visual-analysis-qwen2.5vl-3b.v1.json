@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2744,
+    "assets_selected": 2746,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "8f2c3204127db9dec5c5350d",
-      "bf79b2d3ef8b4eaee78e61f2"
+      "a32915414c7da548dcd3be6e",
+      "a66e7f95d6a7bcad7705b624"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2741,
-    "assets_remaining": 4747,
+    "assets_analyzed": 2743,
+    "assets_remaining": 4745,
     "assets_completion_percent": 36.6,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2739,
+    "assets_skipped_from_checkpoint": 2741,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40962118311",
-      "checkpointed_at": "2026-10-29T22:55:19Z"
+      "checkpointed_at": "2026-10-29T23:00:36Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40962118311",
-      "checkpointed_at": "2026-10-29T22:55:49Z"
+      "checkpointed_at": "2026-10-29T23:01:07Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40962118311",
-      "checkpointed_at": "2026-10-29T22:56:26Z"
+      "checkpointed_at": "2026-10-29T23:01:46Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -102979,6 +102979,83 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40962118311",
       "checkpointed_at": "2026-10-29T22:59:44Z"
+    },
+    {
+      "asset_id": "a32915414c7da548dcd3be6e",
+      "asset_sha256": "e305184bfc90cafd41c15b1ed80761c2597af4c29125883dec95659db203e2e3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/e305184bfc90cafd41c15b1ed80761c2597af4c29125883dec95659db203e2e3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A candle burning in a glass tumbler and another candle not covered by a glass tumbler.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a)",
+          "continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time.",
+          "Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "The image illustrates the difference in candle behavior when exposed to air supply.",
+        "limitations": [
+          "The image does not show the chemical component of air that supports combustion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40962118311",
+      "checkpointed_at": "2026-10-29T23:02:29Z"
+    },
+    {
+      "asset_id": "a66e7f95d6a7bcad7705b624",
+      "asset_sha256": "b9b65938cdfcc0a3308361fa6bf8898de1e30ab072cc333482463cd0cc6a9b63",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/b9b65938cdfcc0a3308361fa6bf8898de1e30ab072cc333482463cd0cc6a9b63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a candle burning and extinguishing, with a glass tumbler covering the flame.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a)",
+          "continues to burn, whereas the candle that was covered with a",
+          "glass tumbler (Fig. 5.6b) stops burning after some time.",
+          "Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have",
+          "a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air",
+          "Flame",
+          "Extinguishing"
+        ],
+        "context_relation": "The image illustrates a scientific experiment to explain why a candle extinguishes when covered by a glass tumbler.",
+        "limitations": [
+          "The image does not provide a detailed explanation of the chemical components of air that support combustion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40962118311",
+      "checkpointed_at": "2026-10-29T23:03:13Z"
     }
   ]
 }
