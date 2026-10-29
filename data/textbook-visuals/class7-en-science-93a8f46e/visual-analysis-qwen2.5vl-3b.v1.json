@@ -14,14 +14,14 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "0d1c88ea0154d314c4c70259",
-      "a8a782a35001bd63b508a6b5"
+      "8f2c3204127db9dec5c5350d",
+      "bf79b2d3ef8b4eaee78e61f2"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2739,
-    "assets_remaining": 4749,
+    "assets_analyzed": 2741,
+    "assets_remaining": 4747,
     "assets_completion_percent": 36.6,
-    "assets_failed": 21,
+    "assets_failed": 20,
     "assets_skipped_from_checkpoint": 2739,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40962118311",
-      "checkpointed_at": "2026-10-29T22:50:30Z"
+      "checkpointed_at": "2026-10-29T22:55:19Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40962118311",
-      "checkpointed_at": "2026-10-29T22:50:59Z"
+      "checkpointed_at": "2026-10-29T22:55:49Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40962118311",
-      "checkpointed_at": "2026-10-29T22:51:35Z"
+      "checkpointed_at": "2026-10-29T22:56:26Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -102677,19 +102677,31 @@
     {
       "asset_id": "8f2c3204127db9dec5c5350d",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 82,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40945587644",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or content"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40962118311",
+      "checkpointed_at": "2026-10-29T22:59:06Z"
     },
     {
       "asset_id": "1c15db130c85fc3ff2ba5cca",
@@ -102938,6 +102950,35 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
       "checkpointed_at": "2026-10-29T21:54:40Z"
+    },
+    {
+      "asset_id": "bf79b2d3ef8b4eaee78e61f2",
+      "asset_sha256": "88ca0f59175746ba78a89882e35faacc6b883128d2efc4fac8e3ddc8acff2b3a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/88ca0f59175746ba78a89882e35faacc6b883128d2efc4fac8e3ddc8acff2b3a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person with short black hair, smiling and looking to the side.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon illustration and does not provide any specific context or information.",
+        "limitations": [
+          "The image does not provide any specific context or information related to the textbook content.",
+          "The image is a cartoon illustration and does not depict any specific scientific or educational concept."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40962118311",
+      "checkpointed_at": "2026-10-29T22:59:44Z"
     }
   ]
 }
