@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2737,
+    "assets_selected": 2738,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "8f2c3204127db9dec5c5350d",
-      "1c15db130c85fc3ff2ba5cca"
+      "c6a0afc4597063ec0b52e441",
+      "3e6caf56652add91771c8201"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2733,
-    "assets_remaining": 4755,
+    "assets_analyzed": 2735,
+    "assets_remaining": 4753,
     "assets_completion_percent": 36.5,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2732,
+    "assets_skipped_from_checkpoint": 2733,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:30:56Z"
+      "checkpointed_at": "2026-10-29T21:38:35Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:31:35Z"
+      "checkpointed_at": "2026-10-29T21:39:15Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:32:25Z"
+      "checkpointed_at": "2026-10-29T21:40:05Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -102718,6 +102718,82 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
       "checkpointed_at": "2026-10-29T21:37:35Z"
+    },
+    {
+      "asset_id": "c6a0afc4597063ec0b52e441",
+      "asset_sha256": "9bf4845176d18ad5f6c960cf6561566740fc375092e5364f838c24a5c859a942",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "page-0082.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook discussing chemical changes involving rusting and combustion.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "5.3 Some Other Processes Involving\nChemical Changes",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied\nin the chapter 'The World of Metals and\nNon-metals', a new brown-coloured\nsubstance called rust is formed. Thus,\nrusting is also a chemical change because\nit involves the formation of a new\nsubstance, iron oxide (Fig. 5.4).",
+          "Fig. 5.4: Rusted\niron nails",
+          "5.3.2 Combustion",
+          "Let us recall the burning of a magnesium ribbon\n(Fig. 5.5) learnt in the chapter 'The World of\nMetals and Non-metals'. Can you predict if this\nis a physical or a chemical change?",
+          "When the magnesium ribbon is burnt, a new\nsubstance, magnesium oxide, is formed. So, the\nburning of magnesium ribbon also involves a\nchemical change. We observed that heat and light\nare also produced along with the formation of a\nnew substance in this reaction.",
+          "The burning of magnesium ribbon can be represented as—\nMagnesium + Oxygen → Magnesium oxide + Heat + Light\n(Ribbon) (Air) (White powder)",
+          "A chemical reaction in which a substance reacts with oxygen\nand produces heat and/or light is called combustion. Substances\nthat undergo combustion reactions are called combustible\nsubstances. For example, wood, paper, cotton, kerosene, etc.,\nare combustible substances.",
+          "Let us find out whether the presence of oxygen\nis essential for combustion.",
+          "Activity 5.5: Let us investigate",
+          "Place two identical candles on two separate\npetri dishes and light them.",
+          "Cover one of these with a glass tumbler, as\nshown in Fig. 5.6.",
+          "What happens to the candle flames in the two\ncases?"
+        ],
+        "concepts": [
+          "chemical change",
+          "rusting",
+          "combustion",
+          "combustible substances",
+          "combustion reaction"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the actual experiment or reaction.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40945587644",
+      "checkpointed_at": "2026-10-29T21:43:28Z"
+    },
+    {
+      "asset_id": "3e6caf56652add91771c8201",
+      "asset_sha256": "3a49d7635c453c7f98971d8c581deeebfc1536086bef8322d7eb49d06318eef4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/3a49d7635c453c7f98971d8c581deeebfc1536086bef8322d7eb49d06318eef4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about the candle experiment.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40945587644",
+      "checkpointed_at": "2026-10-29T21:44:32Z"
     }
   ]
 }
