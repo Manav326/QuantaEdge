@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2745,
-    "successful_visual_analyses": 2722,
-    "missing_visual_analyses": 4743,
+    "raw_analysis_result_rows": 2750,
+    "successful_visual_analyses": 2727,
+    "missing_visual_analyses": 4738,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4766,
+    "unresolved_count": 4761,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -111428,9 +111428,18 @@
       "asset_path": "assets/8de30958ca8d8fb421958ebebddf39c4bcf2e1c8a73def067c60e6ff2cab5fb7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a brown object at the top, possibly a scroll or banner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the chapter 'The World of Metals and Non-metals' and discusses the chemical change of rusting in iron.",
+        "limitations": [
+          "The visible text is incomplete and does not provide specific details about the image content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111446,9 +111455,23 @@
       "asset_path": "assets/3f409deb228599319b5c3793f9f49dac852650647e043ee09df5b9d3ac519815.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a brown liquid dripping from it, possibly representing rust.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "metal"
+        ],
+        "context_relation": "The image is related to the chapter 'The World of Metals and Non-metals' and the topic of rusting in iron.",
+        "limitations": [
+          "The image does not provide specific details about the rusting process or the formation of iron oxide."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111464,9 +111487,24 @@
       "asset_path": "assets/b75812124ac1005354bdfd37de6b2cbcd98d5a1e101b5a30b95afb58fedc1e0a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two candles, one lit and one extinguished, with smoke rising from the extinguished candle.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "candle",
+          "light",
+          "extinguished",
+          "smoke",
+          "chemical change"
+        ],
+        "context_relation": "The image illustrates a simple experiment involving candles to demonstrate a chemical change.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or its purpose."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111482,9 +111520,22 @@
       "asset_path": "assets/48d7ac1b9eccbc7dae1bdf2b99d3d5a8474fbe7d0010d639a060cb481265114e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a rusting iron rod.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide"
+        ],
+        "context_relation": "The image is related to the chapter 'The World of Metals and Non-metals' and discusses the formation of rust during the rusting of iron.",
+        "limitations": [
+          "The image does not provide specific details about the rusting process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111500,9 +111551,16 @@
       "asset_path": "assets/040f4db0b42421ba6a32742f4d9977bfa89a7c72a6799bcdc5016bf1928c851f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
