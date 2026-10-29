@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1498,
+    "assets_selected": 1500,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "9bea1739a0207cd8ff11e251",
-      "63d5f48304db6a80f15e3510"
+      "982fb521e685ac67ba119e0a",
+      "58f5cf795160d10035d35fab"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1495,
-    "assets_remaining": 583,
-    "assets_completion_percent": 71.9,
+    "assets_analyzed": 1497,
+    "assets_remaining": 581,
+    "assets_completion_percent": 72.0,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1493,
+    "assets_skipped_from_checkpoint": 1495,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:29:58Z"
+      "checkpointed_at": "2026-10-29T01:34:03Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:30:59Z"
+      "checkpointed_at": "2026-10-29T01:35:03Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:31:50Z"
+      "checkpointed_at": "2026-10-29T01:35:52Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -50738,6 +50738,83 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
       "checkpointed_at": "2026-10-29T01:32:46Z"
+    },
+    {
+      "asset_id": "982fb521e685ac67ba119e0a",
+      "asset_sha256": "868ab500fe45aac07c0803bced61fd5aaaff3b7b89e89eadaa92bd9a6dbb4790",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "page-0165.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing possible reasons for water droplets on a glass tumbler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Discuss with your friends. Write down the possible reasons in Fig. 8.3.",
+          "May be ice has come out of the glass tumbler and melted.",
+          "Fig. 8.3: Provide your possible reasons explaining the appearance of water droplets on the outer surface of the glass tumbler",
+          "You may have various possible reasons. You may agree or disagree with the reasons of others. Aavi and Thirav argued with a chain of reasons. What do you think about the possible reasons mentioned in Fig. 8.4?",
+          "I think that some of the water may have seeped out of the glass tumbler.",
+          "No, it cannot seep out. The level of water in the glass tumbler has not decreased.",
+          "It might have decreased, but may not be significant enough to be seen.",
+          "With a tall and narrow bottle, even a slight change in the level of water is noticeable.",
+          "We can take water at room temperature in another tumbler and find out whether any water seeps out."
+        ],
+        "concepts": [
+          "Possible reasons for water droplets on a glass tumbler",
+          "Chain of reasoning"
+        ],
+        "context_relation": "Discussion and explanation of possible reasons",
+        "limitations": [
+          "No specific limitations mentioned in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40785541263",
+      "checkpointed_at": "2026-10-29T01:40:07Z"
+    },
+    {
+      "asset_id": "58f5cf795160d10035d35fab",
+      "asset_sha256": "db34477166fe04d56abc786f667d54247b52b06af4d79ff326e493a38ef02feb",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 166,
+      "asset_path": "assets/db34477166fe04d56abc786f667d54247b52b06af4d79ff326e493a38ef02feb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "736e0564c9b0139c30ea8610577d2423b4bbc63e582929923be241b97f3fe274",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a purple flower with water droplets on its petals and leaves.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "flower",
+          "purple flower",
+          "water droplets",
+          "plant",
+          "dew drops",
+          "morning",
+          "water boiling"
+        ],
+        "context_relation": "The image shows a close-up of a purple flower with water droplets, which is related to the discussion about dew drops on plants and their formation in the morning.",
+        "limitations": [
+          "The image does not provide specific information about dew formation or boiling water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40785541263",
+      "checkpointed_at": "2026-10-29T01:41:47Z"
     }
   ]
 }

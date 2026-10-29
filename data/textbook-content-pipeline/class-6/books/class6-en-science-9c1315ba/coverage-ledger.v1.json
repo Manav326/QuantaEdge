@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1517,
-    "successful_visual_analyses": 1498,
-    "missing_visual_analyses": 561,
+    "raw_analysis_result_rows": 1519,
+    "successful_visual_analyses": 1500,
+    "missing_visual_analyses": 559,
     "failed_visual_analyses": 19,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 580,
+    "unresolved_count": 578,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -57075,9 +57075,31 @@
       "asset_path": "page-0165.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Students discussing possible reasons for water droplets on a glass tumbler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Discuss with your friends. Write down the possible reasons in Fig. 8.3.",
+          "May be ice has come out of the glass tumbler and melted.",
+          "Fig. 8.3: Provide your possible reasons explaining the appearance of water droplets on the outer surface of the glass tumbler",
+          "You may have various possible reasons. You may agree or disagree with the reasons of others. Aavi and Thirav argued with a chain of reasons. What do you think about the possible reasons mentioned in Fig. 8.4?",
+          "I think that some of the water may have seeped out of the glass tumbler.",
+          "No, it cannot seep out. The level of water in the glass tumbler has not decreased.",
+          "It might have decreased, but may not be significant enough to be seen.",
+          "With a tall and narrow bottle, even a slight change in the level of water is noticeable.",
+          "We can take water at room temperature in another tumbler and find out whether any water seeps out."
+        ],
+        "concepts": [
+          "Possible reasons for water droplets on a glass tumbler",
+          "Chain of reasoning"
+        ],
+        "context_relation": "Discussion and explanation of possible reasons",
+        "limitations": [
+          "No specific limitations mentioned in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -57093,9 +57115,26 @@
       "asset_path": "assets/db34477166fe04d56abc786f667d54247b52b06af4d79ff326e493a38ef02feb.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a purple flower with water droplets on its petals and leaves.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "flower",
+          "purple flower",
+          "water droplets",
+          "plant",
+          "dew drops",
+          "morning",
+          "water boiling"
+        ],
+        "context_relation": "The image shows a close-up of a purple flower with water droplets, which is related to the discussion about dew drops on plants and their formation in the morning.",
+        "limitations": [
+          "The image does not provide specific information about dew formation or boiling water."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
