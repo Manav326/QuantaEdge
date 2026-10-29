@@ -15,12 +15,12 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "fb7d2b0f4e73fdab0694ebc3"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1361,
-    "assets_remaining": 930,
-    "assets_completion_percent": 59.4,
+    "assets_analyzed": 1362,
+    "assets_remaining": 929,
+    "assets_completion_percent": 59.5,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1361,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40826046100",
-      "checkpointed_at": "2026-10-29T06:58:37Z"
+      "checkpointed_at": "2026-10-29T07:03:18Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40826046100",
-      "checkpointed_at": "2026-10-29T06:59:02Z"
+      "checkpointed_at": "2026-10-29T07:03:43Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40826046100",
-      "checkpointed_at": "2026-10-29T06:59:31Z"
+      "checkpointed_at": "2026-10-29T07:04:12Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40826046100",
-      "checkpointed_at": "2026-10-29T07:00:14Z"
+      "checkpointed_at": "2026-10-29T07:04:54Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -45396,6 +45396,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40815452112",
       "checkpointed_at": "2026-10-29T05:51:12Z"
+    },
+    {
+      "asset_id": "fb7d2b0f4e73fdab0694ebc3",
+      "asset_sha256": "3b537a9d3310de67dc825c7be29787e0b0bd769d0472fdb64e3308559b5a9a11",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 116,
+      "asset_path": "assets/3b537a9d3310de67dc825c7be29787e0b0bd769d0472fdb64e3308559b5a9a11.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a750e69b0591cc915090c35b911a780a89de0cc1f835dbb05cb498459af65e8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of five people standing in a line, with one person pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or question related to the visible elements.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40826046100",
+      "checkpointed_at": "2026-10-29T07:05:32Z"
     }
   ]
 }
