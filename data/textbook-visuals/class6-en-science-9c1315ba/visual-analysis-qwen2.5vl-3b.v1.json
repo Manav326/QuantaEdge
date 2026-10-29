@@ -14,14 +14,14 @@
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "6ad1a44c4439dad27d3403c2",
-      "56b6fc3411ed6da127bdf529"
+      "2249feba9d9de2d28593e04b",
+      "b6bd03a2c995b149f373ec8e"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1490,
-    "assets_remaining": 588,
-    "assets_completion_percent": 71.7,
-    "assets_failed": 21,
+    "assets_analyzed": 1491,
+    "assets_remaining": 587,
+    "assets_completion_percent": 71.8,
+    "assets_failed": 20,
     "assets_skipped_from_checkpoint": 1490,
     "batch_limit": 5,
     "publication_allowed": false
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T00:55:30Z"
+      "checkpointed_at": "2026-10-29T01:07:48Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T00:56:30Z"
+      "checkpointed_at": "2026-10-29T01:08:48Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T00:57:21Z"
+      "checkpointed_at": "2026-10-29T01:09:38Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -48967,7 +48967,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40753605122",
+      "run_id": "40785541263",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -49941,19 +49941,55 @@
     {
       "asset_id": "b6bd03a2c995b149f373ec8e",
       "asset_sha256": "46da1155c0017352143e3a70235a34a3d6ca6ce39a1f95233ea70afa446802d5",
-      "page_text_context_sha256": "0a44929b33133a6cfaf1730c704ea4b2ee82948bf69490ecbcb1da12c880e18d",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 162,
       "asset_path": "page-0162.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0a44929b33133a6cfaf1730c704ea4b2ee82948bf69490ecbcb1da12c880e18d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40753605122",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity 8.1: Observing the conversion of ice to water.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Activity 8.1: Let us observe",
+          "Put an ice cube in a cup, leave it on the table and observe.",
+          "Ice gets converted into water.",
+          "What can you conclude from the observations?",
+          "Does this mean that ice and water are the same substance?",
+          "Yes, ice and water are the two forms of the same substance.",
+          "These forms are also called states. These different states of water show many differences in their behaviour. Water flows but ice does not. Water splashes but ice does not.",
+          "8.1 Investigating Water's Disappearing Act",
+          "It is a rainy morning. While going to school, Aavi and Thirav observe that there are a lot of water puddles in the playground. That evening, when they go to play, they are surprised to observe that some of the water in the puddles had disappeared.",
+          "I think the water has been absorbed by the soil on the playground. What do you think about it?",
+          "Have you ever noticed water in the puddles disappearing? Where does it go? Discuss with your friends.",
+          "Where else have you seen water disappearing? Can you think of a possible reason why this happens?",
+          "You might have observed that after washing the utensils, water left on the surface of the utensils, dries up after some time. Does the reason you thought earlier to explain water disappearance apply in this case also?",
+          "Aavi wonders if water has seeped through the surface of the utensils.",
+          "Thirav thinks that water does not seep through the surface of the utensils. Design an activity to investigate whose idea is correct.",
+          "Activity 8.2: Let us investigate",
+          "Take a tablespoon of water on a steel plate as shown in Fig. 8.1."
+        ],
+        "concepts": [
+          "Observing the conversion of ice to water",
+          "Understanding the different states of water",
+          "Absorption of water by soil",
+          "Disappearance of water in puddles",
+          "Reasons for water disappearance",
+          "Designing an activity to investigate"
+        ],
+        "context_relation": "Observing and understanding the properties of water",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40785541263",
+      "checkpointed_at": "2026-10-29T01:19:16Z"
     },
     {
       "asset_id": "94f02006760d68f63810f266",
