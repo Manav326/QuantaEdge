@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2695,
+    "assets_selected": 2696,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "85a87ffa2149535a0bd4f1c0",
-      "a85c66e314c55aec3b44a7b3"
+      "46d08946cbdcaa8d5431803a",
+      "bbcebab600e2f2af68963eb2"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2691,
-    "assets_remaining": 4797,
-    "assets_completion_percent": 35.9,
+    "assets_analyzed": 2693,
+    "assets_remaining": 4795,
+    "assets_completion_percent": 36.0,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2690,
+    "assets_skipped_from_checkpoint": 2691,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:14:49Z"
+      "checkpointed_at": "2026-10-29T17:18:39Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:15:16Z"
+      "checkpointed_at": "2026-10-29T17:19:05Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:15:50Z"
+      "checkpointed_at": "2026-10-29T17:19:39Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -101381,6 +101381,58 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "46d08946cbdcaa8d5431803a",
+      "asset_sha256": "ef58f6f2594f7678d6ed508c111a47bf576c49d50adb1b52dbccac1d8d33eb04",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/ef58f6f2594f7678d6ed508c111a47bf576c49d50adb1b52dbccac1d8d33eb04.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a dark, possibly black, surface with a small, round, white object in the center.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40909580964",
+      "checkpointed_at": "2026-10-29T17:20:13Z"
+    },
+    {
+      "asset_id": "bbcebab600e2f2af68963eb2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40909580964",
+      "checkpointed_at": "2026-10-29T17:20:18Z"
     }
   ]
 }
