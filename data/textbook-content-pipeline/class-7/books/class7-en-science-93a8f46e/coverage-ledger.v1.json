@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2670,
-    "successful_visual_analyses": 2649,
-    "missing_visual_analyses": 4818,
+    "raw_analysis_result_rows": 2673,
+    "successful_visual_analyses": 2652,
+    "missing_visual_analyses": 4815,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4839,
+    "unresolved_count": 4836,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -108824,9 +108824,29 @@
       "asset_path": "assets/6dd4a34e7ffe114acf2c1854d9730a14c9aaad482a54699b108f530d72726557.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of a substance changing in appearance but remaining the same chemically.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "substance",
+          "appearance",
+          "chemical activity",
+          "creating objects with paper"
+        ],
+        "context_relation": "The page is discussing a concept in chemistry related to the appearance of substances and their chemical activity.",
+        "limitations": [
+          "The page does not provide specific instructions or a diagram."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -108842,9 +108862,19 @@
       "asset_path": "assets/2bd1a6d7b8d264c07420828fc3f42479490eb033996d40afefbb7a19cdf7bd45.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or string, possibly made of yarn or twine, with a blue handle or loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a rope or string, not a full page or diagram, and does not contain any text or labels that can be analyzed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -108860,9 +108890,27 @@
       "asset_path": "assets/4d62716a66f3faa3b7b24010f6a88524b3d971a4cb9b8d3339a3a6aed9dccd4a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of yellow and green objects, possibly paper or fabric, arranged in a row.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Paper"
+        ],
+        "context_relation": "The image is related to the text discussing the creation and discussion of objects with paper.",
+        "limitations": [
+          "The image is blurry and the specific details of the objects are not clear."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

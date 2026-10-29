@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3046f9a39d17512bdbb08a6c0ec53ebdf07a0220c73c090aa47d2a6110c40213",
+  "raw_analysis_sha256": "9182dfaa70ed8474e1074882c17fd0916601c19d95a3dcea47e9a6596b7d5909",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862891681",
-      "checkpointed_at": "2026-10-29T13:05:16Z",
+      "checkpointed_at": "2026-10-29T13:11:39Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862891681",
-      "checkpointed_at": "2026-10-29T13:06:17Z",
+      "checkpointed_at": "2026-10-29T13:12:40Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -156414,6 +156414,168 @@
         "context_relation": "The image is a close-up of a piece of paper with a blue and yellow object partially visible, which is related to the text discussing the creation and discussion of objects with paper.",
         "limitations": [
           "The image does not provide a clear view of the blue and yellow object."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "490aed9488592c4c32ddd9f2",
+      "asset_sha256": "6dd4a34e7ffe114acf2c1854d9730a14c9aaad482a54699b108f530d72726557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/6dd4a34e7ffe114acf2c1854d9730a14c9aaad482a54699b108f530d72726557.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of a substance changing in appearance but remaining the same chemically.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "substance",
+          "appearance",
+          "chemical activity",
+          "creating objects with paper"
+        ],
+        "context_relation": "The page is discussing a concept in chemistry related to the appearance of substances and their chemical activity.",
+        "limitations": [
+          "The page does not provide specific instructions or a diagram."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40862891681",
+      "checkpointed_at": "2026-10-29T13:13:53Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of a substance changing in appearance but remaining the same chemically.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "substance",
+          "appearance",
+          "chemical activity",
+          "creating objects with paper"
+        ],
+        "context_relation": "The page is discussing a concept in chemistry related to the appearance of substances and their chemical activity.",
+        "limitations": [
+          "The page does not provide specific instructions or a diagram."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "59a09f094c22d60e413f8e06",
+      "asset_sha256": "2bd1a6d7b8d264c07420828fc3f42479490eb033996d40afefbb7a19cdf7bd45",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/2bd1a6d7b8d264c07420828fc3f42479490eb033996d40afefbb7a19cdf7bd45.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or string, possibly made of yarn or twine, with a blue handle or loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a rope or string, not a full page or diagram, and does not contain any text or labels that can be analyzed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40862891681",
+      "checkpointed_at": "2026-10-29T13:15:05Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or string, possibly made of yarn or twine, with a blue handle or loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a rope or string, not a full page or diagram, and does not contain any text or labels that can be analyzed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "85b0fb04dbbaa3e01bcb02ab",
+      "asset_sha256": "4d62716a66f3faa3b7b24010f6a88524b3d971a4cb9b8d3339a3a6aed9dccd4a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/4d62716a66f3faa3b7b24010f6a88524b3d971a4cb9b8d3339a3a6aed9dccd4a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of yellow and green objects, possibly paper or fabric, arranged in a row.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Paper"
+        ],
+        "context_relation": "The image is related to the text discussing the creation and discussion of objects with paper.",
+        "limitations": [
+          "The image is blurry and the specific details of the objects are not clear."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40862891681",
+      "checkpointed_at": "2026-10-29T13:16:14Z",
+      "effective_analysis": {
+        "visual_summary": "A group of yellow and green objects, possibly paper or fabric, arranged in a row.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Paper"
+        ],
+        "context_relation": "The image is related to the text discussing the creation and discussion of objects with paper.",
+        "limitations": [
+          "The image is blurry and the specific details of the objects are not clear."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
