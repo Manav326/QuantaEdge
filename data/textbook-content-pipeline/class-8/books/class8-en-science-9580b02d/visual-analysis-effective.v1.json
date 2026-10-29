@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4172a0d5c9f7294e704cbff849c94aadf572281572d573280f21f07387be491e",
+  "raw_analysis_sha256": "09e476d55b59403fc67db67e8fca858ce78d8c51b47e273e03b4e9877269bda1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40815452112",
-      "checkpointed_at": "2026-10-29T05:40:52Z",
+      "checkpointed_at": "2026-10-29T05:47:55Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40815452112",
-      "checkpointed_at": "2026-10-29T05:41:26Z",
+      "checkpointed_at": "2026-10-29T05:48:29Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40815452112",
-      "checkpointed_at": "2026-10-29T05:42:05Z",
+      "checkpointed_at": "2026-10-29T05:49:08Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40815452112",
-      "checkpointed_at": "2026-10-29T05:43:03Z",
+      "checkpointed_at": "2026-10-29T05:50:06Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -68630,6 +68630,42 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the given text.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "73c7780464ec245b5ddcf74c",
+      "asset_sha256": "ed3b03221bc82bf9d3f48b0e1b198f4de478036cdab3713641f08aa3e4d6f7e7",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 116,
+      "asset_path": "assets/ed3b03221bc82bf9d3f48b0e1b198f4de478036cdab3713641f08aa3e4d6f7e7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a750e69b0591cc915090c35b911a780a89de0cc1f835dbb05cb498459af65e8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand pouring liquid from a container into a bottle using a funnel.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a scientific experiment or demonstration involving the transfer of liquid from one container to another using a funnel.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40815452112",
+      "checkpointed_at": "2026-10-29T05:51:12Z",
+      "effective_analysis": {
+        "visual_summary": "A hand pouring liquid from a container into a bottle using a funnel.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a scientific experiment or demonstration involving the transfer of liquid from one container to another using a funnel.",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
