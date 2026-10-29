@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "cdf7a94b5208aedaa5718f5854d3690de01bcb98ebe88e1f413b7f1aa234407e",
+  "raw_analysis_sha256": "a1b5449d2cad86f1516b7b10180d0a35c42d45992b824a489e149a13ecaed47d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -7282,9 +7282,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
+      "run_id": "40862891681",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -15031,71 +15031,63 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
-          "To do this, we have to step out of this book, step out of the\nclassroom perhaps, and experience the world through activities\nand experiments. These are experiences that we hope will not\njust be interesting or exciting but also serve as stepping stones\nto a deeper understanding of the environment we ",
-          "But let’s get back into this book for now. You will read about\ntopics in different fields of science, from physics and chemistry\nto biology and earth sciences. While they might appear as\ndiﬀ erent chapters, just as we had said in Grade 6, they are\nall interconnected. Scientific ideas in one area oft"
+          "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
+          "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
+          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
         ],
         "concepts": [
           "science",
           "curiosity",
           "questioning",
+          "process",
           "environment",
-          "responsibility",
-          "science as a process",
+          "society",
           "environmental challenges",
           "sustainable world",
           "properties of materials",
-          "discovery",
-          "interconnectedness",
+          "interconnected",
           "scientific ideas",
           "discoveries",
           "asking questions"
         ],
         "context_relation": "exploration and questioning in science",
         "limitations": [
-          "limited to Grade 7",
-          "focus on nature and environment",
-          "emphasis on responsibility and sustainability",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The text does not provide specific examples or questions for the reader to explore."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T11:00:45Z",
+      "run_id": "40862891681",
+      "checkpointed_at": "2026-10-29T11:23:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
-          "To do this, we have to step out of this book, step out of the\nclassroom perhaps, and experience the world through activities\nand experiments. These are experiences that we hope will not\njust be interesting or exciting but also serve as stepping stones\nto a deeper understanding of the environment we ",
-          "But let’s get back into this book for now. You will read about\ntopics in different fields of science, from physics and chemistry\nto biology and earth sciences. While they might appear as\ndiﬀ erent chapters, just as we had said in Grade 6, they are\nall interconnected. Scientific ideas in one area oft"
+          "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
+          "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
+          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
         ],
         "concepts": [
           "science",
           "curiosity",
           "questioning",
+          "process",
           "environment",
-          "responsibility",
-          "science as a process",
+          "society",
           "environmental challenges",
           "sustainable world",
           "properties of materials",
-          "discovery",
-          "interconnectedness",
+          "interconnected",
           "scientific ideas",
           "discoveries",
           "asking questions"
         ],
         "context_relation": "exploration and questioning in science",
         "limitations": [
-          "limited to Grade 7",
-          "focus on nature and environment",
-          "emphasis on responsibility and sustainability",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The text does not provide specific examples or questions for the reader to explore."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -20239,7 +20231,6 @@
           "Earth",
           "Moon",
           "rotation",
-          "axis",
           "day and night",
           "experiments",
           "questions",
@@ -20249,16 +20240,16 @@
           "questions and answers",
           "turning around"
         ],
-        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically and conduct experiments.",
+        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically about scientific concepts.",
         "limitations": [
-          "The text does not provide specific images or diagrams related to the concepts discussed."
+          "The text does not provide specific images or diagrams to accompany the text."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T11:01:14Z",
+      "run_id": "40862891681",
+      "checkpointed_at": "2026-10-29T11:27:08Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -20275,7 +20266,6 @@
           "Earth",
           "Moon",
           "rotation",
-          "axis",
           "day and night",
           "experiments",
           "questions",
@@ -20285,9 +20275,9 @@
           "questions and answers",
           "turning around"
         ],
-        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically and conduct experiments.",
+        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically about scientific concepts.",
         "limitations": [
-          "The text does not provide specific images or diagrams related to the concepts discussed."
+          "The text does not provide specific images or diagrams to accompany the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -72028,7 +72018,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
+      "run_id": "40862891681",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -78674,7 +78664,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
+      "run_id": "40862891681",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
