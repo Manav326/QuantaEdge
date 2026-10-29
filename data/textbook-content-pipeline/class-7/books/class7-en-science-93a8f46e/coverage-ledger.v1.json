@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2750,
-    "successful_visual_analyses": 2727,
-    "missing_visual_analyses": 4738,
+    "raw_analysis_result_rows": 2755,
+    "successful_visual_analyses": 2732,
+    "missing_visual_analyses": 4733,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4761,
+    "unresolved_count": 4756,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -111576,9 +111576,19 @@
       "asset_path": "assets/47c650faace3192d1cb0107905d8cb747ec3de9730df31568bc20bd594bfb647.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or synthetic material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook content.",
+          "The image is a close-up of a twisted rope or cord, not a diagram or chart related to the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111594,9 +111604,28 @@
       "asset_path": "assets/04ca70a3cebe53886d3110b3be13b0395ce0eb24100897e09735014d9c15a8b0.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page discussing the chemical change of rusting in iron, showing a figure related to the topic.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "chemical reaction"
+        ],
+        "context_relation": "The page discusses the chemical change of rusting in iron, providing a reference to a figure related to the topic.",
+        "limitations": [
+          "The image does not show the figure mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111612,9 +111641,18 @@
       "asset_path": "assets/fa2f185b58cd18a602d6cc840d093750d08507b4077f6dd3899cc46329fe7bd2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111630,9 +111668,23 @@
       "asset_path": "assets/9340dfc2a3bae06a76dce940ed397fcfd6476613d95c0fced8dce65f8d151fcb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of rust on iron, highlighting the brown color and texture.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "metal"
+        ],
+        "context_relation": "The image is related to the chapter 'The World of Metals and Non-metals' and the section on rusting.",
+        "limitations": [
+          "The image is blurry and lacks specific details about the rusting process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -111648,9 +111700,28 @@
       "asset_path": "assets/2415c73668c8380b27a0aa417fb5d6b02511fad513062c5fb1c5416d9981a3c2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page discussing the chemical change of rusting in iron, showing a figure related to the topic.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "chemical reaction"
+        ],
+        "context_relation": "The page discusses the chemical change of rusting in iron, providing a figure related to the topic.",
+        "limitations": [
+          "The image does not show the figure mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
