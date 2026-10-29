@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2664,
-    "successful_visual_analyses": 2643,
-    "missing_visual_analyses": 4824,
+    "raw_analysis_result_rows": 2667,
+    "successful_visual_analyses": 2646,
+    "missing_visual_analyses": 4821,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4845,
+    "unresolved_count": 4842,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -108601,9 +108601,28 @@
       "asset_path": "assets/d72262e21076d3949ca1f0e72f4ef0b5299be13bb09e0c5811a866c7b73c7644.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow origami bird sitting on a white surface.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "origami",
+          "paper folding",
+          "chemical activity",
+          "creating objects with paper"
+        ],
+        "context_relation": "The image is a visual representation of the concept of creating objects with paper, specifically an origami bird.",
+        "limitations": [
+          "The image does not provide specific details about the paper used or the exact steps to create the origami bird."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -108619,9 +108638,30 @@
       "asset_path": "assets/e09050451f64cbdda95c33b9c92cf705bf4071b3ab9868827f096111517b7116.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Several colorful paper origami animals are displayed on a dark surface.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Paper Origami",
+          "Appearance",
+          "Substance"
+        ],
+        "context_relation": "The image is related to the educational content about chemical activity and paper origami.",
+        "limitations": [
+          "The image does not show the actual origami animals, only their outlines.",
+          "The text is partially cut off, making some words unclear."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -108637,9 +108677,29 @@
       "asset_path": "assets/08670899e61651ba4b28e71b12d35c1579f2e14e95c978c65c77cabadffd7818.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful paper craft project with various shapes and colors.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Paper Craft",
+          "Chemical Activity",
+          "Appearance",
+          "Substance"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific image details provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
