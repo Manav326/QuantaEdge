@@ -11,17 +11,17 @@
     "assets_selected": 2658,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "4b1298747dc1ec978a226ae5",
-      "647c2218dab5482dd1c1758e",
-      "0e143e54e2f709b8a4e5968d",
-      "463542d4277119b7abc93e3a",
-      "8604e838b1f1e41398ca72dd"
+      "1554b4067d24673fc7b88fc2",
+      "0d1c88ea0154d314c4c70259",
+      "d456527f98b45c7ff5c257c7",
+      "3f7ae9acb6ad507d62a992e9",
+      "855c57c8fc845b0d6160a5f5"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2653,
-    "assets_remaining": 4835,
-    "assets_completion_percent": 35.4,
-    "assets_failed": 23,
+    "assets_analyzed": 2656,
+    "assets_remaining": 4832,
+    "assets_completion_percent": 35.5,
+    "assets_failed": 22,
     "assets_skipped_from_checkpoint": 2653,
     "batch_limit": 5,
     "publication_allowed": false
@@ -85693,7 +85693,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40862891681",
+      "run_id": "40882266088",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -90445,7 +90445,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40862891681",
+      "run_id": "40882266088",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -96418,19 +96418,56 @@
     {
       "asset_id": "d456527f98b45c7ff5c257c7",
       "asset_sha256": "54cbb1667488e4d14b507f6d2494632c10df3769dc01d9163590feef90385431",
-      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 77,
       "asset_path": "assets/54cbb1667488e4d14b507f6d2494632c10df3769dc01d9163590feef90385431.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40862891681",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A variety of fruits and vegetables are illustrated in a pattern.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "pineapple",
+          "banana",
+          "lettuce",
+          "peach",
+          "watermelon",
+          "strawberry",
+          "cucumber",
+          "tomato",
+          "eggplant",
+          "carrot",
+          "pepper",
+          "onion",
+          "lettuce",
+          "peach",
+          "watermelon",
+          "strawberry",
+          "cucumber",
+          "tomato",
+          "eggplant",
+          "carrot",
+          "pepper",
+          "onion"
+        ],
+        "concepts": [
+          "fruits",
+          "vegetables"
+        ],
+        "context_relation": "The image is a visual representation of the fruits and vegetables mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific information about the text's content."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:00:05Z"
     },
     {
       "asset_id": "47c0d3068c13153fcc01ebf1",
@@ -99706,6 +99743,100 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862891681",
       "checkpointed_at": "2026-10-29T13:24:50Z"
+    },
+    {
+      "asset_id": "3f7ae9acb6ad507d62a992e9",
+      "asset_sha256": "1d87ba07c88989d42764032b8a9ec60c6d69d26976dd7ecf3348b21a9bafd018",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "page-0079.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for creating paper objects and playing with a balloon.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance but Remain the Same!",
+          "Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          " Take a few sheets of paper and fold them to create new objects (Fig. 5.1).",
+          " Do you get the same paper back when you unfold these objects?",
+          "B. Playing with a balloon",
+          " Take a balloon and inflate it. Now, loosen your grip and let the air escape out.",
+          " Do you get the uninflated balloon back?",
+          " Take another balloon; inflate it and grip the opening tightly. Now, prick it with a pin.",
+          "Caution - Be careful while using a pin.",
+          " What happens? Will you be able to get the uninflated balloon back?",
+          "C. Crushing a piece of chalk",
+          " Crush a small piece of chalk into powder.",
+          " Can you get the chalk piece back from the powder?",
+          "Is there any similarity in the changes listed in A, B, and C?",
+          "During all these changes, materials, such as the paper, the rubber sheet of the balloon, and the chalk, remained the same, though their appearances (shape or size) may have changed. You may also recall from the Grade 6 Science textbook Curiosity that water can exist in different states (solid, liqui",
+          "In all these cases, although we observe a change in the appearance, no new substance is formed. Such changes in which only physical properties like shape, size, and state of substances change are called physical changes.",
+          "Let us explore a different type of change."
+        ],
+        "concepts": [
+          "Physical properties",
+          "Appearance",
+          "Change",
+          "Physical changes",
+          "Grade 6 Science textbook Curiosity"
+        ],
+        "context_relation": "The page provides instructions for creating paper objects and playing with a balloon, as well as discussing physical changes in materials.",
+        "limitations": [
+          "The page does not provide specific instructions for creating paper objects or playing with a balloon.",
+          "The page does not provide specific information about the Grade 6 Science textbook Curiosity.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:04:34Z"
+    },
+    {
+      "asset_id": "855c57c8fc845b0d6160a5f5",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a person blowing air into a glass container.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observing changes in appearance",
+          "Blowing air into containers",
+          "Comparing substances"
+        ],
+        "context_relation": "The image is related to the activity described in the text, showing a visual representation of the experiment.",
+        "limitations": [
+          "The image does not show the actual experiment, only a conceptual representation.",
+          "The image does not include any text or labels that would clarify the experiment further."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:06:24Z"
     }
   ]
 }
