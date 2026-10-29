@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1495,
+    "assets_selected": 1496,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "2249feba9d9de2d28593e04b",
-      "b6bd03a2c995b149f373ec8e"
+      "9aafc2d512540d2b5045b0d9",
+      "391681ceedeceddf96aae984"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1491,
-    "assets_remaining": 587,
+    "assets_analyzed": 1493,
+    "assets_remaining": 585,
     "assets_completion_percent": 71.8,
-    "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1490,
+    "assets_failed": 19,
+    "assets_skipped_from_checkpoint": 1491,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:07:48Z"
+      "checkpointed_at": "2026-10-29T01:20:34Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:08:48Z"
+      "checkpointed_at": "2026-10-29T01:21:34Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
-      "checkpointed_at": "2026-10-29T01:09:38Z"
+      "checkpointed_at": "2026-10-29T01:22:23Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -50182,19 +50182,53 @@
     {
       "asset_id": "9aafc2d512540d2b5045b0d9",
       "asset_sha256": "6a7a742b53d9d327a0aa27c6af8a31d7c1a09c6739bf719e010e24345a3a1e67",
-      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 163,
       "asset_path": "page-0163.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40753605122",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the behavior of water on a steel plate and its conversion into water vapor.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Observe whether water seeps through to\nthe other side of the plate or not.",
+          "Keep observing this at regular intervals\nuntil the water completely disappears.",
+          "What do you infer? Is this activity enough\nto come to the conclusion that water does\nnot seep through a steel plate?",
+          "If water does not seep through the steel\nplate. Then, where has the water gone?",
+          "This water gets converted into gaseous\nstate called water vapour. The water vapour is\nanother state of water. Let us think of another\nobservation where you notice the water\ndisappearing.",
+          "While making dosa, we sprinkle some water\non the hot pan and it disappears. Where does\nit go?",
+          "Let us draw",
+          "Draw a detailed sketch (with labels and\ncaption) about what happens to the water.",
+          "The water which is sprinkled on the hot\npan gets converted into steam. Steam is\nactually water vapour, some part of which\nconverts into water droplets.",
+          "The process of conversion of water into\nits vapour state is called evaporation.",
+          "The process of evaporation takes place continuously,\neven at room temperature. Can you think of other examples\nof evaporation?",
+          "Drying of wet clothes, mopped floor, and sweat on our\nbody are some examples of it.",
+          "Now what do you think is the reason for the disappearance\nof water from the puddles? Is it due to: (i) seeping of water\ninto the ground or (ii) evaporation of water or (iii) both of\nthese?",
+          "Hand sanitiser disappears as you rub it on your hands.\nWhat happens to it?"
+        ],
+        "concepts": [
+          "water seeping through a steel plate",
+          "water vapor",
+          "evaporation",
+          "drying of clothes",
+          "mopping floor",
+          "sweat on the body",
+          "reason for disappearance of water from puddles"
+        ],
+        "context_relation": "exploration of water's behavior and its transformation",
+        "limitations": [
+          "no specific visual elements mentioned"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40785541263",
+      "checkpointed_at": "2026-10-29T01:27:01Z"
     },
     {
       "asset_id": "09774c76f9e03e429fc2284b",
@@ -50609,6 +50643,35 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
       "checkpointed_at": "2026-10-28T22:22:11Z"
+    },
+    {
+      "asset_id": "391681ceedeceddf96aae984",
+      "asset_sha256": "d7248e866279dd7bb9dadd486552a1c87708833d016a5ad422deb453231530b4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/d7248e866279dd7bb9dadd486552a1c87708833d016a5ad422deb453231530b4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with glasses and braided hair, wearing a blue scarf and a light blue shirt, is gesturing with both hands.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the appearance of water droplets on the outer surface of a glass tumbler.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the reasons mentioned in the text.",
+          "The image is a cartoon and may not represent the exact appearance of water droplets on a glass tumbler."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40785541263",
+      "checkpointed_at": "2026-10-29T01:28:41Z"
     }
   ]
 }
