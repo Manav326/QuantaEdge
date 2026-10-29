@@ -15,11 +15,11 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "007d778e6aac20ef9556a4d3"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1365,
-    "assets_remaining": 926,
+    "assets_analyzed": 1366,
+    "assets_remaining": 925,
     "assets_completion_percent": 59.6,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1365,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862758347",
-      "checkpointed_at": "2026-10-29T12:13:42Z"
+      "checkpointed_at": "2026-10-29T12:18:42Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862758347",
-      "checkpointed_at": "2026-10-29T12:14:09Z"
+      "checkpointed_at": "2026-10-29T12:19:08Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862758347",
-      "checkpointed_at": "2026-10-29T12:14:40Z"
+      "checkpointed_at": "2026-10-29T12:19:38Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862758347",
-      "checkpointed_at": "2026-10-29T12:15:27Z"
+      "checkpointed_at": "2026-10-29T12:20:24Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -45516,6 +45516,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40842216220",
       "checkpointed_at": "2026-10-29T11:03:19Z"
+    },
+    {
+      "asset_id": "007d778e6aac20ef9556a4d3",
+      "asset_sha256": "2883c77bb3e9731875d72b983b5a2242af720266838e1f2e8109282e3abebc59",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 117,
+      "asset_path": "assets/2883c77bb3e9731875d72b983b5a2242af720266838e1f2e8109282e3abebc59.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "218c7b73c5256b66b29c78167a4ad1e242f183171abbd0c505a5ae142fe4d10f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a large pink sheet of paper.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the activity of holding a strip of paper and observing its behavior when blown over.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40862758347",
+      "checkpointed_at": "2026-10-29T12:20:59Z"
     }
   ]
 }

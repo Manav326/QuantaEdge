@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "24301df27a6910a8308050d0bf6ddfed9c94dd97043be942a7df71c0753a9c72",
+  "raw_analysis_sha256": "ee6588a538d5df80541eed488153a9f98afe3c1b339f59f65e0621bfb6b011ea",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862758347",
-      "checkpointed_at": "2026-10-29T12:13:42Z",
+      "checkpointed_at": "2026-10-29T12:18:42Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862758347",
-      "checkpointed_at": "2026-10-29T12:14:09Z",
+      "checkpointed_at": "2026-10-29T12:19:08Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862758347",
-      "checkpointed_at": "2026-10-29T12:14:40Z",
+      "checkpointed_at": "2026-10-29T12:19:38Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862758347",
-      "checkpointed_at": "2026-10-29T12:15:27Z",
+      "checkpointed_at": "2026-10-29T12:20:24Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -68843,6 +68843,42 @@
         "limitations": [
           "No specific limitations mentioned."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "007d778e6aac20ef9556a4d3",
+      "asset_sha256": "2883c77bb3e9731875d72b983b5a2242af720266838e1f2e8109282e3abebc59",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 117,
+      "asset_path": "assets/2883c77bb3e9731875d72b983b5a2242af720266838e1f2e8109282e3abebc59.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "218c7b73c5256b66b29c78167a4ad1e242f183171abbd0c505a5ae142fe4d10f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a large pink sheet of paper.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the activity of holding a strip of paper and observing its behavior when blown over.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40862758347",
+      "checkpointed_at": "2026-10-29T12:20:59Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a large pink sheet of paper.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the activity of holding a strip of paper and observing its behavior when blown over.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
