@@ -49689,16 +49689,14 @@
           "atmospheric pressure",
           "rubber sucker",
           "air pressure",
-          "SI unit of pressure",
+          "force of gravity",
           "millibar",
           "hectopascal",
-          "wind formation",
-          "inflated balloon",
-          "puncture in the bicycle tube"
+          "wind formation"
         ],
-        "context_relation": "descriptive",
+        "context_relation": "The image is a diagram illustrating the concept of atmospheric pressure using a rubber sucker.",
         "limitations": [
-          "The image does not show the actual experiment of pulling the sucker off the surface."
+          "The image does not provide a visual representation of the atmospheric pressure."
         ]
       },
       "chapter_id": null,
