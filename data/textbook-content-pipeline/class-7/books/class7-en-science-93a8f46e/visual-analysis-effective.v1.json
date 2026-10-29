@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "eea3a905bb92acaa1ae6a8a5e273307630fe66219b66b8b966a9528ed962cca6",
+  "raw_analysis_sha256": "a18589f6310360e935d50b9a87369f2b04d66d46f641ddfd5211b354345e2eae",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:45:34Z",
+      "checkpointed_at": "2026-10-29T21:50:38Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:46:14Z",
+      "checkpointed_at": "2026-10-29T21:51:18Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40945587644",
-      "checkpointed_at": "2026-10-29T21:47:04Z",
+      "checkpointed_at": "2026-10-29T21:52:08Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -161550,6 +161550,116 @@
           "Flame extinguishment"
         ],
         "context_relation": "The image illustrates the concept of combustion and the role of air in sustaining a flame.",
+        "limitations": [
+          "The image does not provide a detailed explanation of the chemical components of air that support combustion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fdec9e03ec78cebb890a265e",
+      "asset_sha256": "7d36d4f9cc6d2caa918c3bde3a3604633cc91ae912e41e9f167fd9ea005177a5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/7d36d4f9cc6d2caa918c3bde3a3604633cc91ae912e41e9f167fd9ea005177a5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a candle burning and a candle extinguished by a glass tumbler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen? Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame g",
+          "The component of air that supports combustion is"
+        ],
+        "concepts": [
+          "Combustion",
+          "Air",
+          "Flame",
+          "Supply of air"
+        ],
+        "context_relation": "The image is a visual representation of a scientific experiment to explain why a candle extinguished by a glass tumbler stops burning.",
+        "limitations": [
+          "The image does not provide a detailed explanation of the chemical reaction involved in combustion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40945587644",
+      "checkpointed_at": "2026-10-29T21:53:24Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a candle burning and a candle extinguished by a glass tumbler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen? Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame g",
+          "The component of air that supports combustion is"
+        ],
+        "concepts": [
+          "Combustion",
+          "Air",
+          "Flame",
+          "Supply of air"
+        ],
+        "context_relation": "The image is a visual representation of a scientific experiment to explain why a candle extinguished by a glass tumbler stops burning.",
+        "limitations": [
+          "The image does not provide a detailed explanation of the chemical reaction involved in combustion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f0f8f7d21c309ff35139c86d",
+      "asset_sha256": "d555242406dd4ba394bb89c85de467c4b5efe130227a814b627566cc1a121bff",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/d555242406dd4ba394bb89c85de467c4b5efe130227a814b627566cc1a121bff.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A candle burning and a candle extinguished by a glass tumbler, illustrating the effect of air supply on combustion.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "The image illustrates the relationship between air supply and the continuation of combustion.",
+        "limitations": [
+          "The image does not provide a detailed explanation of the chemical components of air that support combustion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40945587644",
+      "checkpointed_at": "2026-10-29T21:54:40Z",
+      "effective_analysis": {
+        "visual_summary": "A candle burning and a candle extinguished by a glass tumbler, illustrating the effect of air supply on combustion.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "The image illustrates the relationship between air supply and the continuation of combustion.",
         "limitations": [
           "The image does not provide a detailed explanation of the chemical components of air that support combustion."
         ]
