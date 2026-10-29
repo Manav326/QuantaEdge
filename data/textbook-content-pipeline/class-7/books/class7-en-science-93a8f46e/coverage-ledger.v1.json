@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2683,
-    "successful_visual_analyses": 2661,
-    "missing_visual_analyses": 4805,
+    "raw_analysis_result_rows": 2688,
+    "successful_visual_analyses": 2666,
+    "missing_visual_analyses": 4800,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4827,
+    "unresolved_count": 4822,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -109247,9 +109247,29 @@
       "asset_path": "assets/50aab810b5f3ff25e53deb15f68818abae612b3c8be36cd86463e89b340b01d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person blowing air into a glass container.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observing changes in appearance",
+          "Comparing substances",
+          "Blowing air into containers"
+        ],
+        "context_relation": "The image is related to the activity described in the text.",
+        "limitations": [
+          "The image does not show the actual experiment being conducted.",
+          "The image does not show the results of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -109265,9 +109285,29 @@
       "asset_path": "assets/727c859dd54793cc7126f3b8c7a51efda16627cb2abb64712362f0e51a2681f4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two glass tumblers labeled A and B are filled with tap water and lime water respectively. Air is blown into each glass using separate straws.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Physical change",
+          "Observation",
+          "Experiment"
+        ],
+        "context_relation": "The image is a visual representation of an experiment to observe the effect of blowing air into two different liquids.",
+        "limitations": [
+          "The image does not show the outcome of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -109283,9 +109323,28 @@
       "asset_path": "assets/f75ca1e354bb0b51a1667abf20927f3ab51a32bfe045e4748ba158de490f70f3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a glass with a straw, possibly demonstrating a chemical reaction or a physical change.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Physical change",
+          "Observation"
+        ],
+        "context_relation": "The image is related to the activity described in the visible text, showing a person conducting an experiment to observe changes in appearance.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -109301,9 +109360,29 @@
       "asset_path": "assets/a5952ac87a116f59e0dce4dd14592c0fe6eff41131439ff44395f77d259f26ce.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two glass tumblers labeled A and B are filled with tap water and lime water respectively. Air is blown into each glass using separate straws.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observation of changes in substances",
+          "Effect of air on substances",
+          "Comparison of substances"
+        ],
+        "context_relation": "The image is a visual representation of an activity in a textbook, illustrating the observation of changes in substances when exposed to air.",
+        "limitations": [
+          "The image does not show the actual changes in the substances.",
+          "The image does not include any measurements or data."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -109319,9 +109398,30 @@
       "asset_path": "assets/c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope-like object with a blue handle, possibly made of metal or plastic, twisted together.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Activity",
+          "Observation",
+          "Experiment",
+          "Appearance",
+          "Chemical reaction"
+        ],
+        "context_relation": "The image is not directly related to the text, but it could be a visual aid for the experiment described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the rope-like object."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
