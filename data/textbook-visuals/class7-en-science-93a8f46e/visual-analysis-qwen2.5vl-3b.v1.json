@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2604,
+    "assets_selected": 2606,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "85cd5fbe1074c87b56ab115d",
-      "c84e6f285d5ddf7b44b3e307"
+      "531f8a200f4e6bcfdf91e460",
+      "a0e59959eee39533f90aca8b"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2601,
-    "assets_remaining": 4887,
-    "assets_completion_percent": 34.7,
+    "assets_analyzed": 2603,
+    "assets_remaining": 4885,
+    "assets_completion_percent": 34.8,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2599,
+    "assets_skipped_from_checkpoint": 2601,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40803456766",
-      "checkpointed_at": "2026-10-29T03:01:23Z"
+      "checkpointed_at": "2026-10-29T03:04:06Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40803456766",
-      "checkpointed_at": "2026-10-29T03:01:52Z"
+      "checkpointed_at": "2026-10-29T03:04:35Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40803456766",
-      "checkpointed_at": "2026-10-29T03:02:30Z"
+      "checkpointed_at": "2026-10-29T03:05:13Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -97940,6 +97940,81 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40803456766",
       "checkpointed_at": "2026-10-29T03:03:18Z"
+    },
+    {
+      "asset_id": "531f8a200f4e6bcfdf91e460",
+      "asset_sha256": "00cb91809c08d9e98b4bdb7a613696d80a3a61894e781e302c8697c96aaa526f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/00cb91809c08d9e98b4bdb7a613696d80a3a61894e781e302c8697c96aaa526f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing chemical activity and creating objects with paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "appearance",
+          "paper"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show any diagrams, charts, graphs, tables, maps, cartoons, photos, illustrations, equations, or other visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40803456766",
+      "checkpointed_at": "2026-10-29T03:05:56Z"
+    },
+    {
+      "asset_id": "a0e59959eee39533f90aca8b",
+      "asset_sha256": "34c11133855f1e960efe88c0cba37ef61e9fcee99938e6e1f6d190fa9904bdbd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/34c11133855f1e960efe88c0cba37ef61e9fcee99938e6e1f6d190fa9904bdbd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing chemical activity and creating objects with paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "appearance",
+          "creating objects with paper"
+        ],
+        "context_relation": "The page is discussing a practical activity related to chemical activity and paper.",
+        "limitations": [
+          "The page does not provide specific instructions or details on how to create objects with paper."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40803456766",
+      "checkpointed_at": "2026-10-29T03:06:39Z"
     }
   ]
 }
