@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2662,
-    "successful_visual_analyses": 2641,
-    "missing_visual_analyses": 4826,
-    "failed_visual_analyses": 21,
+    "raw_analysis_result_rows": 2664,
+    "successful_visual_analyses": 2642,
+    "missing_visual_analyses": 4824,
+    "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4847,
+    "unresolved_count": 4846,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -108547,7 +108547,7 @@
       "asset_path": "assets/2a946c1a89f69daa403ccd74e1c525fd99b77bdfa5ef90467b27148c394dbc33.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -108565,9 +108565,27 @@
       "asset_path": "assets/dd04d3b6ec9a0e5fe73f7dc8886b8c9207249a21d4c4e0ba1dbe49986704238c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black background with a pink paper airplane in the bottom left corner.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance but Remain the Same!",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Paper"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific image details provided",
+          "No additional context or elements visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

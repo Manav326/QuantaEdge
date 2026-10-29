@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "92bdb8c58007e7c57c5a017a36a9f896ed263bf8f2a216dd71f5e5fc6ab96f86",
+  "raw_analysis_sha256": "cdf7a94b5208aedaa5718f5854d3690de01bcb98ebe88e1f413b7f1aa234407e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:57:29Z",
+      "checkpointed_at": "2026-10-29T11:00:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:57:58Z",
+      "checkpointed_at": "2026-10-29T11:01:14Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:58:34Z",
+      "checkpointed_at": "2026-10-29T11:01:52Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -155972,6 +155972,84 @@
         "context_relation": "The page is discussing the concept of chemical activity and how substances can change in appearance while remaining the same.",
         "limitations": [
           "The page does not provide specific instructions or examples for creating objects with paper."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e60b54f64a4ac034768bf13b",
+      "asset_sha256": "2a946c1a89f69daa403ccd74e1c525fd99b77bdfa5ef90467b27148c394dbc33",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/2a946c1a89f69daa403ccd74e1c525fd99b77bdfa5ef90467b27148c394dbc33.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40853001770",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c537f4c271de063fcc42b948",
+      "asset_sha256": "dd04d3b6ec9a0e5fe73f7dc8886b8c9207249a21d4c4e0ba1dbe49986704238c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/dd04d3b6ec9a0e5fe73f7dc8886b8c9207249a21d4c4e0ba1dbe49986704238c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black background with a pink paper airplane in the bottom left corner.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance but Remain the Same!",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Paper"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific image details provided",
+          "No additional context or elements visible"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40853001770",
+      "checkpointed_at": "2026-10-29T11:04:04Z",
+      "effective_analysis": {
+        "visual_summary": "A black background with a pink paper airplane in the bottom left corner.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance but Remain the Same!",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Paper"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific image details provided",
+          "No additional context or elements visible"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
