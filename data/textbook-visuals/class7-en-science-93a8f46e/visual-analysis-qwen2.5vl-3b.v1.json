@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2666,
+    "assets_selected": 2671,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "ff7d3985a48f7b091421d471",
-      "c8103f6cf577e71ef1bae0fa",
-      "845857c6ddb9efe89b641a99",
-      "e998d16ecb5d71b7fcfa82e1",
-      "11a603bcf43908b9efcb0b2b"
+      "3f0dc388dc11aa1d3081e954",
+      "dde594290a8da8d719244055",
+      "28657d421b332592420f3008",
+      "04154bf3a20cc38f3a6d0f8b",
+      "0fee6bfab434e264e4a5841c"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2666,
-    "assets_remaining": 4822,
-    "assets_completion_percent": 35.6,
+    "assets_analyzed": 2671,
+    "assets_remaining": 4817,
+    "assets_completion_percent": 35.7,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2661,
+    "assets_skipped_from_checkpoint": 2666,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -100199,6 +100199,228 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40882266088",
       "checkpointed_at": "2026-10-29T15:24:45Z"
+    },
+    {
+      "asset_id": "3f0dc388dc11aa1d3081e954",
+      "asset_sha256": "c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Substance May Change in",
+          "Appearance and Not Remain",
+          "the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observation",
+          "Experiment",
+          "Appearance",
+          "Chemical reaction",
+          "Lime water"
+        ],
+        "context_relation": "The image is not directly related to the content of the textbook page.",
+        "limitations": [
+          "The image does not provide any visual evidence of the experiment described in the textbook page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:25:17Z"
+    },
+    {
+      "asset_id": "dde594290a8da8d719244055",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, with a focus on the texture and color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook content.",
+          "The image is a close-up of a rope or cable, not a diagram or chart related to the textbook.",
+          "The image does not show any specific educational content or activity from the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:26:55Z"
+    },
+    {
+      "asset_id": "28657d421b332592420f3008",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, with a focus on the texture and color.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Substance May Change in",
+          "Appearance and Not Remain",
+          "the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "coiled rope or cable",
+          "close-up view",
+          "color",
+          "texture",
+          "Activity 5.3",
+          "glass tumblers",
+          "lime water",
+          "tap water",
+          "blowing air",
+          "exhale",
+          "straws",
+          "Fig. 5.2"
+        ],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide information about the substance change in appearance and not remaining the same.",
+          "The image does not show the blowing air into the glass tumblers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:27:25Z"
+    },
+    {
+      "asset_id": "04154bf3a20cc38f3a6d0f8b",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, with a focus on the texture and color.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Substance May Change in",
+          "Appearance and Not Remain",
+          "the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "coiled rope or cable",
+          "close-up view",
+          "color",
+          "texture",
+          "Activity 5.3",
+          "glass tumblers",
+          "lime water",
+          "tap water",
+          "blowing air",
+          "exhale",
+          "straws",
+          "Fig. 5.2"
+        ],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide information about the substance change in appearance and not remaining the same.",
+          "The image does not show the blowing air into the glass tumblers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:27:55Z"
+    },
+    {
+      "asset_id": "0fee6bfab434e264e4a5841c",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, with a focus on the texture and color.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Substance May Change in",
+          "Appearance and Not Remain",
+          "the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "coiled rope or cable",
+          "close-up view",
+          "color",
+          "texture",
+          "Activity 5.3",
+          "glass tumblers",
+          "lime water",
+          "tap water",
+          "blowing air",
+          "exhale",
+          "straws",
+          "Fig. 5.2"
+        ],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide information about the substance change in appearance and not remaining the same.",
+          "The image does not show the blowing air into the glass tumblers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T15:28:25Z"
     }
   ]
 }
