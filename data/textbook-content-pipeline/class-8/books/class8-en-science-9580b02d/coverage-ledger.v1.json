@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1385,
-    "successful_visual_analyses": 1368,
-    "missing_visual_analyses": 906,
+    "raw_analysis_result_rows": 1386,
+    "successful_visual_analyses": 1369,
+    "missing_visual_analyses": 905,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 923,
+    "unresolved_count": 922,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -51654,9 +51654,26 @@
       "asset_path": "page-0116.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Question about pressure on boats and lightning occurrence.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5. There are two boats, A and B. Boat A has a base area of 7 m2, and 5 persons are seated in it. Boat B has a base area of 3.5 m2, and 3 persons are seating in it. If each person has a weight of 700 N, find out which boat will experience more pressure on its base and by how much?",
+          "6. Would lightning occur if air and clouds were good conductors of electricity? Give reasons for your answer.",
+          "7. What will happen to the two identical balloons A and B as shown in Fig. 6.24 when water is filled into the bottle up to a certain height. Will both the balloons bulge? If yes, will they bulge equally? Explain your answer."
+        ],
+        "concepts": [
+          "pressure on boats",
+          "lightning occurrence",
+          "balloons and water"
+        ],
+        "context_relation": "Question about pressure on boats and lightning occurrence",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

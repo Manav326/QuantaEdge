@@ -15,12 +15,12 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "24753cdfc624d0ea41941ec9"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1364,
-    "assets_remaining": 927,
-    "assets_completion_percent": 59.5,
+    "assets_analyzed": 1365,
+    "assets_remaining": 926,
+    "assets_completion_percent": 59.6,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1364,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40842216220",
-      "checkpointed_at": "2026-10-29T10:54:38Z"
+      "checkpointed_at": "2026-10-29T10:59:45Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40842216220",
-      "checkpointed_at": "2026-10-29T10:55:03Z"
+      "checkpointed_at": "2026-10-29T11:00:14Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40842216220",
-      "checkpointed_at": "2026-10-29T10:55:33Z"
+      "checkpointed_at": "2026-10-29T11:00:50Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40842216220",
-      "checkpointed_at": "2026-10-29T10:56:18Z"
+      "checkpointed_at": "2026-10-29T11:01:39Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -45480,6 +45480,42 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40842112133",
       "checkpointed_at": "2026-10-29T09:43:54Z"
+    },
+    {
+      "asset_id": "24753cdfc624d0ea41941ec9",
+      "asset_sha256": "dbb322c9cb5467e27cb2601e45608bd6fda5370d2ad3d99e2fd731f464d49c32",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 116,
+      "asset_path": "page-0116.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "2a750e69b0591cc915090c35b911a780a89de0cc1f835dbb05cb498459af65e8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Question about pressure on boats and lightning occurrence.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5. There are two boats, A and B. Boat A has a base area of 7 m2, and 5 persons are seated in it. Boat B has a base area of 3.5 m2, and 3 persons are seating in it. If each person has a weight of 700 N, find out which boat will experience more pressure on its base and by how much?",
+          "6. Would lightning occur if air and clouds were good conductors of electricity? Give reasons for your answer.",
+          "7. What will happen to the two identical balloons A and B as shown in Fig. 6.24 when water is filled into the bottle up to a certain height. Will both the balloons bulge? If yes, will they bulge equally? Explain your answer."
+        ],
+        "concepts": [
+          "pressure on boats",
+          "lightning occurrence",
+          "balloons and water"
+        ],
+        "context_relation": "Question about pressure on boats and lightning occurrence",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40842216220",
+      "checkpointed_at": "2026-10-29T11:03:19Z"
     }
   ]
 }
