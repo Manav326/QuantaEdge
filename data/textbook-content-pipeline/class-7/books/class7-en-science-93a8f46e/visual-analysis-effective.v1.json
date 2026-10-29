@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b09d377633e143a691b47b787d7beccb95825f22b6a80ae8ca1e49299d3a7359",
+  "raw_analysis_sha256": "0051538cef676740fa5a6b938015b1c6b794da46ab57d546483088e176fc4e3c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:01:11Z",
+      "checkpointed_at": "2026-10-29T17:05:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:01:37Z",
+      "checkpointed_at": "2026-10-29T17:06:07Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:02:11Z",
+      "checkpointed_at": "2026-10-29T17:06:41Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -142384,7 +142384,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40882266088",
+      "run_id": "40909580964",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -158402,21 +158402,63 @@
     {
       "asset_id": "ad7faad990b09c17cb2b6992",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 80,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fa8a0235cac008513cb5af97729577888df37ad305d35630f3e641bcbc36bc3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40882266088",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two glass tumblers labeled A and B are filled with tap water and lime water respectively. Air is blown into each glass using separate straws.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observation of changes in appearance",
+          "Comparison of substances",
+          "Effect of air on substances"
+        ],
+        "context_relation": "The image is a visual representation of an activity in a textbook, specifically Activity 5.3.",
+        "limitations": [
+          "The image does not show the actual observation of the changes in appearance of the substances.",
+          "The image does not show the results of the observation."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40909580964",
+      "checkpointed_at": "2026-10-29T17:10:47Z",
+      "effective_analysis": {
+        "visual_summary": "Two glass tumblers labeled A and B are filled with tap water and lime water respectively. Air is blown into each glass using separate straws.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.2 A Substance May Change in Appearance and Not Remain the Same!",
+          "Activity 5.3: Let us explore",
+          "Take two glass tumblers or small transparent bottles. Mark them A and B.",
+          "Fill one-fourth of glass tumbler A with tap water and one-fourth of glass tumbler B with lime water.",
+          "Now, blow air (exhale) into each glass tumbler, one at a time, using separate straws (Fig. 5.2) and observe them."
+        ],
+        "concepts": [
+          "Observation of changes in appearance",
+          "Comparison of substances",
+          "Effect of air on substances"
+        ],
+        "context_relation": "The image is a visual representation of an activity in a textbook, specifically Activity 5.3.",
+        "limitations": [
+          "The image does not show the actual observation of the changes in appearance of the substances.",
+          "The image does not show the results of the observation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
