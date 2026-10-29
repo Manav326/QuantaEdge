@@ -14,12 +14,12 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "29c388b0161ccfef7bc70795",
-      "0d1c88ea0154d314c4c70259"
+      "d456527f98b45c7ff5c257c7",
+      "6933b813211b2f9f57816fe7"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2619,
-    "assets_remaining": 4869,
+    "assets_analyzed": 2620,
+    "assets_remaining": 4868,
     "assets_completion_percent": 35.0,
     "assets_failed": 21,
     "assets_skipped_from_checkpoint": 2619,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40831329841",
-      "checkpointed_at": "2026-10-29T08:07:00Z"
+      "checkpointed_at": "2026-10-29T08:14:04Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40831329841",
-      "checkpointed_at": "2026-10-29T08:07:38Z"
+      "checkpointed_at": "2026-10-29T08:14:42Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40831329841",
-      "checkpointed_at": "2026-10-29T08:08:28Z"
+      "checkpointed_at": "2026-10-29T08:15:32Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -96509,7 +96509,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40820786471",
+      "run_id": "40831329841",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -98590,6 +98590,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40820786471",
       "checkpointed_at": "2026-10-29T06:44:23Z"
+    },
+    {
+      "asset_id": "6933b813211b2f9f57816fe7",
+      "asset_sha256": "b0859ae781e47c91456d8da9b4896104df4bb0f65f4a1d70ba671c3a3d83d20e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/b0859ae781e47c91456d8da9b4896104df4bb0f65f4a1d70ba671c3a3d83d20e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40831329841",
+      "checkpointed_at": "2026-10-29T08:18:56Z"
     }
   ]
 }
