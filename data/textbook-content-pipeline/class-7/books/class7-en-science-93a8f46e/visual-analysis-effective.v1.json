@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c3c8daeed619af6945df2067d55fec5453cea30d97236d7f9c1ab6a33ef486f7",
+  "raw_analysis_sha256": "92bdb8c58007e7c57c5a017a36a9f896ed263bf8f2a216dd71f5e5fc6ab96f86",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:54:20Z",
+      "checkpointed_at": "2026-10-29T10:57:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:54:47Z",
+      "checkpointed_at": "2026-10-29T10:57:58Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:55:23Z",
+      "checkpointed_at": "2026-10-29T10:58:34Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -155850,6 +155850,128 @@
         "context_relation": "The image is related to the text about creating objects with paper.",
         "limitations": [
           "The image does not provide specific details about the paper folding process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f16128d11ca03949b4fe1e16",
+      "asset_sha256": "7682023e73b22d37dac37cb30edbfc8489f1c4e9cef225585aa24b5db1497a11",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/7682023e73b22d37dac37cb30edbfc8489f1c4e9cef225585aa24b5db1497a11.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow origami bird on a black background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "origami",
+          "paper folding",
+          "chemical activity",
+          "appearance",
+          "creating objects"
+        ],
+        "context_relation": "The image is a visual representation of the concept of creating objects with paper, specifically an origami bird.",
+        "limitations": [
+          "The image does not provide information about the chemical activity or the appearance of the substance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40853001770",
+      "checkpointed_at": "2026-10-29T10:59:14Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow origami bird on a black background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "origami",
+          "paper folding",
+          "chemical activity",
+          "appearance",
+          "creating objects"
+        ],
+        "context_relation": "The image is a visual representation of the concept of creating objects with paper, specifically an origami bird.",
+        "limitations": [
+          "The image does not provide information about the chemical activity or the appearance of the substance."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c5086749e8eefc8d75f3733e",
+      "asset_sha256": "4ddc187ea030639578621267e14e78de1eb9a69c824166c0984e6d24ba2271cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/4ddc187ea030639578621267e14e78de1eb9a69c824166c0984e6d24ba2271cf.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing chemical activity and creating objects with paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "appearance",
+          "creating objects with paper"
+        ],
+        "context_relation": "The page is discussing the concept of chemical activity and how substances can change in appearance while remaining the same.",
+        "limitations": [
+          "The page does not provide specific instructions or examples for creating objects with paper."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40853001770",
+      "checkpointed_at": "2026-10-29T10:59:57Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing chemical activity and creating objects with paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "chemical activity",
+          "appearance",
+          "creating objects with paper"
+        ],
+        "context_relation": "The page is discussing the concept of chemical activity and how substances can change in appearance while remaining the same.",
+        "limitations": [
+          "The page does not provide specific instructions or examples for creating objects with paper."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
