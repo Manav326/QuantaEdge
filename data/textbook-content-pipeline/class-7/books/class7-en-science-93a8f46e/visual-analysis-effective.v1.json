@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "761a2cdff7bf296e444aebfd0a4f21ce5c7b4a3cb443bed3e35196635adc60fd",
+  "raw_analysis_sha256": "7d97f3e664ecadfe90ccba3fcfa24403d49ecb8292e6f83f1b269dd2eebcb9f9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -158549,6 +158549,368 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "493a597c6cacf3033d8f6f9a",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fd2a66a1d30f6266b08f377d",
+      "asset_sha256": "4bdda94151a1dce37c90c15093b41f78031d4fc6a1695d99835fe7ec870db81d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/4bdda94151a1dce37c90c15093b41f78031d4fc6a1695d99835fe7ec870db81d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with text about a chemical reaction involving calcium hydroxide and carbon dioxide, indicating a test for carbon dioxide using lime water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide. Let us explore this with another activity usingsome substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "Observation",
+          "Conclusion"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Lime water",
+          "Carbon dioxide",
+          "Test for carbon dioxide"
+        ],
+        "context_relation": "The image is a visual representation of a chemical reaction and its application in a test for carbon dioxide.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the substances used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T16:04:39Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with text about a chemical reaction involving calcium hydroxide and carbon dioxide, indicating a test for carbon dioxide using lime water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide. Let us explore this with another activity usingsome substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "Observation",
+          "Conclusion"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Lime water",
+          "Carbon dioxide",
+          "Test for carbon dioxide"
+        ],
+        "context_relation": "The image is a visual representation of a chemical reaction and its application in a test for carbon dioxide.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the substances used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "49e5c485bc4ad10542b87819",
+      "asset_sha256": "5ceea7bbcb6087a55a7f96c47b50841231ed289df733fafc85c55f8a5b30aff3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/5ceea7bbcb6087a55a7f96c47b50841231ed289df733fafc85c55f8a5b30aff3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A chemical reaction involving calcium hydroxide and carbon dioxide, resulting in the formation of calcium carbonate and water, with a visual representation of the reaction.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "(Insoluble substance)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide. Let us explore this with another activity using some substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "61"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Calcium hydroxide",
+          "Carbon dioxide",
+          "Calcium carbonate",
+          "Water",
+          "Lime water",
+          "Insoluble substance",
+          "Test for carbon dioxide"
+        ],
+        "context_relation": "The image is a visual representation of a chemical reaction used as a test for carbon dioxide.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the substances used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T16:06:29Z",
+      "effective_analysis": {
+        "visual_summary": "A chemical reaction involving calcium hydroxide and carbon dioxide, resulting in the formation of calcium carbonate and water, with a visual representation of the reaction.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "(Insoluble substance)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide. Let us explore this with another activity using some substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "61"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Calcium hydroxide",
+          "Carbon dioxide",
+          "Calcium carbonate",
+          "Water",
+          "Lime water",
+          "Insoluble substance",
+          "Test for carbon dioxide"
+        ],
+        "context_relation": "The image is a visual representation of a chemical reaction used as a test for carbon dioxide.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the substances used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "89d49455d20d34b5dffb2e08",
+      "asset_sha256": "87c230532d89386291f7312c00c9786c4b07cc1f82b20dfdbafdfb51b1c2a33b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/87c230532d89386291f7312c00c9786c4b07cc1f82b20dfdbafdfb51b1c2a33b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a setup for a chemical reaction involving lime water and carbon dioxide.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "(Insoluble substance)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide. Let us explore this with another activity using some substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "Ca(OH)2 + CO2 → CaCO3 + H2O"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Lime water",
+          "Carbon dioxide",
+          "Insoluble substance",
+          "Test for carbon dioxide"
+        ],
+        "context_relation": "The image is a visual representation of a chemical reaction involving lime water and carbon dioxide, which is used as a test for carbon dioxide.",
+        "limitations": [
+          "The image does not show the actual reaction taking place."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T16:08:15Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a setup for a chemical reaction involving lime water and carbon dioxide.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "(Insoluble substance)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide. Let us explore this with another activity using some substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "Ca(OH)2 + CO2 → CaCO3 + H2O"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Lime water",
+          "Carbon dioxide",
+          "Insoluble substance",
+          "Test for carbon dioxide"
+        ],
+        "context_relation": "The image is a visual representation of a chemical reaction involving lime water and carbon dioxide, which is used as a test for carbon dioxide.",
+        "limitations": [
+          "The image does not show the actual reaction taking place."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "de6bb0b169c7d05cf0b41a2d",
+      "asset_sha256": "c6adee5d0f0290ac4951c2222d1a72854d66b3070dce8aae50ba45a8b571c10d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/c6adee5d0f0290ac4951c2222d1a72854d66b3070dce8aae50ba45a8b571c10d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two plastic bottles connected by a tube, with green caps, containing a clear liquid.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "(Insoluble substance)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide. Let us explore this with another activity using some substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23"
+        ],
+        "concepts": [
+          "Calcium hydroxide",
+          "Carbon dioxide",
+          "Lime water",
+          "Insoluble substance",
+          "Test for carbon dioxide",
+          "Chemical activity",
+          "Plastic bottles",
+          "Green caps",
+          "Clear liquid"
+        ],
+        "context_relation": "The image is related to a chemical activity involving lime water and carbon dioxide, which is used as a test for carbon dioxide.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the substances used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40882266088",
+      "checkpointed_at": "2026-10-29T16:10:33Z",
+      "effective_analysis": {
+        "visual_summary": "Two plastic bottles connected by a tube, with green caps, containing a clear liquid.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "(Insoluble substance)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide. Let us explore this with another activity using some substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23"
+        ],
+        "concepts": [
+          "Calcium hydroxide",
+          "Carbon dioxide",
+          "Lime water",
+          "Insoluble substance",
+          "Test for carbon dioxide",
+          "Chemical activity",
+          "Plastic bottles",
+          "Green caps",
+          "Clear liquid"
+        ],
+        "context_relation": "The image is related to a chemical activity involving lime water and carbon dioxide, which is used as a test for carbon dioxide.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the substances used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
