@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "44fc62076ab5c0ea2f91d0d5dd4185eb6c8920ecdf6cb119b8ee3435c8473212",
+  "raw_analysis_sha256": "9a03ccafb52742c840015b9d8454b01c1d42c9eaa141a939396437c1ff7894b8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40911041871",
-      "checkpointed_at": "2026-10-29T17:30:00Z",
+      "checkpointed_at": "2026-10-29T17:34:55Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40911041871",
-      "checkpointed_at": "2026-10-29T17:30:26Z",
+      "checkpointed_at": "2026-10-29T17:35:20Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40911041871",
-      "checkpointed_at": "2026-10-29T17:30:57Z",
+      "checkpointed_at": "2026-10-29T17:35:50Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40911041871",
-      "checkpointed_at": "2026-10-29T17:31:42Z",
+      "checkpointed_at": "2026-10-29T17:36:34Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -68914,6 +68914,42 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is related to the educational content of Chapter 6 in a textbook about pressure, winds, storms, and cyclones.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "918fbe6f5054e5461f2bfb35",
+      "asset_sha256": "fd5e6a9ec18097580bda821e9c535c648c654e321b31f875b1e290cd930e0155",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 117,
+      "asset_path": "assets/fd5e6a9ec18097580bda821e9c535c648c654e321b31f875b1e290cd930e0155.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "218c7b73c5256b66b29c78167a4ad1e242f183171abbd0c505a5ae142fe4d10f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon of a boy holding a large yellow signboard.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of Chapter 6 in the NCERT textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40911041871",
+      "checkpointed_at": "2026-10-29T17:37:08Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon of a boy holding a large yellow signboard.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of Chapter 6 in the NCERT textbook.",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",

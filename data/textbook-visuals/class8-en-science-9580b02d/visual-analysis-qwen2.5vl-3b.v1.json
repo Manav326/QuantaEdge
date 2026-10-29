@@ -15,11 +15,11 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "918fbe6f5054e5461f2bfb35"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1367,
-    "assets_remaining": 924,
+    "assets_analyzed": 1368,
+    "assets_remaining": 923,
     "assets_completion_percent": 59.7,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1367,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40911041871",
-      "checkpointed_at": "2026-10-29T17:30:00Z"
+      "checkpointed_at": "2026-10-29T17:34:55Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40911041871",
-      "checkpointed_at": "2026-10-29T17:30:26Z"
+      "checkpointed_at": "2026-10-29T17:35:20Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40911041871",
-      "checkpointed_at": "2026-10-29T17:30:57Z"
+      "checkpointed_at": "2026-10-29T17:35:50Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40911041871",
-      "checkpointed_at": "2026-10-29T17:31:42Z"
+      "checkpointed_at": "2026-10-29T17:36:34Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -45568,6 +45568,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40889634634",
       "checkpointed_at": "2026-10-29T16:18:18Z"
+    },
+    {
+      "asset_id": "918fbe6f5054e5461f2bfb35",
+      "asset_sha256": "fd5e6a9ec18097580bda821e9c535c648c654e321b31f875b1e290cd930e0155",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 117,
+      "asset_path": "assets/fd5e6a9ec18097580bda821e9c535c648c654e321b31f875b1e290cd930e0155.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "218c7b73c5256b66b29c78167a4ad1e242f183171abbd0c505a5ae142fe4d10f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon of a boy holding a large yellow signboard.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of Chapter 6 in the NCERT textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40911041871",
+      "checkpointed_at": "2026-10-29T17:37:08Z"
     }
   ]
 }
