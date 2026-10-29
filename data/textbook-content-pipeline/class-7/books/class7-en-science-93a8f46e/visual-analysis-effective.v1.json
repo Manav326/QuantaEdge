@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a968aa41049aab9fa2c24468cb413badc35f3a2e03a1bfdac6743b7114c22df7",
+  "raw_analysis_sha256": "499b67522e4c767241daa9b137830ed7927511b8b00f0226be4f57a263105066",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:18:39Z",
+      "checkpointed_at": "2026-10-29T17:21:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:19:05Z",
+      "checkpointed_at": "2026-10-29T17:21:28Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
-      "checkpointed_at": "2026-10-29T17:19:39Z",
+      "checkpointed_at": "2026-10-29T17:22:02Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -159389,6 +159389,136 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9311237697c1b661b5462d94",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40909580964",
+      "checkpointed_at": "2026-10-29T17:22:08Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ed7e1426134bf03687ad3528",
+      "asset_sha256": "30fd9d9a184da37fad9bd669cd98e7f38e87a1ab1e8e574c5625933ed0531506",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 81,
+      "asset_path": "page-0081.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for an experiment involving vinegar and baking soda to produce carbon dioxide gas, with visual aids showing the setup and results.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.4: Let us experiment",
+          "Take a teaspoonful of vinegar or lemon juice in a test tube.",
+          "Add a pinch of baking soda (sodium hydrogen carbonate) to it.",
+          "What do you observe?",
+          "You would hear a fizzing bubbling sound and see the gas bubbles forming.",
+          "Pass this gas through freshly prepared lime water kept in another test tube, as shown in Fig. 5.3a.",
+          "What do you observe?",
+          "The lime water turns milky. What do you infer about the gas formed by mixing vinegar and baking soda?",
+          "This indicates that the gas formed is carbon dioxide.",
+          "This activity can also be performed using two small used bottles instead of test tubes and a flexible straw, as shown in Fig. 5.3b.",
+          "Fig. 5.3: Reaction of vinegar and baking soda",
+          "Since a new substance, carbon dioxide, is formed in this reaction, we say that a chemical change has occurred here as well. It can be represented as—",
+          "Vinegar + Baking soda → Carbon dioxide + Other substances",
+          "Repeat the above activity using baking soda and water. Do you observe any bubble formation? Is this a physical or a chemical change?"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Physical change",
+          "Carbon dioxide",
+          "Baking soda",
+          "Vinegar",
+          "Lime water",
+          "Test tubes",
+          "Bubbles",
+          "Bottles",
+          "Flexible straw",
+          "Inference"
+        ],
+        "context_relation": "The text describes an experiment involving vinegar and baking soda to produce carbon dioxide gas, which is used to test for carbon dioxide in lime water.",
+        "limitations": [
+          "The experiment can be performed using test tubes or bottles and a flexible straw, but the visual aids in the text do not show the setup."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40909580964",
+      "checkpointed_at": "2026-10-29T17:23:47Z",
+      "effective_analysis": {
+        "visual_summary": "Instructions for an experiment involving vinegar and baking soda to produce carbon dioxide gas, with visual aids showing the setup and results.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.4: Let us experiment",
+          "Take a teaspoonful of vinegar or lemon juice in a test tube.",
+          "Add a pinch of baking soda (sodium hydrogen carbonate) to it.",
+          "What do you observe?",
+          "You would hear a fizzing bubbling sound and see the gas bubbles forming.",
+          "Pass this gas through freshly prepared lime water kept in another test tube, as shown in Fig. 5.3a.",
+          "What do you observe?",
+          "The lime water turns milky. What do you infer about the gas formed by mixing vinegar and baking soda?",
+          "This indicates that the gas formed is carbon dioxide.",
+          "This activity can also be performed using two small used bottles instead of test tubes and a flexible straw, as shown in Fig. 5.3b.",
+          "Fig. 5.3: Reaction of vinegar and baking soda",
+          "Since a new substance, carbon dioxide, is formed in this reaction, we say that a chemical change has occurred here as well. It can be represented as—",
+          "Vinegar + Baking soda → Carbon dioxide + Other substances",
+          "Repeat the above activity using baking soda and water. Do you observe any bubble formation? Is this a physical or a chemical change?"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Physical change",
+          "Carbon dioxide",
+          "Baking soda",
+          "Vinegar",
+          "Lime water",
+          "Test tubes",
+          "Bubbles",
+          "Bottles",
+          "Flexible straw",
+          "Inference"
+        ],
+        "context_relation": "The text describes an experiment involving vinegar and baking soda to produce carbon dioxide gas, which is used to test for carbon dioxide in lime water.",
+        "limitations": [
+          "The experiment can be performed using test tubes or bottles and a flexible straw, but the visual aids in the text do not show the setup."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
