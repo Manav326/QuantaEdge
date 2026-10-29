@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2719,
-    "successful_visual_analyses": 2695,
-    "missing_visual_analyses": 4769,
-    "failed_visual_analyses": 24,
+    "raw_analysis_result_rows": 2720,
+    "successful_visual_analyses": 2697,
+    "missing_visual_analyses": 4768,
+    "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4793,
+    "unresolved_count": 4791,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -110469,9 +110469,19 @@
       "asset_path": "assets/62188cfac29c8e9e8cbaf7f2049e04dbe49a1a5c2b84fcec630a688dc90b69dc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two bottles containing a clear liquid, one with a small amount of a white substance at the bottom.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Experimental setup for a chemical reaction test",
+        "limitations": [
+          "No specific labels or instructions are provided in the image. The focus is on the bottles and their contents.",
+          "The image does not show the reaction process or the outcome of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -110616,9 +110626,22 @@
       "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Green illustration of a person with a dotted line above their head, possibly indicating a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thought",
+          "idea",
+          "person"
+        ],
+        "context_relation": "The image is likely related to the chapter 'The World of Metals and Non-metals' in the context of chemical changes and rusting.",
+        "limitations": [
+          "The image does not provide specific details about the chemical process or the formation of rust."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

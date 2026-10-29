@@ -11,17 +11,17 @@
     "assets_selected": 2700,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "4b1298747dc1ec978a226ae5",
-      "647c2218dab5482dd1c1758e",
-      "0e143e54e2f709b8a4e5968d",
-      "463542d4277119b7abc93e3a",
-      "8604e838b1f1e41398ca72dd"
+      "1554b4067d24673fc7b88fc2",
+      "0d1c88ea0154d314c4c70259",
+      "a8a782a35001bd63b508a6b5",
+      "a85c66e314c55aec3b44a7b3",
+      "9937c3e1a450bc1c1b1b6190"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2695,
-    "assets_remaining": 4793,
+    "assets_analyzed": 2697,
+    "assets_remaining": 4791,
     "assets_completion_percent": 36.0,
-    "assets_failed": 24,
+    "assets_failed": 23,
     "assets_skipped_from_checkpoint": 2695,
     "batch_limit": 5,
     "publication_allowed": false
@@ -85693,7 +85693,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40909580964",
+      "run_id": "40921514282",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -90445,7 +90445,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40909580964",
+      "run_id": "40921514282",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -100954,7 +100954,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40909580964",
+      "run_id": "40921514282",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -101259,19 +101259,31 @@
     {
       "asset_id": "a85c66e314c55aec3b44a7b3",
       "asset_sha256": "62188cfac29c8e9e8cbaf7f2049e04dbe49a1a5c2b84fcec630a688dc90b69dc",
-      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 81,
       "asset_path": "assets/62188cfac29c8e9e8cbaf7f2049e04dbe49a1a5c2b84fcec630a688dc90b69dc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40909580964",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two bottles containing a clear liquid, one with a small amount of a white substance at the bottom.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Experimental setup for a chemical reaction test",
+        "limitations": [
+          "No specific labels or instructions are provided in the image. The focus is on the bottles and their contents.",
+          "The image does not show the reaction process or the outcome of the experiment."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:03:10Z"
     },
     {
       "asset_id": "46d08946cbdcaa8d5431803a",
@@ -101405,6 +101417,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40909580964",
       "checkpointed_at": "2026-10-29T17:23:47Z"
+    },
+    {
+      "asset_id": "9937c3e1a450bc1c1b1b6190",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Green illustration of a person with a dotted line above their head, possibly indicating a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thought",
+          "idea",
+          "person"
+        ],
+        "context_relation": "The image is likely related to the chapter 'The World of Metals and Non-metals' in the context of chemical changes and rusting.",
+        "limitations": [
+          "The image does not provide specific details about the chemical process or the formation of rust."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:04:49Z"
     }
   ]
 }
