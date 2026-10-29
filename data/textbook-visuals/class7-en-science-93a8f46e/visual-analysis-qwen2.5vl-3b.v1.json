@@ -14,12 +14,12 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "29c388b0161ccfef7bc70795",
-      "0d1c88ea0154d314c4c70259"
+      "d456527f98b45c7ff5c257c7",
+      "a9e763718b228fa328159152"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2598,
-    "assets_remaining": 4890,
+    "assets_analyzed": 2599,
+    "assets_remaining": 4889,
     "assets_completion_percent": 34.7,
     "assets_failed": 21,
     "assets_skipped_from_checkpoint": 2598,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40803456766",
-      "checkpointed_at": "2026-10-29T02:52:23Z"
+      "checkpointed_at": "2026-10-29T02:57:13Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40803456766",
-      "checkpointed_at": "2026-10-29T02:52:51Z"
+      "checkpointed_at": "2026-10-29T02:57:42Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40803456766",
-      "checkpointed_at": "2026-10-29T02:53:27Z"
+      "checkpointed_at": "2026-10-29T02:58:20Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -96509,7 +96509,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40789318652",
+      "run_id": "40803456766",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -97827,6 +97827,44 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
       "checkpointed_at": "2026-10-29T01:54:46Z"
+    },
+    {
+      "asset_id": "a9e763718b228fa328159152",
+      "asset_sha256": "7ae5a0ef2c23bbca934c3f757f51597d8a611a73b2143ba91843296d5fca8414",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/7ae5a0ef2c23bbca934c3f757f51597d8a611a73b2143ba91843296d5fca8414.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or string.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Substance May Change in Appearance but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Appearance",
+          "Substance",
+          "Paper"
+        ],
+        "context_relation": "The image is related to the educational content about chemical activity and appearance of substances.",
+        "limitations": [
+          "The image does not provide specific details about the chemical activity or appearance of the substance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40803456766",
+      "checkpointed_at": "2026-10-29T03:00:34Z"
     }
   ]
 }
