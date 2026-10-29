@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6b91b2e1453ce4132c9dd148fde016b84ce3ed4db66a491316f013f5c905156c",
+  "raw_analysis_sha256": "47d7fa009bc1c750ebc588d9ef80bae6010468594e4994f00106406894fb03e2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
-      "checkpointed_at": "2026-10-29T01:21:22Z",
+      "checkpointed_at": "2026-10-29T01:30:44Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
-      "checkpointed_at": "2026-10-29T01:22:23Z",
+      "checkpointed_at": "2026-10-29T01:31:45Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -151582,7 +151582,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
+      "run_id": "40789318652",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -151780,21 +151780,51 @@
     {
       "asset_id": "fa82e8570d7b6993a6b58eeb",
       "asset_sha256": "f268ae46d497b68255e72397a41ed2d3460a5fa14fbdd76863c8ee49953a5113",
-      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 77,
       "asset_path": "assets/f268ae46d497b68255e72397a41ed2d3460a5fa14fbdd76863c8ee49953a5113.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pattern of various scientific and technological icons, including a satellite, a light bulb, a satellite dish, a beaker, and a USB cable, arranged in a random pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "technology",
+          "icons",
+          "pattern"
+        ],
+        "context_relation": "The image represents a pattern of scientific and technological icons, possibly used as a background or design element.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the icons."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40789318652",
+      "checkpointed_at": "2026-10-29T01:35:52Z",
+      "effective_analysis": {
+        "visual_summary": "A pattern of various scientific and technological icons, including a satellite, a light bulb, a satellite dish, a beaker, and a USB cable, arranged in a random pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "technology",
+          "icons",
+          "pattern"
+        ],
+        "context_relation": "The image represents a pattern of scientific and technological icons, possibly used as a background or design element.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the icons."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -152716,21 +152746,41 @@
     {
       "asset_id": "4ba0a80240d4a7102bb8906b",
       "asset_sha256": "a9b8a0ce685c04f3d8e8efb7ef21eb6d509354ed903494183a0712a4f5641f72",
-      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 78,
       "asset_path": "assets/a9b8a0ce685c04f3d8e8efb7ef21eb6d509354ed903494183a0712a4f5641f72.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a green horizontal line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observations and reflections on changes in ice cubes.",
+        "limitations": [
+          "No specific content or data is provided in the image."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40789318652",
+      "checkpointed_at": "2026-10-29T01:36:51Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a green horizontal line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observations and reflections on changes in ice cubes.",
+        "limitations": [
+          "No specific content or data is provided in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

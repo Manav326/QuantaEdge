@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 2613,
-    "successful_visual_analyses": 2589,
+    "successful_visual_analyses": 2591,
     "missing_visual_analyses": 4875,
-    "failed_visual_analyses": 24,
+    "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4899,
+    "unresolved_count": 4897,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -105923,9 +105923,23 @@
       "asset_path": "assets/f268ae46d497b68255e72397a41ed2d3460a5fa14fbdd76863c8ee49953a5113.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pattern of various scientific and technological icons, including a satellite, a light bulb, a satellite dish, a beaker, and a USB cable, arranged in a random pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "technology",
+          "icons",
+          "pattern"
+        ],
+        "context_relation": "The image represents a pattern of scientific and technological icons, possibly used as a background or design element.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the icons."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -106525,9 +106539,18 @@
       "asset_path": "assets/a9b8a0ce685c04f3d8e8efb7ef21eb6d509354ed903494183a0712a4f5641f72.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a green horizontal line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observations and reflections on changes in ice cubes.",
+        "limitations": [
+          "No specific content or data is provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

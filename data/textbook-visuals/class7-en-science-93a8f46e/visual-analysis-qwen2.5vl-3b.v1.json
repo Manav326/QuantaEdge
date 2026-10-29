@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2591,
+    "assets_selected": 2592,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "29c388b0161ccfef7bc70795",
-      "0d1c88ea0154d314c4c70259",
-      "d7da2e4245dce1153447bcf6"
+      "d456527f98b45c7ff5c257c7",
+      "fa82e8570d7b6993a6b58eeb",
+      "4ba0a80240d4a7102bb8906b"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2587,
-    "assets_remaining": 4901,
-    "assets_completion_percent": 34.5,
-    "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2586,
+    "assets_analyzed": 2589,
+    "assets_remaining": 4899,
+    "assets_completion_percent": 34.6,
+    "assets_failed": 22,
+    "assets_skipped_from_checkpoint": 2587,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
-      "checkpointed_at": "2026-10-29T01:21:22Z"
+      "checkpointed_at": "2026-10-29T01:30:44Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40789318652",
-      "checkpointed_at": "2026-10-29T01:22:23Z"
+      "checkpointed_at": "2026-10-29T01:31:45Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -96462,7 +96462,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
+      "run_id": "40789318652",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -96588,19 +96588,35 @@
     {
       "asset_id": "fa82e8570d7b6993a6b58eeb",
       "asset_sha256": "f268ae46d497b68255e72397a41ed2d3460a5fa14fbdd76863c8ee49953a5113",
-      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 77,
       "asset_path": "assets/f268ae46d497b68255e72397a41ed2d3460a5fa14fbdd76863c8ee49953a5113.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pattern of various scientific and technological icons, including a satellite, a light bulb, a satellite dish, a beaker, and a USB cable, arranged in a random pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "technology",
+          "icons",
+          "pattern"
+        ],
+        "context_relation": "The image represents a pattern of scientific and technological icons, possibly used as a background or design element.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the icons."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40789318652",
+      "checkpointed_at": "2026-10-29T01:35:52Z"
     },
     {
       "asset_id": "621e8a41f7c10a2c2d629f53",
@@ -97207,19 +97223,30 @@
     {
       "asset_id": "4ba0a80240d4a7102bb8906b",
       "asset_sha256": "a9b8a0ce685c04f3d8e8efb7ef21eb6d509354ed903494183a0712a4f5641f72",
-      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 78,
       "asset_path": "assets/a9b8a0ce685c04f3d8e8efb7ef21eb6d509354ed903494183a0712a4f5641f72.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40779967644",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a green horizontal line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observations and reflections on changes in ice cubes.",
+        "limitations": [
+          "No specific content or data is provided in the image."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40789318652",
+      "checkpointed_at": "2026-10-29T01:36:51Z"
     },
     {
       "asset_id": "2f4943ab77cd3ea7e3263d2a",
