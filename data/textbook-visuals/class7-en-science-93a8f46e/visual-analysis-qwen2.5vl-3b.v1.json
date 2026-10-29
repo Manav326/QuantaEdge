@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2644,
+    "assets_selected": 2645,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "8604e838b1f1e41398ca72dd",
-      "1554b4067d24673fc7b88fc2",
-      "29c388b0161ccfef7bc70795"
+      "0d1c88ea0154d314c4c70259",
+      "d456527f98b45c7ff5c257c7",
+      "e60b54f64a4ac034768bf13b"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2640,
-    "assets_remaining": 4848,
+    "assets_analyzed": 2641,
+    "assets_remaining": 4847,
     "assets_completion_percent": 35.3,
-    "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2639,
+    "assets_failed": 21,
+    "assets_skipped_from_checkpoint": 2640,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862891681",
-      "checkpointed_at": "2026-10-29T12:39:20Z"
+      "checkpointed_at": "2026-10-29T12:49:02Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862891681",
-      "checkpointed_at": "2026-10-29T12:40:20Z"
+      "checkpointed_at": "2026-10-29T12:50:02Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -90507,7 +90507,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
+      "run_id": "40862891681",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -96488,7 +96488,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
+      "run_id": "40862891681",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -99268,19 +99268,42 @@
     {
       "asset_id": "e60b54f64a4ac034768bf13b",
       "asset_sha256": "2a946c1a89f69daa403ccd74e1c525fd99b77bdfa5ef90467b27148c394dbc33",
-      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 79,
       "asset_path": "assets/2a946c1a89f69daa403ccd74e1c525fd99b77bdfa5ef90467b27148c394dbc33.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper boat made of pink and orange paper, with a pink flag attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "paper boat",
+          "pink and orange paper",
+          "pink flag",
+          "paper objects",
+          "chemical activity"
+        ],
+        "context_relation": "The image is related to the text about creating paper objects and discussing chemical activity.",
+        "limitations": [
+          "The image does not show the actual paper boat or the flag."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40862891681",
+      "checkpointed_at": "2026-10-29T12:57:17Z"
     },
     {
       "asset_id": "c537f4c271de063fcc42b948",

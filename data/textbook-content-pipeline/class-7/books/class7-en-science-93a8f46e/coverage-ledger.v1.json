@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 2664,
-    "successful_visual_analyses": 2642,
+    "successful_visual_analyses": 2643,
     "missing_visual_analyses": 4824,
-    "failed_visual_analyses": 22,
+    "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4846,
+    "unresolved_count": 4845,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -108526,9 +108526,30 @@
       "asset_path": "assets/2a946c1a89f69daa403ccd74e1c525fd99b77bdfa5ef90467b27148c394dbc33.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A paper boat made of pink and orange paper, with a pink flag attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "paper boat",
+          "pink and orange paper",
+          "pink flag",
+          "paper objects",
+          "chemical activity"
+        ],
+        "context_relation": "The image is related to the text about creating paper objects and discussing chemical activity.",
+        "limitations": [
+          "The image does not show the actual paper boat or the flag."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

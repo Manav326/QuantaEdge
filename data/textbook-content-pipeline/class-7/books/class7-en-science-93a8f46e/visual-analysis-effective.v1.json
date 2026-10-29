@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f7791c140812b7925e0fd2b142b83ab8fd5f4b0f470ddbd75c521c4381a044a6",
+  "raw_analysis_sha256": "5dc40b270d2669b777510c414c0895a26cdbc3019ccf091a6c4cbaf8261271f2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862891681",
-      "checkpointed_at": "2026-10-29T12:39:20Z",
+      "checkpointed_at": "2026-10-29T12:49:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40862891681",
-      "checkpointed_at": "2026-10-29T12:40:20Z",
+      "checkpointed_at": "2026-10-29T12:50:02Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -142292,7 +142292,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
+      "run_id": "40862891681",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -151632,7 +151632,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
+      "run_id": "40862891681",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -155938,21 +155938,65 @@
     {
       "asset_id": "e60b54f64a4ac034768bf13b",
       "asset_sha256": "2a946c1a89f69daa403ccd74e1c525fd99b77bdfa5ef90467b27148c394dbc33",
-      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 79,
       "asset_path": "assets/2a946c1a89f69daa403ccd74e1c525fd99b77bdfa5ef90467b27148c394dbc33.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40853001770",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper boat made of pink and orange paper, with a pink flag attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "paper boat",
+          "pink and orange paper",
+          "pink flag",
+          "paper objects",
+          "chemical activity"
+        ],
+        "context_relation": "The image is related to the text about creating paper objects and discussing chemical activity.",
+        "limitations": [
+          "The image does not show the actual paper boat or the flag."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40862891681",
+      "checkpointed_at": "2026-10-29T12:57:17Z",
+      "effective_analysis": {
+        "visual_summary": "A paper boat made of pink and orange paper, with a pink flag attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "paper boat",
+          "pink and orange paper",
+          "pink flag",
+          "paper objects",
+          "chemical activity"
+        ],
+        "context_relation": "The image is related to the text about creating paper objects and discussing chemical activity.",
+        "limitations": [
+          "The image does not show the actual paper boat or the flag."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
