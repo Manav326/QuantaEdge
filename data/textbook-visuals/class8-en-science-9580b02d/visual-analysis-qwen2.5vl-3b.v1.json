@@ -15,11 +15,11 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "5f15f054d2dd4b06797d0c40"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1370,
-    "assets_remaining": 921,
+    "assets_analyzed": 1371,
+    "assets_remaining": 920,
     "assets_completion_percent": 59.8,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1370,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40960814484",
-      "checkpointed_at": "2026-10-29T22:57:40Z"
+      "checkpointed_at": "2026-10-29T23:02:35Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40960814484",
-      "checkpointed_at": "2026-10-29T22:58:06Z"
+      "checkpointed_at": "2026-10-29T23:03:01Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40960814484",
-      "checkpointed_at": "2026-10-29T22:58:37Z"
+      "checkpointed_at": "2026-10-29T23:03:30Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40960814484",
-      "checkpointed_at": "2026-10-29T22:59:23Z"
+      "checkpointed_at": "2026-10-29T23:04:14Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -45651,6 +45651,42 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40949527664",
       "checkpointed_at": "2026-10-29T21:45:10Z"
+    },
+    {
+      "asset_id": "5f15f054d2dd4b06797d0c40",
+      "asset_sha256": "f2312732e169ae0cddb2786b7bf27035b2b8e9f789cda64fbab490c2d90d87be",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 117,
+      "asset_path": "page-0117.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "218c7b73c5256b66b29c78167a4ad1e242f183171abbd0c505a5ae142fe4d10f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for a science experiment involving a strip of paper and a diagram of a science society.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Hold a strip of paper, 18 cm long and 2 cm wide, between your thumb and forefinger so that it hangs freely. Predict what you will observe if you blow over the paper. Perform the activity now. Note down your observations and interpret your results.",
+          "List three major cyclones which have occured in India in the last 20 years. List two major destruction caused by each of the cyclones. What measures were taken by the local government and communities to reduce the loss of life and destruction of property? Mention two suggestions you would like to pr",
+          "Collect data on the strength of thunderstorms for various regions of India. Compare your findings and identify which regions are more prone to thunderstorms. Can you give reasons for your findings?"
+        ],
+        "concepts": [
+          "Science Society",
+          "Cyclones",
+          "Thunderstorms"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The instructions are specific to the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40960814484",
+      "checkpointed_at": "2026-10-29T23:05:52Z"
     }
   ]
 }

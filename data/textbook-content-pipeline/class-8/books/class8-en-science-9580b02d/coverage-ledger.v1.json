@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1391,
-    "successful_visual_analyses": 1374,
-    "missing_visual_analyses": 900,
+    "raw_analysis_result_rows": 1392,
+    "successful_visual_analyses": 1375,
+    "missing_visual_analyses": 899,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 917,
+    "unresolved_count": 916,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -51819,9 +51819,26 @@
       "asset_path": "page-0117.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for a science experiment involving a strip of paper and a diagram of a science society.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Hold a strip of paper, 18 cm long and 2 cm wide, between your thumb and forefinger so that it hangs freely. Predict what you will observe if you blow over the paper. Perform the activity now. Note down your observations and interpret your results.",
+          "List three major cyclones which have occured in India in the last 20 years. List two major destruction caused by each of the cyclones. What measures were taken by the local government and communities to reduce the loss of life and destruction of property? Mention two suggestions you would like to pr",
+          "Collect data on the strength of thunderstorms for various regions of India. Compare your findings and identify which regions are more prone to thunderstorms. Can you give reasons for your findings?"
+        ],
+        "concepts": [
+          "Science Society",
+          "Cyclones",
+          "Thunderstorms"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The instructions are specific to the content of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
