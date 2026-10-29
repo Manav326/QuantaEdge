@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2638,
+    "assets_selected": 2639,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "d456527f98b45c7ff5c257c7",
-      "b5c507fdc58aa03fc3dbe5a3"
+      "80dc75b349e3091326e27838",
+      "c6f4cce329002b6c1904b857"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2634,
-    "assets_remaining": 4854,
+    "assets_analyzed": 2636,
+    "assets_remaining": 4852,
     "assets_completion_percent": 35.2,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2633,
+    "assets_skipped_from_checkpoint": 2634,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:50:21Z"
+      "checkpointed_at": "2026-10-29T10:54:20Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:50:49Z"
+      "checkpointed_at": "2026-10-29T10:54:47Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
-      "checkpointed_at": "2026-10-29T10:51:25Z"
+      "checkpointed_at": "2026-10-29T10:55:23Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -99134,6 +99134,80 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40853001770",
       "checkpointed_at": "2026-10-29T10:53:34Z"
+    },
+    {
+      "asset_id": "80dc75b349e3091326e27838",
+      "asset_sha256": "33b7d0a27a419d5668217df8070daa2218b1de6c97041a5abc329a81494d4243",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/33b7d0a27a419d5668217df8070daa2218b1de6c97041a5abc329a81494d4243.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a simple machine with a lever and a fulcrum.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A Substance May Change in Appearance but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Simple machine",
+          "Lever",
+          "Fulcrum",
+          "Chemical activity"
+        ],
+        "context_relation": "The image is related to the educational content of a textbook about simple machines and chemical activity.",
+        "limitations": [
+          "The image does not provide specific details about the simple machine or its components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40853001770",
+      "checkpointed_at": "2026-10-29T10:56:03Z"
+    },
+    {
+      "asset_id": "c6f4cce329002b6c1904b857",
+      "asset_sha256": "b65f4b3a59d6c34b3880192db098389313af7f257c45395a4339d68b1f4c042c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/b65f4b3a59d6c34b3880192db098389313af7f257c45395a4339d68b1f4c042c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "93a68230a708d69aaa3e55aa74fcb1e1199e4cb326a5eebb17a29d15b495942b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black background with a blue folded paper in the bottom right corner.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Creating objects with paper"
+        ],
+        "context_relation": "The image is related to the text about creating objects with paper.",
+        "limitations": [
+          "The image does not provide specific details about the paper folding process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40853001770",
+      "checkpointed_at": "2026-10-29T10:56:42Z"
     }
   ]
 }

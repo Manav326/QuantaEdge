@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2658,
-    "successful_visual_analyses": 2637,
-    "missing_visual_analyses": 4830,
+    "raw_analysis_result_rows": 2660,
+    "successful_visual_analyses": 2639,
+    "missing_visual_analyses": 4828,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4851,
+    "unresolved_count": 4849,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -108400,9 +108400,28 @@
       "asset_path": "assets/33b7d0a27a419d5668217df8070daa2218b1de6c97041a5abc329a81494d4243.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a simple machine with a lever and a fulcrum.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A Substance May Change in Appearance but Remain the Same!",
+          "Chemical Activity 5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Simple machine",
+          "Lever",
+          "Fulcrum",
+          "Chemical activity"
+        ],
+        "context_relation": "The image is related to the educational content of a textbook about simple machines and chemical activity.",
+        "limitations": [
+          "The image does not provide specific details about the simple machine or its components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -108418,9 +108437,26 @@
       "asset_path": "assets/b65f4b3a59d6c34b3880192db098389313af7f257c45395a4339d68b1f4c042c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black background with a blue folded paper in the bottom right corner.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.1 A Substance May Change in Appearance",
+          "5.2: Let us create and discuss",
+          "A. Creating some objects with paper",
+          "Take a few sheets of paper"
+        ],
+        "concepts": [
+          "Chemical Activity",
+          "Creating objects with paper"
+        ],
+        "context_relation": "The image is related to the text about creating objects with paper.",
+        "limitations": [
+          "The image does not provide specific details about the paper folding process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
