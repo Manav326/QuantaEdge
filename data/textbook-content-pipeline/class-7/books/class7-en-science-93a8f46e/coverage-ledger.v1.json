@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2725,
-    "successful_visual_analyses": 2702,
-    "missing_visual_analyses": 4763,
+    "raw_analysis_result_rows": 2730,
+    "successful_visual_analyses": 2707,
+    "missing_visual_analyses": 4758,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4786,
+    "unresolved_count": 4781,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -110798,9 +110798,23 @@
       "asset_path": "assets/a20ebc9983b807b824a8bba00a08acaa55a29be6b61d2ffb09bbe7ae3e325942.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of rust on iron, highlighting the brown color and texture.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "metal"
+        ],
+        "context_relation": "The image is a visual representation of the chemical change that occurs during rusting, specifically focusing on the formation of iron oxide.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the visual of rust on iron."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -110816,9 +110830,28 @@
       "asset_path": "assets/2f2516f8b3bd6cad4a122ed40da1a628504645292cc3ab1044b8440034f4c819.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page discussing the chemical change of rusting in iron.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "formation of a new substance"
+        ],
+        "context_relation": "The page discusses the chemical change of rusting in iron, which is a new brown-coloured substance called rust.",
+        "limitations": [
+          "The image does not show any visual representation of the rusting process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -110834,9 +110867,16 @@
       "asset_path": "assets/2d71849020007096f49d933be8382d94bdd75bd56fa326ecb40110398c2c3de0.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -110852,9 +110892,18 @@
       "asset_path": "assets/2fe9c193059f9b9c1036460bcb68c58d2f88cfa0710ba17f446cfc247e0732c5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about rusting iron.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -110870,9 +110919,27 @@
       "asset_path": "assets/6e26f75d59e3e6c263201c596e9273dc72c6c5d629120d159d8ef20fdf1e7b4b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the formation of rust from iron.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "Rusting",
+          "Chemical change",
+          "Iron oxide"
+        ],
+        "context_relation": "The image is a visual representation of the chemical process of rusting, which is a part of the chapter 'The World of Metals and Non-metals'.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or the formation of rust."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

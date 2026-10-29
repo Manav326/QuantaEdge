@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3d839c128aef5f3f48e708a4d977fcc7a9588d80560d0b9897759d47a52add25",
+  "raw_analysis_sha256": "df4593843e9d2bf13b4e7f16f93c68cd32f15faa95104f7c263c5fbf182aade5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -159588,6 +159588,250 @@
         "context_relation": "uncertain",
         "limitations": [
           "unclear if the page contains any text or visual content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8117fbba0270cc88202eacdb",
+      "asset_sha256": "a20ebc9983b807b824a8bba00a08acaa55a29be6b61d2ffb09bbe7ae3e325942",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/a20ebc9983b807b824a8bba00a08acaa55a29be6b61d2ffb09bbe7ae3e325942.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of rust on iron, highlighting the brown color and texture.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "metal"
+        ],
+        "context_relation": "The image is a visual representation of the chemical change that occurs during rusting, specifically focusing on the formation of iron oxide.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the visual of rust on iron."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:14:58Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of rust on iron, highlighting the brown color and texture.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "metal"
+        ],
+        "context_relation": "The image is a visual representation of the chemical change that occurs during rusting, specifically focusing on the formation of iron oxide.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the visual of rust on iron."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7d790aaae47ae6041889694f",
+      "asset_sha256": "2f2516f8b3bd6cad4a122ed40da1a628504645292cc3ab1044b8440034f4c819",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/2f2516f8b3bd6cad4a122ed40da1a628504645292cc3ab1044b8440034f4c819.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page discussing the chemical change of rusting in iron.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "formation of a new substance"
+        ],
+        "context_relation": "The page discusses the chemical change of rusting in iron, which is a new brown-coloured substance called rust.",
+        "limitations": [
+          "The image does not show any visual representation of the rusting process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:16:45Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page discussing the chemical change of rusting in iron.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "rusting",
+          "chemical change",
+          "iron oxide",
+          "formation of a new substance"
+        ],
+        "context_relation": "The page discusses the chemical change of rusting in iron, which is a new brown-coloured substance called rust.",
+        "limitations": [
+          "The image does not show any visual representation of the rusting process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4c9e96f62b8e22767c65a445",
+      "asset_sha256": "2d71849020007096f49d933be8382d94bdd75bd56fa326ecb40110398c2c3de0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/2d71849020007096f49d933be8382d94bdd75bd56fa326ecb40110398c2c3de0.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:18:17Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dab7bfd0cdd7d92e402f59e3",
+      "asset_sha256": "2fe9c193059f9b9c1036460bcb68c58d2f88cfa0710ba17f446cfc247e0732c5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/2fe9c193059f9b9c1036460bcb68c58d2f88cfa0710ba17f446cfc247e0732c5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about rusting iron.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:19:52Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about rusting iron.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2024c80b4407d9bc7e9fa8ed",
+      "asset_sha256": "6e26f75d59e3e6c263201c596e9273dc72c6c5d629120d159d8ef20fdf1e7b4b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 82,
+      "asset_path": "assets/6e26f75d59e3e6c263201c596e9273dc72c6c5d629120d159d8ef20fdf1e7b4b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "db1c3bcec02c0a109fb16c139dc995ed4bc4da783e07183aa6260006fcdf94f4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the formation of rust from iron.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "Rusting",
+          "Chemical change",
+          "Iron oxide"
+        ],
+        "context_relation": "The image is a visual representation of the chemical process of rusting, which is a part of the chapter 'The World of Metals and Non-metals'.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or the formation of rust."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40921514282",
+      "checkpointed_at": "2026-10-29T19:21:47Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the formation of rust from iron.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5.3 Some Other Processes Involving",
+          "5.3.1 Rusting",
+          "In the rusting of iron, which you studied in the chapter 'The World of Metals and Non-metals', a new brown-coloured substance called rust is formed. Thus, rusting is also a chemical change because it involves the formation of a new substance, iron oxide (Fig. 5.4).",
+          "Fig."
+        ],
+        "concepts": [
+          "Rusting",
+          "Chemical change",
+          "Iron oxide"
+        ],
+        "context_relation": "The image is a visual representation of the chemical process of rusting, which is a part of the chapter 'The World of Metals and Non-metals'.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or the formation of rust."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
