@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1504,
+    "assets_selected": 1505,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "2249feba9d9de2d28593e04b",
-      "f20681ba982380a94591449f"
+      "52f003036c5d5721b35c8d7f",
+      "d7688b482895406d3aa1a0c2"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1500,
-    "assets_remaining": 578,
-    "assets_completion_percent": 72.2,
+    "assets_analyzed": 1502,
+    "assets_remaining": 576,
+    "assets_completion_percent": 72.3,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1499,
+    "assets_skipped_from_checkpoint": 1500,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:42:08Z"
+      "checkpointed_at": "2026-10-30T00:54:55Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:43:09Z"
+      "checkpointed_at": "2026-10-30T00:55:54Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:43:57Z"
+      "checkpointed_at": "2026-10-30T00:56:43Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -50922,6 +50922,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
       "checkpointed_at": "2026-10-30T00:53:39Z"
+    },
+    {
+      "asset_id": "52f003036c5d5721b35c8d7f",
+      "asset_sha256": "57d93752e6b030f067bfac8fd2a0898fe8cc96bcb5104b5e71b430f4b7b44d52",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 167,
+      "asset_path": "assets/57d93752e6b030f067bfac8fd2a0898fe8cc96bcb5104b5e71b430f4b7b44d52.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eebd695eb3d6d5c889344e9f785f3b1199427bca02fb9aaaca398f3c57a7b962",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rectangular piece of yellow paper with a rough, textured edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a piece of paper, not related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any information about the content of the textbook or the experiment described in Table 8.2."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-30T00:58:21Z"
+    },
+    {
+      "asset_id": "d7688b482895406d3aa1a0c2",
+      "asset_sha256": "0b5afc80958de8b332af94620045d7451b1c9b046265574b872abb392416a54e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 167,
+      "asset_path": "assets/0b5afc80958de8b332af94620045d7451b1c9b046265574b872abb392416a54e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eebd695eb3d6d5c889344e9f785f3b1199427bca02fb9aaaca398f3c57a7b962",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with braided hair and a red bow, wearing a light blue shirt with a blue collar.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about humidity and condensation.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-30T00:59:55Z"
     }
   ]
 }
