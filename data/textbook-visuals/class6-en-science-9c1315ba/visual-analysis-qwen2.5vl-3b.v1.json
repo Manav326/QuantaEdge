@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1521,
+    "assets_selected": 1523,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "8e056534d5a845bf27f6cb6e",
-      "853c48805769ffe4ff80512f",
-      "0c02bd1b1653dbd056394b21"
+      "917582415d7c8aae1b5d12ce",
+      "5d8b19568a8402d874805be0",
+      "0fe87d8992cab63b0b59f142"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1518,
-    "assets_remaining": 560,
-    "assets_completion_percent": 73.1,
+    "assets_analyzed": 1521,
+    "assets_remaining": 557,
+    "assets_completion_percent": 73.2,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1516,
+    "assets_skipped_from_checkpoint": 1518,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
-      "checkpointed_at": "2026-10-30T15:10:22Z"
+      "checkpointed_at": "2026-10-30T15:21:34Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
-      "checkpointed_at": "2026-10-30T15:11:13Z"
+      "checkpointed_at": "2026-10-30T15:22:26Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -51550,6 +51550,146 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
       "checkpointed_at": "2026-10-30T15:20:25Z"
+    },
+    {
+      "asset_id": "917582415d7c8aae1b5d12ce",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 172,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f4436d770274f8ccaebd941c8857368da7f9d0a923a870beb5663ee9011bcd2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An investigation table showing findings of an evaporation experiment.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 8.4: Findings of the investigation",
+          "Reflect on",
+          "what you",
+          "did really",
+          "complete evaporation",
+          "What can you conclude from this investigation?",
+          "If you spread out water on a plate, its area exposed to air",
+          "is larger. Therefore, evaporation is faster."
+        ],
+        "concepts": [
+          "Evaporation",
+          "Exposure to air",
+          "Plate",
+          "Bottle cap",
+          "Time taken for evaporation"
+        ],
+        "context_relation": "The table summarizes the findings of an evaporation experiment conducted in the text.",
+        "limitations": [
+          "The table does not provide specific data or results from the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:22:57Z"
+    },
+    {
+      "asset_id": "5d8b19568a8402d874805be0",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 172,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f4436d770274f8ccaebd941c8857368da7f9d0a923a870beb5663ee9011bcd2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:23:09Z"
+    },
+    {
+      "asset_id": "0fe87d8992cab63b0b59f142",
+      "asset_sha256": "dbd9c11a556f61b9e20534344c08a9e1e26a377f179ad7d74f0e32484dc165b5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 172,
+      "asset_path": "page-0172.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f4436d770274f8ccaebd941c8857368da7f9d0a923a870beb5663ee9011bcd2e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table showing findings of an investigation comparing evaporation rates of water on a plate versus a bottle cap.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 8.4: Findings of the investigation",
+          "Reflect on",
+          "what you",
+          "did really",
+          "well in this",
+          "activity.?",
+          "Time taken for",
+          "complete evaporation",
+          "Exposed area of water",
+          "Less (bottle cap)",
+          "More (plate)",
+          "What can you conclude from this investigation?",
+          "If you spread out water on a plate, its area exposed to air",
+          "is larger. Therefore, evaporation is faster.",
+          "What would happen if milk is taken instead of water in",
+          "the above activity?",
+          "Other conditions which affect how fast water evaporates",
+          "Design an activity similar to Activity 8.7 to find out what are",
+          "the other conditions which can affect how fast water will",
+          "evaporate. What would you change? What would you keep",
+          "the same? Perform this activity, use Table 8.5 to record the",
+          "data and discuss your observations.",
+          "Table 8.5: Record the data of an investigation where one",
+          "condition is changed and other condition remains the same",
+          "Condition that is kept the same:",
+          "Condition that is changed",
+          "Time taken for",
+          "complete evaporation",
+          "Other than the conditions you have explored to find how",
+          "water can be made to evaporate faster or slower, you can"
+        ],
+        "concepts": [
+          "evaporation",
+          "water",
+          "plate",
+          "bottle cap",
+          "milk",
+          "conditions",
+          "activity",
+          "investigation",
+          "data",
+          "time",
+          "evaporation rate"
+        ],
+        "context_relation": "exploring the factors affecting evaporation rates of water",
+        "limitations": [
+          "The table does not provide specific data for the evaporation times."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:27:40Z"
     }
   ]
 }
