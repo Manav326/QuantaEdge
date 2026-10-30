@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2808,
+    "assets_selected": 2809,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "1adde60acdf54ec641807121"
+      "b1af823b682853c8589180f1"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2804,
-    "assets_remaining": 4684,
-    "assets_completion_percent": 37.4,
+    "assets_analyzed": 2805,
+    "assets_remaining": 4683,
+    "assets_completion_percent": 37.5,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2803,
+    "assets_skipped_from_checkpoint": 2804,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41008539541",
-      "checkpointed_at": "2026-10-30T06:35:39Z"
+      "checkpointed_at": "2026-10-30T06:39:10Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41008539541",
-      "checkpointed_at": "2026-10-30T06:36:10Z"
+      "checkpointed_at": "2026-10-30T06:39:42Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41008539541",
-      "checkpointed_at": "2026-10-30T06:36:51Z"
+      "checkpointed_at": "2026-10-30T06:40:22Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41008539541",
-      "checkpointed_at": "2026-10-30T06:37:35Z"
+      "checkpointed_at": "2026-10-30T06:41:04Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -105297,6 +105297,45 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41008539541",
       "checkpointed_at": "2026-10-30T06:38:20Z"
+    },
+    {
+      "asset_id": "b1af823b682853c8589180f1",
+      "asset_sha256": "9eff7700979157fb1935d454902fafc99beef8fc137355c00f33bc4e2ac7cb61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/9eff7700979157fb1935d454902fafc99beef8fc137355c00f33bc4e2ac7cb61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of paper being held by tongs with a lighted matchstick approaching it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher or an adult.",
+          "Hold a piece of paper with a pair of tongs and bring a lighted matchstick to it. It quickly catches fire.",
+          "Do we say that we need a fire to start the burning process?"
+        ],
+        "concepts": [
+          "Fire",
+          "Burning",
+          "Supervision",
+          "Safety",
+          "Experiment"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41008539541",
+      "checkpointed_at": "2026-10-30T06:41:48Z"
     }
   ]
 }
