@@ -15,12 +15,12 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "ce4cd02cbb1d643912c16e76"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1382,
-    "assets_remaining": 909,
-    "assets_completion_percent": 60.3,
+    "assets_analyzed": 1383,
+    "assets_remaining": 908,
+    "assets_completion_percent": 60.4,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1382,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41097050137",
-      "checkpointed_at": "2026-10-30T18:55:05Z"
+      "checkpointed_at": "2026-10-30T19:02:20Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41097050137",
-      "checkpointed_at": "2026-10-30T18:55:40Z"
+      "checkpointed_at": "2026-10-30T19:02:55Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41097050137",
-      "checkpointed_at": "2026-10-30T18:56:20Z"
+      "checkpointed_at": "2026-10-30T19:03:36Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41097050137",
-      "checkpointed_at": "2026-10-30T18:57:21Z"
+      "checkpointed_at": "2026-10-30T19:04:37Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -46124,6 +46124,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41068788542",
       "checkpointed_at": "2026-10-30T15:20:56Z"
+    },
+    {
+      "asset_id": "ce4cd02cbb1d643912c16e76",
+      "asset_sha256": "b570d800dc84bf060a887bce71645341f8b013600e884446da3a15ee258ce614",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 119,
+      "asset_path": "assets/b570d800dc84bf060a887bce71645341f8b013600e884446da3a15ee258ce614.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bba3cd87442f97552f1dd1e9c80cb27de77ede3ce3bee36f96da122cd52bba54",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two cylindrical objects on a solid surface, possibly representing pebbles or stones.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "99",
+          "Where do these pebbles, stones, and sand come from?",
+          "In the mountains, rocks gradually break down due to erosion.",
+          "Rivers flowing through these regions carry along the eroded rock pieces.",
+          "As the rivers flow, they continue to break down the rocks further into pebbles, stones, sand;",
+          "and transport large quantities of them to the plains.",
+          "The bigger rocks are eventually broken down into finer grains"
+        ],
+        "concepts": [
+          "erosion",
+          "rivers",
+          "pebbles",
+          "stones",
+          "sand",
+          "transportation",
+          "decomposition"
+        ],
+        "context_relation": "The image is an illustration related to the text discussing the breakdown and transportation of rocks and minerals.",
+        "limitations": [
+          "The image does not provide specific details about the size or type of pebbles and stones."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41097050137",
+      "checkpointed_at": "2026-10-30T19:05:57Z"
     }
   ]
 }
