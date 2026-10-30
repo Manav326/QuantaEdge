@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e80ef95834bafe7aece385269f2dda477ac0bd57845f87dde0bf5808c92ffed9",
+  "raw_analysis_sha256": "1a65a2331f274bbbee9227474571e825b618c2a5a2c1014479d9b109b4420b9c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40987078774",
-      "checkpointed_at": "2026-10-30T03:16:32Z",
+      "checkpointed_at": "2026-10-30T03:29:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40987078774",
-      "checkpointed_at": "2026-10-30T03:17:38Z",
+      "checkpointed_at": "2026-10-30T03:30:26Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -158696,21 +158696,77 @@
     {
       "asset_id": "a8a782a35001bd63b508a6b5",
       "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
-      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 81,
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3d707308c85364e321a72ce5ac6b265899bb2e32d55d38923d4961db5f8c0d2e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40971546225",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A chemical reaction involving calcium hydroxide and carbon dioxide forming calcium carbonate and water, with a visual representation of the reaction.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide.",
+          "Let us explore this with another activity using some substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "61"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Calcium hydroxide",
+          "Carbon dioxide",
+          "Calcium carbonate",
+          "Water",
+          "Lime water",
+          "Test for carbon dioxide"
+        ],
+        "context_relation": "The image is a visual representation of a chemical reaction used as a test for carbon dioxide.",
+        "limitations": [
+          "The image does not show the actual experiment or reaction."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40987078774",
+      "checkpointed_at": "2026-10-30T03:31:56Z",
+      "effective_analysis": {
+        "visual_summary": "A chemical reaction involving calcium hydroxide and carbon dioxide forming calcium carbonate and water, with a visual representation of the reaction.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Calcium hydroxide + Carbon dioxide",
+          "(Lime water)",
+          "The turning of lime water milky is also used as a test for",
+          "carbon dioxide.",
+          "Let us explore this with another activity using some substances from our kitchen.",
+          "Chemical",
+          "Activity 5.4: Let us experiment",
+          "Take a",
+          "61"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Calcium hydroxide",
+          "Carbon dioxide",
+          "Calcium carbonate",
+          "Water",
+          "Lime water",
+          "Test for carbon dioxide"
+        ],
+        "context_relation": "The image is a visual representation of a chemical reaction used as a test for carbon dioxide.",
+        "limitations": [
+          "The image does not show the actual experiment or reaction."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -163946,6 +164002,114 @@
         "context_relation": "The image illustrates a scientific experiment to explain the effect of air supply on combustion.",
         "limitations": [
           "The image does not provide specific details about the materials used or the conditions under which the experiment was conducted."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "96d29cf1aac3763ae338e2e8",
+      "asset_sha256": "bda4b17720a8e085e84093323e3e88e2f3d099eb7aa4045d62ca1dd4abbfb21e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/bda4b17720a8e085e84093323e3e88e2f3d099eb7aa4045d62ca1dd4abbfb21e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A candle burning in a glass tumbler and another candle not covered by a glass tumbler.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "The image illustrates the difference in the burning behavior of candles due to the availability of air.",
+        "limitations": [
+          "The image does not provide a diagram or chart to explain the concept."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40987078774",
+      "checkpointed_at": "2026-10-30T03:33:24Z",
+      "effective_analysis": {
+        "visual_summary": "A candle burning in a glass tumbler and another candle not covered by a glass tumbler.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "The image illustrates the difference in the burning behavior of candles due to the availability of air.",
+        "limitations": [
+          "The image does not provide a diagram or chart to explain the concept."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "19635ede3b2611d807b476aa",
+      "asset_sha256": "52e34a17da35176591aab5635c1b8c6e59bc18dfbcc8082f1edb1154aa5f4c57",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/52e34a17da35176591aab5635c1b8c6e59bc18dfbcc8082f1edb1154aa5f4c57.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A candle is shown burning in a glass tumbler and another candle is shown burning without a glass tumbler. The text explains that the candle in the glass tumbler stops burning because it does not have a continuous supply of air.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "Explanation of why a candle stops burning when covered by a glass tumbler",
+        "limitations": [
+          "The image does not show the actual experiment, only the explanation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40987078774",
+      "checkpointed_at": "2026-10-30T03:34:59Z",
+      "effective_analysis": {
+        "visual_summary": "A candle is shown burning in a glass tumbler and another candle is shown burning without a glass tumbler. The text explains that the candle in the glass tumbler stops burning because it does not have a continuous supply of air.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "Explanation of why a candle stops burning when covered by a glass tumbler",
+        "limitations": [
+          "The image does not show the actual experiment, only the explanation."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
