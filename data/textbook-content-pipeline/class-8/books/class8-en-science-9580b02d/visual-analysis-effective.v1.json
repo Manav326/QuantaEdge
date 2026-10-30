@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9ceecc7ec27383e3e07edb164de5fef6aae93cb58c560a187b1bdff0e6e93c96",
+  "raw_analysis_sha256": "c707e88791af1110de7a94738a9af75617625893e7abe520e664bdcb4d9c3d78",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40980015680",
-      "checkpointed_at": "2026-10-30T01:39:26Z",
+      "checkpointed_at": "2026-10-30T01:44:25Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40980015680",
-      "checkpointed_at": "2026-10-30T01:39:53Z",
+      "checkpointed_at": "2026-10-30T01:44:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40980015680",
-      "checkpointed_at": "2026-10-30T01:40:25Z",
+      "checkpointed_at": "2026-10-30T01:45:21Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40980015680",
-      "checkpointed_at": "2026-10-30T01:41:11Z",
+      "checkpointed_at": "2026-10-30T01:46:10Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -69150,6 +69150,50 @@
         "context_relation": "The image is related to the textbook content about the nature of matter and its properties.",
         "limitations": [
           "The image does not provide specific answers to the questions listed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "81e07e0b75f6fba1786a01ab",
+      "asset_sha256": "cdf64d08af83c84e2b7979a3279a58134255fa4e8f817c56537a5eff54181c39",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 118,
+      "asset_path": "assets/cdf64d08af83c84e2b7979a3279a58134255fa4e8f817c56537a5eff54181c39.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5889dfe3608053f58da41f33c69e2f86c05efc743f4a7ecef7b37bb042452c96",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a book and waving.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the content of the textbook about the nature of matter and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content.",
+          "The image does not show any equations or formulas.",
+          "The image does not depict any specific scientific phenomena or experiments."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40980015680",
+      "checkpointed_at": "2026-10-30T01:46:48Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a book and waving.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the content of the textbook about the nature of matter and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content.",
+          "The image does not show any equations or formulas.",
+          "The image does not depict any specific scientific phenomena or experiments."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
