@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "327c9cbf1f0dc9bd201f3fb617c52309fe9aef58985173517885cb4e6fac2465",
+  "raw_analysis_sha256": "2e13fbc451b1ae38ab0d53a88bc7fc7da30abf8231e2646cc7a1b3ac1e7a4ed9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41112378558",
-      "checkpointed_at": "2026-10-30T20:57:58Z",
+      "checkpointed_at": "2026-10-30T21:05:08Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41112378558",
-      "checkpointed_at": "2026-10-30T20:59:20Z",
+      "checkpointed_at": "2026-10-30T21:06:31Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164714,7 +164714,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41112378558",
-      "checkpointed_at": "2026-10-30T21:00:50Z",
+      "checkpointed_at": "2026-10-30T21:07:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -169703,6 +169703,82 @@
         "concepts": [],
         "context_relation": "The image is related to the text about the burning candle and its chemical properties.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3c8814eabfef05a98b46adb8",
+      "asset_sha256": "ac5ceac65064b274edbac9a450be9bff9f725f840b1c0f0e9eaa73cfbbf8bc3d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/ac5ceac65064b274edbac9a450be9bff9f725f840b1c0f0e9eaa73cfbbf8bc3d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon of a scientist holding a beaker with a blue liquid.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about the burning candle in Activity 5.7.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41112378558",
+      "checkpointed_at": "2026-10-30T21:09:26Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon of a scientist holding a beaker with a blue liquid.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about the burning candle in Activity 5.7.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "620b9bde7c172f243cb396ba",
+      "asset_sha256": "67fd94f603ec76c10dcb7763b1aa1dfb1211a4ddb52ef107056c5c685fa08680",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/67fd94f603ec76c10dcb7763b1aa1dfb1211a4ddb52ef107056c5c685fa08680.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a historical figure with a serious expression.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about the burning candle in Activity 5.7.",
+        "limitations": [
+          "The image does not provide specific details about the historical figure or the context of the discussion about the burning candle."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41112378558",
+      "checkpointed_at": "2026-10-30T21:10:53Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a historical figure with a serious expression.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about the burning candle in Activity 5.7.",
+        "limitations": [
+          "The image does not provide specific details about the historical figure or the context of the discussion about the burning candle."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
