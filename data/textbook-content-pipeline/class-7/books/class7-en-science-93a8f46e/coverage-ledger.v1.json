@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2837,
-    "successful_visual_analyses": 2817,
-    "missing_visual_analyses": 4651,
+    "raw_analysis_result_rows": 2839,
+    "successful_visual_analyses": 2819,
+    "missing_visual_analyses": 4649,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4671,
+    "unresolved_count": 4669,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -114712,9 +114712,32 @@
       "asset_path": "assets/25925d97495cf02d35e94942a30110e6d18d89622f0956d737a55532ef37d248.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of paper being held by tongs with a lighted matchstick approaching it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher",
+          "or an adult.",
+          "Hold a piece of paper with a pair of",
+          "tongs and bring a lighted matchstick",
+          "to it. It quickly catches fire. Do we say",
+          "that we need a fire to start the burning process?"
+        ],
+        "concepts": [
+          "Fire",
+          "Burning",
+          "Safety",
+          "Experiment"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "The image is a photo of a piece of paper being held by tongs with a lighted matchstick approaching it.",
+          "The text suggests that the image is related to an educational activity about fire and burning."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -114730,9 +114753,31 @@
       "asset_path": "assets/f5b73676d10b58586ebab73a11d660486c63e50ada2b44cee5df4e3ace0da7da.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of paper being held by tongs with a lighted matchstick approaching it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher",
+          "or an adult.",
+          " Hold a piece of paper with a pair of",
+          "tongs and bring a lighted matchstick",
+          "to it. It quickly catches fire. Do we say",
+          "that we need a fire to start the burning process?"
+        ],
+        "concepts": [
+          "Burning",
+          "Safety",
+          "Experiment",
+          "Observation"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
