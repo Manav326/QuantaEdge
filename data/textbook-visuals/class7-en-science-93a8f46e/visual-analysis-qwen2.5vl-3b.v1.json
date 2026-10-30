@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2836,
+    "assets_selected": 2838,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "54f5863bce3b662fa0d0489d",
-      "bc131de2c4593ee2d26bae95"
+      "d746f6b78bb1ebf1166b9cd9",
+      "bd15047599d11d575bc7fc24"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2833,
-    "assets_remaining": 4655,
-    "assets_completion_percent": 37.8,
+    "assets_analyzed": 2835,
+    "assets_remaining": 4653,
+    "assets_completion_percent": 37.9,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2831,
+    "assets_skipped_from_checkpoint": 2833,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41050335050",
-      "checkpointed_at": "2026-10-30T13:39:24Z"
+      "checkpointed_at": "2026-10-30T13:44:45Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41050335050",
-      "checkpointed_at": "2026-10-30T13:40:24Z"
+      "checkpointed_at": "2026-10-30T13:45:45Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41050335050",
-      "checkpointed_at": "2026-10-30T13:41:48Z"
+      "checkpointed_at": "2026-10-30T13:47:06Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -106313,6 +106313,86 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41050335050",
       "checkpointed_at": "2026-10-30T13:43:14Z"
+    },
+    {
+      "asset_id": "d746f6b78bb1ebf1166b9cd9",
+      "asset_sha256": "a701e64af34f4a33c63105eb9004856fa9617facc941b76436b87bfd19de3730",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/a701e64af34f4a33c63105eb9004856fa9617facc941b76436b87bfd19de3730.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green page with a white border, possibly a blank page or a page with a simple design.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "65",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about chemical reactions and physical changes in a burning candle.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook page.",
+          "The text is partially visible and may not be complete."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41050335050",
+      "checkpointed_at": "2026-10-30T13:48:17Z"
+    },
+    {
+      "asset_id": "bd15047599d11d575bc7fc24",
+      "asset_sha256": "4eb4d9b86f9ce1035a28cfa5263c97dac6190117c002fb348d9894a98edac418",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/4eb4d9b86f9ce1035a28cfa5263c97dac6190117c002fb348d9894a98edac418.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green border with a white background, possibly indicating a page break or a section divider in a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "65",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Burning candle",
+          "Melting wax",
+          "Evaporating wax"
+        ],
+        "context_relation": "The image is related to an educational content editor analyzing a textbook page about a chemical reaction involving a burning candle.",
+        "limitations": [
+          "The image does not show the actual content of the textbook page.",
+          "The text is partially obscured or cut off."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41050335050",
+      "checkpointed_at": "2026-10-30T13:49:28Z"
     }
   ]
 }

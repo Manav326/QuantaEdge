@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2856,
-    "successful_visual_analyses": 2836,
-    "missing_visual_analyses": 4632,
+    "raw_analysis_result_rows": 2858,
+    "successful_visual_analyses": 2838,
+    "missing_visual_analyses": 4630,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4652,
+    "unresolved_count": 4650,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -115379,9 +115379,30 @@
       "asset_path": "assets/a701e64af34f4a33c63105eb9004856fa9617facc941b76436b87bfd19de3730.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green page with a white border, possibly a blank page or a page with a simple design.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "65",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about chemical reactions and physical changes in a burning candle.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook page.",
+          "The text is partially visible and may not be complete."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -115397,9 +115418,30 @@
       "asset_path": "assets/4eb4d9b86f9ce1035a28cfa5263c97dac6190117c002fb348d9894a98edac418.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green border with a white background, possibly indicating a page break or a section divider in a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "65",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Burning candle",
+          "Melting wax",
+          "Evaporating wax"
+        ],
+        "context_relation": "The image is related to an educational content editor analyzing a textbook page about a chemical reaction involving a burning candle.",
+        "limitations": [
+          "The image does not show the actual content of the textbook page.",
+          "The text is partially obscured or cut off."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
