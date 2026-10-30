@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1d827713525ecb594836ae385bcf484c24ffd1a29fc7172b1e618a3326545fbd",
+  "raw_analysis_sha256": "bb0370684ea3c36c3142ebb5f0bcdbe5adb3544bc8b65c509166f8a16f299573",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:05:55Z",
+      "checkpointed_at": "2026-10-30T05:12:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:06:24Z",
+      "checkpointed_at": "2026-10-30T05:12:35Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:07:01Z",
+      "checkpointed_at": "2026-10-30T05:13:12Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164775,8 +164775,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40987078774",
-      "checkpointed_at": "2026-10-30T04:06:53Z",
+      "run_id": "41001545973",
+      "checkpointed_at": "2026-10-30T05:15:09Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -164911,6 +164911,74 @@
         "concepts": [],
         "context_relation": "The image is unrelated to the text.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "865dc0716c9751511f1f76dc",
+      "asset_sha256": "6929b522a961cea8f9f03968ca74f0dc731afa63c379e90142c1b09a2a03437e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/6929b522a961cea8f9f03968ca74f0dc731afa63c379e90142c1b09a2a03437e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of paper being held by tongs and a lighted matchstick being brought close to it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher",
+          "or an adult.",
+          "Hold a piece of paper with a pair of",
+          "tongs and bring a lighted matchstick",
+          "to it. It quickly catches fire.",
+          "Do we say",
+          "that we need a fire to start the burning process?"
+        ],
+        "concepts": [
+          "Fire",
+          "Burning",
+          "Safety",
+          "Experiment"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41001545973",
+      "checkpointed_at": "2026-10-30T05:15:55Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of paper being held by tongs and a lighted matchstick being brought close to it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher",
+          "or an adult.",
+          "Hold a piece of paper with a pair of",
+          "tongs and bring a lighted matchstick",
+          "to it. It quickly catches fire.",
+          "Do we say",
+          "that we need a fire to start the burning process?"
+        ],
+        "concepts": [
+          "Fire",
+          "Burning",
+          "Safety",
+          "Experiment"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
