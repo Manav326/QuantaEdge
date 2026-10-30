@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2846,
-    "successful_visual_analyses": 2826,
-    "missing_visual_analyses": 4642,
+    "raw_analysis_result_rows": 2848,
+    "successful_visual_analyses": 2828,
+    "missing_visual_analyses": 4640,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4662,
+    "unresolved_count": 4660,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -115024,9 +115024,27 @@
       "asset_path": "assets/844f4ad82fc8aaa22809b282bfe095b3b8d881a5c7e8da0a19f7f431205c5539.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Students discussing the burning candle and its chemical reactions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is a diagram showing students discussing the burning candle and its chemical reactions.",
+        "limitations": [
+          "The image does not show the actual diagram or students' discussion."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -115042,9 +115060,26 @@
       "asset_path": "assets/e64dcc32215e70d1913f266cea3c675da7e54ec7fb0191d5b5d552cc8e4eabb4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of two people sitting and discussing something.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about",
+          "the burning candle."
+        ],
+        "concepts": [
+          "Chemical",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the discussion about the burning candle in Activity 5.7.",
+        "limitations": [
+          "The image does not provide specific details about the discussion."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
