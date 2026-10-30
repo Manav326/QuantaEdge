@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "efa8c98c8491a0261af389d5e8cf8d6e32916a6c3da5207b5ed4f9395024705c",
+  "raw_analysis_sha256": "46ccf289888dccee83deb22bfcac0ac49c9024ffbf088b360c437f36e7c4728d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40995153438",
-      "checkpointed_at": "2026-10-30T03:59:46Z",
+      "checkpointed_at": "2026-10-30T04:04:29Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40995153438",
-      "checkpointed_at": "2026-10-30T04:00:11Z",
+      "checkpointed_at": "2026-10-30T04:04:55Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40995153438",
-      "checkpointed_at": "2026-10-30T04:00:41Z",
+      "checkpointed_at": "2026-10-30T04:05:24Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40995153438",
-      "checkpointed_at": "2026-10-30T04:01:26Z",
+      "checkpointed_at": "2026-10-30T04:06:06Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -67862,7 +67862,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40988136129",
+      "run_id": "40995153438",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
