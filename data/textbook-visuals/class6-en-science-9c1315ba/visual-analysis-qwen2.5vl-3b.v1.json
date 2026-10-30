@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1517,
+    "assets_selected": 1519,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "1a695e571d59afae7006a6ec",
-      "1bd25dc6efb8ccb79ef75f57"
+      "9391a09b1fa7b92f58d75a38",
+      "dfe76dda221f431647417b09"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1514,
-    "assets_remaining": 564,
-    "assets_completion_percent": 72.9,
+    "assets_analyzed": 1516,
+    "assets_remaining": 562,
+    "assets_completion_percent": 73.0,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1512,
+    "assets_skipped_from_checkpoint": 1514,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T09:04:49Z"
+      "checkpointed_at": "2026-10-30T09:13:13Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T09:05:55Z"
+      "checkpointed_at": "2026-10-30T09:14:17Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T09:06:49Z"
+      "checkpointed_at": "2026-10-30T09:15:10Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -51472,6 +51472,65 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
       "checkpointed_at": "2026-10-30T09:11:53Z"
+    },
+    {
+      "asset_id": "9391a09b1fa7b92f58d75a38",
+      "asset_sha256": "3fd00f8690d93e2176c73e481bc0d04baaeaa9b7ee061cf4ac57e44d4aea3f44",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 171,
+      "asset_path": "assets/3fd00f8690d93e2176c73e481bc0d04baaeaa9b7ee061cf4ac57e44d4aea3f44.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "322e1b2f96232706a7c00b392a5bbc7723036d4e48948a85508373c70f31bd7d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three children sitting at a table, engaged in a discussion or activity, with papers and pens in front of them.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "discussion",
+          "activity",
+          "evaporation",
+          "conditions"
+        ],
+        "context_relation": "The image is related to the educational content about evaporation and its conditions.",
+        "limitations": [
+          "The image does not provide specific details about the activity or conditions being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41015673938",
+      "checkpointed_at": "2026-10-30T09:16:51Z"
+    },
+    {
+      "asset_id": "dfe76dda221f431647417b09",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 171,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "322e1b2f96232706a7c00b392a5bbc7723036d4e48948a85508373c70f31bd7d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An empty page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41015673938",
+      "checkpointed_at": "2026-10-30T09:17:08Z"
     }
   ]
 }
