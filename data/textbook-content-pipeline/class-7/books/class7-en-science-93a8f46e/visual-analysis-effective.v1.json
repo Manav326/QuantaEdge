@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "066eb0ec1316c46d6d722f7d7c9ec5b395ed1130f11b9c53dee6183f5572a21c",
+  "raw_analysis_sha256": "1d827713525ecb594836ae385bcf484c24ffd1a29fc7172b1e618a3326545fbd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:01:04Z",
+      "checkpointed_at": "2026-10-30T05:05:55Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:01:32Z",
+      "checkpointed_at": "2026-10-30T05:06:24Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:02:09Z",
+      "checkpointed_at": "2026-10-30T05:07:01Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -142384,7 +142384,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40987078774",
+      "run_id": "41001545973",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -164604,21 +164604,67 @@
     {
       "asset_id": "abff5995a7f8ae024668b20c",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 83,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40987078774",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A candle burning in a glass tumbler and a candle burning without a glass tumbler.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a)",
+          "continues to burn, whereas the candle that was covered with a",
+          "glass tumbler (Fig. 5.6b) stops burning after some time. Why does",
+          "this happen? Since the candle covered by the glass tumbler does not have",
+          "a continuous supply of air, the flame gets extinguished soon.",
+          "andThe component of air that supports combustion i"
+        ],
+        "concepts": [
+          "Candle",
+          "Glass tumbler",
+          "Combustion",
+          "Air",
+          "Extinguishment"
+        ],
+        "context_relation": "The image illustrates the difference in candle burning when covered and uncovered.",
+        "limitations": [
+          "The image does not show the actual experiment, only a description of the observation."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41001545973",
+      "checkpointed_at": "2026-10-30T05:11:18Z",
+      "effective_analysis": {
+        "visual_summary": "A candle burning in a glass tumbler and a candle burning without a glass tumbler.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a)",
+          "continues to burn, whereas the candle that was covered with a",
+          "glass tumbler (Fig. 5.6b) stops burning after some time. Why does",
+          "this happen? Since the candle covered by the glass tumbler does not have",
+          "a continuous supply of air, the flame gets extinguished soon.",
+          "andThe component of air that supports combustion i"
+        ],
+        "concepts": [
+          "Candle",
+          "Glass tumbler",
+          "Combustion",
+          "Air",
+          "Extinguishment"
+        ],
+        "context_relation": "The image illustrates the difference in candle burning when covered and uncovered.",
+        "limitations": [
+          "The image does not show the actual experiment, only a description of the observation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

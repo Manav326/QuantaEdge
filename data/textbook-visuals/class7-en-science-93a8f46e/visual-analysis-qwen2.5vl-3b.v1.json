@@ -14,14 +14,14 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "8604e838b1f1e41398ca72dd",
-      "1554b4067d24673fc7b88fc2"
+      "0d1c88ea0154d314c4c70259",
+      "abff5995a7f8ae024668b20c"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2797,
-    "assets_remaining": 4691,
+    "assets_analyzed": 2798,
+    "assets_remaining": 4690,
     "assets_completion_percent": 37.4,
-    "assets_failed": 20,
+    "assets_failed": 19,
     "assets_skipped_from_checkpoint": 2797,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:01:04Z"
+      "checkpointed_at": "2026-10-30T05:05:55Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:01:32Z"
+      "checkpointed_at": "2026-10-30T05:06:24Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:02:09Z"
+      "checkpointed_at": "2026-10-30T05:07:01Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -90554,7 +90554,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40987078774",
+      "run_id": "41001545973",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -104835,19 +104835,43 @@
     {
       "asset_id": "abff5995a7f8ae024668b20c",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 83,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40987078774",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A candle burning in a glass tumbler and a candle burning without a glass tumbler.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a)",
+          "continues to burn, whereas the candle that was covered with a",
+          "glass tumbler (Fig. 5.6b) stops burning after some time. Why does",
+          "this happen? Since the candle covered by the glass tumbler does not have",
+          "a continuous supply of air, the flame gets extinguished soon.",
+          "andThe component of air that supports combustion i"
+        ],
+        "concepts": [
+          "Candle",
+          "Glass tumbler",
+          "Combustion",
+          "Air",
+          "Extinguishment"
+        ],
+        "context_relation": "The image illustrates the difference in candle burning when covered and uncovered.",
+        "limitations": [
+          "The image does not show the actual experiment, only a description of the observation."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41001545973",
+      "checkpointed_at": "2026-10-30T05:11:18Z"
     },
     {
       "asset_id": "eacb819b4c4047aa8bd75a5b",
