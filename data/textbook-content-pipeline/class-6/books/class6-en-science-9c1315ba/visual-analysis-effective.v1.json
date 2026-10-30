@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "64ff97c4a737753b34757de704736caf98815a1cdcaa13cc6866067db6ba107a",
+  "raw_analysis_sha256": "0d10144d4b1752e45328db93e7b8363b06d4493e3e8accc3a3fdeb4a463f83eb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
-      "checkpointed_at": "2026-10-30T14:54:17Z",
+      "checkpointed_at": "2026-10-30T15:10:22Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
-      "checkpointed_at": "2026-10-30T14:55:09Z",
+      "checkpointed_at": "2026-10-30T15:11:13Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -78026,7 +78026,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41015673938",
+      "run_id": "41061654369",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -78335,6 +78335,110 @@
         "concepts": [],
         "context_relation": "None",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "853c48805769ffe4ff80512f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 171,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "322e1b2f96232706a7c00b392a5bbc7723036d4e48948a85508373c70f31bd7d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An empty page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:16:10Z",
+      "effective_analysis": {
+        "visual_summary": "An empty page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0c02bd1b1653dbd056394b21",
+      "asset_sha256": "e09029c7f02079017cbf5c3fdcfc8a2b3081b5d92fcc646bdf88445d51bfa621",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 171,
+      "asset_path": "page-0171.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "322e1b2f96232706a7c00b392a5bbc7723036d4e48948a85508373c70f31bd7d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity instructions for investigating how water evaporates faster or slower.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "8.5 How can Water be Evaporated Faster or Slower?",
+          "In section 8.1, we have learnt about evaporation. Let us explore it more!",
+          "Observe your surroundings. What are the conditions that affect how fast water evaporates? What differences do you see in evaporation on a cold day versus a hot day? Discuss with your friends. The following words may help in your discussion—fan, drying cloth, sweating, windy day, hot day, rainy day.",
+          "Let us perform Activity 8.7 to investigate conditions that will affect how fast water will evaporate.",
+          "Activity 8.7: Let us investigate",
+          "Take water in a small cap of a bottle (you may use sanitiser in place of water).",
+          "Take the same amount of water in a plate. The exposed area of water in the bottle cap and the plate are different.",
+          "Keep both of them near each other.",
+          "Record the time taken for the water to completely evaporate in each case in Table 8.4."
+        ],
+        "concepts": [
+          "Evaporation",
+          "Conditions affecting evaporation",
+          "Activity 8.7"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:20:25Z",
+      "effective_analysis": {
+        "visual_summary": "Activity instructions for investigating how water evaporates faster or slower.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "8.5 How can Water be Evaporated Faster or Slower?",
+          "In section 8.1, we have learnt about evaporation. Let us explore it more!",
+          "Observe your surroundings. What are the conditions that affect how fast water evaporates? What differences do you see in evaporation on a cold day versus a hot day? Discuss with your friends. The following words may help in your discussion—fan, drying cloth, sweating, windy day, hot day, rainy day.",
+          "Let us perform Activity 8.7 to investigate conditions that will affect how fast water will evaporate.",
+          "Activity 8.7: Let us investigate",
+          "Take water in a small cap of a bottle (you may use sanitiser in place of water).",
+          "Take the same amount of water in a plate. The exposed area of water in the bottle cap and the plate are different.",
+          "Keep both of them near each other.",
+          "Record the time taken for the water to completely evaporate in each case in Table 8.4."
+        ],
+        "concepts": [
+          "Evaporation",
+          "Conditions affecting evaporation",
+          "Activity 8.7"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
