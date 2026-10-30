@@ -15,12 +15,12 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "07fea958dc5c5e3a780ee5cb"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1384,
-    "assets_remaining": 907,
-    "assets_completion_percent": 60.4,
+    "assets_analyzed": 1385,
+    "assets_remaining": 906,
+    "assets_completion_percent": 60.5,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1384,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41123472009",
-      "checkpointed_at": "2026-10-30T21:35:30Z"
+      "checkpointed_at": "2026-10-30T21:40:22Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41123472009",
-      "checkpointed_at": "2026-10-30T21:35:55Z"
+      "checkpointed_at": "2026-10-30T21:40:48Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41123472009",
-      "checkpointed_at": "2026-10-30T21:36:25Z"
+      "checkpointed_at": "2026-10-30T21:41:18Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41123472009",
-      "checkpointed_at": "2026-10-30T21:37:09Z"
+      "checkpointed_at": "2026-10-30T21:42:02Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -46215,6 +46215,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41112802763",
       "checkpointed_at": "2026-10-30T20:25:18Z"
+    },
+    {
+      "asset_id": "07fea958dc5c5e3a780ee5cb",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 119,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bba3cd87442f97552f1dd1e9c80cb27de77ede3ce3bee36f96da122cd52bba54",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the breakdown of rocks into pebbles, stones, and sand due to erosion.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "99",
+          "Where do these pebbles, stones, and sand come from?",
+          "In the mountains, rocks gradually break down due to erosion.",
+          "Rivers flowing through these regions carry along the eroded rock pieces.",
+          "As the rivers flow, they continue to break down the rocks further into pebbles, stones, sand;",
+          "and transport large quantities of them to the plains.",
+          "The bigger rocks are eventually broken down into finer grains"
+        ],
+        "concepts": [
+          "erosion",
+          "rock breakdown",
+          "pebbles",
+          "stones",
+          "sand",
+          "transportation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the natural process of erosion and the breakdown of rocks into smaller particles.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is in English."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41123472009",
+      "checkpointed_at": "2026-10-30T21:42:23Z"
     }
   ]
 }
