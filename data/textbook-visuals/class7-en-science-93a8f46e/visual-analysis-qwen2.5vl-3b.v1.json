@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2872,
+    "assets_selected": 2876,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "28f83c0eea4610bf2e7a2975",
-      "446142bfd4235d511ce053c6",
-      "ea94d87d2a4f030de5641f29",
-      "344e16b7d7b0e2f837b84d40"
+      "08f6a8391e07242fd7442e37",
+      "0847d357bd1661e32fdbe013",
+      "97de4add8918dfa55060ef4d",
+      "870b5669ad78b1de3c497182"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2871,
-    "assets_remaining": 4617,
-    "assets_completion_percent": 38.3,
+    "assets_analyzed": 2875,
+    "assets_remaining": 4613,
+    "assets_completion_percent": 38.4,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2867,
+    "assets_skipped_from_checkpoint": 2871,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41090330445",
-      "checkpointed_at": "2026-10-30T18:47:56Z"
+      "checkpointed_at": "2026-10-30T18:55:52Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -107708,6 +107708,161 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41090330445",
       "checkpointed_at": "2026-10-30T18:54:35Z"
+    },
+    {
+      "asset_id": "08f6a8391e07242fd7442e37",
+      "asset_sha256": "3a6c2792418e175d690dcfcba0013ae91fbeb92ad3d3d5dd0a59d3064a666aea",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/3a6c2792418e175d690dcfcba0013ae91fbeb92ad3d3d5dd0a59d3064a666aea.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the process of a burning candle.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about the burning candle and its chemical reactions.",
+        "limitations": [
+          "The image does not provide specific details about the burning candle's chemical reactions.",
+          "The image does not show the actual burning candle or its components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41090330445",
+      "checkpointed_at": "2026-10-30T18:57:28Z"
+    },
+    {
+      "asset_id": "0847d357bd1661e32fdbe013",
+      "asset_sha256": "8269c0a8aee13e8ada4727591fb9c377f53497c7bef56a253816404ea8b8fb89",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/8269c0a8aee13e8ada4727591fb9c377f53497c7bef56a253816404ea8b8fb89.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the process of a burning candle.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about the burning candle and its chemical reactions.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved in the burning candle.",
+          "The image does not show the actual burning candle or the melting wax.",
+          "The image does not include any measurements or data points related to the chemical reactions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41090330445",
+      "checkpointed_at": "2026-10-30T18:59:11Z"
+    },
+    {
+      "asset_id": "97de4add8918dfa55060ef4d",
+      "asset_sha256": "3f886a64b5792b5acf00b99e93955c3297070a676fbc71a2ccfc73d8e91a4533",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/3f886a64b5792b5acf00b99e93955c3297070a676fbc71a2ccfc73d8e91a4533.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the process of a burning candle.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about",
+          "the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is a visual representation of a chemical reaction involving a burning candle.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction.",
+          "The image does not show the actual process of the candle burning."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41090330445",
+      "checkpointed_at": "2026-10-30T19:00:53Z"
+    },
+    {
+      "asset_id": "870b5669ad78b1de3c497182",
+      "asset_sha256": "bd441bb3226c6d2a12a0d26a36da41bb58813eb17d7d3fc342048e2149cf2fc8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/bd441bb3226c6d2a12a0d26a36da41bb58813eb17d7d3fc342048e2149cf2fc8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing the burning candle and its chemical properties.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about",
+          "the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical properties of wax",
+          "Melting and evaporation of wax"
+        ],
+        "context_relation": "The image is a diagram showing students discussing the burning candle and its chemical properties.",
+        "limitations": [
+          "The image does not show the actual burning candle or the students' discussion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41090330445",
+      "checkpointed_at": "2026-10-30T19:02:34Z"
     }
   ]
 }
