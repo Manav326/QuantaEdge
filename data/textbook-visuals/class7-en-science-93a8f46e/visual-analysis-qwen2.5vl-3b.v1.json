@@ -14,13 +14,13 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "0d1c88ea0154d314c4c70259",
-      "f5cfd5f0dfcebd60e3212f1b"
+      "f5cfd5f0dfcebd60e3212f1b",
+      "ab862897f16b0544880f66fd"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2841,
-    "assets_remaining": 4647,
-    "assets_completion_percent": 37.9,
+    "assets_analyzed": 2842,
+    "assets_remaining": 4646,
+    "assets_completion_percent": 38.0,
     "assets_failed": 19,
     "assets_skipped_from_checkpoint": 2841,
     "batch_limit": 5,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41078771691",
-      "checkpointed_at": "2026-10-30T16:09:00Z"
+      "checkpointed_at": "2026-10-30T16:14:19Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41078771691",
-      "checkpointed_at": "2026-10-30T16:09:29Z"
+      "checkpointed_at": "2026-10-30T16:14:48Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41078771691",
-      "checkpointed_at": "2026-10-30T16:10:06Z"
+      "checkpointed_at": "2026-10-30T16:15:26Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104932,8 +104932,10 @@
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
-          "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
+          "SCIENCE AND SOCIETY",
+          "If a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt and stick to the sk",
+          "FASCINATING FACTS",
+          "Nature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescence.",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
@@ -104946,7 +104948,7 @@
           "air",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of carbon dioxide gas in the air.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -104956,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41078771691",
-      "checkpointed_at": "2026-10-30T16:13:32Z"
+      "checkpointed_at": "2026-10-30T16:16:06Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -106662,6 +106664,44 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
       "checkpointed_at": "2026-10-30T15:11:17Z"
+    },
+    {
+      "asset_id": "ab862897f16b0544880f66fd",
+      "asset_sha256": "d3c3e5aba945534ccb2b698d65e365a9a754f10c38dc73a54a5cf1b95cca54b5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/d3c3e5aba945534ccb2b698d65e365a9a754f10c38dc73a54a5cf1b95cca54b5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing the burning candle and its chemical reactions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about",
+          "the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is a diagram showing a discussion about a burning candle and its chemical reactions.",
+        "limitations": [
+          "The image does not show the actual burning candle or the students' discussion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41078771691",
+      "checkpointed_at": "2026-10-30T16:16:46Z"
     }
   ]
 }
