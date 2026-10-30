@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5b60ffca4fa0f0fa6be287910a279ae9f69ee6bd0b3b6def9d84b20072b86213",
+  "raw_analysis_sha256": "eeee9b921507ba56a94e806688e5d18628deb8f5d68c8ce83fd4f45b321879c8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41112378558",
-      "checkpointed_at": "2026-10-30T21:12:06Z",
+      "checkpointed_at": "2026-10-30T21:19:10Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41112378558",
-      "checkpointed_at": "2026-10-30T21:13:30Z",
+      "checkpointed_at": "2026-10-30T21:20:33Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164714,7 +164714,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41112378558",
-      "checkpointed_at": "2026-10-30T21:14:58Z",
+      "checkpointed_at": "2026-10-30T21:22:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -169880,6 +169880,124 @@
         "limitations": [
           "The image does not provide any specific information about the text content.",
           "The image is a still from a cartoon or animated series, not a photograph or real-life image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8a30544060a9ed7179fa28f7",
+      "asset_sha256": "66933dc629630c3bab0ad828c5b4343c2e7ccabb4df751af74a778eee6a157da",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/66933dc629630c3bab0ad828c5b4343c2e7ccabb4df751af74a778eee6a157da.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing the burning candle and its chemical properties.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical properties of burning",
+          "Melting and evaporation of wax"
+        ],
+        "context_relation": "The image is a visual representation of a discussion activity in a chemistry textbook.",
+        "limitations": [
+          "The image does not show the actual discussion or the students' responses.",
+          "The text is incomplete and does not provide the full context of the discussion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41112378558",
+      "checkpointed_at": "2026-10-30T21:23:37Z",
+      "effective_analysis": {
+        "visual_summary": "Students discussing the burning candle and its chemical properties.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical properties of burning",
+          "Melting and evaporation of wax"
+        ],
+        "context_relation": "The image is a visual representation of a discussion activity in a chemistry textbook.",
+        "limitations": [
+          "The image does not show the actual discussion or the students' responses.",
+          "The text is incomplete and does not provide the full context of the discussion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b51146155215c32718843b99",
+      "asset_sha256": "d1d5576b684f663605413880b0fb39d94e4564e0f27c4a953319513806081f93",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/d1d5576b684f663605413880b0fb39d94e4564e0f27c4a953319513806081f93.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person with a red shirt and black hair, possibly discussing a scientific concept.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about chemical reactions and the melting and evaporation of wax.",
+        "limitations": [
+          "The image does not provide specific details about the discussion topic or the students' responses."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41112378558",
+      "checkpointed_at": "2026-10-30T21:25:13Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person with a red shirt and black hair, possibly discussing a scientific concept.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about chemical reactions and the melting and evaporation of wax.",
+        "limitations": [
+          "The image does not provide specific details about the discussion topic or the students' responses."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
