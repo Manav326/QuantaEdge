@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "513cb8edd2f27d3ca17b4acade4c860eea842048a09e11e20bd54e42da667fa4",
+  "raw_analysis_sha256": "9f40b512ba8b5ca975fe82ccd07f8a629a9a505cce655a4be3a34c2afef7bfbf",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T08:39:08Z",
+      "checkpointed_at": "2026-10-30T08:47:11Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T08:40:42Z",
+      "checkpointed_at": "2026-10-30T08:48:48Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164714,7 +164714,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T08:42:26Z",
+      "checkpointed_at": "2026-10-30T08:50:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -165540,6 +165540,152 @@
         "limitations": [
           "The image does not show the actual activity being performed, only a visual representation.",
           "The text in the image is not related to the activity described in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "22bbb232d7e56f3bbbeebf31",
+      "asset_sha256": "c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of paper being held by tongs with a lighted matchstick nearby.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher",
+          "or an adult.",
+          "Hold a piece of paper with a pair of",
+          "tongs and bring a lighted matchstick",
+          "to it. It quickly catches fire. Do we say",
+          "that we need a fire to start the burning process?"
+        ],
+        "concepts": [
+          "Fire",
+          "Lighted matchstick",
+          "Tongs",
+          "Supervision",
+          "Activity supervision"
+        ],
+        "context_relation": "The image is related to an educational activity involving fire and supervision.",
+        "limitations": [
+          "The image does not show the actual activity being performed.",
+          "The image does not show the results of the activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41016250470",
+      "checkpointed_at": "2026-10-30T08:52:09Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of paper being held by tongs with a lighted matchstick nearby.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher",
+          "or an adult.",
+          "Hold a piece of paper with a pair of",
+          "tongs and bring a lighted matchstick",
+          "to it. It quickly catches fire. Do we say",
+          "that we need a fire to start the burning process?"
+        ],
+        "concepts": [
+          "Fire",
+          "Lighted matchstick",
+          "Tongs",
+          "Supervision",
+          "Activity supervision"
+        ],
+        "context_relation": "The image is related to an educational activity involving fire and supervision.",
+        "limitations": [
+          "The image does not show the actual activity being performed.",
+          "The image does not show the results of the activity."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bcaecee7ffdecf4758982d36",
+      "asset_sha256": "c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of paper with a pair of tongs and a lighted matchstick.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher",
+          "or an adult.",
+          "Hold a piece of paper with a pair of",
+          "tongs and bring a lighted matchstick",
+          "to it. It quickly catches fire.",
+          "Do we say",
+          "that we need a fire to start the burning process?"
+        ],
+        "concepts": [
+          "Activity",
+          "Caution",
+          "Supervision",
+          "Lighted matchstick",
+          "Paper",
+          "Tongs",
+          "Fire",
+          "Burning process"
+        ],
+        "context_relation": "The image is related to the activity described in the text.",
+        "limitations": [
+          "The image does not show the actual activity being performed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41016250470",
+      "checkpointed_at": "2026-10-30T08:52:41Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of paper with a pair of tongs and a lighted matchstick.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher",
+          "or an adult.",
+          "Hold a piece of paper with a pair of",
+          "tongs and bring a lighted matchstick",
+          "to it. It quickly catches fire.",
+          "Do we say",
+          "that we need a fire to start the burning process?"
+        ],
+        "concepts": [
+          "Activity",
+          "Caution",
+          "Supervision",
+          "Lighted matchstick",
+          "Paper",
+          "Tongs",
+          "Fire",
+          "Burning process"
+        ],
+        "context_relation": "The image is related to the activity described in the text.",
+        "limitations": [
+          "The image does not show the actual activity being performed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
