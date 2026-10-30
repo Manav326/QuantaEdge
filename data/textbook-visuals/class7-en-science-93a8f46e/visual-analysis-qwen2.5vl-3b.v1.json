@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2830,
+    "assets_selected": 2832,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
+      "e904eb84e607d05c01b9eca9",
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "f5cfd5f0dfcebd60e3212f1b",
-      "111096258377ca2efb8b20c1",
-      "fb7ab5f76d3ffe815f80c540"
+      "79bbc448b9853ba138d248e2",
+      "c85f41bbf274ff0251ebf3e6"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 2827,
     "assets_remaining": 4661,
     "assets_completion_percent": 37.8,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2825,
+    "assets_skipped_from_checkpoint": 2827,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -4829,7 +4829,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41033422861",
+      "run_id": "41050335050",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -9962,36 +9962,35 @@
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
-          "To do this, we have to step out of this book, step out of the\nclassroom perhaps, and experience the world through activities\nand experiments. These are experiences that we hope will not\njust be interesting or exciting but also serve as stepping stones\nto a deeper understanding of the environment we ",
-          "But let’s get back into this book for now. You will read about\ntopics in different fields of science, from physics and chemistry\nto biology and earth sciences. While they might appear as\ndiﬀ erent chapters, just as we had said in Grade 6, they are\nall interconnected. Scientific ideas in one area oft"
+          "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
+          "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
+          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
         ],
         "concepts": [
           "science",
           "curiosity",
           "questioning",
+          "process",
           "environment",
-          "responsibility",
-          "science as a process",
+          "society",
           "environmental challenges",
           "sustainable world",
           "properties of materials",
-          "discovery",
-          "interconnectedness",
+          "interconnected",
           "scientific ideas",
           "discoveries",
           "asking questions"
         ],
         "context_relation": "exploration and questioning in science",
         "limitations": [
-          "the text does not provide specific examples or activities for Grade 7 students to engage with"
+          "The text does not provide specific examples or questions for the reader to explore."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:37:29Z"
+      "run_id": "41050335050",
+      "checkpointed_at": "2026-10-30T11:58:02Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13472,7 +13471,6 @@
           "Earth",
           "Moon",
           "rotation",
-          "axis",
           "day and night",
           "experiments",
           "questions",
@@ -13482,7 +13480,7 @@
           "questions and answers",
           "turning around"
         ],
-        "context_relation": "The text discusses the effects of light on the Earth and Moon, and encourages readers to think critically about scientific concepts.",
+        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically about scientific concepts.",
         "limitations": [
           "The text does not provide specific images or diagrams to accompany the text."
         ]
@@ -13490,8 +13488,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:38:30Z"
+      "run_id": "41050335050",
+      "checkpointed_at": "2026-10-30T12:01:03Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -45670,7 +45668,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41033422861",
+      "run_id": "41050335050",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -49960,7 +49958,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41033422861",
+      "run_id": "41050335050",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
