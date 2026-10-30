@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "51d05bd1f73c2855339acb9364204920ad9fcf11689999877514193f838aabb0",
+  "raw_analysis_sha256": "9ec6948f910eb665773bacf23093d767fba884a264536dc1bcdf577b7559dce3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:29:07Z",
+      "checkpointed_at": "2026-10-30T08:41:34Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:30:11Z",
+      "checkpointed_at": "2026-10-30T08:42:37Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:31:03Z",
+      "checkpointed_at": "2026-10-30T08:43:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -74442,7 +74442,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40968271659",
+      "run_id": "41015673938",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -77970,6 +77970,74 @@
         "limitations": [
           "no specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c4d9a43bc72351737fcd0111",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 169,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "70f89a8f4eb5189a1a1017e1a725b51d4863a6a188e4173cc7e455924687c401",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of water in different states.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "What are the differences in the properties of water in\nsolid, liquid and gaseous states?",
+          "Ice (solid state) retains its shape irrespective of the\ncontainer in which it is placed while water takes the shape\nof the container. Ice does not flow or spread.",
+          "Water (liquid state) flows and changes its shape. Water\ndoes not have a fixed shape. It takes up the shape of the\ncontainer in which it is kept, but the volume of water remains\nconstant. Does water also possess the property to spread?\nYes, water also has the property to spread while keeping the\nvolu",
+          "Water vapour (gaseous state)"
+        ],
+        "concepts": [
+          "properties of water",
+          "solid state",
+          "liquid state",
+          "gaseous state",
+          "volume",
+          "shape",
+          "flow",
+          "spread"
+        ],
+        "context_relation": "The page is discussing the differences in the properties of water in different states.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41015673938",
+      "checkpointed_at": "2026-10-30T08:49:16Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of water in different states.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "What are the differences in the properties of water in\nsolid, liquid and gaseous states?",
+          "Ice (solid state) retains its shape irrespective of the\ncontainer in which it is placed while water takes the shape\nof the container. Ice does not flow or spread.",
+          "Water (liquid state) flows and changes its shape. Water\ndoes not have a fixed shape. It takes up the shape of the\ncontainer in which it is kept, but the volume of water remains\nconstant. Does water also possess the property to spread?\nYes, water also has the property to spread while keeping the\nvolu",
+          "Water vapour (gaseous state)"
+        ],
+        "concepts": [
+          "properties of water",
+          "solid state",
+          "liquid state",
+          "gaseous state",
+          "volume",
+          "shape",
+          "flow",
+          "spread"
+        ],
+        "context_relation": "The page is discussing the differences in the properties of water in different states.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

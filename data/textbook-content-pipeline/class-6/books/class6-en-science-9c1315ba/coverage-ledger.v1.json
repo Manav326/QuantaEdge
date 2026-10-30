@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1530,
-    "successful_visual_analyses": 1511,
-    "missing_visual_analyses": 548,
+    "raw_analysis_result_rows": 1531,
+    "successful_visual_analyses": 1512,
+    "missing_visual_analyses": 547,
     "failed_visual_analyses": 19,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 567,
+    "unresolved_count": 566,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -57554,9 +57554,32 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of water in different states.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "What are the differences in the properties of water in\nsolid, liquid and gaseous states?",
+          "Ice (solid state) retains its shape irrespective of the\ncontainer in which it is placed while water takes the shape\nof the container. Ice does not flow or spread.",
+          "Water (liquid state) flows and changes its shape. Water\ndoes not have a fixed shape. It takes up the shape of the\ncontainer in which it is kept, but the volume of water remains\nconstant. Does water also possess the property to spread?\nYes, water also has the property to spread while keeping the\nvolu",
+          "Water vapour (gaseous state)"
+        ],
+        "concepts": [
+          "properties of water",
+          "solid state",
+          "liquid state",
+          "gaseous state",
+          "volume",
+          "shape",
+          "flow",
+          "spread"
+        ],
+        "context_relation": "The page is discussing the differences in the properties of water in different states.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
