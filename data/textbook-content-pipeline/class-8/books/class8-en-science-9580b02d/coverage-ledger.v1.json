@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1392,
-    "successful_visual_analyses": 1375,
-    "missing_visual_analyses": 899,
+    "raw_analysis_result_rows": 1393,
+    "successful_visual_analyses": 1376,
+    "missing_visual_analyses": 898,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 916,
+    "unresolved_count": 915,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -51854,9 +51854,29 @@
       "asset_path": "assets/8783560055ab363f7eb8b40353828f434644c526a1fee4e513ee5c18e4cca51b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students in red uniforms are engaged in an outdoor science activity, examining rocks and water in a rocky landscape.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why is it possible to pile up stones or sand, but not a liquid like water?",
+          "Why does water take the shape of folded hands but lose that shape when released?",
+          "We cannot see air, so how does it add weight to an inflated balloon?",
+          "Is the air we breathe today the same that existed thousands of years ago?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Nature of Matter",
+          "Properties of Water",
+          "Properties of Air",
+          "Curiosity"
+        ],
+        "context_relation": "The image is related to the textbook content about the nature of matter and its properties.",
+        "limitations": [
+          "The image does not provide specific answers to the questions listed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

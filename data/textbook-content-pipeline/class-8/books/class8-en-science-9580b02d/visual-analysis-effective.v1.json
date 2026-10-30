@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8a905aa7c95332e458bf59df0d765a5e2fad187dc51901aa58793e771630c108",
+  "raw_analysis_sha256": "6ce68a7f0cac0161cc9d8926a91145eb34e17817c6ead7c88a92ce6db5a42092",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40971045207",
-      "checkpointed_at": "2026-10-30T00:17:58Z",
+      "checkpointed_at": "2026-10-30T00:23:13Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40971045207",
-      "checkpointed_at": "2026-10-30T00:18:25Z",
+      "checkpointed_at": "2026-10-30T00:23:41Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40971045207",
-      "checkpointed_at": "2026-10-30T00:18:58Z",
+      "checkpointed_at": "2026-10-30T00:24:13Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40971045207",
-      "checkpointed_at": "2026-10-30T00:19:47Z",
+      "checkpointed_at": "2026-10-30T00:25:00Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -69088,6 +69088,68 @@
         "context_relation": "Educational content",
         "limitations": [
           "The instructions are specific to the content of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d80da850e9ffd23770a2741c",
+      "asset_sha256": "8783560055ab363f7eb8b40353828f434644c526a1fee4e513ee5c18e4cca51b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 118,
+      "asset_path": "assets/8783560055ab363f7eb8b40353828f434644c526a1fee4e513ee5c18e4cca51b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5889dfe3608053f58da41f33c69e2f86c05efc743f4a7ecef7b37bb042452c96",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of students in red uniforms are engaged in an outdoor science activity, examining rocks and water in a rocky landscape.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why is it possible to pile up stones or sand, but not a liquid like water?",
+          "Why does water take the shape of folded hands but lose that shape when released?",
+          "We cannot see air, so how does it add weight to an inflated balloon?",
+          "Is the air we breathe today the same that existed thousands of years ago?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Nature of Matter",
+          "Properties of Water",
+          "Properties of Air",
+          "Curiosity"
+        ],
+        "context_relation": "The image is related to the textbook content about the nature of matter and its properties.",
+        "limitations": [
+          "The image does not provide specific answers to the questions listed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40971045207",
+      "checkpointed_at": "2026-10-30T00:25:52Z",
+      "effective_analysis": {
+        "visual_summary": "A group of students in red uniforms are engaged in an outdoor science activity, examining rocks and water in a rocky landscape.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why is it possible to pile up stones or sand, but not a liquid like water?",
+          "Why does water take the shape of folded hands but lose that shape when released?",
+          "We cannot see air, so how does it add weight to an inflated balloon?",
+          "Is the air we breathe today the same that existed thousands of years ago?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Nature of Matter",
+          "Properties of Water",
+          "Properties of Air",
+          "Curiosity"
+        ],
+        "context_relation": "The image is related to the textbook content about the nature of matter and its properties.",
+        "limitations": [
+          "The image does not provide specific answers to the questions listed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

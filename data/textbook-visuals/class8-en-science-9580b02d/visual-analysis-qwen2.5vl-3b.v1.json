@@ -15,12 +15,12 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "d80da850e9ffd23770a2741c"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1371,
-    "assets_remaining": 920,
-    "assets_completion_percent": 59.8,
+    "assets_analyzed": 1372,
+    "assets_remaining": 919,
+    "assets_completion_percent": 59.9,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1371,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40971045207",
-      "checkpointed_at": "2026-10-30T00:17:58Z"
+      "checkpointed_at": "2026-10-30T00:23:13Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40971045207",
-      "checkpointed_at": "2026-10-30T00:18:25Z"
+      "checkpointed_at": "2026-10-30T00:23:41Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40971045207",
-      "checkpointed_at": "2026-10-30T00:18:58Z"
+      "checkpointed_at": "2026-10-30T00:24:13Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40971045207",
-      "checkpointed_at": "2026-10-30T00:19:47Z"
+      "checkpointed_at": "2026-10-30T00:25:00Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -45687,6 +45687,45 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40960814484",
       "checkpointed_at": "2026-10-29T23:05:52Z"
+    },
+    {
+      "asset_id": "d80da850e9ffd23770a2741c",
+      "asset_sha256": "8783560055ab363f7eb8b40353828f434644c526a1fee4e513ee5c18e4cca51b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 118,
+      "asset_path": "assets/8783560055ab363f7eb8b40353828f434644c526a1fee4e513ee5c18e4cca51b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5889dfe3608053f58da41f33c69e2f86c05efc743f4a7ecef7b37bb042452c96",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of students in red uniforms are engaged in an outdoor science activity, examining rocks and water in a rocky landscape.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why is it possible to pile up stones or sand, but not a liquid like water?",
+          "Why does water take the shape of folded hands but lose that shape when released?",
+          "We cannot see air, so how does it add weight to an inflated balloon?",
+          "Is the air we breathe today the same that existed thousands of years ago?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Nature of Matter",
+          "Properties of Water",
+          "Properties of Air",
+          "Curiosity"
+        ],
+        "context_relation": "The image is related to the textbook content about the nature of matter and its properties.",
+        "limitations": [
+          "The image does not provide specific answers to the questions listed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40971045207",
+      "checkpointed_at": "2026-10-30T00:25:52Z"
     }
   ]
 }
