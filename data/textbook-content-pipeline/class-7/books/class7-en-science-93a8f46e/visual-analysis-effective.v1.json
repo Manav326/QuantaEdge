@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c9a4a690219c21348fb4840884851c3cdb8201f5e0185b5fbff1b9b6a10d454a",
+  "raw_analysis_sha256": "0c4de4e64c07450949e8b064ea9849a78785dde99b15f61ce5fb6d72ac8813c2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T08:54:05Z",
+      "checkpointed_at": "2026-10-30T09:00:30Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T08:55:42Z",
+      "checkpointed_at": "2026-10-30T09:02:08Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164714,7 +164714,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T08:57:24Z",
+      "checkpointed_at": "2026-10-30T09:03:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -165761,6 +165761,90 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
       "checkpointed_at": "2026-10-30T08:59:08Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or a similar material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a twisted rope or cord, which is not directly related to the text about a burning matchstick and the burning process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dcb98490ebb6f81acc38362b",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or a similar material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a twisted rope or cord, which is not directly related to the text about a burning matchstick and the burning process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41016250470",
+      "checkpointed_at": "2026-10-30T09:04:12Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or a similar material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a twisted rope or cord, which is not directly related to the text about a burning matchstick and the burning process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ac81990ffd3d4baa3818c054",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or a similar material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a twisted rope or cord, which is not directly related to the text about a burning matchstick and the burning process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41016250470",
+      "checkpointed_at": "2026-10-30T09:04:30Z",
       "effective_analysis": {
         "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or a similar material.",
         "visual_type": "illustration",
