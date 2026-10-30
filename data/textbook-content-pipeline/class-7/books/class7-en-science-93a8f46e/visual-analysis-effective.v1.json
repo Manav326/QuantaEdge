@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d68f740cbaefc9a43e2790c7ca05c0013c7268a91e4d74b39446e67b95d5f18c",
+  "raw_analysis_sha256": "4c51ddcc1c0cc2cc468fda974c37f57414d92e6667594d6431ae55c5a5e47b9c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:02:21Z",
+      "checkpointed_at": "2026-10-30T15:05:33Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:02:49Z",
+      "checkpointed_at": "2026-10-30T15:06:02Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:03:27Z",
+      "checkpointed_at": "2026-10-30T15:06:39Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:04:06Z",
+      "checkpointed_at": "2026-10-30T15:07:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -167382,6 +167382,60 @@
         "limitations": [
           "unclear specific details of the image",
           "no specific objects or figures visible"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "be03167321c86f964cad99f8",
+      "asset_sha256": "f548d55fc5fc7c8df58044cfb8d41b48f0778b1464426aa86e43f64e2d67c2bd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/f548d55fc5fc7c8df58044cfb8d41b48f0778b1464426aa86e43f64e2d67c2bd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular frame with a curved corner, possibly indicating a section or heading in a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting and evaporation of wax"
+        ],
+        "context_relation": "The image is likely a part of an educational content, specifically related to a textbook chapter on chemical reactions and physical changes in materials.",
+        "limitations": [
+          "The image does not provide specific details about the content of the discussion or the visual representation of the burning candle.",
+          "The text is partially obscured, making it difficult to extract all the details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41067764012",
+      "checkpointed_at": "2026-10-30T15:07:59Z",
+      "effective_analysis": {
+        "visual_summary": "A green rectangular frame with a curved corner, possibly indicating a section or heading in a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting and evaporation of wax"
+        ],
+        "context_relation": "The image is likely a part of an educational content, specifically related to a textbook chapter on chemical reactions and physical changes in materials.",
+        "limitations": [
+          "The image does not provide specific details about the content of the discussion or the visual representation of the burning candle.",
+          "The text is partially obscured, making it difficult to extract all the details."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

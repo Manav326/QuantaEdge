@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2843,
+    "assets_selected": 2844,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "ae38e0a8cecb87c5be22df37"
+      "be03167321c86f964cad99f8"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2839,
-    "assets_remaining": 4649,
+    "assets_analyzed": 2840,
+    "assets_remaining": 4648,
     "assets_completion_percent": 37.9,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2838,
+    "assets_skipped_from_checkpoint": 2839,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:02:21Z"
+      "checkpointed_at": "2026-10-30T15:05:33Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:02:49Z"
+      "checkpointed_at": "2026-10-30T15:06:02Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:03:27Z"
+      "checkpointed_at": "2026-10-30T15:06:39Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:04:06Z"
+      "checkpointed_at": "2026-10-30T15:07:19Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -106592,6 +106592,41 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
       "checkpointed_at": "2026-10-30T15:04:45Z"
+    },
+    {
+      "asset_id": "be03167321c86f964cad99f8",
+      "asset_sha256": "f548d55fc5fc7c8df58044cfb8d41b48f0778b1464426aa86e43f64e2d67c2bd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/f548d55fc5fc7c8df58044cfb8d41b48f0778b1464426aa86e43f64e2d67c2bd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular frame with a curved corner, possibly indicating a section or heading in a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting and evaporation of wax"
+        ],
+        "context_relation": "The image is likely a part of an educational content, specifically related to a textbook chapter on chemical reactions and physical changes in materials.",
+        "limitations": [
+          "The image does not provide specific details about the content of the discussion or the visual representation of the burning candle.",
+          "The text is partially obscured, making it difficult to extract all the details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41067764012",
+      "checkpointed_at": "2026-10-30T15:07:59Z"
     }
   ]
 }
