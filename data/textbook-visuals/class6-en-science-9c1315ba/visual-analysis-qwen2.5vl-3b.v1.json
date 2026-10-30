@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1514,
+    "assets_selected": 1515,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "2e4c077a65b10cea231c4b7c",
-      "8e056534d5a845bf27f6cb6e"
+      "73f365727e0fd05f66409103",
+      "43084bf8e5a05ae6b75f814c"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1510,
-    "assets_remaining": 568,
-    "assets_completion_percent": 72.7,
+    "assets_analyzed": 1512,
+    "assets_remaining": 566,
+    "assets_completion_percent": 72.8,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1509,
+    "assets_skipped_from_checkpoint": 1510,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:50:39Z"
+      "checkpointed_at": "2026-10-30T08:59:33Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:51:43Z"
+      "checkpointed_at": "2026-10-30T09:00:40Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:52:39Z"
+      "checkpointed_at": "2026-10-30T09:01:34Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -51331,6 +51331,61 @@
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "73f365727e0fd05f66409103",
+      "asset_sha256": "3c19348f92129a310261b4d5ed6f33590504612d152ea8f6a1e8acdda36d6e93",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 170,
+      "asset_path": "assets/3c19348f92129a310261b4d5ed6f33590504612d152ea8f6a1e8acdda36d6e93.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab9fa7a3254637e8bbcb827bfaa6980aff02523c928378ad1f8b9d4f8076da16",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of yellow fabric with a textured edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41015673938",
+      "checkpointed_at": "2026-10-30T09:03:08Z"
+    },
+    {
+      "asset_id": "43084bf8e5a05ae6b75f814c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 170,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab9fa7a3254637e8bbcb827bfaa6980aff02523c928378ad1f8b9d4f8076da16",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An image of a black page with no visible text or graphics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or graphics"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41015673938",
+      "checkpointed_at": "2026-10-30T09:03:26Z"
     }
   ]
 }
