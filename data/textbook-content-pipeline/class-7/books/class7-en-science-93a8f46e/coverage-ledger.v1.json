@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2865,
-    "successful_visual_analyses": 2846,
-    "missing_visual_analyses": 4623,
+    "raw_analysis_result_rows": 2866,
+    "successful_visual_analyses": 2847,
+    "missing_visual_analyses": 4622,
     "failed_visual_analyses": 19,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4642,
+    "unresolved_count": 4641,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -115757,9 +115757,28 @@
       "asset_path": "assets/988696560e6fdfd7344daddda89b265fac566c94fa05e401b8501c46e6324239.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the process of a burning candle, with a hand holding a lit candle and a green rectangle indicating the melting wax.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Burning candle",
+          "Melting wax",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the activity and discussion about the burning candle in Activity 5.7.",
+        "limitations": [
+          "The image does not provide specific details about the discussion or the students' thoughts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f2a2a0427f204d8af6b39581fa39e9227525a7575a3c63cc43c22f3628f501af",
+  "raw_analysis_sha256": "5fa656a697f3d38858023b9deb445ee3629aa2c5908689f7334f5ca3c2e7e364",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41078771691",
-      "checkpointed_at": "2026-10-30T16:14:19Z",
+      "checkpointed_at": "2026-10-30T16:17:34Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41078771691",
-      "checkpointed_at": "2026-10-30T16:14:48Z",
+      "checkpointed_at": "2026-10-30T16:18:03Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41078771691",
-      "checkpointed_at": "2026-10-30T16:15:26Z",
+      "checkpointed_at": "2026-10-30T16:18:41Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41078771691",
-      "checkpointed_at": "2026-10-30T16:16:06Z",
+      "checkpointed_at": "2026-10-30T16:19:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -167554,6 +167554,66 @@
         "context_relation": "The image is a diagram showing a discussion about a burning candle and its chemical reactions.",
         "limitations": [
           "The image does not show the actual burning candle or the students' discussion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1715f89248adf755a07077ac",
+      "asset_sha256": "988696560e6fdfd7344daddda89b265fac566c94fa05e401b8501c46e6324239",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/988696560e6fdfd7344daddda89b265fac566c94fa05e401b8501c46e6324239.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the process of a burning candle, with a hand holding a lit candle and a green rectangle indicating the melting wax.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Burning candle",
+          "Melting wax",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the activity and discussion about the burning candle in Activity 5.7.",
+        "limitations": [
+          "The image does not provide specific details about the discussion or the students' thoughts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41078771691",
+      "checkpointed_at": "2026-10-30T16:20:00Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the process of a burning candle, with a hand holding a lit candle and a green rectangle indicating the melting wax.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Burning candle",
+          "Melting wax",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the activity and discussion about the burning candle in Activity 5.7.",
+        "limitations": [
+          "The image does not provide specific details about the discussion or the students' thoughts."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
