@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2893,
+    "assets_selected": 2894,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "30fb5d5708945737db34547c"
+      "15bbee75cadbd2b7db4986a1"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2889,
-    "assets_remaining": 4599,
+    "assets_analyzed": 2890,
+    "assets_remaining": 4598,
     "assets_completion_percent": 38.6,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2888,
+    "assets_skipped_from_checkpoint": 2889,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:46:04Z"
+      "checkpointed_at": "2026-10-30T22:50:11Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:46:32Z"
+      "checkpointed_at": "2026-10-30T22:50:40Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:47:11Z"
+      "checkpointed_at": "2026-10-30T22:51:17Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:47:52Z"
+      "checkpointed_at": "2026-10-30T22:51:56Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -108439,6 +108439,39 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
       "checkpointed_at": "2026-10-30T22:49:24Z"
+    },
+    {
+      "asset_id": "15bbee75cadbd2b7db4986a1",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a person floating in the air with a dotted line above them, possibly representing a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thought",
+          "idea",
+          "floating",
+          "dotted line"
+        ],
+        "context_relation": "The image is related to the discussion of changes and reversibility in the text.",
+        "limitations": [
+          "The image does not provide specific details about the text or the activity it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41132715388",
+      "checkpointed_at": "2026-10-30T22:52:33Z"
     }
   ]
 }

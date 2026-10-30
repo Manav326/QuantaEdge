@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2912,
-    "successful_visual_analyses": 2893,
-    "missing_visual_analyses": 4576,
+    "raw_analysis_result_rows": 2913,
+    "successful_visual_analyses": 2894,
+    "missing_visual_analyses": 4575,
     "failed_visual_analyses": 19,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4595,
+    "unresolved_count": 4594,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -117447,9 +117447,23 @@
       "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green illustration of a person floating in the air with a dotted line above them, possibly representing a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thought",
+          "idea",
+          "floating",
+          "dotted line"
+        ],
+        "context_relation": "The image is related to the discussion of changes and reversibility in the text.",
+        "limitations": [
+          "The image does not provide specific details about the text or the activity it is related to."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

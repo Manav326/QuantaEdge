@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "16819aa63e180166cb39088da18d718d0d316d6970c781c857de7b0444d302b8",
+  "raw_analysis_sha256": "09f363dc28bdece8e69e39b55fd5798f833f24f4e7c75dd51e601d83da76818a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:46:04Z",
+      "checkpointed_at": "2026-10-30T22:50:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:46:32Z",
+      "checkpointed_at": "2026-10-30T22:50:40Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:47:11Z",
+      "checkpointed_at": "2026-10-30T22:51:17Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:47:52Z",
+      "checkpointed_at": "2026-10-30T22:51:56Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -170276,6 +170276,56 @@
         "context_relation": "The image shows a diagram of students discussing the changes in a candle.",
         "limitations": [
           "The image does not provide specific details about the physical and chemical changes in the candle."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "15bbee75cadbd2b7db4986a1",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a person floating in the air with a dotted line above them, possibly representing a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thought",
+          "idea",
+          "floating",
+          "dotted line"
+        ],
+        "context_relation": "The image is related to the discussion of changes and reversibility in the text.",
+        "limitations": [
+          "The image does not provide specific details about the text or the activity it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41132715388",
+      "checkpointed_at": "2026-10-30T22:52:33Z",
+      "effective_analysis": {
+        "visual_summary": "A green illustration of a person floating in the air with a dotted line above them, possibly representing a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thought",
+          "idea",
+          "floating",
+          "dotted line"
+        ],
+        "context_relation": "The image is related to the discussion of changes and reversibility in the text.",
+        "limitations": [
+          "The image does not provide specific details about the text or the activity it is related to."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
