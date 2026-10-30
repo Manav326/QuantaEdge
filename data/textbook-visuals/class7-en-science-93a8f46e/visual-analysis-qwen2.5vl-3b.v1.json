@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2813,
+    "assets_selected": 2815,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "22bbb232d7e56f3bbbeebf31",
-      "bcaecee7ffdecf4758982d36"
+      "0c7cf06b5a3e7661023f0b58",
+      "aef62ff0e75ec4a0e7e42578"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2810,
-    "assets_remaining": 4678,
-    "assets_completion_percent": 37.5,
+    "assets_analyzed": 2812,
+    "assets_remaining": 4676,
+    "assets_completion_percent": 37.6,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2808,
+    "assets_skipped_from_checkpoint": 2810,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T08:47:11Z"
+      "checkpointed_at": "2026-10-30T08:54:05Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T08:48:48Z"
+      "checkpointed_at": "2026-10-30T08:55:42Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104925,7 +104925,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T08:50:27Z"
+      "checkpointed_at": "2026-10-30T08:57:24Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -105511,6 +105511,64 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
       "checkpointed_at": "2026-10-30T08:52:41Z"
+    },
+    {
+      "asset_id": "0c7cf06b5a3e7661023f0b58",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or synthetic material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a twisted rope or cord, which is not directly related to the text about a fire investigation activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41016250470",
+      "checkpointed_at": "2026-10-30T08:58:50Z"
+    },
+    {
+      "asset_id": "aef62ff0e75ec4a0e7e42578",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or a similar material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a twisted rope or cord, which is not directly related to the text about a burning matchstick and the burning process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41016250470",
+      "checkpointed_at": "2026-10-30T08:59:08Z"
     }
   ]
 }
