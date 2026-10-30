@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2886,
-    "successful_visual_analyses": 2864,
-    "missing_visual_analyses": 4602,
+    "raw_analysis_result_rows": 2890,
+    "successful_visual_analyses": 2868,
+    "missing_visual_analyses": 4598,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4624,
+    "unresolved_count": 4620,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -116435,9 +116435,30 @@
       "asset_path": "assets/ff345c8f239ccd23c96d1c038b0a919134830ff5795d0e56f0413ada448804b1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the melting and evaporation of wax in a burning candle.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Melting",
+          "Evaporation",
+          "Burning candle"
+        ],
+        "context_relation": "The image is a visual representation of the chemical process occurring in a burning candle, specifically the melting and evaporation of wax.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved in the burning candle.",
+          "The image does not show the actual experiment or setup for the burning candle.",
+          "The image does not include any measurements or data points related to the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -116453,9 +116474,31 @@
       "asset_path": "assets/7f8035eb919085fc3780fc6effd86b2d23d1ca0335fdf28aa3c98124b31dd496.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green background with a white line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "65",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about",
+          "the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical",
+          "Activity",
+          "Fig. 5.9",
+          "Burning candle",
+          "Think, pair, and share"
+        ],
+        "context_relation": "The image is a page from a textbook discussing an activity related to a burning candle.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the discussion."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -116471,9 +116514,28 @@
       "asset_path": "assets/8db9e4aa22b2ff0052be669902293acb810b9bb8d1f593fbe170104f77e1fa00.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A candle burning with a melting wax and evaporating wax.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about",
+          "the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the discussion about the burning candle in Activity 5.7.",
+        "limitations": [
+          "The image does not provide specific details about the discussion."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -116489,9 +116551,30 @@
       "asset_path": "assets/45ae1aac73eefbd488fc57fa19ff597b10f4fac789fef2badc7818c6ea4ed9c3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green rectangular object with a curved edge.",
+        "visual_type": "other",
+        "visible_text": [
+          "65",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the text about a burning candle and its chemical reactions.",
+        "limitations": [
+          "The image does not provide specific details about the burning candle or its chemical reactions.",
+          "The text is incomplete and does not provide a full understanding of the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
