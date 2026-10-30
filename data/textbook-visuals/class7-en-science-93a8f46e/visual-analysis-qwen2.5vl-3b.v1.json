@@ -13,13 +13,13 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "8604e838b1f1e41398ca72dd",
-      "1554b4067d24673fc7b88fc2",
-      "0d1c88ea0154d314c4c70259"
+      "f5cfd5f0dfcebd60e3212f1b",
+      "2c5bb8e00c5b07f812ddbda7",
+      "a72552acdc46609eabbe7726"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2827,
-    "assets_remaining": 4661,
+    "assets_analyzed": 2829,
+    "assets_remaining": 4659,
     "assets_completion_percent": 37.8,
     "assets_failed": 20,
     "assets_skipped_from_checkpoint": 2827,
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41050335050",
-      "checkpointed_at": "2026-10-30T13:12:27Z"
+      "checkpointed_at": "2026-10-30T13:24:09Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41050335050",
-      "checkpointed_at": "2026-10-30T13:13:29Z"
+      "checkpointed_at": "2026-10-30T13:25:10Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104908,8 +104908,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:39:55Z"
+      "run_id": "41050335050",
+      "checkpointed_at": "2026-10-30T13:28:54Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -106095,6 +106095,83 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
       "checkpointed_at": "2026-10-30T11:42:08Z"
+    },
+    {
+      "asset_id": "2c5bb8e00c5b07f812ddbda7",
+      "asset_sha256": "937c2ae67cd6abfa76d4930d800270487f2996bd890514d45f8fe43f6e67ceba",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/937c2ae67cd6abfa76d4930d800270487f2996bd890514d45f8fe43f6e67ceba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a burning candle and a hand reaching out to touch it.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical and",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about chemical reactions and the properties of wax.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or the properties of wax."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41050335050",
+      "checkpointed_at": "2026-10-30T13:30:09Z"
+    },
+    {
+      "asset_id": "a72552acdc46609eabbe7726",
+      "asset_sha256": "54e83d9bbbfdd37c7ac108c4edffd508cf44255c658ca82b788e3c483b0d8dd7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/54e83d9bbbfdd37c7ac108c4edffd508cf44255c658ca82b788e3c483b0d8dd7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the process of a burning candle, with a focus on the melting and evaporation of wax.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about the burning candle and its chemical reactions.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved in the burning candle.",
+          "The image does not show the actual burning candle or the melting wax.",
+          "The image does not include any measurements or data points related to the chemical reactions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41050335050",
+      "checkpointed_at": "2026-10-30T13:31:29Z"
     }
   ]
 }
