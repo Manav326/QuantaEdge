@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "339b215b46f278d381e398ed7222ec24977abba44d0cfedf0ded05747a837a82",
+  "raw_analysis_sha256": "7a92bcccd963ea74dce4e17220316c2302f03ce66f477f1199d28e1a0ae74453",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:38:27Z",
+      "checkpointed_at": "2026-10-30T22:43:28Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:38:56Z",
+      "checkpointed_at": "2026-10-30T22:43:56Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:39:33Z",
+      "checkpointed_at": "2026-10-30T22:44:32Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:40:13Z",
+      "checkpointed_at": "2026-10-30T22:45:10Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -170164,6 +170164,48 @@
         "context_relation": "The page is blank and does not contain any visual or textual content.",
         "limitations": [
           "The page is completely black and lacks any visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "35dec21c064e7ccd6104fe75",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and does not contain any visible content.",
+        "limitations": [
+          "The page is completely black and no text or images are visible.",
+          "The page is blank and does not contain any visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41132715388",
+      "checkpointed_at": "2026-10-30T22:45:18Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and does not contain any visible content.",
+        "limitations": [
+          "The page is completely black and no text or images are visible.",
+          "The page is blank and does not contain any visible content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
