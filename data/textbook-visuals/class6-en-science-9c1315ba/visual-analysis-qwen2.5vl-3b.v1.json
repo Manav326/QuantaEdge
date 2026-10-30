@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1507,
+    "assets_selected": 1509,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "9a4ccd57d3f459c720ed0509",
-      "5836b3c9a704270a93026dc4"
+      "aa2b364df8562846356acff4",
+      "ea5c14e9bfebcc99773b9eb8"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1504,
-    "assets_remaining": 574,
-    "assets_completion_percent": 72.4,
+    "assets_analyzed": 1506,
+    "assets_remaining": 572,
+    "assets_completion_percent": 72.5,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1502,
+    "assets_skipped_from_checkpoint": 1504,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T01:01:10Z"
+      "checkpointed_at": "2026-10-30T01:05:36Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T01:02:09Z"
+      "checkpointed_at": "2026-10-30T01:06:36Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T01:02:59Z"
+      "checkpointed_at": "2026-10-30T01:07:25Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -51074,6 +51074,86 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
       "checkpointed_at": "2026-10-30T01:04:20Z"
+    },
+    {
+      "asset_id": "aa2b364df8562846356acff4",
+      "asset_sha256": "581c242a1693faf632085f558d975d645fd51ab9ca95bc43f7228b6867e2772e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 167,
+      "asset_path": "page-0167.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "eebd695eb3d6d5c889344e9f785f3b1199427bca02fb9aaaca398f3c57a7b962",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table showing time intervals and corresponding mass of water, followed by a question about observations and a note about humidity.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 8.2: Measurement of mass in condensation\nexperiment using a digital weighing balance",
+          "Time               Mass of water",
+          "0 min",
+          "5 min",
+          "10 min",
+          "15 min",
+          "20 min",
+          "25 min",
+          "30 min",
+          "Do your findings match with\nyour predictions? Explain your\nobservations.",
+          "You may observe some water\ndroplets on the glass tumbler.\nWater vapour from the air\ncomes in contact with the cold\nsurface of the glass tumbler\nand gets converted into water\ndroplets on the glass tumbler\nthrough condensation. There is an increase in the reading\non the digital weighing balance. Can w",
+          "Repeat Activity 8.4 with the following modifications—",
+          "Mark the water level on the glass tumbler with a\npermanent marker or a visible tape.",
+          "What do you observe? Water level in the glass tumbler\ndoes not go down but the extra water gets collected on the\nouter surface of the glass tumbler. What can you conclude"
+        ],
+        "concepts": [
+          "condensation",
+          "humidity",
+          "water vapor",
+          "digital weighing balance",
+          "Observations",
+          "Activity 8.4"
+        ],
+        "context_relation": "The table and text are related to the experiment of measuring mass in condensation using a digital weighing balance.",
+        "limitations": [
+          "The table does not provide actual data for the mass of water at each time interval.",
+          "The text assumes that the reader has completed Activity 8.4 and is seeking modifications to the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-30T01:12:00Z"
+    },
+    {
+      "asset_id": "ea5c14e9bfebcc99773b9eb8",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 168,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3ee84fe3256a9e7ee425526d5ce4629bf078d200789efdd420d36a0d9deade00",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-30T01:12:16Z"
     }
   ]
 }
