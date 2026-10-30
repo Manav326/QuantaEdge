@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2848,
-    "successful_visual_analyses": 2828,
-    "missing_visual_analyses": 4640,
+    "raw_analysis_result_rows": 2850,
+    "successful_visual_analyses": 2830,
+    "missing_visual_analyses": 4638,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4660,
+    "unresolved_count": 4658,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -115095,9 +115095,24 @@
       "asset_path": "assets/97fbd928d4c8da49e3d189f1c7d2b4cdde5a27c35c909a31284a579c8310c176.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Students discussing the burning candle and its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting and evaporation"
+        ],
+        "context_relation": "The image is a diagram showing students discussing the burning candle and its components.",
+        "limitations": [
+          "The image does not show the actual diagram or students' discussion, only text describing the activity and the topic of discussion."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -115113,9 +115128,30 @@
       "asset_path": "assets/20fd961ee1af824716f9a01732c9624cb31cc35104a5f06cdd5f0d8ef63d82dc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a candle melting and evaporating.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about",
+          "the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and",
+          "evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "Educational content related to a textbook",
+        "limitations": [
+          "The image does not provide specific details about the students' discussion or the context of the activity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

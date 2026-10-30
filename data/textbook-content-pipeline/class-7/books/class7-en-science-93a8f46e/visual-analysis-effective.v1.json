@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7451123d23d29a3b4dca7ba74613232ffd0879c5b6240115cde5d614132b3f64",
+  "raw_analysis_sha256": "7672659f7c1a3baba785adfd5ea1cdd02f35dd4236efebb13aa718cbf8ed67b1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:31:16Z",
+      "checkpointed_at": "2026-10-30T11:37:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:32:18Z",
+      "checkpointed_at": "2026-10-30T11:38:30Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -164684,7 +164684,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:33:42Z",
+      "checkpointed_at": "2026-10-30T11:39:55Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -166466,6 +166466,122 @@
         "context_relation": "The image is related to the discussion about the burning candle in Activity 5.7.",
         "limitations": [
           "The image does not provide specific details about the discussion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "111096258377ca2efb8b20c1",
+      "asset_sha256": "97fbd928d4c8da49e3d189f1c7d2b4cdde5a27c35c909a31284a579c8310c176",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/97fbd928d4c8da49e3d189f1c7d2b4cdde5a27c35c909a31284a579c8310c176.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing the burning candle and its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting and evaporation"
+        ],
+        "context_relation": "The image is a diagram showing students discussing the burning candle and its components.",
+        "limitations": [
+          "The image does not show the actual diagram or students' discussion, only text describing the activity and the topic of discussion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41033422861",
+      "checkpointed_at": "2026-10-30T11:40:59Z",
+      "effective_analysis": {
+        "visual_summary": "Students discussing the burning candle and its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting and evaporation"
+        ],
+        "context_relation": "The image is a diagram showing students discussing the burning candle and its components.",
+        "limitations": [
+          "The image does not show the actual diagram or students' discussion, only text describing the activity and the topic of discussion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fb7ab5f76d3ffe815f80c540",
+      "asset_sha256": "20fd961ee1af824716f9a01732c9624cb31cc35104a5f06cdd5f0d8ef63d82dc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/20fd961ee1af824716f9a01732c9624cb31cc35104a5f06cdd5f0d8ef63d82dc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a candle melting and evaporating.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about",
+          "the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and",
+          "evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "Educational content related to a textbook",
+        "limitations": [
+          "The image does not provide specific details about the students' discussion or the context of the activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41033422861",
+      "checkpointed_at": "2026-10-30T11:42:08Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a candle melting and evaporating.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about",
+          "the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and",
+          "evaporates..."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "Educational content related to a textbook",
+        "limitations": [
+          "The image does not provide specific details about the students' discussion or the context of the activity."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
