@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "4b1298747dc1ec978a226ae5",
-      "0e143e54e2f709b8a4e5968d",
-      "463542d4277119b7abc93e3a"
+      "8604e838b1f1e41398ca72dd",
+      "1554b4067d24673fc7b88fc2",
+      "0d1c88ea0154d314c4c70259"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 2817,
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T10:43:21Z"
+      "checkpointed_at": "2026-10-30T10:54:24Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T10:44:22Z"
+      "checkpointed_at": "2026-10-30T10:55:26Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -85738,7 +85738,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41016250470",
+      "run_id": "41033422861",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -85755,7 +85755,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41016250470",
+      "run_id": "41033422861",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -90507,7 +90507,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41016250470",
+      "run_id": "41033422861",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
