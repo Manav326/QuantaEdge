@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a6345c16a49d41c25a8260eac243af247c1279de11ad681891b5941db8a01b4f",
+  "raw_analysis_sha256": "893d8a3208f1f24d644e0e74ef053b0ebcfd7836b76a2cff3c553dc97a88ade2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -634,7 +634,7 @@
           "conceptual connections",
           "National Council of Educational Research and Training"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic development.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic educational development.",
         "limitations": [
           "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
@@ -642,8 +642,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41085852989",
-      "checkpointed_at": "2026-10-30T16:36:13Z",
+      "run_id": "41093163555",
+      "checkpointed_at": "2026-10-30T16:56:22Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -671,7 +671,7 @@
           "conceptual connections",
           "National Council of Educational Research and Training"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic development.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic educational development.",
         "limitations": [
           "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
@@ -29435,11 +29435,9 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
-          "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
           "Freelance Editor",
           "Proofreader",
+          "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
@@ -29452,8 +29450,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41085852989",
-      "checkpointed_at": "2026-10-30T16:37:02Z",
+      "run_id": "41093163555",
+      "checkpointed_at": "2026-10-30T17:00:05Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -29476,11 +29474,9 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
-          "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
           "Freelance Editor",
           "Proofreader",
+          "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
@@ -31482,9 +31478,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41085852989",
+      "run_id": "41093163555",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -32362,7 +32358,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41085852989",
+      "run_id": "41093163555",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -35050,24 +35046,24 @@
           "colour",
           "size",
           "arrangement",
+          "height",
+          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "height",
-          "types of stem",
-          "features of plants",
-          "nature walk"
+          "nature walk",
+          "observations"
         ],
-        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
+        "context_relation": "The text is a part of a larger educational content, specifically discussing the criteria for grouping plants and animals.",
         "limitations": [
-          "The image does not provide specific details about the criteria for grouping plants and animals."
+          "The text does not provide specific examples or details for each criterion."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41085852989",
-      "checkpointed_at": "2026-10-30T16:37:44Z",
+      "run_id": "41093163555",
+      "checkpointed_at": "2026-10-30T17:11:57Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -35103,17 +35099,17 @@
           "colour",
           "size",
           "arrangement",
+          "height",
+          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "height",
-          "types of stem",
-          "features of plants",
-          "nature walk"
+          "nature walk",
+          "observations"
         ],
-        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
+        "context_relation": "The text is a part of a larger educational content, specifically discussing the criteria for grouping plants and animals.",
         "limitations": [
-          "The image does not provide specific details about the criteria for grouping plants and animals."
+          "The text does not provide specific examples or details for each criterion."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
