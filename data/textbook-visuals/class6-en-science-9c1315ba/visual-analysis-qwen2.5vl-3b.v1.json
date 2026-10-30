@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
-      "b90b1ccd2f380e4a35f9f791",
-      "055ba61cf9184b7284850138",
-      "2185c15c0a88a108ea516878"
+      "7648bdfd0ca00b2a9aab1c0d",
+      "264647961a857697afa5e279",
+      "b90b1ccd2f380e4a35f9f791"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1516,
@@ -424,7 +424,7 @@
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "FOREWORD",
+          "Foreword",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -434,20 +434,18 @@
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
           "pañchakośhas",
-          "Foundational and Preparatory Stages",
           "Middle Stage",
-          "Secondary Stages",
-          "holistic development",
-          "transformative learning culture",
-          "appropriate textbooks",
-          "curricular areas",
-          "content and pedagogy",
-          "classroom arrangement",
-          "teacher preparation",
-          "conceptual connections",
-          "National Council of Educational Research and Training"
+          "Foundational and Preparatory Stages",
+          "Analytical, descriptive, and narrative capabilities",
+          "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
+          "Classroom arrangement",
+          "Teacher preparation",
+          "Conceptual connections",
+          "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic development.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
           "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
@@ -455,8 +453,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41038390048",
-      "checkpointed_at": "2026-10-30T10:43:10Z"
+      "run_id": "41044363916",
+      "checkpointed_at": "2026-10-30T11:02:21Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20117,11 +20115,10 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
-          "Educator",
           "Development Sector Professional",
-          "Chief Consultant",
           "Freelance Editor",
           "Proofreader",
+          "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
@@ -20134,8 +20131,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41038390048",
-      "checkpointed_at": "2026-10-30T10:44:00Z"
+      "run_id": "41044363916",
+      "checkpointed_at": "2026-10-30T11:04:30Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -21417,7 +21414,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41038390048",
+      "run_id": "41044363916",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -22016,7 +22013,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41038390048",
+      "run_id": "41044363916",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -23777,13 +23774,13 @@
           "colour",
           "size",
           "arrangement",
-          "herbs",
-          "shrubs",
-          "trees",
-          "height",
-          "types of stem",
-          "features of plants",
-          "nature walk"
+          "height and types of stem",
+          "nature walk",
+          "observations",
+          "bending stems",
+          "stems do not break",
+          "branches of plants",
+          "ground"
         ],
         "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
         "limitations": [
@@ -23793,8 +23790,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41038390048",
-      "checkpointed_at": "2026-10-30T10:44:42Z"
+      "run_id": "41044363916",
+      "checkpointed_at": "2026-10-30T11:12:12Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
