@@ -12,10 +12,10 @@
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
-      "9f232483ce16973cb62998c9",
       "055ba61cf9184b7284850138",
-      "2104ecb647e20f98cb93ca2e",
-      "2185c15c0a88a108ea516878"
+      "47bbaaf66932c5ee5e514c6c",
+      "9f51f614abe6354db658fd1d",
+      "2cea301bf9b05b3d64207203"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1499,
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-29T23:32:55Z"
+      "checkpointed_at": "2026-10-29T23:48:12Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37958,7 +37958,7 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Units of Measurement"
+          "Length of the table"
         ],
         "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-29T23:39:28Z"
+      "checkpointed_at": "2026-10-29T23:49:12Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44095,7 +44095,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
+        "visual_summary": "An educational page about Oral Rehydration Solution (ORS) and its preparation.",
         "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
@@ -44114,22 +44114,23 @@
           "Diarrhoea",
           "Health Centres",
           "Preparation of ORS",
+          "Water Solubility",
           "Gases in Water",
-          "Solubility",
+          "Survival of Animals and Plants",
           "Density",
-          "Survival of Animals and Plants"
+          "Comparing Density"
         ],
-        "context_relation": "Explanation and activity related to ORS and its properties",
+        "context_relation": "Introduction to ORS and its preparation, followed by a question about the solubility of gases in water and the importance of ORS in maintaining water balance in the body.",
         "limitations": [
-          "No specific limitations mentioned",
+          "The text does not provide specific instructions for preparing ORS or explaining the solubility of gases in water.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40903921338",
-      "checkpointed_at": "2026-10-29T17:59:58Z"
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-29T23:53:38Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44589,7 +44590,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40903921338",
+      "run_id": "40968271659",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -44942,7 +44943,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40903921338",
+      "run_id": "40968271659",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
