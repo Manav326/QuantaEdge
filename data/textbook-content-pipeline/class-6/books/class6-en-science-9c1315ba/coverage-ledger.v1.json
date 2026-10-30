@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1547,
-    "successful_visual_analyses": 1526,
-    "missing_visual_analyses": 531,
+    "raw_analysis_result_rows": 1550,
+    "successful_visual_analyses": 1529,
+    "missing_visual_analyses": 528,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 552,
+    "unresolved_count": 549,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -58131,9 +58131,36 @@
       "asset_path": "page-0173.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An activity involving two bottles with caps, one in sunlight and one in shade, to observe evaporation.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.8: Let us explore",
+          "  Take identical caps of two bottles.",
+          "  Pour equal amount of water in each of the cap.",
+          "  Place one of the cap in sunlight and keep the other in shade as shown in Fig. 8.6.",
+          "  Observe the two caps of bottles after every 15 minutes.",
+          "  Record the time taken for the water to completely evaporate in each case.",
+          "  You can also repeat this activity on a windy or a rainy day, and record your observations.",
+          "Fig. 8.6: Evaporation of water in sunlight and in shade",
+          "What conclusions can you draw from Activity 8.8 and other similar experiences?",
+          "  Water evaporates faster from the cap kept in sunlight compared to the cap kept in shade.",
+          "  It is a common observation that clothes dry faster on a hot sunny day. Do clothes dry faster or slower on a windy day? It is once again a common observation that clothes dry faster on a windy day. With the increase in the movement of air, water evaporates faster."
+        ],
+        "concepts": [
+          "evaporation",
+          "sunlight",
+          "shade",
+          "windy day",
+          "clothes drying"
+        ],
+        "context_relation": "exploration",
+        "limitations": [
+          "The activity assumes that the bottles are identical and that the caps are open to allow for evaporation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -58149,9 +58176,19 @@
       "asset_path": "assets/4db788af7e02ec3153b26381f7af5e19aca6f1b9e9caeb548c9d43778b4bd0a3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair and a red bow, wearing a blue scarf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of humidity and its effect on water evaporation.",
+        "limitations": [
+          "The image does not provide specific details about the humidity levels or the effect on water evaporation.",
+          "The image is a cartoon illustration and may not represent real-world conditions accurately."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -58167,9 +58204,31 @@
       "asset_path": "assets/9f8949ec96d1f44a793703270af75bc80c4b93c726988fff211016fe7fdcfec7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of yellow paper with a scalloped edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "It is also a common observation that clothes dry slowly on a rainy day. On a rainy day, water evaporates slowly. If the amount of water in the air is already high (more humidity), water and hence rainy days",
+          "The amount of water",
+          "vapour in the air is more on rainy days",
+          "and hence rainy days",
+          "evap"
+        ],
+        "concepts": [
+          "clothes drying",
+          "rainy days",
+          "water evaporation",
+          "humidity",
+          "scalloped edge"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source PDF page.",
+        "limitations": [
+          "The image does not show any physical objects or actions.",
+          "The image does not provide any additional information beyond what is in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

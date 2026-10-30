@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1526,
+    "assets_selected": 1529,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "6b3ce6753e38d1a4f0bc4a9a",
-      "62038a03d8c550900d4459e1",
-      "bda5998aa18f438bea2cae7e"
+      "28fe005cf7b2f97e7b20384f",
+      "5820c30e278aa8b6e88f8499",
+      "bd1e6c3198046c5832c1be61"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1524,
-    "assets_remaining": 554,
-    "assets_completion_percent": 73.3,
+    "assets_analyzed": 1527,
+    "assets_remaining": 551,
+    "assets_completion_percent": 73.5,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1521,
+    "assets_skipped_from_checkpoint": 1524,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
-      "checkpointed_at": "2026-10-30T15:28:45Z"
+      "checkpointed_at": "2026-10-30T15:34:07Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
-      "checkpointed_at": "2026-10-30T15:29:35Z"
+      "checkpointed_at": "2026-10-30T15:34:58Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -51820,6 +51820,122 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
       "checkpointed_at": "2026-10-30T15:32:59Z"
+    },
+    {
+      "asset_id": "28fe005cf7b2f97e7b20384f",
+      "asset_sha256": "b47541f739930a00f17491eb647a105888add7ad330bc3d756b050416bc1f748",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 173,
+      "asset_path": "page-0173.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "11fc2047467b025fd392753382893c49c359eae1eddc5e59fbc8ce27dce03b3a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An activity involving two bottles with caps, one in sunlight and one in shade, to observe evaporation.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.8: Let us explore",
+          "  Take identical caps of two bottles.",
+          "  Pour equal amount of water in each of the cap.",
+          "  Place one of the cap in sunlight and keep the other in shade as shown in Fig. 8.6.",
+          "  Observe the two caps of bottles after every 15 minutes.",
+          "  Record the time taken for the water to completely evaporate in each case.",
+          "  You can also repeat this activity on a windy or a rainy day, and record your observations.",
+          "Fig. 8.6: Evaporation of water in sunlight and in shade",
+          "What conclusions can you draw from Activity 8.8 and other similar experiences?",
+          "  Water evaporates faster from the cap kept in sunlight compared to the cap kept in shade.",
+          "  It is a common observation that clothes dry faster on a hot sunny day. Do clothes dry faster or slower on a windy day? It is once again a common observation that clothes dry faster on a windy day. With the increase in the movement of air, water evaporates faster."
+        ],
+        "concepts": [
+          "evaporation",
+          "sunlight",
+          "shade",
+          "windy day",
+          "clothes drying"
+        ],
+        "context_relation": "exploration",
+        "limitations": [
+          "The activity assumes that the bottles are identical and that the caps are open to allow for evaporation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:39:24Z"
+    },
+    {
+      "asset_id": "5820c30e278aa8b6e88f8499",
+      "asset_sha256": "4db788af7e02ec3153b26381f7af5e19aca6f1b9e9caeb548c9d43778b4bd0a3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 174,
+      "asset_path": "assets/4db788af7e02ec3153b26381f7af5e19aca6f1b9e9caeb548c9d43778b4bd0a3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fe3f4c79da4f6def46a072cba9b2e12f83d930340b7ca6de8c13d21346553325",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair and a red bow, wearing a blue scarf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the concept of humidity and its effect on water evaporation.",
+        "limitations": [
+          "The image does not provide specific details about the humidity levels or the effect on water evaporation.",
+          "The image is a cartoon illustration and may not represent real-world conditions accurately."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:41:00Z"
+    },
+    {
+      "asset_id": "bd1e6c3198046c5832c1be61",
+      "asset_sha256": "9f8949ec96d1f44a793703270af75bc80c4b93c726988fff211016fe7fdcfec7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 174,
+      "asset_path": "assets/9f8949ec96d1f44a793703270af75bc80c4b93c726988fff211016fe7fdcfec7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fe3f4c79da4f6def46a072cba9b2e12f83d930340b7ca6de8c13d21346553325",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of yellow paper with a scalloped edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "It is also a common observation that clothes dry slowly on a rainy day. On a rainy day, water evaporates slowly. If the amount of water in the air is already high (more humidity), water and hence rainy days",
+          "The amount of water",
+          "vapour in the air is more on rainy days",
+          "and hence rainy days",
+          "evap"
+        ],
+        "concepts": [
+          "clothes drying",
+          "rainy days",
+          "water evaporation",
+          "humidity",
+          "scalloped edge"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source PDF page.",
+        "limitations": [
+          "The image does not show any physical objects or actions.",
+          "The image does not provide any additional information beyond what is in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:42:43Z"
     }
   ]
 }
