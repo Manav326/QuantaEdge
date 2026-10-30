@@ -11,15 +11,15 @@
     "assets_selected": 2850,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "4b1298747dc1ec978a226ae5",
-      "647c2218dab5482dd1c1758e",
-      "0e143e54e2f709b8a4e5968d",
-      "463542d4277119b7abc93e3a",
-      "8604e838b1f1e41398ca72dd"
+      "1554b4067d24673fc7b88fc2",
+      "0d1c88ea0154d314c4c70259",
+      "f5cfd5f0dfcebd60e3212f1b",
+      "a6123686d1a277823cf141b7",
+      "8b1476701a015fea1c046e8a"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2845,
-    "assets_remaining": 4643,
+    "assets_analyzed": 2847,
+    "assets_remaining": 4641,
     "assets_completion_percent": 38.0,
     "assets_failed": 22,
     "assets_skipped_from_checkpoint": 2845,
@@ -85693,7 +85693,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41078771691",
+      "run_id": "41090330445",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -90445,7 +90445,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41078771691",
+      "run_id": "41090330445",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -104823,20 +104823,21 @@
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY",
-          "If a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt and stick to the sk",
-          "FASCINATING FACTS",
-          "Nature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescence.",
+          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt ",
+          "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
           "combustion",
           "oxygen",
           "carbon dioxide",
+          "fire",
           "bioluminescence",
-          "fireflies",
           "combustible substances",
-          "air",
+          "paper",
+          "fireflies",
+          "carbon",
+          "oxygen",
           "combustion"
         ],
         "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
@@ -104848,8 +104849,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41078771691",
-      "checkpointed_at": "2026-10-30T16:25:54Z"
+      "run_id": "41090330445",
+      "checkpointed_at": "2026-10-30T18:03:24Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -106705,6 +106706,81 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41078771691",
       "checkpointed_at": "2026-10-30T16:26:34Z"
+    },
+    {
+      "asset_id": "a6123686d1a277823cf141b7",
+      "asset_sha256": "cd8bf1da0b25996eafe2fb0e37ba42f6dd255d924dbcd8562498af438aef4fa9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/cd8bf1da0b25996eafe2fb0e37ba42f6dd255d924dbcd8562498af438aef4fa9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green and white rectangular frame with a green arrow pointing to the left.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.9",
+          "Think, pair, and share",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "Chemical",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about the burning candle and its discussion by students.",
+        "limitations": [
+          "The image does not provide specific details about the discussion or the content of the textbook page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41090330445",
+      "checkpointed_at": "2026-10-30T18:05:03Z"
+    },
+    {
+      "asset_id": "8b1476701a015fea1c046e8a",
+      "asset_sha256": "888acc1698a9010777287bc14eba89c4e33f409daa5f3ca11df083d78852697a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/888acc1698a9010777287bc14eba89c4e33f409daa5f3ca11df083d78852697a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing the burning candle and its chemical properties.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and evaporates..."
+        ],
+        "concepts": [
+          "Chemical properties of wax",
+          "Melting and evaporation"
+        ],
+        "context_relation": "The image is a diagram showing students discussing the burning candle and its chemical properties.",
+        "limitations": [
+          "The image does not show the actual diagram or students' discussion.",
+          "The text is partially obscured and incomplete."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41090330445",
+      "checkpointed_at": "2026-10-30T18:06:54Z"
     }
   ]
 }
