@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2764,
+    "assets_selected": 2769,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "851e06f691cde51413a37210",
-      "b91d0b4b2324cf7bb64a854d",
-      "f0d17b2660da7b2c253e7dbb",
-      "026cd667466de43a7cdc414d",
-      "0e356a4a8822444f22075a47"
+      "78e13f2c9e7f41af88284e52",
+      "ce667ad138775a6f08bd8f67",
+      "a1f6e6e609143b21dbc36ed1",
+      "e4439455bf8acaa0e5a6ec3b",
+      "8c2b3e17cd60a4f57dfcd228"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2764,
-    "assets_remaining": 4724,
-    "assets_completion_percent": 36.9,
+    "assets_analyzed": 2769,
+    "assets_remaining": 4719,
+    "assets_completion_percent": 37.0,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 2759,
+    "assets_skipped_from_checkpoint": 2764,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -103702,6 +103702,141 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40971546225",
       "checkpointed_at": "2026-10-30T01:14:16Z"
+    },
+    {
+      "asset_id": "78e13f2c9e7f41af88284e52",
+      "asset_sha256": "7004cf33159a85d27558f92b8b59bd17419c05202fc4c74c18c2a38c19ccf65a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/7004cf33159a85d27558f92b8b59bd17419c05202fc4c74c18c2a38c19ccf65a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a purple jacket and white pants, walking with a backpack.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the text.",
+          "The image is a simple cartoon illustration and does not provide any specific information or context related to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40971546225",
+      "checkpointed_at": "2026-10-30T01:16:02Z"
+    },
+    {
+      "asset_id": "ce667ad138775a6f08bd8f67",
+      "asset_sha256": "5d000d5928da7265d7deee62ff5392c1c25a1ff161f54c3620719466dd3546e7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/5d000d5928da7265d7deee62ff5392c1c25a1ff161f54c3620719466dd3546e7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon of a person holding a magnifying glass, possibly examining something closely.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about the candle experiment.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the candle's behavior."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40971546225",
+      "checkpointed_at": "2026-10-30T01:17:35Z"
+    },
+    {
+      "asset_id": "a1f6e6e609143b21dbc36ed1",
+      "asset_sha256": "dcde263fad6bc6b7af9baf09d585453c7a8e66a7dc66777336b9fb116673a3da",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/dcde263fad6bc6b7af9baf09d585453c7a8e66a7dc66777336b9fb116673a3da.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A night sky with stars and a tree with fireflies.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40971546225",
+      "checkpointed_at": "2026-10-30T01:19:04Z"
+    },
+    {
+      "asset_id": "e4439455bf8acaa0e5a6ec3b",
+      "asset_sha256": "75d9d1b156f82115991d2ce34a03fecd3b1287fbe82d3b9c1d298d23116ceed0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/75d9d1b156f82115991d2ce34a03fecd3b1287fbe82d3b9c1d298d23116ceed0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A night sky with stars and a tree with glowing insects.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40971546225",
+      "checkpointed_at": "2026-10-30T01:20:35Z"
+    },
+    {
+      "asset_id": "8c2b3e17cd60a4f57dfcd228",
+      "asset_sha256": "a2fb4d8429eb407a73bb6126ad8df831d267b1cbb6004a5edf1265eafbd5d148",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 83,
+      "asset_path": "assets/a2fb4d8429eb407a73bb6126ad8df831d267b1cbb6004a5edf1265eafbd5d148.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A night scene with glowing insects in a bushy area.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40971546225",
+      "checkpointed_at": "2026-10-30T01:22:04Z"
     }
   ]
 }
