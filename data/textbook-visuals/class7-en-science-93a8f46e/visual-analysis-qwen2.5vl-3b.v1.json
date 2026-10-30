@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2805,
+    "assets_selected": 2806,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "c1b47f8b7e78507f9c116016"
+      "e663d9e2566b14adba485e8a"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2801,
-    "assets_remaining": 4687,
+    "assets_analyzed": 2802,
+    "assets_remaining": 4686,
     "assets_completion_percent": 37.4,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2800,
+    "assets_skipped_from_checkpoint": 2801,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:20:05Z"
+      "checkpointed_at": "2026-10-30T05:22:50Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:20:33Z"
+      "checkpointed_at": "2026-10-30T05:23:19Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:21:09Z"
+      "checkpointed_at": "2026-10-30T05:23:56Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
-      "checkpointed_at": "2026-10-30T05:21:49Z"
+      "checkpointed_at": "2026-10-30T05:24:35Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -105161,6 +105161,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41001545973",
       "checkpointed_at": "2026-10-30T05:22:03Z"
+    },
+    {
+      "asset_id": "e663d9e2566b14adba485e8a",
+      "asset_sha256": "911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of paper with a pair of tongs and a lighted matchstick.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher",
+          "or an adult.",
+          "Hold a piece of paper with a pair of",
+          "tongs and bring a lighted matchstick",
+          "to it. It quickly catches ﬁre. Do we say",
+          "that we need a ﬁre to start the burning",
+          "process?"
+        ],
+        "concepts": [
+          "Activity",
+          "Caution",
+          "Supervision",
+          "Lighted matchstick",
+          "Paper",
+          "Tongs",
+          "Burning process"
+        ],
+        "context_relation": "The image is related to an educational activity involving a piece of paper, tongs, and a lighted matchstick.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the context in which it is being performed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41001545973",
+      "checkpointed_at": "2026-10-30T05:24:48Z"
     }
   ]
 }
