@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1509,
+    "assets_selected": 1511,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "aa2b364df8562846356acff4",
-      "ea5c14e9bfebcc99773b9eb8"
+      "06172060205b691cf39e9bff",
+      "18448d517283ba7616c40cd3"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1506,
-    "assets_remaining": 572,
-    "assets_completion_percent": 72.5,
+    "assets_analyzed": 1508,
+    "assets_remaining": 570,
+    "assets_completion_percent": 72.6,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1504,
+    "assets_skipped_from_checkpoint": 1506,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T01:05:36Z"
+      "checkpointed_at": "2026-10-30T01:13:35Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T01:06:36Z"
+      "checkpointed_at": "2026-10-30T01:14:35Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T01:07:25Z"
+      "checkpointed_at": "2026-10-30T01:15:24Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -51154,6 +51154,82 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
       "checkpointed_at": "2026-10-30T01:12:16Z"
+    },
+    {
+      "asset_id": "06172060205b691cf39e9bff",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 168,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3ee84fe3256a9e7ee425526d5ce4629bf078d200789efdd420d36a0d9deade00",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-30T01:15:37Z"
+    },
+    {
+      "asset_id": "18448d517283ba7616c40cd3",
+      "asset_sha256": "292acef860904750a2b03f13e3eed82c9b2eefa5f1dd45d61eb6ba7c258c874b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 168,
+      "asset_path": "page-0168.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "3ee84fe3256a9e7ee425526d5ce4629bf078d200789efdd420d36a0d9deade00",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the different states of water, including ice, liquid, and gas.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "from this? This activity shows that water is not seeping from\nthe glass tumbler and the extra water is getting collected\nbecause of condensation.",
+          "8.3 What are the Different States of Water?",
+          "Water is a substance that can be observed in three different\nstates in our daily life. In the solid state, it exists as ice. On\nheating, the ice melts and gets converted into its liquid state.\nOn further heating, water gets converted into its gaseous\nstate. Let us perform Activity 8.5 to identify th",
+          "Activity 8.5: Let us identify",
+          "- Put an ice cube in one container and transfer it to\nanother container of different shape. What changes do\nyou notice in the shape of the ice cube? Record your\nobservations in Table 8.3.",
+          "- Pour water from one container to another container of a\ndifferent shape. Observe how water behaves compared\nto the ice cube and make a record. Did you notice how\nwater flows from one container to the other? What\nhappens to its shape?",
+          "- Pour water on a clean surface and observe how it\nspreads.",
+          "- When water gets converted into water vapour, how\ndoes this water vapour spread? Compare this with the\nspreading behaviour of water.",
+          "Table 8.3: Compare different states of water",
+          "Property Ice\n(Solid state) Water\n(Liquid\nstate) Water\nvapour\n(Gaseous\nstate)",
+          "Shape",
+          "Ability to flow",
+          "Ability to spread"
+        ],
+        "concepts": [
+          "different states of water",
+          "ice",
+          "liquid",
+          "gaseous",
+          "properties of water",
+          "Activity 8.5"
+        ],
+        "context_relation": "explaining the different states of water",
+        "limitations": [
+          "no specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-30T01:20:07Z"
     }
   ]
 }
