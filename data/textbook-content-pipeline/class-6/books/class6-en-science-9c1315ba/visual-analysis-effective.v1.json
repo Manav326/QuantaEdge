@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9ec6948f910eb665773bacf23093d767fba884a264536dc1bcdf577b7559dce3",
+  "raw_analysis_sha256": "8e30313f24ba352e528f6e481ac64fa63b62cde0938933d3daf10069014acf34",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:41:34Z",
+      "checkpointed_at": "2026-10-30T08:50:39Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:42:37Z",
+      "checkpointed_at": "2026-10-30T08:51:43Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:43:29Z",
+      "checkpointed_at": "2026-10-30T08:52:39Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -78041,6 +78041,94 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2e4c077a65b10cea231c4b7c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 169,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "70f89a8f4eb5189a1a1017e1a725b51d4863a6a188e4173cc7e455924687c401",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page explaining the properties of water in different states.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "What are the differences in the properties of water in\nsolid, liquid and gaseous states?",
+          "Ice (solid state) retains its shape irrespective of the\ncontainer in which it is placed while water takes the shape\nof the container. Ice does not flow or spread.",
+          "Water (liquid state) flows and changes its shape. Water\ndoes not have a fixed shape. It takes up the shape of the\ncontainer in which it is kept, but the volume of water remains\nconstant. Does water also possess the property to spread?\nYes, water also has the property to spread while keeping the\nvolu",
+          "Water vapour (gaseous state)"
+        ],
+        "concepts": [
+          "properties of water",
+          "solid state",
+          "liquid state",
+          "gaseous state",
+          "volume",
+          "shape",
+          "flow",
+          "spread"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41015673938",
+      "checkpointed_at": "2026-10-30T08:53:23Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page explaining the properties of water in different states.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "What are the differences in the properties of water in\nsolid, liquid and gaseous states?",
+          "Ice (solid state) retains its shape irrespective of the\ncontainer in which it is placed while water takes the shape\nof the container. Ice does not flow or spread.",
+          "Water (liquid state) flows and changes its shape. Water\ndoes not have a fixed shape. It takes up the shape of the\ncontainer in which it is kept, but the volume of water remains\nconstant. Does water also possess the property to spread?\nYes, water also has the property to spread while keeping the\nvolu",
+          "Water vapour (gaseous state)"
+        ],
+        "concepts": [
+          "properties of water",
+          "solid state",
+          "liquid state",
+          "gaseous state",
+          "volume",
+          "shape",
+          "flow",
+          "spread"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8e056534d5a845bf27f6cb6e",
+      "asset_sha256": "350f3a149f725fb704a13bff8f02652d09a104a6044f4616ed931f226f3727de",
+      "page_text_context_sha256": "70f89a8f4eb5189a1a1017e1a725b51d4863a6a188e4173cc7e455924687c401",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 169,
+      "asset_path": "page-0169.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41015673938",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],

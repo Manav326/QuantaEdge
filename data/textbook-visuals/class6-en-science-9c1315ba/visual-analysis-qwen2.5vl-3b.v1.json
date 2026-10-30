@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1513,
+    "assets_selected": 1514,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "2249feba9d9de2d28593e04b",
-      "c4d9a43bc72351737fcd0111"
+      "2e4c077a65b10cea231c4b7c",
+      "8e056534d5a845bf27f6cb6e"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1509,
-    "assets_remaining": 569,
-    "assets_completion_percent": 72.6,
-    "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1508,
+    "assets_analyzed": 1510,
+    "assets_remaining": 568,
+    "assets_completion_percent": 72.7,
+    "assets_failed": 20,
+    "assets_skipped_from_checkpoint": 1509,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:41:34Z"
+      "checkpointed_at": "2026-10-30T08:50:39Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:42:37Z"
+      "checkpointed_at": "2026-10-30T08:51:43Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
-      "checkpointed_at": "2026-10-30T08:43:29Z"
+      "checkpointed_at": "2026-10-30T08:52:39Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -51272,6 +51272,65 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41015673938",
       "checkpointed_at": "2026-10-30T08:49:16Z"
+    },
+    {
+      "asset_id": "2e4c077a65b10cea231c4b7c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 169,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "70f89a8f4eb5189a1a1017e1a725b51d4863a6a188e4173cc7e455924687c401",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page explaining the properties of water in different states.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "What are the differences in the properties of water in\nsolid, liquid and gaseous states?",
+          "Ice (solid state) retains its shape irrespective of the\ncontainer in which it is placed while water takes the shape\nof the container. Ice does not flow or spread.",
+          "Water (liquid state) flows and changes its shape. Water\ndoes not have a fixed shape. It takes up the shape of the\ncontainer in which it is kept, but the volume of water remains\nconstant. Does water also possess the property to spread?\nYes, water also has the property to spread while keeping the\nvolu",
+          "Water vapour (gaseous state)"
+        ],
+        "concepts": [
+          "properties of water",
+          "solid state",
+          "liquid state",
+          "gaseous state",
+          "volume",
+          "shape",
+          "flow",
+          "spread"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41015673938",
+      "checkpointed_at": "2026-10-30T08:53:23Z"
+    },
+    {
+      "asset_id": "8e056534d5a845bf27f6cb6e",
+      "asset_sha256": "350f3a149f725fb704a13bff8f02652d09a104a6044f4616ed931f226f3727de",
+      "page_text_context_sha256": "70f89a8f4eb5189a1a1017e1a725b51d4863a6a188e4173cc7e455924687c401",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 169,
+      "asset_path": "page-0169.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41015673938",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
