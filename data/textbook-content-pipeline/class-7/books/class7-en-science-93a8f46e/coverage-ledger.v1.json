@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2809,
-    "successful_visual_analyses": 2789,
-    "missing_visual_analyses": 4679,
+    "raw_analysis_result_rows": 2812,
+    "successful_visual_analyses": 2792,
+    "missing_visual_analyses": 4676,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4699,
+    "unresolved_count": 4696,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -113644,9 +113644,25 @@
       "asset_path": "assets/8eb8185ca47a9731f317af04ebe612170e580ac97b438ef763ef1342ecd65af6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A candle burning and a candle extinguished by a glass tumbler, illustrating the effect of air supply on combustion.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "The image illustrates the relationship between air supply and the continuation of combustion.",
+        "limitations": [
+          "The image does not provide a diagram or chart to show the process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -113662,9 +113678,26 @@
       "asset_path": "assets/7504ee14e3eb26d86fb7679cfa2bfb2d9a238c4d8b8b35cecd57fb13c04fc39b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A candle is shown burning in two different scenarios: one where it is uncovered and continues to burn, and another where it is covered by a glass tumbler, which stops burning.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "The image illustrates a scientific experiment to explain why a candle stops burning when covered by a glass tumbler.",
+        "limitations": [
+          "The image does not provide a diagram or chart to explain the concept.",
+          "The image does not show the chemical component of air that supports combustion."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -113680,9 +113713,26 @@
       "asset_path": "assets/622a56ce1f8fece8bcfcc0d59146c63d26cc1ee2b96c14834253a342c5a0d123.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a candle burning and a candle extinguished by a glass tumbler.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time.",
+          "Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon."
+        ],
+        "concepts": [
+          "Combustion",
+          "Air supply",
+          "Flame extinguishment"
+        ],
+        "context_relation": "The image explains the reason why a candle extinguished by a glass tumbler stops burning.",
+        "limitations": [
+          "The image does not provide a diagram of the candle and the glass tumbler."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
