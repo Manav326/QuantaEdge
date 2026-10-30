@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1532,
+    "assets_selected": 1535,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "769957e493c2e2f2b4953a50",
-      "386668f8b7a33ce976da95d5",
-      "f135e4a53c3e68c94034b513"
+      "a5c1484ab6df1a2776c3833a",
+      "2b0ca7542f2abbd2fdc5b8b4",
+      "20d6327a541f8407bebbcafd"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1530,
-    "assets_remaining": 548,
-    "assets_completion_percent": 73.6,
-    "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1527,
+    "assets_analyzed": 1532,
+    "assets_remaining": 546,
+    "assets_completion_percent": 73.7,
+    "assets_failed": 22,
+    "assets_skipped_from_checkpoint": 1530,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
-      "checkpointed_at": "2026-10-30T15:43:49Z"
+      "checkpointed_at": "2026-10-30T15:47:46Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
-      "checkpointed_at": "2026-10-30T15:44:40Z"
+      "checkpointed_at": "2026-10-30T15:48:36Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -52019,6 +52019,100 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
       "checkpointed_at": "2026-10-30T15:46:38Z"
+    },
+    {
+      "asset_id": "a5c1484ab6df1a2776c3833a",
+      "asset_sha256": "8ff1ba4f0cb4c97220fba053fdd98cec93b0b708b44f39c8586abe87c75e8395",
+      "page_text_context_sha256": "fe3f4c79da4f6def46a072cba9b2e12f83d930340b7ca6de8c13d21346553325",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 174,
+      "asset_path": "page-0174.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "2b0ca7542f2abbd2fdc5b8b4",
+      "asset_sha256": "b0a70420c5a5712dae8c59232634ff65f233b84427d47103e9be6d297731a9f8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 175,
+      "asset_path": "assets/b0a70420c5a5712dae8c59232634ff65f233b84427d47103e9be6d297731a9f8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23efa6e96bdf60cef8b4d3a915b5645446863cb2113a8e3e547a61d50a15c80d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A clay pot with a lid and a handle, decorated with geometric patterns.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Small pot",
+          "Place a lid or wet jute",
+          "sack to cover the top of",
+          "the smaller pot.",
+          "Layer of sand",
+          "Large pot",
+          "You can also make",
+          "a drawing of the",
+          "pot-in-pot cooler once it",
+          "is ready.",
+          "Allow 4–5 hours fo",
+          "Fig. 8.7: A pot-in-pot cooler"
+        ],
+        "concepts": [
+          "Clay pot",
+          "Lid",
+          "Handle",
+          "Geometric patterns",
+          "Pot-in-pot cooler",
+          "Drawing",
+          "Sand",
+          "Time"
+        ],
+        "context_relation": "The image is a visual representation of a step in a process for making a pot-in-pot cooler, as described in the text.",
+        "limitations": [
+          "The image does not show the actual process of making the pot-in-pot cooler.",
+          "The image does not show the final product of the pot-in-pot cooler."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:55:28Z"
+    },
+    {
+      "asset_id": "20d6327a541f8407bebbcafd",
+      "asset_sha256": "15bd557be903b6311d3262910da4a29eec4a030f9f322d65a7d454c8af4a5f63",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 175,
+      "asset_path": "assets/15bd557be903b6311d3262910da4a29eec4a030f9f322d65a7d454c8af4a5f63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23efa6e96bdf60cef8b4d3a915b5645446863cb2113a8e3e547a61d50a15c80d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow textured background with a scalloped edge.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or border for a diagram or illustration.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:57:02Z"
     }
   ]
 }
