@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d4fb167a259cf441bdbf0b07c181870a01325140c00f943998aff9df186aaae1",
+  "raw_analysis_sha256": "b50a05736f09545ddb3ce636b750390534750fc24666c26eae7e59005c070353",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:06:00Z",
+      "checkpointed_at": "2026-10-30T11:19:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:07:02Z",
+      "checkpointed_at": "2026-10-30T11:20:03Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -164684,7 +164684,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:10:27Z",
+      "checkpointed_at": "2026-10-30T11:21:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -166150,6 +166150,100 @@
         "limitations": [
           "Supervision required",
           "Safety precautions"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1cb469f3fd5a7d9cf5084a93",
+      "asset_sha256": "3a49d7635c453c7f98971d8c581deeebfc1536086bef8322d7eb49d06318eef4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/3a49d7635c453c7f98971d8c581deeebfc1536086bef8322d7eb49d06318eef4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the activity about the burning candle in Activity 5.7.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41033422861",
+      "checkpointed_at": "2026-10-30T11:22:23Z",
+      "effective_analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the activity about the burning candle in Activity 5.7.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "84105e4199d8152af5c8d5bf",
+      "asset_sha256": "8ab18b5fcb3ace9dd257e8d1b5e77adf97aa563a4ed485eb5b6830e1b8aa1d5d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/8ab18b5fcb3ace9dd257e8d1b5e77adf97aa563a4ed485eb5b6830e1b8aa1d5d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a chemical reaction or process.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.9",
+          "Think, pair, and share",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "chemical reaction",
+          "melting",
+          "evaporation"
+        ],
+        "context_relation": "The image is related to the text discussing the burning candle and its components.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or process being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41033422861",
+      "checkpointed_at": "2026-10-30T11:23:28Z",
+      "effective_analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a chemical reaction or process.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.9",
+          "Think, pair, and share",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "chemical reaction",
+          "melting",
+          "evaporation"
+        ],
+        "context_relation": "The image is related to the text discussing the burning candle and its components.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or process being discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

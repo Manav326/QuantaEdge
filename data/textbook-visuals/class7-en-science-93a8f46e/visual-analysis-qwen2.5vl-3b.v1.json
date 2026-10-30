@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2822,
+    "assets_selected": 2824,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "55bf8ad396fd9c69d6545cf8",
-      "cd063486028ac807c56b8fa4"
+      "1cb469f3fd5a7d9cf5084a93",
+      "84105e4199d8152af5c8d5bf"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2819,
-    "assets_remaining": 4669,
-    "assets_completion_percent": 37.6,
+    "assets_analyzed": 2821,
+    "assets_remaining": 4667,
+    "assets_completion_percent": 37.7,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2817,
+    "assets_skipped_from_checkpoint": 2819,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:06:00Z"
+      "checkpointed_at": "2026-10-30T11:19:02Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:07:02Z"
+      "checkpointed_at": "2026-10-30T11:20:03Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:10:27Z"
+      "checkpointed_at": "2026-10-30T11:21:27Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -105815,6 +105815,69 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
       "checkpointed_at": "2026-10-30T11:17:27Z"
+    },
+    {
+      "asset_id": "1cb469f3fd5a7d9cf5084a93",
+      "asset_sha256": "3a49d7635c453c7f98971d8c581deeebfc1536086bef8322d7eb49d06318eef4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/3a49d7635c453c7f98971d8c581deeebfc1536086bef8322d7eb49d06318eef4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the activity about the burning candle in Activity 5.7.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41033422861",
+      "checkpointed_at": "2026-10-30T11:22:23Z"
+    },
+    {
+      "asset_id": "84105e4199d8152af5c8d5bf",
+      "asset_sha256": "8ab18b5fcb3ace9dd257e8d1b5e77adf97aa563a4ed485eb5b6830e1b8aa1d5d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/8ab18b5fcb3ace9dd257e8d1b5e77adf97aa563a4ed485eb5b6830e1b8aa1d5d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a chemical reaction or process.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.9",
+          "Think, pair, and share",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "chemical reaction",
+          "melting",
+          "evaporation"
+        ],
+        "context_relation": "The image is related to the text discussing the burning candle and its components.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or process being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41033422861",
+      "checkpointed_at": "2026-10-30T11:23:28Z"
     }
   ]
 }
