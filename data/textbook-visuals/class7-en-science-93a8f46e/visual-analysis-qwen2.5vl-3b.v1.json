@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2819,
+    "assets_selected": 2821,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "c989e0d7f4ff6026d632bd78",
-      "0132d2ec0e346526abbec5f7"
+      "55bf8ad396fd9c69d6545cf8",
+      "a5b61012241ab9822a49de1d"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2816,
-    "assets_remaining": 4672,
+    "assets_analyzed": 2817,
+    "assets_remaining": 4671,
     "assets_completion_percent": 37.6,
-    "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2814,
+    "assets_failed": 21,
+    "assets_skipped_from_checkpoint": 2816,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T09:05:53Z"
+      "checkpointed_at": "2026-10-30T09:13:53Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T09:07:31Z"
+      "checkpointed_at": "2026-10-30T09:15:30Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104925,7 +104925,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
-      "checkpointed_at": "2026-10-30T09:09:12Z"
+      "checkpointed_at": "2026-10-30T09:17:13Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -105710,6 +105710,65 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41016250470",
       "checkpointed_at": "2026-10-30T09:12:30Z"
+    },
+    {
+      "asset_id": "55bf8ad396fd9c69d6545cf8",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41016250470",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "a5b61012241ab9822a49de1d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de50784c297565da534c894f27e172b1d7092ecc2b7dd1cb9af60bc003011601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of paper being held by tongs with a lighted matchstick approaching it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 5.6: Let us investigate",
+          "Caution — Perform this activity under the supervision of your teacher",
+          "or an adult.",
+          "Hold a piece of paper with a pair of",
+          "tongs and bring a lighted matchstick",
+          "to it. It quickly catches fire. Do we say",
+          "that we need a fire to start the burning process?"
+        ],
+        "concepts": [
+          "fire",
+          "paper",
+          "tongs",
+          "matchstick",
+          "burning process"
+        ],
+        "context_relation": "Experimental demonstration",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41016250470",
+      "checkpointed_at": "2026-10-30T09:23:15Z"
     }
   ]
 }
