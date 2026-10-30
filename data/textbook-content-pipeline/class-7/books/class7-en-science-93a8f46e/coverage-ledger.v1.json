@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2861,
-    "successful_visual_analyses": 2842,
-    "missing_visual_analyses": 4627,
+    "raw_analysis_result_rows": 2862,
+    "successful_visual_analyses": 2843,
+    "missing_visual_analyses": 4626,
     "failed_visual_analyses": 19,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4646,
+    "unresolved_count": 4645,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -115615,9 +115615,26 @@
       "asset_path": "assets/4888841fa3d0b61c47afa79d66b40a735ed9e95b50dc118107e2f3d505bf7cd8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green and white background with a thin green line running horizontally across the middle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "chemical reaction",
+          "melting",
+          "evaporation"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "unclear specific details of the image",
+          "no specific objects or figures visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
