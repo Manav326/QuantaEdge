@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2852,
-    "successful_visual_analyses": 2832,
-    "missing_visual_analyses": 4636,
+    "raw_analysis_result_rows": 2854,
+    "successful_visual_analyses": 2834,
+    "missing_visual_analyses": 4634,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4656,
+    "unresolved_count": 4654,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -115242,9 +115242,24 @@
       "asset_path": "assets/41d41cba1cee90f261a8c794a859b23de5690db7c121d7fdd2d0857f666c9e4f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green background with a faint, blurred image of a candle and a flame.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "Candle burning",
+          "Chemical reactions"
+        ],
+        "context_relation": "The image is related to the textbook content about candle burning and chemical reactions.",
+        "limitations": [
+          "The image is not clear enough to provide detailed information about the candle burning process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -115260,9 +115275,26 @@
       "asset_path": "assets/0b0d42fe4a1fbdd46b7d9fd3a7c593126b28aded088934d5af0fd43b48511981.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a green header and a light green background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "65",
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "chemical reaction",
+          "melting",
+          "evaporation"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "no specific image or diagram is provided"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
