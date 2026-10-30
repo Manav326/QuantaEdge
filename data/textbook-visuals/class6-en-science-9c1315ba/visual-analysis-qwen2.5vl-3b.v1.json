@@ -14,13 +14,13 @@
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "6ad1a44c4439dad27d3403c2",
-      "56b6fc3411ed6da127bdf529"
+      "2249feba9d9de2d28593e04b",
+      "f20681ba982380a94591449f"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1499,
-    "assets_remaining": 579,
-    "assets_completion_percent": 72.1,
+    "assets_analyzed": 1500,
+    "assets_remaining": 578,
+    "assets_completion_percent": 72.2,
     "assets_failed": 19,
     "assets_skipped_from_checkpoint": 1499,
     "batch_limit": 5,
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:29:58Z"
+      "checkpointed_at": "2026-10-30T00:42:08Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:30:58Z"
+      "checkpointed_at": "2026-10-30T00:43:09Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:31:48Z"
+      "checkpointed_at": "2026-10-30T00:43:57Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -48967,7 +48967,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40785541263",
+      "run_id": "40968271659",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -50873,6 +50873,55 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40785541263",
       "checkpointed_at": "2026-10-29T01:45:23Z"
+    },
+    {
+      "asset_id": "f20681ba982380a94591449f",
+      "asset_sha256": "67637e93d77093f808e7c26907de033248c276d2a59a1d7d374fbe2d33b09f73",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 166,
+      "asset_path": "page-0166.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "736e0564c9b0139c30ea8610577d2423b4bbc63e582929923be241b97f3fe274",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing dew drops on plants and their formation.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Continue the discussion on the given reasons or conduct\nactivities to find evidence for the reasons given to help in\nthis discussion. Where else have you seen water droplets\nlike this?",
+          "You might have seen dew drops on\nplants. Why do we see dew drops more\nin the morning? When we boil the\nwater in a half-filled utensil and cover\nit with a steel plate, some water drops\naccumulate on the inner side of the steel\nplate. Where do these water drops come\nfrom? What do you think?",
+          "When the water vapour present in the\nair comes in contact with a cold surface,\nit forms water droplets. The process of conversion of water\nvapour into its liquid state is called condensation.",
+          "After understanding the concept of condensation of water,\nlet us go back to Activity 8.3. Could the water appearing on\nthe outer surface of the glass tumbler in Activity 8.3 also be\ndue to condensation of water vapour present in the air? Let\nus investigate it.",
+          "Activity 8.4: Let us measure\nAavi and Thirav conduct an activity to find evidence for\ntheir reasons. You can also conduct the activity by following\nthe steps given below. Record your data in Table 8.2.\nTake a glass tumbler half-filled with water containing a\nfew ice cubes. Cover it with a small stee"
+        ],
+        "concepts": [
+          "dew drops",
+          "condensation",
+          "water vapour",
+          "water droplets",
+          "water in a half-filled utensil",
+          "steel plate",
+          "water appearing on the outer surface of the glass tumbler",
+          "digital weighing balance",
+          "mass of cold water",
+          "increase or decrease or remain the same"
+        ],
+        "context_relation": "discussion",
+        "limitations": [
+          "dew drops on plants",
+          "water droplets in a half-filled utensil",
+          "water appearing on the outer surface of the glass tumbler",
+          "mass of cold water on a digital weighing balance",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-30T00:53:39Z"
     }
   ]
 }

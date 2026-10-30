@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e7cba2688daa3bacc82e5ef77f03ba7b504bb1c525d66001c029fcc9ef205a86",
+  "raw_analysis_sha256": "3266f9d42d89aadd74e08499d3c308693c9b86659b30d7232cae25ccda6f44c2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:29:58Z",
+      "checkpointed_at": "2026-10-30T00:42:08Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:30:58Z",
+      "checkpointed_at": "2026-10-30T00:43:09Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:31:48Z",
+      "checkpointed_at": "2026-10-30T00:43:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -74442,7 +74442,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40785541263",
+      "run_id": "40968271659",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -77400,6 +77400,88 @@
         "limitations": [
           "No visible content on the page.",
           "Unable to determine the page's purpose or content based on the image alone."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f20681ba982380a94591449f",
+      "asset_sha256": "67637e93d77093f808e7c26907de033248c276d2a59a1d7d374fbe2d33b09f73",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 166,
+      "asset_path": "page-0166.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "736e0564c9b0139c30ea8610577d2423b4bbc63e582929923be241b97f3fe274",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing dew drops on plants and their formation.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Continue the discussion on the given reasons or conduct\nactivities to find evidence for the reasons given to help in\nthis discussion. Where else have you seen water droplets\nlike this?",
+          "You might have seen dew drops on\nplants. Why do we see dew drops more\nin the morning? When we boil the\nwater in a half-filled utensil and cover\nit with a steel plate, some water drops\naccumulate on the inner side of the steel\nplate. Where do these water drops come\nfrom? What do you think?",
+          "When the water vapour present in the\nair comes in contact with a cold surface,\nit forms water droplets. The process of conversion of water\nvapour into its liquid state is called condensation.",
+          "After understanding the concept of condensation of water,\nlet us go back to Activity 8.3. Could the water appearing on\nthe outer surface of the glass tumbler in Activity 8.3 also be\ndue to condensation of water vapour present in the air? Let\nus investigate it.",
+          "Activity 8.4: Let us measure\nAavi and Thirav conduct an activity to find evidence for\ntheir reasons. You can also conduct the activity by following\nthe steps given below. Record your data in Table 8.2.\nTake a glass tumbler half-filled with water containing a\nfew ice cubes. Cover it with a small stee"
+        ],
+        "concepts": [
+          "dew drops",
+          "condensation",
+          "water vapour",
+          "water droplets",
+          "water in a half-filled utensil",
+          "steel plate",
+          "water appearing on the outer surface of the glass tumbler",
+          "digital weighing balance",
+          "mass of cold water",
+          "increase or decrease or remain the same"
+        ],
+        "context_relation": "discussion",
+        "limitations": [
+          "dew drops on plants",
+          "water droplets in a half-filled utensil",
+          "water appearing on the outer surface of the glass tumbler",
+          "mass of cold water on a digital weighing balance",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-30T00:53:39Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing dew drops on plants and their formation.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Continue the discussion on the given reasons or conduct\nactivities to find evidence for the reasons given to help in\nthis discussion. Where else have you seen water droplets\nlike this?",
+          "You might have seen dew drops on\nplants. Why do we see dew drops more\nin the morning? When we boil the\nwater in a half-filled utensil and cover\nit with a steel plate, some water drops\naccumulate on the inner side of the steel\nplate. Where do these water drops come\nfrom? What do you think?",
+          "When the water vapour present in the\nair comes in contact with a cold surface,\nit forms water droplets. The process of conversion of water\nvapour into its liquid state is called condensation.",
+          "After understanding the concept of condensation of water,\nlet us go back to Activity 8.3. Could the water appearing on\nthe outer surface of the glass tumbler in Activity 8.3 also be\ndue to condensation of water vapour present in the air? Let\nus investigate it.",
+          "Activity 8.4: Let us measure\nAavi and Thirav conduct an activity to find evidence for\ntheir reasons. You can also conduct the activity by following\nthe steps given below. Record your data in Table 8.2.\nTake a glass tumbler half-filled with water containing a\nfew ice cubes. Cover it with a small stee"
+        ],
+        "concepts": [
+          "dew drops",
+          "condensation",
+          "water vapour",
+          "water droplets",
+          "water in a half-filled utensil",
+          "steel plate",
+          "water appearing on the outer surface of the glass tumbler",
+          "digital weighing balance",
+          "mass of cold water",
+          "increase or decrease or remain the same"
+        ],
+        "context_relation": "discussion",
+        "limitations": [
+          "dew drops on plants",
+          "water droplets in a half-filled utensil",
+          "water appearing on the outer surface of the glass tumbler",
+          "mass of cold water on a digital weighing balance",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
