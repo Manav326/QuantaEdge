@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7a92bcccd963ea74dce4e17220316c2302f03ce66f477f1199d28e1a0ae74453",
+  "raw_analysis_sha256": "16819aa63e180166cb39088da18d718d0d316d6970c781c857de7b0444d302b8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:43:28Z",
+      "checkpointed_at": "2026-10-30T22:46:04Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:43:56Z",
+      "checkpointed_at": "2026-10-30T22:46:32Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:44:32Z",
+      "checkpointed_at": "2026-10-30T22:47:11Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:45:10Z",
+      "checkpointed_at": "2026-10-30T22:47:52Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -170206,6 +170206,76 @@
         "limitations": [
           "The page is completely black and no text or images are visible.",
           "The page is blank and does not contain any visible content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "30fb5d5708945737db34547c",
+      "asset_sha256": "218bf4c591892b7dd16962d29721404aafe146c731184c7f9d3f2e09a2e85299",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "page-0085.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing the burning candle and its changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "What do you think?",
+          "The wax melts and evaporates...",
+          "I think the wax burns, and new substances are formed...",
+          "Maybe the wick draws up the liquid wax...",
+          "Wax melts, flows, and solidifies in different shapes...",
+          "Maybe..."
+        ],
+        "concepts": [
+          "Physical changes",
+          "Chemical changes",
+          "Melting",
+          "Evaporation",
+          "Combustion"
+        ],
+        "context_relation": "The image shows a diagram of students discussing the changes in a candle.",
+        "limitations": [
+          "The image does not provide specific details about the physical and chemical changes in the candle."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41132715388",
+      "checkpointed_at": "2026-10-30T22:49:24Z",
+      "effective_analysis": {
+        "visual_summary": "Students discussing the burning candle and its changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "What do you think?",
+          "The wax melts and evaporates...",
+          "I think the wax burns, and new substances are formed...",
+          "Maybe the wick draws up the liquid wax...",
+          "Wax melts, flows, and solidifies in different shapes...",
+          "Maybe..."
+        ],
+        "concepts": [
+          "Physical changes",
+          "Chemical changes",
+          "Melting",
+          "Evaporation",
+          "Combustion"
+        ],
+        "context_relation": "The image shows a diagram of students discussing the changes in a candle.",
+        "limitations": [
+          "The image does not provide specific details about the physical and chemical changes in the candle."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

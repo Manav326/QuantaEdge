@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2892,
+    "assets_selected": 2893,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "35dec21c064e7ccd6104fe75"
+      "30fb5d5708945737db34547c"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2888,
-    "assets_remaining": 4600,
+    "assets_analyzed": 2889,
+    "assets_remaining": 4599,
     "assets_completion_percent": 38.6,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2887,
+    "assets_skipped_from_checkpoint": 2888,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:43:28Z"
+      "checkpointed_at": "2026-10-30T22:46:04Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:43:56Z"
+      "checkpointed_at": "2026-10-30T22:46:32Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:44:32Z"
+      "checkpointed_at": "2026-10-30T22:47:11Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
-      "checkpointed_at": "2026-10-30T22:45:10Z"
+      "checkpointed_at": "2026-10-30T22:47:52Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -108396,6 +108396,49 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41132715388",
       "checkpointed_at": "2026-10-30T22:45:18Z"
+    },
+    {
+      "asset_id": "30fb5d5708945737db34547c",
+      "asset_sha256": "218bf4c591892b7dd16962d29721404aafe146c731184c7f9d3f2e09a2e85299",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "page-0085.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing the burning candle and its changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "What do you think?",
+          "The wax melts and evaporates...",
+          "I think the wax burns, and new substances are formed...",
+          "Maybe the wick draws up the liquid wax...",
+          "Wax melts, flows, and solidifies in different shapes...",
+          "Maybe..."
+        ],
+        "concepts": [
+          "Physical changes",
+          "Chemical changes",
+          "Melting",
+          "Evaporation",
+          "Combustion"
+        ],
+        "context_relation": "The image shows a diagram of students discussing the changes in a candle.",
+        "limitations": [
+          "The image does not provide specific details about the physical and chemical changes in the candle."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41132715388",
+      "checkpointed_at": "2026-10-30T22:49:24Z"
     }
   ]
 }
