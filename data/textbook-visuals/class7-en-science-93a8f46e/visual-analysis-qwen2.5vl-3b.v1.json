@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2824,
+    "assets_selected": 2826,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "1cb469f3fd5a7d9cf5084a93",
-      "84105e4199d8152af5c8d5bf"
+      "503b3b467c466ca232366c6b",
+      "d96368507097016cef5229f3"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2821,
-    "assets_remaining": 4667,
+    "assets_analyzed": 2823,
+    "assets_remaining": 4665,
     "assets_completion_percent": 37.7,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2819,
+    "assets_skipped_from_checkpoint": 2821,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:19:02Z"
+      "checkpointed_at": "2026-10-30T11:25:02Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:20:03Z"
+      "checkpointed_at": "2026-10-30T11:26:04Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
-      "checkpointed_at": "2026-10-30T11:21:27Z"
+      "checkpointed_at": "2026-10-30T11:27:28Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -105878,6 +105878,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41033422861",
       "checkpointed_at": "2026-10-30T11:23:28Z"
+    },
+    {
+      "asset_id": "503b3b467c466ca232366c6b",
+      "asset_sha256": "eb1450ed7ecd4c9ae1229c364380d824092fd8ef6c10c9f18b66369ffe4a639e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/eb1450ed7ecd4c9ae1229c364380d824092fd8ef6c10c9f18b66369ffe4a639e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl with a braid and a backpack, possibly depicting a school setting.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the burning candle and its chemical properties.",
+        "limitations": [
+          "The image does not provide specific details about the chemical properties of the burning candle.",
+          "The image does not show the girl actively discussing the burning candle.",
+          "The image does not include any text or labels that provide additional context or information about the scene."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41033422861",
+      "checkpointed_at": "2026-10-30T11:28:31Z"
+    },
+    {
+      "asset_id": "d96368507097016cef5229f3",
+      "asset_sha256": "fe00cd3c91cbb4d1c416046b2f393387fbb37a0cdabd5591f58f5fd6080d4e2f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/fe00cd3c91cbb4d1c416046b2f393387fbb37a0cdabd5591f58f5fd6080d4e2f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a hat and a scarf, standing next to a blank white page.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about",
+          "the burning candle.",
+          "Chemical",
+          "What do you think?",
+          "The wax melts and",
+          "evaporates..."
+        ],
+        "concepts": [
+          "Chemical",
+          "Melting",
+          "Evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about the burning candle and its chemical properties.",
+        "limitations": [
+          "The image does not provide specific details about the burning candle or its chemical properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41033422861",
+      "checkpointed_at": "2026-10-30T11:29:42Z"
     }
   ]
 }
