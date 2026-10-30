@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2844,
+    "assets_selected": 2845,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "be03167321c86f964cad99f8"
+      "4f80e67ddc96a95024a01e5b"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2840,
-    "assets_remaining": 4648,
+    "assets_analyzed": 2841,
+    "assets_remaining": 4647,
     "assets_completion_percent": 37.9,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2839,
+    "assets_skipped_from_checkpoint": 2840,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:05:33Z"
+      "checkpointed_at": "2026-10-30T15:08:48Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:06:02Z"
+      "checkpointed_at": "2026-10-30T15:09:18Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:06:39Z"
+      "checkpointed_at": "2026-10-30T15:09:57Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
-      "checkpointed_at": "2026-10-30T15:07:19Z"
+      "checkpointed_at": "2026-10-30T15:10:38Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -106627,6 +106627,43 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41067764012",
       "checkpointed_at": "2026-10-30T15:07:59Z"
+    },
+    {
+      "asset_id": "4f80e67ddc96a95024a01e5b",
+      "asset_sha256": "f677b62d37b80e787a4f2d4db11db73d00202746da82ce12be36734493e2cab5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/f677b62d37b80e787a4f2d4db11db73d00202746da82ce12be36734493e2cab5.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing the burning candle and its chemical reactions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle.",
+          "Chemical",
+          "What do you think?"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Burning candle"
+        ],
+        "context_relation": "The image is a diagram showing students discussing the burning candle and its chemical reactions.",
+        "limitations": [
+          "The image does not show the actual diagram or students' discussion.",
+          "The text is partially visible and may be incomplete."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41067764012",
+      "checkpointed_at": "2026-10-30T15:11:17Z"
     }
   ]
 }
