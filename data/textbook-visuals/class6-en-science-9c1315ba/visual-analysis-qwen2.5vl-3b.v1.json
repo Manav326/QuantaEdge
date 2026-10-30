@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1505,
+    "assets_selected": 1507,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "52f003036c5d5721b35c8d7f",
-      "d7688b482895406d3aa1a0c2"
+      "9a4ccd57d3f459c720ed0509",
+      "5836b3c9a704270a93026dc4"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1502,
-    "assets_remaining": 576,
-    "assets_completion_percent": 72.3,
+    "assets_analyzed": 1504,
+    "assets_remaining": 574,
+    "assets_completion_percent": 72.4,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1500,
+    "assets_skipped_from_checkpoint": 1502,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:54:55Z"
+      "checkpointed_at": "2026-10-30T01:01:10Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:55:54Z"
+      "checkpointed_at": "2026-10-30T01:02:09Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
-      "checkpointed_at": "2026-10-30T00:56:43Z"
+      "checkpointed_at": "2026-10-30T01:02:59Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -50976,6 +50976,104 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40968271659",
       "checkpointed_at": "2026-10-30T00:59:55Z"
+    },
+    {
+      "asset_id": "9a4ccd57d3f459c720ed0509",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 167,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eebd695eb3d6d5c889344e9f785f3b1199427bca02fb9aaaca398f3c57a7b962",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table showing the measurement of mass of water in a condensation experiment over time.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 8.2: Measurement of mass in condensation\nexperiment using a digital weighing balance",
+          "Time               Mass of water",
+          "0 min",
+          "5 min",
+          "10 min",
+          "15 min",
+          "20 min",
+          "25 min",
+          "30 min",
+          "Do your findings match with\nyour predictions? Explain your\nobservations.",
+          "The amount of water vapour in\nthe air is also known as humidity.",
+          "The daily humidity data for droplets on the glass tumbler."
+        ],
+        "concepts": [
+          "Condensation",
+          "Digital Weighing Balance",
+          "Mass Measurement",
+          "Time",
+          "Humidity",
+          "Water Vapour"
+        ],
+        "context_relation": "The table is related to the experiment described in the text.",
+        "limitations": [
+          "The table does not provide specific data for each time point.",
+          "The text does not provide specific data for each time point."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-30T01:03:40Z"
+    },
+    {
+      "asset_id": "5836b3c9a704270a93026dc4",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 167,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eebd695eb3d6d5c889344e9f785f3b1199427bca02fb9aaaca398f3c57a7b962",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table showing the mass of water over time in a condensation experiment.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 8.2: Measurement of mass in condensation\nexperiment using a digital weighing balance",
+          "Time               Mass of water",
+          "0 min",
+          "5 min",
+          "10 min",
+          "15 min",
+          "20 min",
+          "25 min",
+          "30 min",
+          "Do your findings match with\nyour predictions? Explain your\nobservations.",
+          "The amount of water vapour in\nthe air is also known as humidity.",
+          "The daily humidity data for droplets on the glass tumbler."
+        ],
+        "concepts": [
+          "Condensation",
+          "Digital weighing balance",
+          "Mass of water",
+          "Time",
+          "Humidity",
+          "Daily humidity data"
+        ],
+        "context_relation": "The table is related to the condensation experiment described in the text.",
+        "limitations": [
+          "The table does not provide specific data points for each time interval.",
+          "The text does not provide specific data points for each time interval."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40968271659",
+      "checkpointed_at": "2026-10-30T01:04:20Z"
     }
   ]
 }
