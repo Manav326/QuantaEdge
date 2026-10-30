@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2834,
+    "assets_selected": 2836,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "3aa1a97f7e36b1fe7222f093",
-      "4e1b9f009f9524b3251761cf"
+      "54f5863bce3b662fa0d0489d",
+      "bc131de2c4593ee2d26bae95"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2831,
-    "assets_remaining": 4657,
+    "assets_analyzed": 2833,
+    "assets_remaining": 4655,
     "assets_completion_percent": 37.8,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2829,
+    "assets_skipped_from_checkpoint": 2831,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41050335050",
-      "checkpointed_at": "2026-10-30T13:33:03Z"
+      "checkpointed_at": "2026-10-30T13:39:24Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41050335050",
-      "checkpointed_at": "2026-10-30T13:34:05Z"
+      "checkpointed_at": "2026-10-30T13:40:24Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41050335050",
-      "checkpointed_at": "2026-10-30T13:35:29Z"
+      "checkpointed_at": "2026-10-30T13:41:48Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -106242,6 +106242,77 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41050335050",
       "checkpointed_at": "2026-10-30T13:37:50Z"
+    },
+    {
+      "asset_id": "54f5863bce3b662fa0d0489d",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing the burning candle and its chemical reactions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "chemical reactions",
+          "melting",
+          "evaporation"
+        ],
+        "context_relation": "The image is a diagram showing students discussing the burning candle and its chemical reactions.",
+        "limitations": [
+          "The image does not show the actual diagram or students' discussion, only text describing the activity and the image to be analyzed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41050335050",
+      "checkpointed_at": "2026-10-30T13:42:56Z"
+    },
+    {
+      "asset_id": "bc131de2c4593ee2d26bae95",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b191186bf22687e6482e1b178ef0a19e59e673410ee89f0980ced2b7df510b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing the burning candle and its chemical reactions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "chemical reactions",
+          "melting",
+          "evaporation"
+        ],
+        "context_relation": "The image is a diagram showing students discussing the burning candle and its chemical reactions.",
+        "limitations": [
+          "The image does not show the actual diagram or students' discussion.",
+          "The text is incomplete and does not provide the full context of the diagram."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41050335050",
+      "checkpointed_at": "2026-10-30T13:43:14Z"
     }
   ]
 }
