@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2d46fa43be12cc6ffeaf121fd0678561d478944f3e4786d60991697f84ba0394",
+  "raw_analysis_sha256": "23b6f8eade7a75925a486e167b1a456dae8af78af92317c4e48efc21c85d18b2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1790,8 +1790,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their importance in encouraging critical thinking and curiosity.",
+        "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
@@ -1801,35 +1801,33 @@
         ],
         "concepts": [
           "open-ended questions",
-          "thought-provoking questions",
           "critical thinking",
           "curiosity",
-          "science",
           "teamwork",
           "inclusive nature",
-          "special needs",
+          "visualisation",
           "peer interactions",
           "assessing understanding",
           "analyzing concepts",
           "safety precautions",
           "fascinating facts",
           "interesting observations",
-          "scientific principles",
-          "real-life applications"
+          "scientific principles"
         ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41068788542",
-      "checkpointed_at": "2026-10-30T15:18:30Z",
+      "run_id": "41080342358",
+      "checkpointed_at": "2026-10-30T15:32:46Z",
       "effective_analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their importance in encouraging critical thinking and curiosity.",
+        "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
@@ -1839,25 +1837,23 @@
         ],
         "concepts": [
           "open-ended questions",
-          "thought-provoking questions",
           "critical thinking",
           "curiosity",
-          "science",
           "teamwork",
           "inclusive nature",
-          "special needs",
+          "visualisation",
           "peer interactions",
           "assessing understanding",
           "analyzing concepts",
           "safety precautions",
           "fascinating facts",
           "interesting observations",
-          "scientific principles",
-          "real-life applications"
+          "scientific principles"
         ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -28856,7 +28852,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41068788542",
+      "run_id": "41080342358",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -29310,60 +29306,54 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgments for the book's publication.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
-          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript. The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
-          "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
+          "Acknowledgments",
+          "Book Publication",
+          "Meticulous Editing",
+          "Support",
+          "Administrative Staff",
           "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Contractual Roles"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
+        "context_relation": "Acknowledgments for the book's publication",
         "limitations": [
-          "No specific visual elements are described."
+          "No specific visual elements are described.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41068788542",
-      "checkpointed_at": "2026-10-30T15:18:56Z",
+      "run_id": "41080342358",
+      "checkpointed_at": "2026-10-30T15:40:42Z",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgments for the book's publication.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
-          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript. The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
-          "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
+          "Acknowledgments",
+          "Book Publication",
+          "Meticulous Editing",
+          "Support",
+          "Administrative Staff",
           "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Contractual Roles"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
+        "context_relation": "Acknowledgments for the book's publication",
         "limitations": [
-          "No specific visual elements are described."
+          "No specific visual elements are described.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -32392,7 +32382,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41068788542",
+      "run_id": "41080342358",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38234,7 +38224,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41068788542",
+      "run_id": "41080342358",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
