@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e77b52489be80136372a7bd02d17f489e098994e76957f1587e42b66910f0cb5",
+  "raw_analysis_sha256": "4f1f3a647b55ff2523e9f5c6dc252d27f2e81bc8dc5a7606c79156af102fbbb1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41080342358",
-      "checkpointed_at": "2026-10-30T16:45:07Z",
+      "checkpointed_at": "2026-10-30T16:57:44Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29347,7 +29347,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41080342358",
-      "checkpointed_at": "2026-10-30T16:46:03Z",
+      "checkpointed_at": "2026-10-30T16:58:40Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
         "visual_type": "page_with_multiple_visuals",
@@ -57868,7 +57868,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41080342358",
-      "checkpointed_at": "2026-10-30T16:47:04Z",
+      "checkpointed_at": "2026-10-30T16:59:42Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
@@ -65672,11 +65672,9 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface, with instructions on how to perform an activity related to atmospheric pressure.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
         "visual_type": "diagram",
         "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -65692,33 +65690,28 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "pressure difference",
-          "atmospheric force",
+          "air pressure",
           "SI unit of pressure",
-          "practical unit of air pressure",
           "millibar",
           "hectopascal",
           "wind formation",
           "inflated balloon",
           "puncture in the bicycle tube"
         ],
-        "context_relation": "educational",
+        "context_relation": "descriptive",
         "limitations": [
-          "The image does not show the actual experiment of pulling the sucker off the surface.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not show the actual experiment of pulling the sucker off the surface."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41080342358",
-      "checkpointed_at": "2026-10-30T16:51:01Z",
+      "checkpointed_at": "2026-10-30T17:01:12Z",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface, with instructions on how to perform an activity related to atmospheric pressure.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
         "visual_type": "diagram",
         "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -65734,20 +65727,17 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "pressure difference",
-          "atmospheric force",
+          "air pressure",
           "SI unit of pressure",
-          "practical unit of air pressure",
           "millibar",
           "hectopascal",
           "wind formation",
           "inflated balloon",
           "puncture in the bicycle tube"
         ],
-        "context_relation": "educational",
+        "context_relation": "descriptive",
         "limitations": [
-          "The image does not show the actual experiment of pulling the sucker off the surface.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not show the actual experiment of pulling the sucker off the surface."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -67178,21 +67168,89 @@
     {
       "asset_id": "52885281ae21238e9ccc031f",
       "asset_sha256": "fe59359cb8342e88b557d6166a640b2ef6acf08ebc62aa0c63e90e8dec6d5b45",
-      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 111,
       "asset_path": "page-0111.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41068788542",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "and  ice  particles. You have learnt in the chapter\n‘Exploring Forces’ that when two objects are rubbed\nagainst each other, they get charged. In this case, strong\nwinds blowing upwards and downwards and rubbing\nagainst each other cause  static  electric charges to\ndevelop within the clouds.\n\nThe pos",
+          "Fig. 6.16: Lightning",
+          "A step further",
+          "Isolated and localised thunderstorms can sometimes occur in various\nregions of India. These thunderstorms are known by various names\nsuch as Kalboishakhi in West Bengal, Bihar, and Jharkhand and\nBordoisila in Assam. They occur before the arrival of the monsoon,\nthereby helping kharif crops to grow. "
+        ],
+        "concepts": [
+          "static electric charges",
+          "clouds",
+          "positive and negative charges",
+          "lightning",
+          "thunderstorms",
+          "monsoon",
+          "kharif crops",
+          "mango showers",
+          "coffee plants",
+          "precautions",
+          "lightning",
+          "tall objects",
+          "low-lying open area",
+          "crouching down",
+          "umbrella with a metallic rod",
+          "water",
+          "bus or a car"
+        ],
+        "context_relation": "The image is a diagram showing the movement of positively and negatively charged particles in clouds.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of the particles or the exact mechanism of charge separation.",
+          "The image does not show the actual movement of the particles or the formation of clouds."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41080342358",
+      "checkpointed_at": "2026-10-30T17:04:53Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "and  ice  particles. You have learnt in the chapter\n‘Exploring Forces’ that when two objects are rubbed\nagainst each other, they get charged. In this case, strong\nwinds blowing upwards and downwards and rubbing\nagainst each other cause  static  electric charges to\ndevelop within the clouds.\n\nThe pos",
+          "Fig. 6.16: Lightning",
+          "A step further",
+          "Isolated and localised thunderstorms can sometimes occur in various\nregions of India. These thunderstorms are known by various names\nsuch as Kalboishakhi in West Bengal, Bihar, and Jharkhand and\nBordoisila in Assam. They occur before the arrival of the monsoon,\nthereby helping kharif crops to grow. "
+        ],
+        "concepts": [
+          "static electric charges",
+          "clouds",
+          "positive and negative charges",
+          "lightning",
+          "thunderstorms",
+          "monsoon",
+          "kharif crops",
+          "mango showers",
+          "coffee plants",
+          "precautions",
+          "lightning",
+          "tall objects",
+          "low-lying open area",
+          "crouching down",
+          "umbrella with a metallic rod",
+          "water",
+          "bus or a car"
+        ],
+        "context_relation": "The image is a diagram showing the movement of positively and negatively charged particles in clouds.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of the particles or the exact mechanism of charge separation.",
+          "The image does not show the actual movement of the particles or the formation of clouds."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
