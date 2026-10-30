@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2867,
-    "successful_visual_analyses": 2848,
-    "missing_visual_analyses": 4621,
+    "raw_analysis_result_rows": 2868,
+    "successful_visual_analyses": 2849,
+    "missing_visual_analyses": 4620,
     "failed_visual_analyses": 19,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4640,
+    "unresolved_count": 4639,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -115833,9 +115833,24 @@
       "asset_path": "assets/c648da07359b3ce142fadf6bd98bdff1fdf16c30171d305ba3579d3fae394663.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a green arrow pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Activity 5.7: Think, pair, and share",
+          "Look at the Fig. 5.9. Analyse what students are discussing about the burning candle."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Melting and evaporation"
+        ],
+        "context_relation": "The image is related to the textbook content about chemical reactions and the melting and evaporation of wax in a burning candle.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions or the melting and evaporation process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
