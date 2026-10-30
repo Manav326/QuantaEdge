@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c9cbcbeec1cff422d1d2f4ffb6dbb03bed01c0e6020e1fa0d1173d7a8603ec3f",
+  "raw_analysis_sha256": "9062d676b1721f079aa1ca67ee18bc35921e67aa82a988921c517467d560f28f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
-      "checkpointed_at": "2026-10-30T15:21:34Z",
+      "checkpointed_at": "2026-10-30T15:28:45Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
-      "checkpointed_at": "2026-10-30T15:22:26Z",
+      "checkpointed_at": "2026-10-30T15:29:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -78670,6 +78670,218 @@
         "context_relation": "exploring the factors affecting evaporation rates of water",
         "limitations": [
           "The table does not provide specific data for the evaporation times."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6b3ce6753e38d1a4f0bc4a9a",
+      "asset_sha256": "72bca6326283ed02e69d80cabf45c9ce53c52c7b4d748a84ddf36c6b490f281a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 173,
+      "asset_path": "assets/72bca6326283ed02e69d80cabf45c9ce53c52c7b4d748a84ddf36c6b490f281a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11fc2047467b025fd392753382893c49c359eae1eddc5e59fbc8ce27dce03b3a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a house with a tree in the background, showing two bottles with water caps placed in sunlight and shade.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Take identical caps of two bottles.",
+          "Pour equal amount of water in each of the cap.",
+          "Place one of the cap in sunlight and keep the other in shade as shown in Fig. 8.6.",
+          "Observe the two caps of bottles after every 15 minutes.",
+          "Record the time taken for the water to completely evaporate in each case.",
+          "You can also repeat this activity on a windy or a rainy day, and record your observations."
+        ],
+        "concepts": [
+          "Evaporation",
+          "Sunlight",
+          "Shade",
+          "Water",
+          "Time",
+          "Observation"
+        ],
+        "context_relation": "The image is related to Activity 8.8 in the textbook, which involves observing the evaporation of water in sunlight and shade.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:31:29Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a house with a tree in the background, showing two bottles with water caps placed in sunlight and shade.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Take identical caps of two bottles.",
+          "Pour equal amount of water in each of the cap.",
+          "Place one of the cap in sunlight and keep the other in shade as shown in Fig. 8.6.",
+          "Observe the two caps of bottles after every 15 minutes.",
+          "Record the time taken for the water to completely evaporate in each case.",
+          "You can also repeat this activity on a windy or a rainy day, and record your observations."
+        ],
+        "concepts": [
+          "Evaporation",
+          "Sunlight",
+          "Shade",
+          "Water",
+          "Time",
+          "Observation"
+        ],
+        "context_relation": "The image is related to Activity 8.8 in the textbook, which involves observing the evaporation of water in sunlight and shade.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "62038a03d8c550900d4459e1",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 173,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11fc2047467b025fd392753382893c49c359eae1eddc5e59fbc8ce27dce03b3a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity involving two bottles with identical caps, one in sunlight and one in shade, to observe the evaporation of water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.8: Let us explore",
+          "  Take identical caps of two bottles.",
+          "  Pour equal amount of water in each of the cap.",
+          "  Place one of the cap in sunlight and keep the other in shade as shown in Fig. 8.6.",
+          "  Observe the two caps of bottles after every 15 minutes.",
+          "  Record the time taken for the water to completely evaporate in each case.",
+          "  You can also repeat this activity on a windy or a rainy day, and record your observations.",
+          "Fig. 8.6: Evaporation of water in sunlight and in shade"
+        ],
+        "concepts": [
+          "Evaporation",
+          "Sunlight",
+          "Shade",
+          "Water",
+          "Time",
+          "Observation"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "The activity is based on observation and recording, not quantitative data.",
+          "The results may vary based on environmental conditions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:32:16Z",
+      "effective_analysis": {
+        "visual_summary": "Activity involving two bottles with identical caps, one in sunlight and one in shade, to observe the evaporation of water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.8: Let us explore",
+          "  Take identical caps of two bottles.",
+          "  Pour equal amount of water in each of the cap.",
+          "  Place one of the cap in sunlight and keep the other in shade as shown in Fig. 8.6.",
+          "  Observe the two caps of bottles after every 15 minutes.",
+          "  Record the time taken for the water to completely evaporate in each case.",
+          "  You can also repeat this activity on a windy or a rainy day, and record your observations.",
+          "Fig. 8.6: Evaporation of water in sunlight and in shade"
+        ],
+        "concepts": [
+          "Evaporation",
+          "Sunlight",
+          "Shade",
+          "Water",
+          "Time",
+          "Observation"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "The activity is based on observation and recording, not quantitative data.",
+          "The results may vary based on environmental conditions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bda5998aa18f438bea2cae7e",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 173,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11fc2047467b025fd392753382893c49c359eae1eddc5e59fbc8ce27dce03b3a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An activity involving the evaporation of water in sunlight and shade, recorded over time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.8: Let us explore",
+          "  Take identical caps of two bottles.",
+          "  Pour equal amount of water in each of the cap.",
+          "  Place one of the cap in sunlight and keep the other in shade as shown in Fig. 8.6.",
+          "  Observe the two caps of bottles after every 15 minutes.",
+          "  Record the time taken for the water to completely evaporate in each case.",
+          "  You can also repeat this activity on a windy or a rainy day, and record your observations."
+        ],
+        "concepts": [
+          "Evaporation",
+          "Sunlight",
+          "Shade",
+          "Time",
+          "Water"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "The activity is based on observation and recording, not quantitative data.",
+          "The results may vary depending on environmental conditions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41061654369",
+      "checkpointed_at": "2026-10-30T15:32:59Z",
+      "effective_analysis": {
+        "visual_summary": "An activity involving the evaporation of water in sunlight and shade, recorded over time.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.8: Let us explore",
+          "  Take identical caps of two bottles.",
+          "  Pour equal amount of water in each of the cap.",
+          "  Place one of the cap in sunlight and keep the other in shade as shown in Fig. 8.6.",
+          "  Observe the two caps of bottles after every 15 minutes.",
+          "  Record the time taken for the water to completely evaporate in each case.",
+          "  You can also repeat this activity on a windy or a rainy day, and record your observations."
+        ],
+        "concepts": [
+          "Evaporation",
+          "Sunlight",
+          "Shade",
+          "Time",
+          "Water"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "The activity is based on observation and recording, not quantitative data.",
+          "The results may vary depending on environmental conditions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
