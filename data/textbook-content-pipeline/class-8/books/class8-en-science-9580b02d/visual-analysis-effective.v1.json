@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "089ae075983e2118b8dfab4ba39d42441d196debdcc73dca0ad12599e3a41063",
+  "raw_analysis_sha256": "9d982fabc6f21a023755a8c134906be018fedcfe44a7f80e3a1f3877aaf442ec",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:48:20Z",
+      "checkpointed_at": "2026-10-31T03:54:00Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:49:06Z",
+      "checkpointed_at": "2026-10-31T03:54:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:50:01Z",
+      "checkpointed_at": "2026-10-31T03:55:48Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -67147,7 +67147,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:51:14Z",
+      "checkpointed_at": "2026-10-31T03:57:03Z",
       "effective_analysis": {
         "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds, with a caption indicating that the positively charged particles move upwards and the negatively charged particles move downwards.",
         "visual_type": "diagram",
@@ -70244,6 +70244,52 @@
           "spoon"
         ],
         "context_relation": "The image shows a hand stirring a glass of water with a spoon.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a6ba758cfd83e63968b04c12",
+      "asset_sha256": "76826fdd766fe03d77e6bc5e938d06c6073952527174c92918b12ee631395396",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 120,
+      "asset_path": "assets/76826fdd766fe03d77e6bc5e938d06c6073952527174c92918b12ee631395396.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "892319e7e877ce5c035164db9b1aee2f0b6d51e1ce0585455125d9bf352e12ac",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist wearing goggles and a lab coat, giving a thumbs-up.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "goggles",
+          "lab coat",
+          "thumbs-up"
+        ],
+        "context_relation": "The image is related to the educational content about the smallest units of chalk.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41155951709",
+      "checkpointed_at": "2026-10-31T03:58:37Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist wearing goggles and a lab coat, giving a thumbs-up.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "goggles",
+          "lab coat",
+          "thumbs-up"
+        ],
+        "context_relation": "The image is related to the educational content about the smallest units of chalk.",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
