@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2905,
+    "assets_selected": 2906,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "303e10143b2571fcd35087bc"
+      "a5ce719b8ae327672e001c48"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2901,
-    "assets_remaining": 4587,
-    "assets_completion_percent": 38.7,
+    "assets_analyzed": 2902,
+    "assets_remaining": 4586,
+    "assets_completion_percent": 38.8,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2900,
+    "assets_skipped_from_checkpoint": 2901,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41151884061",
-      "checkpointed_at": "2026-10-31T03:07:28Z"
+      "checkpointed_at": "2026-10-31T03:10:54Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41151884061",
-      "checkpointed_at": "2026-10-31T03:07:58Z"
+      "checkpointed_at": "2026-10-31T03:11:24Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41151884061",
-      "checkpointed_at": "2026-10-31T03:08:36Z"
+      "checkpointed_at": "2026-10-31T03:12:05Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41151884061",
-      "checkpointed_at": "2026-10-31T03:09:17Z"
+      "checkpointed_at": "2026-10-31T03:12:48Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -108873,6 +108873,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41151884061",
       "checkpointed_at": "2026-10-31T03:10:06Z"
+    },
+    {
+      "asset_id": "a5ce719b8ae327672e001c48",
+      "asset_sha256": "45daf6f6c70ca53b6916017940c5f7efdac37c88035993ce9ea2f594ca4c5846",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/45daf6f6c70ca53b6916017940c5f7efdac37c88035993ce9ea2f594ca4c5846.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41151884061",
+      "checkpointed_at": "2026-10-31T03:13:25Z"
     }
   ]
 }
