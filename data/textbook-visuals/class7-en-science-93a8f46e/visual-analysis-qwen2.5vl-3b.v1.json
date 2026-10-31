@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2917,
+    "assets_selected": 2921,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "662b10cdd9f4ff6fbd60c3f6",
-      "f0e7c477b65f39b344a38652",
-      "0672ee6c40eb19c4d516cc8b",
-      "9f0f716cd2b6c4b74151ac5b"
+      "cbac5b05cd5059edf32726cf",
+      "1d61126678bbdceae80adf98",
+      "1f551e03fa7ed4076801b12d",
+      "e701c752c6c6922a512e8a3d"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2916,
-    "assets_remaining": 4572,
-    "assets_completion_percent": 38.9,
+    "assets_analyzed": 2920,
+    "assets_remaining": 4568,
+    "assets_completion_percent": 39.0,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2912,
+    "assets_skipped_from_checkpoint": 2916,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41157962776",
-      "checkpointed_at": "2026-10-31T05:11:11Z"
+      "checkpointed_at": "2026-10-31T05:19:14Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -109238,6 +109238,160 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41157962776",
       "checkpointed_at": "2026-10-31T05:17:52Z"
+    },
+    {
+      "asset_id": "cbac5b05cd5059edf32726cf",
+      "asset_sha256": "953d65717ae164c960afd6ae8a23e8cb8d9b1bacc7662eca1f7f91e97657d774",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/953d65717ae164c960afd6ae8a23e8cb8d9b1bacc7662eca1f7f91e97657d774.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:20:45Z"
+    },
+    {
+      "asset_id": "1d61126678bbdceae80adf98",
+      "asset_sha256": "add384f86256fad7fb891afe32865fee32c958a08a696d9b0d30f53af820bcf3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/add384f86256fad7fb891afe32865fee32c958a08a696d9b0d30f53af820bcf3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table with columns for 'Observation' and 'Conclusion' is shown.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "Observation",
+          "Conclusion"
+        ],
+        "concepts": [
+          "Observation",
+          "Conclusion"
+        ],
+        "context_relation": "The table is related to the discussion of reversible changes in the text.",
+        "limitations": [
+          "The table is incomplete and only has two columns."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:22:24Z"
+    },
+    {
+      "asset_id": "1f551e03fa7ed4076801b12d",
+      "asset_sha256": "a24d12489c0ce5d839ad041c231298ca80260eab32d6e501782ffe3fcb68ffb6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/a24d12489c0ce5d839ad041c231298ca80260eab32d6e501782ffe3fcb68ffb6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table titled 'Can changes be reversed?' listing various changes and whether they can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "1. Melting",
+          "2. Freezing",
+          "3. Evaporation",
+          "4. Condensation",
+          "5. Sublimation",
+          "6. Deposition",
+          "7. Oxidation",
+          "8. Reduction",
+          "9. Combustion",
+          "10. Neutralization",
+          "11. Decomposition",
+          "12. Fermentation",
+          "13. Photosynthesis",
+          "14. Respiration",
+          "15. Photosynthesis",
+          "16. Respiration",
+          "17. Photosynthesis",
+          "18. Respiration",
+          "19. Photosynthesis",
+          "20. Respiration"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Melting",
+          "Freezing",
+          "Evaporation",
+          "Condensation",
+          "Sublimation",
+          "Deposition",
+          "Oxidation",
+          "Reduction",
+          "Combustion",
+          "Neutralization",
+          "Decomposition",
+          "Fermentation",
+          "Photosynthesis",
+          "Respiration"
+        ],
+        "context_relation": "The table is a continuation of the discussion on changes and their reversibility from the previous activity.",
+        "limitations": [
+          "The table is incomplete, listing only a few examples of changes and their reversibility."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:24:35Z"
+    },
+    {
+      "asset_id": "e701c752c6c6922a512e8a3d",
+      "asset_sha256": "509daaf21328a0cc6fbbee8b77031b46bc29cbc10b3ee01c47574510b045aaeb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/509daaf21328a0cc6fbbee8b77031b46bc29cbc10b3ee01c47574510b045aaeb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:26:16Z"
     }
   ]
 }
