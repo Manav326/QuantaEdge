@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2925,
+    "assets_selected": 2929,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "c1f4fd39443a74319c67d3ad",
-      "90d48b38363b44c12e9fc136",
-      "23d19ee31a9e7d06da2fa944",
-      "871caa1fa9acd3fe80f7a4c4"
+      "d4f0f310dfa2ac19bb06a11b",
+      "e6694cf74aa132efeab3f16e",
+      "e26781c9b8596e6a62ebea11",
+      "92a619fb5b8554104da8a8b7"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2924,
-    "assets_remaining": 4564,
-    "assets_completion_percent": 39.0,
+    "assets_analyzed": 2928,
+    "assets_remaining": 4560,
+    "assets_completion_percent": 39.1,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2920,
+    "assets_skipped_from_checkpoint": 2924,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41157962776",
-      "checkpointed_at": "2026-10-31T05:27:41Z"
+      "checkpointed_at": "2026-10-31T05:35:41Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -109512,6 +109512,160 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41157962776",
       "checkpointed_at": "2026-10-31T05:34:17Z"
+    },
+    {
+      "asset_id": "d4f0f310dfa2ac19bb06a11b",
+      "asset_sha256": "555a901503fe0fd73fac87686cb1fd75dc7c5c7cb4cd56b72751fd183df9bbf4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/555a901503fe0fd73fac87686cb1fd75dc7c5c7cb4cd56b72751fd183df9bbf4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with?",
+          "Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Observations",
+          "Table 5.2"
+        ],
+        "context_relation": "The page discusses the reversibility of changes, encouraging students to think about which changes can be reversed and record their observations in a table.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the reversibility of changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:37:35Z"
+    },
+    {
+      "asset_id": "e6694cf74aa132efeab3f16e",
+      "asset_sha256": "dfe607a7e4fab12d58c9636290931a646d39b1a53f9a3630666ba8dcd786aa0d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/dfe607a7e4fab12d58c9636290931a646d39b1a53f9a3630666ba8dcd786aa0d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table titled 'Table 5.2: Can changes be reversed?' is presented, asking students to record their observations on whether changes can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2."
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Observations"
+        ],
+        "context_relation": "The table is a continuation of the discussion on changes and their reversibility.",
+        "limitations": [
+          "The table is incomplete and does not provide specific examples or criteria for determining reversibility."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:39:20Z"
+    },
+    {
+      "asset_id": "e26781c9b8596e6a62ebea11",
+      "asset_sha256": "7a4bbfd594bb72136df104418841722372c9c906e1592fd4178c6d8cfb405ca1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/7a4bbfd594bb72136df104418841722372c9c906e1592fd4178c6d8cfb405ca1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:40:53Z"
+    },
+    {
+      "asset_id": "92a619fb5b8554104da8a8b7",
+      "asset_sha256": "b6b66fa2028712f8bc134c920456764ef53cbf2d006e9506bbb5b797fd51858a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/b6b66fa2028712f8bc134c920456764ef53cbf2d006e9506bbb5b797fd51858a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table titled 'Table 5.2: Can changes be reversed?' is present, listing various changes and whether they can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "1. Melting",
+          "2. Freezing",
+          "3. Evaporation",
+          "4. Condensation",
+          "5. Dissolving",
+          "6. Precipitation",
+          "7. Combustion",
+          "8. Chemical reaction",
+          "9. Physical reaction",
+          "10. Nuclear reaction"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Melting",
+          "Freezing",
+          "Evaporation",
+          "Condensation",
+          "Dissolving",
+          "Precipitation",
+          "Combustion",
+          "Chemical reaction",
+          "Physical reaction",
+          "Nuclear reaction"
+        ],
+        "context_relation": "The table is related to the discussion of changes and their reversibility in the text.",
+        "limitations": [
+          "The table does not include specific examples or explanations for each change."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:42:46Z"
     }
   ]
 }

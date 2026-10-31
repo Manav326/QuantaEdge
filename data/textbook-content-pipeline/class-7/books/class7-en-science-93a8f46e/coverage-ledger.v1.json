@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2947,
-    "successful_visual_analyses": 2925,
-    "missing_visual_analyses": 4541,
+    "raw_analysis_result_rows": 2951,
+    "successful_visual_analyses": 2929,
+    "missing_visual_analyses": 4537,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4563,
+    "unresolved_count": 4559,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -118491,9 +118491,30 @@
       "asset_path": "assets/555a901503fe0fd73fac87686cb1fd75dc7c5c7cb4cd56b72751fd183df9bbf4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with?",
+          "Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Observations",
+          "Table 5.2"
+        ],
+        "context_relation": "The page discusses the reversibility of changes, encouraging students to think about which changes can be reversed and record their observations in a table.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the reversibility of changes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -118509,9 +118530,25 @@
       "asset_path": "assets/dfe607a7e4fab12d58c9636290931a646d39b1a53f9a3630666ba8dcd786aa0d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table titled 'Table 5.2: Can changes be reversed?' is presented, asking students to record their observations on whether changes can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2."
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Observations"
+        ],
+        "context_relation": "The table is a continuation of the discussion on changes and their reversibility.",
+        "limitations": [
+          "The table is incomplete and does not provide specific examples or criteria for determining reversibility."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -118527,9 +118564,16 @@
       "asset_path": "assets/7a4bbfd594bb72136df104418841722372c9c906e1592fd4178c6d8cfb405ca1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -118545,9 +118589,43 @@
       "asset_path": "assets/b6b66fa2028712f8bc134c920456764ef53cbf2d006e9506bbb5b797fd51858a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table titled 'Table 5.2: Can changes be reversed?' is present, listing various changes and whether they can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "1. Melting",
+          "2. Freezing",
+          "3. Evaporation",
+          "4. Condensation",
+          "5. Dissolving",
+          "6. Precipitation",
+          "7. Combustion",
+          "8. Chemical reaction",
+          "9. Physical reaction",
+          "10. Nuclear reaction"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Melting",
+          "Freezing",
+          "Evaporation",
+          "Condensation",
+          "Dissolving",
+          "Precipitation",
+          "Combustion",
+          "Chemical reaction",
+          "Physical reaction",
+          "Nuclear reaction"
+        ],
+        "context_relation": "The table is related to the discussion of changes and their reversibility in the text.",
+        "limitations": [
+          "The table does not include specific examples or explanations for each change."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
