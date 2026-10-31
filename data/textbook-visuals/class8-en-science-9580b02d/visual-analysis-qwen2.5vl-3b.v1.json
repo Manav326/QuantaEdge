@@ -12,10 +12,10 @@
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
+      "a2890b3458baf46be1b64d1a",
       "35f32b476dc5977bc161e8e8",
-      "f492c50e9c7d7ef8d140ae06",
-      "2e220d251d13a2e76c57e33b",
-      "52885281ae21238e9ccc031f"
+      "fc310253031bd2210d27a7e7",
+      "414a0224c90f14c01c7da9e7"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1392,
@@ -1203,33 +1203,31 @@
           "curiosity",
           "teamwork",
           "inclusive education",
-          "safety",
+          "safety precautions",
           "peer interactions",
-          "understanding concepts",
           "assessing understanding",
           "analyzing concepts",
-          "sustaining interest",
           "challenging ideas",
           "additional information",
           "interesting facts",
           "engaging materials",
           "Ever heard of",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "A step further"
+          "A step further",
+          "advanced concepts",
+          "scientific principles",
+          "real-life applications"
         ],
         "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T09:15:45Z"
+      "run_id": "41189022706",
+      "checkpointed_at": "2026-10-31T09:40:08Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -19845,9 +19843,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41182122873",
+      "run_id": "41189022706",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -20144,8 +20142,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgments for the book's contributors and staff.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
           "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
@@ -20153,25 +20151,28 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
+          "Acknowledgments",
           "Contributors",
-          "Freelance Language Editor",
+          "Staff",
+          "Textbook",
+          "Editing",
+          "Publication",
           "DTP Cell",
           "Publication Division",
           "Contractual",
           "Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors",
+        "context_relation": "Acknowledgments for the book's contributors and staff.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific visual elements are described.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T09:16:36Z"
+      "run_id": "41189022706",
+      "checkpointed_at": "2026-10-31T09:49:27Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22090,9 +22091,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41182122873",
+      "run_id": "41189022706",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -25826,9 +25827,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41182122873",
+      "run_id": "41189022706",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
