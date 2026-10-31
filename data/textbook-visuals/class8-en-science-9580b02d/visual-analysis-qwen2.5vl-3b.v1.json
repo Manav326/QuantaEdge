@@ -15,13 +15,13 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "ed47972eb74639ec9bc709d3"
+      "52885281ae21238e9ccc031f"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1390,
     "assets_remaining": 901,
     "assets_completion_percent": 60.7,
-    "assets_failed": 16,
+    "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1390,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41166798071",
-      "checkpointed_at": "2026-10-31T05:14:30Z"
+      "checkpointed_at": "2026-10-31T05:22:45Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41166798071",
-      "checkpointed_at": "2026-10-31T05:15:03Z"
+      "checkpointed_at": "2026-10-31T05:23:19Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41166798071",
-      "checkpointed_at": "2026-10-31T05:15:43Z"
+      "checkpointed_at": "2026-10-31T05:23:58Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41166798071",
-      "checkpointed_at": "2026-10-31T05:16:41Z"
+      "checkpointed_at": "2026-10-31T05:24:57Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44416,56 +44416,19 @@
     {
       "asset_id": "52885281ae21238e9ccc031f",
       "asset_sha256": "fe59359cb8342e88b557d6166a640b2ef6acf08ebc62aa0c63e90e8dec6d5b45",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 111,
       "asset_path": "page-0111.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds, with a caption indicating that the positively charged particles move upwards and the negatively charged particles move downwards.",
-        "visual_type": "diagram",
-        "visible_text": [
-          "and  ice  particles. You have learnt in the chapter\n‘Exploring Forces’ that when two objects are rubbed\nagainst each other, they get charged. In this case, strong\nwinds blowing upwards and downwards and rubbing\nagainst each other cause  static  electric charges to\ndevelop within the clouds.\n\nThe pos",
-          "Fig. 6.16: Lightning",
-          "A step further",
-          "Isolated and localised thunderstorms can sometimes occur in various\nregions of India. These thunderstorms are known by various names\nsuch as Kalboishakhi in West Bengal, Bihar, and Jharkhand and\nBordoisila in Assam. They occur before the arrival of the monsoon,\nthereby helping kharif crops to grow. "
-        ],
-        "concepts": [
-          "Pressure",
-          "Winds",
-          "Storms",
-          "Cyclones",
-          "Exploring Forces",
-          "Static electric charges",
-          "Clouds",
-          "Lightning",
-          "Thunderstorms",
-          "Monsoon",
-          "Kharif crops",
-          "Mango showers",
-          "Coffee plants",
-          "Precautions",
-          "Lightning",
-          "Tall objects",
-          "Low-lying open area",
-          "Crouching down",
-          "Umbrella with a metallic rod",
-          "Water"
-        ],
-        "context_relation": "The image is a diagram that explains the movement of positively and negatively charged particles in clouds, which leads to the formation of lightning.",
-        "limitations": [
-          "The image does not provide specific details about the physical properties of the particles or the exact mechanism of lightning formation."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:57:03Z"
+      "run_id": "41166798071",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "02cdb1f955dd51e569c06039",
