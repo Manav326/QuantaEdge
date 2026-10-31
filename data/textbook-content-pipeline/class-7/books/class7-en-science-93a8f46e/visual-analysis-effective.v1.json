@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f3a4d972d49a0972cfa82ddc401a4a52bb1c669c21024df82649d8fa3c3121c9",
+  "raw_analysis_sha256": "2ad8d5d7303a22546b67d7f3bef6888807aaee429189373ad52f119290e7d772",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
-      "checkpointed_at": "2026-10-31T20:01:55Z",
+      "checkpointed_at": "2026-10-31T20:09:55Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -176631,6 +176631,234 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e1a7ab00f696c6dda37de901",
+      "asset_sha256": "5ea263fa96815bf0e7de987d9caebf4da2f8dc8722cc951c07d3bb61a9b65035",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/5ea263fa96815bf0e7de987d9caebf4da2f8dc8722cc951c07d3bb61a9b65035.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to brown, possibly representing a natural landscape or abstract design.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "riverbeds",
+          "lakes",
+          "rock pebbles",
+          "soil",
+          "sediments",
+          "wind",
+          "flowing water",
+          "smoother rocks"
+        ],
+        "context_relation": "The image is a visual representation of the text content about erosion.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:11:46Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to brown, possibly representing a natural landscape or abstract design.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "riverbeds",
+          "lakes",
+          "rock pebbles",
+          "soil",
+          "sediments",
+          "wind",
+          "flowing water",
+          "smoother rocks"
+        ],
+        "context_relation": "The image is a visual representation of the text content about erosion.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "578b34cd42eddbb6ac6de97f",
+      "asset_sha256": "6e8006cbce2793b8d2771182e23126bc2bac08151ff631ae3175c6b3496ab5a6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/6e8006cbce2793b8d2771182e23126bc2bac08151ff631ae3175c6b3496ab5a6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue ring attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about erosion.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:13:18Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue ring attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about erosion.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "032d704b0e8c981b92691f0c",
+      "asset_sha256": "1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "river rocks",
+          "pebbles",
+          "smoothness",
+          "constant erosion"
+        ],
+        "context_relation": "The image is related to the text discussing erosion and its effects on riverbeds and lakes.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its properties.",
+          "The image does not show any specific examples of erosion or physical changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:14:54Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "river rocks",
+          "pebbles",
+          "smoothness",
+          "constant erosion"
+        ],
+        "context_relation": "The image is related to the text discussing erosion and its effects on riverbeds and lakes.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its properties.",
+          "The image does not show any specific examples of erosion or physical changes."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "14871711928bf13b253edff9",
+      "asset_sha256": "1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "river rocks",
+          "pebbles",
+          "sediments",
+          "wind",
+          "flowing water"
+        ],
+        "context_relation": "The image is related to the text discussing erosion and its effects on riverbeds and lakes.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:15:06Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "river rocks",
+          "pebbles",
+          "sediments",
+          "wind",
+          "flowing water"
+        ],
+        "context_relation": "The image is related to the text discussing erosion and its effects on riverbeds and lakes.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its context."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
