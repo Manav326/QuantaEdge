@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3004,
+    "assets_selected": 3006,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "1d72c1c1f1feebaad99a7f59",
-      "77360f8787521943090f0717"
+      "91b70db0b6b3912518594625",
+      "096409826191c10014657df9"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3001,
-    "assets_remaining": 4487,
+    "assets_analyzed": 3003,
+    "assets_remaining": 4485,
     "assets_completion_percent": 40.1,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2999,
+    "assets_skipped_from_checkpoint": 3001,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:30:17Z"
+      "checkpointed_at": "2026-10-31T17:40:56Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:31:46Z"
+      "checkpointed_at": "2026-10-31T17:42:28Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104925,7 +104925,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:33:22Z"
+      "checkpointed_at": "2026-10-31T17:44:03Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -112118,6 +112118,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
       "checkpointed_at": "2026-10-31T17:39:37Z"
+    },
+    {
+      "asset_id": "91b70db0b6b3912518594625",
+      "asset_sha256": "1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T17:45:26Z"
+    },
+    {
+      "asset_id": "096409826191c10014657df9",
+      "asset_sha256": "5dc9d12c2f43e1420e2f53687515e80177c6536d4096b936debd4bde571e54c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/5dc9d12c2f43e1420e2f53687515e80177c6536d4096b936debd4bde571e54c7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like object with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of erosion and natural forces.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T17:46:54Z"
     }
   ]
 }
