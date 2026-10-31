@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2896,
+    "assets_selected": 2897,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "3c3f4a27af593cd95f27e83f"
+      "029a82f1e49f88e194fc128c"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2892,
-    "assets_remaining": 4596,
+    "assets_analyzed": 2893,
+    "assets_remaining": 4595,
     "assets_completion_percent": 38.6,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2891,
+    "assets_skipped_from_checkpoint": 2892,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:29:36Z"
+      "checkpointed_at": "2026-10-31T00:34:28Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:30:16Z"
+      "checkpointed_at": "2026-10-31T00:35:08Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:31:08Z"
+      "checkpointed_at": "2026-10-31T00:36:00Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:32:03Z"
+      "checkpointed_at": "2026-10-31T00:36:56Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -108538,6 +108538,36 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
       "checkpointed_at": "2026-10-31T00:33:27Z"
+    },
+    {
+      "asset_id": "029a82f1e49f88e194fc128c",
+      "asset_sha256": "3fcac7171e96ef133e9f41fcde27d709930dc8a30c6bbea1b280ba745359cf8c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/3fcac7171e96ef133e9f41fcde27d709930dc8a30c6bbea1b280ba745359cf8c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion of changes in substances and objects.",
+        "limitations": [
+          "The image does not provide specific details about the changes discussed in the text.",
+          "The image does not show any specific objects or substances.",
+          "The image does not include any numerical data or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141287258",
+      "checkpointed_at": "2026-10-31T00:38:03Z"
     }
   ]
 }
