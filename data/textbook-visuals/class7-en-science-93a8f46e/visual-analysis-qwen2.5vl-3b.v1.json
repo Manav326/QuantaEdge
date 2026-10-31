@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3036,
+    "assets_selected": 3040,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "894a013f25bd8af0b3a07a0f",
-      "5d30d4aeab109513dec3fb3a",
-      "6b095e00056ae612c05b3cc7",
-      "9ad48450fac005d092364646"
+      "cec341c9811295d4ae13d0cc",
+      "c2663aca3d0eaf6d9d05fe52",
+      "6af39d43e7b7d7c3ba56d7f2",
+      "8f4fec17a12347aff780bec3"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3035,
-    "assets_remaining": 4453,
-    "assets_completion_percent": 40.5,
+    "assets_analyzed": 3039,
+    "assets_remaining": 4449,
+    "assets_completion_percent": 40.6,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 3031,
+    "assets_skipped_from_checkpoint": 3035,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
-      "checkpointed_at": "2026-10-31T20:41:45Z"
+      "checkpointed_at": "2026-10-31T20:49:17Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -113306,6 +113306,153 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
       "checkpointed_at": "2026-10-31T20:48:01Z"
+    },
+    {
+      "asset_id": "cec341c9811295d4ae13d0cc",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing physical changes in substances.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "69",
+          "Let Us Enhance Our Learning",
+          "1. Which of the following statements are the characteristics of",
+          "a physical change?",
+          "Chemical",
+          "(i) The state of the substance may or may not change.",
+          "and",
+          "(ii) A substance with d"
+        ],
+        "concepts": [
+          "physical change",
+          "chemical change"
+        ],
+        "context_relation": "The page is discussing the characteristics of physical and chemical changes.",
+        "limitations": [
+          "The text is incomplete and does not provide a full explanation of the characteristics of physical and chemical changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:49:33Z"
+    },
+    {
+      "asset_id": "c2663aca3d0eaf6d9d05fe52",
+      "asset_sha256": "0ad731cf50296dfebf8e50d1faabbea791b6e864663de2bf86469f28d1eb6190",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/0ad731cf50296dfebf8e50d1faabbea791b6e864663de2bf86469f28d1eb6190.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing a rope ladder made of ice blocks.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "69",
+          "Let Us Enhance Our Learning",
+          "1. Which of the following statements are the characteristics of",
+          "a physical change?",
+          "Chemical",
+          "(i) The state of the substance may or may not change.",
+          "and",
+          "(ii) A substance with d"
+        ],
+        "concepts": [
+          "Physical change",
+          "Chemical change"
+        ],
+        "context_relation": "The image is a visual representation of a physical change, where the substance (ice) changes its state without altering its chemical composition.",
+        "limitations": [
+          "The image does not provide specific examples or explanations for the characteristics of physical and chemical changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:51:13Z"
+    },
+    {
+      "asset_id": "6af39d43e7b7d7c3ba56d7f2",
+      "asset_sha256": "cbaf917d9b0ab0a06a4ae1c7f020cc9927e848bdf916ae9c0e3e66760bb8d6c4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/cbaf917d9b0ab0a06a4ae1c7f020cc9927e848bdf916ae9c0e3e66760bb8d6c4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a spiral rope with a blue and yellow color scheme.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:52:39Z"
+    },
+    {
+      "asset_id": "8f4fec17a12347aff780bec3",
+      "asset_sha256": "2b1168f9fcab6af02f9f7f19d4717eb32ed49e9fe116fa64f1d1d9c8754f63c5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/2b1168f9fcab6af02f9f7f19d4717eb32ed49e9fe116fa64f1d1d9c8754f63c5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a spiral or helical structure.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "69",
+          "Let Us Enhance Our Learning",
+          "1. Which of the following statements are the characteristics of",
+          "a physical change?",
+          "Chemical",
+          "(i) The state of the substance may or may not change.",
+          "and",
+          "(ii) A substance with d"
+        ],
+        "concepts": [
+          "Physical change",
+          "Chemical change",
+          "State of a substance"
+        ],
+        "context_relation": "The image is a close-up of a spiral or helical structure, unrelated to the text.",
+        "limitations": [
+          "The image does not provide any information about the text or its context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:54:19Z"
     }
   ]
 }
