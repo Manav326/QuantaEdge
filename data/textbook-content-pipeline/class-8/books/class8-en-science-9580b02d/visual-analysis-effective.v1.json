@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e26e494b0b8d5c860c5affd699718c02dfba26088ac5e6c3717af82b32da4819",
+  "raw_analysis_sha256": "0070a4c2c68235cc405f80c32538cb291f60a0639dea0d4e5844e53d752b9d1c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1790,7 +1790,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their importance in encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1804,19 +1804,26 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
+          "inclusive education",
+          "safety",
           "peer interactions",
+          "understanding concepts",
           "assessing understanding",
           "analyzing concepts",
-          "safety precautions",
+          "sustaining interest",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "engaging materials",
+          "Ever heard of",
           "fascinating facts",
           "interesting observations",
-          "scientific principles"
+          "curiosity-driven questions",
+          "A step further"
         ],
-        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
+          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -1824,9 +1831,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41202144772",
-      "checkpointed_at": "2026-10-31T12:49:40Z",
+      "checkpointed_at": "2026-10-31T13:09:50Z",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their importance in encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1840,19 +1847,26 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
+          "inclusive education",
+          "safety",
           "peer interactions",
+          "understanding concepts",
           "assessing understanding",
           "analyzing concepts",
-          "safety precautions",
+          "sustaining interest",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "engaging materials",
+          "Ever heard of",
           "fascinating facts",
           "interesting observations",
-          "scientific principles"
+          "curiosity-driven questions",
+          "A step further"
         ],
-        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
+          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -29306,54 +29320,56 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgments for the book's publication.",
-        "visual_type": "uncertain",
+        "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript. The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
+          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgments",
-          "Book Publication",
-          "Meticulous Editing",
-          "Support",
-          "Administrative Staff",
+          "Acknowledgment",
+          "Textbook",
+          "Contributors",
+          "Freelance Language Editor",
+          "DTP Cell",
           "Publication Division",
-          "Contractual Roles"
+          "Contractual",
+          "Proofreaders"
         ],
-        "context_relation": "Acknowledgments for the book's publication",
+        "context_relation": "Acknowledgment and appreciation for contributors",
         "limitations": [
-          "No specific visual elements are described.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "No specific limitations mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41202144772",
-      "checkpointed_at": "2026-10-31T12:58:02Z",
+      "checkpointed_at": "2026-10-31T13:10:49Z",
       "effective_analysis": {
-        "visual_summary": "Acknowledgments for the book's publication.",
-        "visual_type": "uncertain",
+        "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript. The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
+          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgments",
-          "Book Publication",
-          "Meticulous Editing",
-          "Support",
-          "Administrative Staff",
+          "Acknowledgment",
+          "Textbook",
+          "Contributors",
+          "Freelance Language Editor",
+          "DTP Cell",
           "Publication Division",
-          "Contractual Roles"
+          "Contractual",
+          "Proofreaders"
         ],
-        "context_relation": "Acknowledgments for the book's publication",
+        "context_relation": "Acknowledgment and appreciation for contributors",
         "limitations": [
-          "No specific visual elements are described.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "No specific limitations mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -38516,7 +38532,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41195367233",
+      "run_id": "41202144772",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -45052,9 +45068,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41195367233",
+      "run_id": "41202144772",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -45734,7 +45750,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41195367233",
+      "run_id": "41202144772",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
