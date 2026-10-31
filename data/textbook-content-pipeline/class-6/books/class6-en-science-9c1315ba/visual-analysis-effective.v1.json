@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "43728a2da349abdeb6d60bc5aa7ebd8b583f01ae02fd0dc60975dd220932b0fa",
+  "raw_analysis_sha256": "ffc624c26a40452e999caea7a6103d50f4f2e7f1475d09a2415951fcb6640a8c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T01:52:54Z",
+      "checkpointed_at": "2026-10-31T02:02:58Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T01:53:55Z",
+      "checkpointed_at": "2026-10-31T02:04:00Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T01:54:45Z",
+      "checkpointed_at": "2026-10-31T02:04:51Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -79500,6 +79500,166 @@
         "context_relation": "The image is a visual representation of a step-by-step guide for creating a pot-in-pot cooler.",
         "limitations": [
           "The image does not show the actual process of creating the pot-in-pot cooler."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f7438f4d6bb8ffe8d8c17699",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 175,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23efa6e96bdf60cef8b4d3a915b5645446863cb2113a8e3e547a61d50a15c80d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A step-by-step guide for creating a pot-in-pot cooler, including placing a lid or wet jute sack, layering sand, and allowing 4-5 hours to cool.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Small pot",
+          "Place a lid or wet jute",
+          "sack to cover the top of",
+          "the smaller pot.",
+          "You can also make",
+          "a drawing of the",
+          "pot-in-pot cooler once it",
+          "is ready.",
+          "Layer of sand",
+          "Large pot",
+          "Lid",
+          "Allow 4–5 hours to cool."
+        ],
+        "concepts": [
+          "Pot-in-pot cooler",
+          "Lid",
+          "Wet jute sack",
+          "Sand",
+          "Cooling process"
+        ],
+        "context_relation": "The image is a step-by-step guide for creating a pot-in-pot cooler.",
+        "limitations": [
+          "The image does not show the actual cooler being used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141375591",
+      "checkpointed_at": "2026-10-31T02:05:28Z",
+      "effective_analysis": {
+        "visual_summary": "A step-by-step guide for creating a pot-in-pot cooler, including placing a lid or wet jute sack, layering sand, and allowing 4-5 hours to cool.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Small pot",
+          "Place a lid or wet jute",
+          "sack to cover the top of",
+          "the smaller pot.",
+          "You can also make",
+          "a drawing of the",
+          "pot-in-pot cooler once it",
+          "is ready.",
+          "Layer of sand",
+          "Large pot",
+          "Lid",
+          "Allow 4–5 hours to cool."
+        ],
+        "concepts": [
+          "Pot-in-pot cooler",
+          "Lid",
+          "Wet jute sack",
+          "Sand",
+          "Cooling process"
+        ],
+        "context_relation": "The image is a step-by-step guide for creating a pot-in-pot cooler.",
+        "limitations": [
+          "The image does not show the actual cooler being used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9404de919681d6efc3710ad7",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 175,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23efa6e96bdf60cef8b4d3a915b5645446863cb2113a8e3e547a61d50a15c80d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a pot-in-pot cooler setup with a small pot, a lid or wet jute sack, and a large pot.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Small pot",
+          "Place a lid or wet jute",
+          "sack to cover the top of",
+          "the smaller pot.",
+          "You can also make",
+          "a drawing of the",
+          "pot-in-pot cooler once it",
+          "is ready.",
+          "Layer of sand",
+          "Large pot",
+          "Lid",
+          "Fig. 8.7: A pot-in-pot cooler",
+          "Allow 4–5 hours fo"
+        ],
+        "concepts": [
+          "Pot-in-pot cooler",
+          "Small pot",
+          "Lid or wet jute sack",
+          "Large pot",
+          "Layer of sand"
+        ],
+        "context_relation": "The image is a visual representation of a step-by-step guide for constructing a pot-in-pot cooler.",
+        "limitations": [
+          "The image does not provide specific instructions or measurements for the pot-in-pot cooler.",
+          "The image does not show the final product or the cooling process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141375591",
+      "checkpointed_at": "2026-10-31T02:06:10Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a pot-in-pot cooler setup with a small pot, a lid or wet jute sack, and a large pot.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Small pot",
+          "Place a lid or wet jute",
+          "sack to cover the top of",
+          "the smaller pot.",
+          "You can also make",
+          "a drawing of the",
+          "pot-in-pot cooler once it",
+          "is ready.",
+          "Layer of sand",
+          "Large pot",
+          "Lid",
+          "Fig. 8.7: A pot-in-pot cooler",
+          "Allow 4–5 hours fo"
+        ],
+        "concepts": [
+          "Pot-in-pot cooler",
+          "Small pot",
+          "Lid or wet jute sack",
+          "Large pot",
+          "Layer of sand"
+        ],
+        "context_relation": "The image is a visual representation of a step-by-step guide for constructing a pot-in-pot cooler.",
+        "limitations": [
+          "The image does not provide specific instructions or measurements for the pot-in-pot cooler.",
+          "The image does not show the final product or the cooling process."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
