@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4be5bc0f826ee88ea5c68d9ec72de58d3463a1665b7b053d53629362af945e82",
+  "raw_analysis_sha256": "45af593a2ed1203c56026568bcfe2c93911dd57ba1d0bb690d8c1140327284af",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:57:44Z",
+      "checkpointed_at": "2026-10-31T10:05:51Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:58:43Z",
+      "checkpointed_at": "2026-10-31T10:06:51Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:59:31Z",
+      "checkpointed_at": "2026-10-31T10:07:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -80274,6 +80274,90 @@
         "context_relation": "The image is a visual representation of the water cycle, which is a concept from the chapter 'Nature’s Treasures'.",
         "limitations": [
           "The image does not provide specific details about the water cycle process, such as the exact steps or the role of each element."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "75a5416b5481a97bcf215629",
+      "asset_sha256": "dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 178,
+      "asset_path": "assets/dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "17fe177c536ba29ba3191f4e37949dd809193b676164c9360ce3b88630ca95fa",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it, pinned to a yellow sticky note.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "Key Points"
+        ],
+        "context_relation": "The image is a visual representation of a key point or summary.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T10:09:13Z",
+      "effective_analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it, pinned to a yellow sticky note.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "Key Points"
+        ],
+        "context_relation": "The image is a visual representation of a key point or summary.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "181ac3db6eda5552e2e78a15",
+      "asset_sha256": "58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 178,
+      "asset_path": "assets/58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "17fe177c536ba29ba3191f4e37949dd809193b676164c9360ce3b88630ca95fa",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of water cycle and its components.",
+        "limitations": [
+          "The image does not provide specific details about the water cycle components or their functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T10:10:47Z",
+      "effective_analysis": {
+        "visual_summary": "A green banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of water cycle and its components.",
+        "limitations": [
+          "The image does not provide specific details about the water cycle components or their functions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

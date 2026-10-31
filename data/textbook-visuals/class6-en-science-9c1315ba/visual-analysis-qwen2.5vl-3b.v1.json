@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1547,
+    "assets_selected": 1549,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "2117ef1dbcc04e031baf9b4d",
-      "b7e9b122156c01a64ccda0f9"
+      "75a5416b5481a97bcf215629",
+      "181ac3db6eda5552e2e78a15"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1544,
-    "assets_remaining": 534,
-    "assets_completion_percent": 74.3,
+    "assets_analyzed": 1546,
+    "assets_remaining": 532,
+    "assets_completion_percent": 74.4,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1542,
+    "assets_skipped_from_checkpoint": 1544,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:57:44Z"
+      "checkpointed_at": "2026-10-31T10:05:51Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:58:43Z"
+      "checkpointed_at": "2026-10-31T10:06:51Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:59:31Z"
+      "checkpointed_at": "2026-10-31T10:07:40Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -52684,6 +52684,64 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
       "checkpointed_at": "2026-10-31T10:04:35Z"
+    },
+    {
+      "asset_id": "75a5416b5481a97bcf215629",
+      "asset_sha256": "dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 178,
+      "asset_path": "assets/dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "17fe177c536ba29ba3191f4e37949dd809193b676164c9360ce3b88630ca95fa",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it, pinned to a yellow sticky note.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "Key Points"
+        ],
+        "context_relation": "The image is a visual representation of a key point or summary.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T10:09:13Z"
+    },
+    {
+      "asset_id": "181ac3db6eda5552e2e78a15",
+      "asset_sha256": "58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 178,
+      "asset_path": "assets/58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "17fe177c536ba29ba3191f4e37949dd809193b676164c9360ce3b88630ca95fa",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of water cycle and its components.",
+        "limitations": [
+          "The image does not provide specific details about the water cycle components or their functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T10:10:47Z"
     }
   ]
 }
