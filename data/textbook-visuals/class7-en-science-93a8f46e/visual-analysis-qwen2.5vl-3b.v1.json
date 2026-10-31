@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2901,
+    "assets_selected": 2902,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "91fe073bdaa10b44625d07a0"
+      "112ec1dcbb9f4fc4237a373b"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2897,
-    "assets_remaining": 4591,
+    "assets_analyzed": 2898,
+    "assets_remaining": 4590,
     "assets_completion_percent": 38.7,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2896,
+    "assets_skipped_from_checkpoint": 2897,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141377519",
-      "checkpointed_at": "2026-10-31T01:52:01Z"
+      "checkpointed_at": "2026-10-31T01:55:13Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141377519",
-      "checkpointed_at": "2026-10-31T01:52:29Z"
+      "checkpointed_at": "2026-10-31T01:55:42Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141377519",
-      "checkpointed_at": "2026-10-31T01:53:09Z"
+      "checkpointed_at": "2026-10-31T01:56:16Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141377519",
-      "checkpointed_at": "2026-10-31T01:53:47Z"
+      "checkpointed_at": "2026-10-31T01:56:54Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -108726,6 +108726,59 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141377519",
       "checkpointed_at": "2026-10-31T01:54:28Z"
+    },
+    {
+      "asset_id": "112ec1dcbb9f4fc4237a373b",
+      "asset_sha256": "c094a4b6b5c863978021ae6dc7447d521fcc602f96a709f47f591f4951703bed",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/c094a4b6b5c863978021ae6dc7447d521fcc602f96a709f47f591f4951703bed.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table titled 'Can changes be reversed?' listing various changes and whether they can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "1. Melting",
+          "2. Freezing",
+          "3. Evaporation",
+          "4. Condensation",
+          "5. Sublimation",
+          "6. Deposition",
+          "7. Dissolution",
+          "8. Combustion",
+          "9. Chemical reaction",
+          "10. Physical reaction"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Melting",
+          "Freezing",
+          "Evaporation",
+          "Condensation",
+          "Sublimation",
+          "Deposition",
+          "Dissolution",
+          "Combustion",
+          "Chemical reaction",
+          "Physical reaction"
+        ],
+        "context_relation": "The table is a continuation of the discussion on changes and their reversibility.",
+        "limitations": [
+          "The table does not provide specific examples or explanations for each change."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141377519",
+      "checkpointed_at": "2026-10-31T01:57:44Z"
     }
   ]
 }

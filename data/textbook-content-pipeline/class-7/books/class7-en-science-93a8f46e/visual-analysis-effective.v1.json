@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a038ccaaf6f6a041cdc92d71f223c18273f15554e6c9abafb9c4224d66a39c4b",
+  "raw_analysis_sha256": "d761440649760cc5727be4a45d0eeeb6c8c8dc1e7312faa6d87d3e9e8fbb90f0",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141377519",
-      "checkpointed_at": "2026-10-31T01:52:01Z",
+      "checkpointed_at": "2026-10-31T01:55:13Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141377519",
-      "checkpointed_at": "2026-10-31T01:52:29Z",
+      "checkpointed_at": "2026-10-31T01:55:42Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141377519",
-      "checkpointed_at": "2026-10-31T01:53:09Z",
+      "checkpointed_at": "2026-10-31T01:56:16Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141377519",
-      "checkpointed_at": "2026-10-31T01:53:47Z",
+      "checkpointed_at": "2026-10-31T01:56:54Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -170722,6 +170722,96 @@
         "context_relation": "The page is discussing the concept of reversibility in changes, specifically asking students to think about which changes can be reversed and record their observations in a table.",
         "limitations": [
           "The page does not provide specific examples or illustrations to support the concept of reversibility."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "112ec1dcbb9f4fc4237a373b",
+      "asset_sha256": "c094a4b6b5c863978021ae6dc7447d521fcc602f96a709f47f591f4951703bed",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/c094a4b6b5c863978021ae6dc7447d521fcc602f96a709f47f591f4951703bed.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table titled 'Can changes be reversed?' listing various changes and whether they can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "1. Melting",
+          "2. Freezing",
+          "3. Evaporation",
+          "4. Condensation",
+          "5. Sublimation",
+          "6. Deposition",
+          "7. Dissolution",
+          "8. Combustion",
+          "9. Chemical reaction",
+          "10. Physical reaction"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Melting",
+          "Freezing",
+          "Evaporation",
+          "Condensation",
+          "Sublimation",
+          "Deposition",
+          "Dissolution",
+          "Combustion",
+          "Chemical reaction",
+          "Physical reaction"
+        ],
+        "context_relation": "The table is a continuation of the discussion on changes and their reversibility.",
+        "limitations": [
+          "The table does not provide specific examples or explanations for each change."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141377519",
+      "checkpointed_at": "2026-10-31T01:57:44Z",
+      "effective_analysis": {
+        "visual_summary": "A table titled 'Can changes be reversed?' listing various changes and whether they can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "1. Melting",
+          "2. Freezing",
+          "3. Evaporation",
+          "4. Condensation",
+          "5. Sublimation",
+          "6. Deposition",
+          "7. Dissolution",
+          "8. Combustion",
+          "9. Chemical reaction",
+          "10. Physical reaction"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Melting",
+          "Freezing",
+          "Evaporation",
+          "Condensation",
+          "Sublimation",
+          "Deposition",
+          "Dissolution",
+          "Combustion",
+          "Chemical reaction",
+          "Physical reaction"
+        ],
+        "context_relation": "The table is a continuation of the discussion on changes and their reversibility.",
+        "limitations": [
+          "The table does not provide specific examples or explanations for each change."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
