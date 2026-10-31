@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2947,
+    "assets_selected": 2951,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "df88e13bf168b0bd24756b97",
-      "fc7747e5efed5d751fbef4a3",
-      "b1b38059000a36fb71868c87",
-      "c9243e4db2603d76696814d0"
+      "eec0a39e20db32f5ecbaa117",
+      "f11a8fc5d4dfa179c22e1be7",
+      "a990e0ef8d1a13a6e96f40ff",
+      "eeab43004f2dfd8c94ad7acc"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2946,
-    "assets_remaining": 4542,
-    "assets_completion_percent": 39.3,
-    "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2942,
+    "assets_analyzed": 2949,
+    "assets_remaining": 4539,
+    "assets_completion_percent": 39.4,
+    "assets_failed": 23,
+    "assets_skipped_from_checkpoint": 2946,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41163662926",
-      "checkpointed_at": "2026-10-31T07:46:15Z"
+      "checkpointed_at": "2026-10-31T07:52:31Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -110248,6 +110248,120 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41163662926",
       "checkpointed_at": "2026-10-31T07:51:16Z"
+    },
+    {
+      "asset_id": "eec0a39e20db32f5ecbaa117",
+      "asset_sha256": "7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a yellowish color.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide specific information about the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:52:38Z"
+    },
+    {
+      "asset_id": "f11a8fc5d4dfa179c22e1be7",
+      "asset_sha256": "40dfa116a93e6187cbf9d2b6bbb6ff2d4182f5b12116132c45a1f9485faff7c0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/40dfa116a93e6187cbf9d2b6bbb6ff2d4182f5b12116132c45a1f9485faff7c0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a rope with a blurred background.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image is not related to the content of the textbook.",
+          "The image is a close-up of a rope with a blurred background, which does not provide any information about the textbook's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:54:15Z"
+    },
+    {
+      "asset_id": "a990e0ef8d1a13a6e96f40ff",
+      "asset_sha256": "29af1857d25fc8c4792c18458060530cfa9a865bfb3400273f59636cd26bda40",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/29af1857d25fc8c4792c18458060530cfa9a865bfb3400273f59636cd26bda40.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing changes and reversibility.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Observations",
+          "Table 5.2"
+        ],
+        "context_relation": "The text is discussing the reversibility of changes in a scientific context.",
+        "limitations": [
+          "The image does not show any specific visual elements.",
+          "The text is in English and does not include any mathematical or graphical elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:56:02Z"
+    },
+    {
+      "asset_id": "eeab43004f2dfd8c94ad7acc",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
