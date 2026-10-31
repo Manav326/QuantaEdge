@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "31b5a301708dbe2b43c87a8f2effd18ed28bcc335c3183b11c84d13afdc1081d",
+  "raw_analysis_sha256": "6f1dbccbabaee0008c37a2a3a55da2a678713ed58bf0df700f077dba8b8f3c0b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:34:28Z",
+      "checkpointed_at": "2026-10-31T00:39:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:35:08Z",
+      "checkpointed_at": "2026-10-31T00:39:44Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:36:00Z",
+      "checkpointed_at": "2026-10-31T00:40:35Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:36:56Z",
+      "checkpointed_at": "2026-10-31T00:41:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -170470,6 +170470,68 @@
           "The image does not provide specific details about the changes discussed in the text.",
           "The image does not show any specific objects or substances.",
           "The image does not include any numerical data or formulas."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ffeba7d0f80804f75b0d5ce5",
+      "asset_sha256": "5167737d88fec34c0f83aec67bed6146904028a9dfd0b6c3a54bc5a6e480dfaf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/5167737d88fec34c0f83aec67bed6146904028a9dfd0b6c3a54bc5a6e480dfaf.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing changes and their reversibility.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with?",
+          "Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Observations"
+        ],
+        "context_relation": "The text is discussing the reversibility of changes in a scientific context.",
+        "limitations": [
+          "The image does not show any specific visual elements or diagrams related to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141287258",
+      "checkpointed_at": "2026-10-31T00:42:44Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing changes and their reversibility.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with?",
+          "Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility",
+          "Observations"
+        ],
+        "context_relation": "The text is discussing the reversibility of changes in a scientific context.",
+        "limitations": [
+          "The image does not show any specific visual elements or diagrams related to the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
