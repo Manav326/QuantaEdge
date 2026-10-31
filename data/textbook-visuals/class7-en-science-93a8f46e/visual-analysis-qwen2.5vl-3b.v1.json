@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2954,
+    "assets_selected": 2957,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "48c01344e522094a98c348ea",
-      "4f12060f42d06a864b48d260",
-      "aee293cfb8c4916e17d4fc7e",
-      "a987e9ce9f81078c33fed496"
+      "dcab746fb9e2b800ae3df766",
+      "28d692389f824efa0de8e9b1",
+      "fa22f83916064942c8eacf56",
+      "ed4766007c9387d0969724fc"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2952,
-    "assets_remaining": 4536,
-    "assets_completion_percent": 39.4,
+    "assets_analyzed": 2956,
+    "assets_remaining": 4532,
+    "assets_completion_percent": 39.5,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2949,
+    "assets_skipped_from_checkpoint": 2952,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41163662926",
-      "checkpointed_at": "2026-10-31T08:04:04Z"
+      "checkpointed_at": "2026-10-31T08:12:26Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -110468,6 +110468,147 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41163662926",
       "checkpointed_at": "2026-10-31T08:11:10Z"
+    },
+    {
+      "asset_id": "dcab746fb9e2b800ae3df766",
+      "asset_sha256": "65293e89cbe98a1ca8953ba7aa3600f0928bb0b9f7df83e0337bf5d7a7bfd298",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/65293e89cbe98a1ca8953ba7aa3600f0928bb0b9f7df83e0337bf5d7a7bfd298.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific applications"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or details about the undesirable changes or their desirable outcomes.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T08:14:09Z"
+    },
+    {
+      "asset_id": "28d692389f824efa0de8e9b1",
+      "asset_sha256": "f0ddd6fd8417f12addd88b9f148dd678c2c6d6f221c4de1a389c9d59fe8c8720",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/f0ddd6fd8417f12addd88b9f148dd678c2c6d6f221c4de1a389c9d59fe8c8720.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T08:15:40Z"
+    },
+    {
+      "asset_id": "fa22f83916064942c8eacf56",
+      "asset_sha256": "8f7cc3669dc5ae3c0ff90ecb21299eb316c42b0044c2b3b4e8d04b789c000747",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/8f7cc3669dc5ae3c0ff90ecb21299eb316c42b0044c2b3b4e8d04b789c000747.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A change that is undesirable in some situations may be desirable in other situations. For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "change",
+          "undesirable",
+          "desirable",
+          "rusting",
+          "decay",
+          "food storage",
+          "decomposition",
+          "compost"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T08:17:16Z"
+    },
+    {
+      "asset_id": "ed4766007c9387d0969724fc",
+      "asset_sha256": "b5ff6c9df9388bf68241f993c65e3389cb3163ca7471109e807a7142db5c9078",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/b5ff6c9df9388bf68241f993c65e3389cb3163ca7471109e807a7142db5c9078.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific",
+          "conversion of food waste into compost"
+        ],
+        "context_relation": "The text discusses the idea that changes can be considered undesirable in one context but desirable in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for why the changes are considered undesirable or desirable.",
+          "The text does not include any visual aids or diagrams to support the discussion.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T08:19:07Z"
     }
   ]
 }
