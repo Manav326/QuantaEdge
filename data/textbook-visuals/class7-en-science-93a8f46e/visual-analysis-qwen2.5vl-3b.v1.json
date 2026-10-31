@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2969,
+    "assets_selected": 2973,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "7cf3741e9606341c091293c4",
-      "dd9b6876840356822de58600",
-      "fa10245fdba090dfb2b59bdd",
-      "22d72cdc6f630d0f9cf3ea2b"
+      "da5512409b066bafff22eff1",
+      "cb57bb6dc0a3e78feaf67b69",
+      "9a7cd064bfb98ba47a6027dc",
+      "5e29e3511657a9529a0cccb8"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2968,
-    "assets_remaining": 4520,
-    "assets_completion_percent": 39.6,
+    "assets_analyzed": 2972,
+    "assets_remaining": 4516,
+    "assets_completion_percent": 39.7,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2964,
+    "assets_skipped_from_checkpoint": 2968,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41174380359",
-      "checkpointed_at": "2026-10-31T10:23:14Z"
+      "checkpointed_at": "2026-10-31T10:31:23Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -111019,6 +111019,124 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41174380359",
       "checkpointed_at": "2026-10-31T10:30:03Z"
+    },
+    {
+      "asset_id": "da5512409b066bafff22eff1",
+      "asset_sha256": "475ecb70fb0860bc8828745ab0da9e1076d080a29bff29de7d411710ad466287",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/475ecb70fb0860bc8828745ab0da9e1076d080a29bff29de7d411710ad466287.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:32:54Z"
+    },
+    {
+      "asset_id": "cb57bb6dc0a3e78feaf67b69",
+      "asset_sha256": "dfe607a7e4fab12d58c9636290931a646d39b1a53f9a3630666ba8dcd786aa0d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/dfe607a7e4fab12d58c9636290931a646d39b1a53f9a3630666ba8dcd786aa0d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific applications"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for why these changes are desirable in other contexts.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:34:39Z"
+    },
+    {
+      "asset_id": "9a7cd064bfb98ba47a6027dc",
+      "asset_sha256": "7a4bbfd594bb72136df104418841722372c9c906e1592fd4178c6d8cfb405ca1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/7a4bbfd594bb72136df104418841722372c9c906e1592fd4178c6d8cfb405ca1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:36:09Z"
+    },
+    {
+      "asset_id": "5e29e3511657a9529a0cccb8",
+      "asset_sha256": "b6b66fa2028712f8bc134c920456764ef53cbf2d006e9506bbb5b797fd51858a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/b6b66fa2028712f8bc134c920456764ef53cbf2d006e9506bbb5b797fd51858a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a yellow and brown background with a white circle in the center.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any context or information related to the text.",
+        "limitations": [
+          "The image is blurred and not clearly visible.",
+          "The content of the image is not readable."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:37:43Z"
     }
   ]
 }
