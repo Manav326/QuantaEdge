@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2993,
+    "assets_selected": 2994,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "4f12060f42d06a864b48d260"
+      "6e136be486882eb838d480ad"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2989,
-    "assets_remaining": 4499,
+    "assets_analyzed": 2990,
+    "assets_remaining": 4498,
     "assets_completion_percent": 39.9,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2988,
+    "assets_skipped_from_checkpoint": 2989,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:49:15Z"
+      "checkpointed_at": "2026-10-31T12:55:26Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:49:52Z"
+      "checkpointed_at": "2026-10-31T12:56:04Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:50:41Z"
+      "checkpointed_at": "2026-10-31T12:56:54Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:51:33Z"
+      "checkpointed_at": "2026-10-31T12:57:48Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -111795,6 +111795,35 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41174380359",
       "checkpointed_at": "2026-10-31T11:09:14Z"
+    },
+    {
+      "asset_id": "6e136be486882eb838d480ad",
+      "asset_sha256": "b9966e217e3565544ded165c168f2b2c99ee2eb5e86832bca578e1636e12e3aa",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/b9966e217e3565544ded165c168f2b2c99ee2eb5e86832bca578e1636e12e3aa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rugged, rocky landscape with steep cliffs and sparse vegetation.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image depicts a natural landscape, possibly a desert or arid region, with rocky cliffs and sparse vegetation.",
+        "limitations": [
+          "The image does not provide specific details about the location or the geological features.",
+          "The image does not contain any text or labels that provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41195883841",
+      "checkpointed_at": "2026-10-31T12:58:55Z"
     }
   ]
 }

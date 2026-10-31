@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "58a6a10451221fbb761bfc6a09539988d65218599c2c003a0c888cb5378f55a7",
+  "raw_analysis_sha256": "1c357305ebbbf0ce8593e065fd3f659dcf96bddf59febc4cbe1a929c95234072",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:49:15Z",
+      "checkpointed_at": "2026-10-31T12:55:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:49:52Z",
+      "checkpointed_at": "2026-10-31T12:56:04Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:50:41Z",
+      "checkpointed_at": "2026-10-31T12:56:54Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:51:33Z",
+      "checkpointed_at": "2026-10-31T12:57:48Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -175374,6 +175374,48 @@
         "context_relation": "The page is a blank page with no visible content.",
         "limitations": [
           "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6e136be486882eb838d480ad",
+      "asset_sha256": "b9966e217e3565544ded165c168f2b2c99ee2eb5e86832bca578e1636e12e3aa",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/b9966e217e3565544ded165c168f2b2c99ee2eb5e86832bca578e1636e12e3aa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rugged, rocky landscape with steep cliffs and sparse vegetation.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image depicts a natural landscape, possibly a desert or arid region, with rocky cliffs and sparse vegetation.",
+        "limitations": [
+          "The image does not provide specific details about the location or the geological features.",
+          "The image does not contain any text or labels that provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41195883841",
+      "checkpointed_at": "2026-10-31T12:58:55Z",
+      "effective_analysis": {
+        "visual_summary": "A rugged, rocky landscape with steep cliffs and sparse vegetation.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image depicts a natural landscape, possibly a desert or arid region, with rocky cliffs and sparse vegetation.",
+        "limitations": [
+          "The image does not provide specific details about the location or the geological features.",
+          "The image does not contain any text or labels that provide additional context or information."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
