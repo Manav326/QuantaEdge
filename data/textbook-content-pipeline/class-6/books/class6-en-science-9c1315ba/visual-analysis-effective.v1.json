@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9145df8c96cd4adce896ff1017613aba3b0fa58c868c6b83f8dcc9e43ec29277",
+  "raw_analysis_sha256": "cf6a37aa2607862b880b833d8c83453c0f6651a2eef0c6920ceca994ff9753d0",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T02:07:27Z",
+      "checkpointed_at": "2026-10-31T02:16:51Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T02:08:29Z",
+      "checkpointed_at": "2026-10-31T02:17:53Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T02:09:20Z",
+      "checkpointed_at": "2026-10-31T02:18:44Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -79789,6 +79789,106 @@
           "The image is a photograph and does not represent a diagram, chart, or table.",
           "The image is a single frame and does not represent a sequence or process."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "adca18fdc71e0e92b073af84",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 176,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9fcd0315a418343f2c8f40254a127d741ecd526d97d430a3223831816c97564a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a poem about rain, snow, and hail.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Under special conditions, it might also fall as hail or snow.",
+          "Aavi enjoys the rain and creates a poem. You can complete",
+          "the poem and present it in your class.",
+          "I wonder, oh! I wonder so,\nWhich path does water choose to go?\nI wonder, oh! I wonder so,\nWhen does it snow?\nI wonder, oh! I got a wonder call,\nHow does rain fall?"
+        ],
+        "concepts": [
+          "Poetry",
+          "Weather",
+          "Hail",
+          "Snow",
+          "Rain"
+        ],
+        "context_relation": "The poem is a creative writing exercise related to the concepts of weather and precipitation.",
+        "limitations": [
+          "The poem is incomplete and requires the reader to complete it.",
+          "The poem is written in a conversational style, which may not be suitable for all educational contexts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141375591",
+      "checkpointed_at": "2026-10-31T02:19:22Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a poem about rain, snow, and hail.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Under special conditions, it might also fall as hail or snow.",
+          "Aavi enjoys the rain and creates a poem. You can complete",
+          "the poem and present it in your class.",
+          "I wonder, oh! I wonder so,\nWhich path does water choose to go?\nI wonder, oh! I wonder so,\nWhen does it snow?\nI wonder, oh! I got a wonder call,\nHow does rain fall?"
+        ],
+        "concepts": [
+          "Poetry",
+          "Weather",
+          "Hail",
+          "Snow",
+          "Rain"
+        ],
+        "context_relation": "The poem is a creative writing exercise related to the concepts of weather and precipitation.",
+        "limitations": [
+          "The poem is incomplete and requires the reader to complete it.",
+          "The poem is written in a conversational style, which may not be suitable for all educational contexts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "38211c481466ba9923426ab3",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 176,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9fcd0315a418343f2c8f40254a127d741ecd526d97d430a3223831816c97564a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141375591",
+      "checkpointed_at": "2026-10-31T02:19:36Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
