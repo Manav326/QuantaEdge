@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0b43e8d9dd4652b65ab299f92f867fe4a8203ace57068a84763d23852efc83be",
+  "raw_analysis_sha256": "73929d4f88e8173ecc105b31e5d4148de249c4bb477096fc4f02b86a502c1051",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41174380359",
-      "checkpointed_at": "2026-10-31T10:54:44Z",
+      "checkpointed_at": "2026-10-31T11:02:28Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -174903,6 +174903,222 @@
         "concepts": [],
         "context_relation": "None",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0d8f29a1ce5e3143a1debea1",
+      "asset_sha256": "4b557fc014662a74b1872b178fd1cd6832264473a5a89822c1751fc00269f73e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/4b557fc014662a74b1872b178fd1cd6832264473a5a89822c1751fc00269f73e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of undesirable changes in materials and their potential for beneficial use in different contexts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations. For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "rusting of iron",
+          "decay of food",
+          "beneficial use",
+          "conversion of food waste into compost"
+        ],
+        "context_relation": "The text discusses the idea that changes in materials can be both undesirable and beneficial, depending on the context.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for the benefits of decomposition of food waste into compost."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T11:04:11Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of undesirable changes in materials and their potential for beneficial use in different contexts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations. For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "rusting of iron",
+          "decay of food",
+          "beneficial use",
+          "conversion of food waste into compost"
+        ],
+        "context_relation": "The text discusses the idea that changes in materials can be both undesirable and beneficial, depending on the context.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for the benefits of decomposition of food waste into compost."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "20a4e43177c71ae36d175c66",
+      "asset_sha256": "20df06e2ac110fee00f6e911754cd924a9ce5bfc6e7d56fc4adc2e86eb8563a6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/20df06e2ac110fee00f6e911754cd924a9ce5bfc6e7d56fc4adc2e86eb8563a6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific",
+          "conversion of food waste into compost"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or details about the undesirable changes or their desirable outcomes.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T11:06:02Z",
+      "effective_analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific",
+          "conversion of food waste into compost"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or details about the undesirable changes or their desirable outcomes.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d099feaf96966402bcd0f89c",
+      "asset_sha256": "5b45af1669360c92dc75f0ca32d03dd145a6d4fc9f7a014b950e023ad3a960cc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/5b45af1669360c92dc75f0ca32d03dd145a6d4fc9f7a014b950e023ad3a960cc.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific applications"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or details about the undesirable changes or their desirable outcomes.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T11:07:42Z",
+      "effective_analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific applications"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or details about the undesirable changes or their desirable outcomes.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "38983f02252abecc4144ed52",
+      "asset_sha256": "bdbef136963e37fa3223f4324b1e3ea0800bc5c316e869747a612a053cc088a5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/bdbef136963e37fa3223f4324b1e3ea0800bc5c316e869747a612a053cc088a5.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T11:09:14Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
