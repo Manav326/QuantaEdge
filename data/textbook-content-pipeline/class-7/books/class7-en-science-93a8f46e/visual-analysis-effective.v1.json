@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b2c717e8db68b258f15b19517297180449386409561a0bbda53a11a86f00613b",
+  "raw_analysis_sha256": "273bcb9b6ef3e0125c4e13599503ff1471d7a8fd9b553c08d2e1768a81c3077d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:15:53Z",
+      "checkpointed_at": "2026-10-31T17:30:17Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:17:21Z",
+      "checkpointed_at": "2026-10-31T17:31:46Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164688,8 +164688,10 @@
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
-          "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
+          "SCIENCE AND SOCIETY",
+          "If a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt and stick to the sk",
+          "FASCINATING FACTS",
+          "Nature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescence.",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
@@ -164702,7 +164704,7 @@
           "air",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of carbon dioxide gas in the air.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -164712,14 +164714,16 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:29:02Z",
+      "checkpointed_at": "2026-10-31T17:33:22Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
-          "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
+          "SCIENCE AND SOCIETY",
+          "If a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt and stick to the sk",
+          "FASCINATING FACTS",
+          "Nature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescence.",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
@@ -164732,7 +164736,7 @@
           "air",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of carbon dioxide gas in the air.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -175710,6 +175714,136 @@
         "context_relation": "The page is a blank page with no visible text or images.",
         "limitations": [
           "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1d72c1c1f1feebaad99a7f59",
+      "asset_sha256": "0d5c17a15de8d3f2f3c844f0d59eb4638658c6bac763e9966d639ab2d955533c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "page-0087.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing undesirable and desirable changes in iron rusting and food decay, and the conversion of food waste into compost.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such\nas the rusting of iron or the decay of food during its storage.\nA change that is undesirable in some situations may be desirable\nin other situations. For example, decomposition of food can be\nvery useful in converting food waste into compost.",
+          "Some changes occurring over the years due to human activity\ncan have a long-term environmental impact. For example, the\nincreased consumption of fuels in cars, trains, aeroplanes, etc.,\nis increasing the amount of carbon dioxide in the atmosphere.\nDrying of paint on walls, doors, furniture, etc., re",
+          "5.7 Some Slow Natural Changes\n5.7.1 Weathering of rocks\nHave you seen heaps of sand, soil, and stones lying at the base of\nmountains as shown in Fig. 5.10a? These are called sediments. How\nhave these formed? These are formed by physical changes that\nbreak up large rocks into smaller pieces. Temperat",
+          "Fig. 5.10: (a) Sediments at the base of a cliff (b) red sediment layer"
+        ],
+        "concepts": [
+          "weathering",
+          "sediments",
+          "chemical changes",
+          "physical changes",
+          "atmospheric pollution",
+          "climatic conditions",
+          "roots of trees",
+          "water vapour",
+          "red-coloured layer",
+          "red colour",
+          "iron oxide",
+          "basalt",
+          "cliff",
+          "sediment layer"
+        ],
+        "context_relation": "The text discusses the undesirable and desirable changes in iron rusting and food decay, and the conversion of food waste into compost. It also explains the weathering process and its effects on rocks.",
+        "limitations": [
+          "The text does not provide specific examples or illustrations of the weathering process.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T17:38:07Z",
+      "effective_analysis": {
+        "visual_summary": "Text discussing undesirable and desirable changes in iron rusting and food decay, and the conversion of food waste into compost.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such\nas the rusting of iron or the decay of food during its storage.\nA change that is undesirable in some situations may be desirable\nin other situations. For example, decomposition of food can be\nvery useful in converting food waste into compost.",
+          "Some changes occurring over the years due to human activity\ncan have a long-term environmental impact. For example, the\nincreased consumption of fuels in cars, trains, aeroplanes, etc.,\nis increasing the amount of carbon dioxide in the atmosphere.\nDrying of paint on walls, doors, furniture, etc., re",
+          "5.7 Some Slow Natural Changes\n5.7.1 Weathering of rocks\nHave you seen heaps of sand, soil, and stones lying at the base of\nmountains as shown in Fig. 5.10a? These are called sediments. How\nhave these formed? These are formed by physical changes that\nbreak up large rocks into smaller pieces. Temperat",
+          "Fig. 5.10: (a) Sediments at the base of a cliff (b) red sediment layer"
+        ],
+        "concepts": [
+          "weathering",
+          "sediments",
+          "chemical changes",
+          "physical changes",
+          "atmospheric pollution",
+          "climatic conditions",
+          "roots of trees",
+          "water vapour",
+          "red-coloured layer",
+          "red colour",
+          "iron oxide",
+          "basalt",
+          "cliff",
+          "sediment layer"
+        ],
+        "context_relation": "The text discusses the undesirable and desirable changes in iron rusting and food decay, and the conversion of food waste into compost. It also explains the weathering process and its effects on rocks.",
+        "limitations": [
+          "The text does not provide specific examples or illustrations of the weathering process.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "77360f8787521943090f0717",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a person running with a dotted line behind them, possibly representing motion or speed.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "running",
+          "motion",
+          "speed"
+        ],
+        "context_relation": "The image is related to the concept of erosion and the movement of particles.",
+        "limitations": [
+          "The image does not provide specific details about erosion or its effects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T17:39:37Z",
+      "effective_analysis": {
+        "visual_summary": "A green illustration of a person running with a dotted line behind them, possibly representing motion or speed.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "running",
+          "motion",
+          "speed"
+        ],
+        "context_relation": "The image is related to the concept of erosion and the movement of particles.",
+        "limitations": [
+          "The image does not provide specific details about erosion or its effects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

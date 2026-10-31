@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3022,
-    "successful_visual_analyses": 3002,
-    "missing_visual_analyses": 4466,
+    "raw_analysis_result_rows": 3024,
+    "successful_visual_analyses": 3004,
+    "missing_visual_analyses": 4464,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4486,
+    "unresolved_count": 4484,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -113992,8 +113992,10 @@
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
-          "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
+          "SCIENCE AND SOCIETY",
+          "If a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt and stick to the sk",
+          "FASCINATING FACTS",
+          "Nature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescence.",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
@@ -114006,7 +114008,7 @@
           "air",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of carbon dioxide gas in the air.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -120935,9 +120937,39 @@
       "asset_path": "page-0087.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing undesirable and desirable changes in iron rusting and food decay, and the conversion of food waste into compost.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such\nas the rusting of iron or the decay of food during its storage.\nA change that is undesirable in some situations may be desirable\nin other situations. For example, decomposition of food can be\nvery useful in converting food waste into compost.",
+          "Some changes occurring over the years due to human activity\ncan have a long-term environmental impact. For example, the\nincreased consumption of fuels in cars, trains, aeroplanes, etc.,\nis increasing the amount of carbon dioxide in the atmosphere.\nDrying of paint on walls, doors, furniture, etc., re",
+          "5.7 Some Slow Natural Changes\n5.7.1 Weathering of rocks\nHave you seen heaps of sand, soil, and stones lying at the base of\nmountains as shown in Fig. 5.10a? These are called sediments. How\nhave these formed? These are formed by physical changes that\nbreak up large rocks into smaller pieces. Temperat",
+          "Fig. 5.10: (a) Sediments at the base of a cliff (b) red sediment layer"
+        ],
+        "concepts": [
+          "weathering",
+          "sediments",
+          "chemical changes",
+          "physical changes",
+          "atmospheric pollution",
+          "climatic conditions",
+          "roots of trees",
+          "water vapour",
+          "red-coloured layer",
+          "red colour",
+          "iron oxide",
+          "basalt",
+          "cliff",
+          "sediment layer"
+        ],
+        "context_relation": "The text discusses the undesirable and desirable changes in iron rusting and food decay, and the conversion of food waste into compost. It also explains the weathering process and its effects on rocks.",
+        "limitations": [
+          "The text does not provide specific examples or illustrations of the weathering process.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -120953,9 +120985,22 @@
       "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green illustration of a person running with a dotted line behind them, possibly representing motion or speed.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "running",
+          "motion",
+          "speed"
+        ],
+        "context_relation": "The image is related to the concept of erosion and the movement of particles.",
+        "limitations": [
+          "The image does not provide specific details about erosion or its effects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
