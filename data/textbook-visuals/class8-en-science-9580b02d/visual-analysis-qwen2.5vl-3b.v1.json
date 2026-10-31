@@ -15,12 +15,12 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "52885281ae21238e9ccc031f",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "7584ab2ce1a03efc325b4efa"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1387,
-    "assets_remaining": 904,
-    "assets_completion_percent": 60.5,
+    "assets_analyzed": 1388,
+    "assets_remaining": 903,
+    "assets_completion_percent": 60.6,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1387,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:33:18Z"
+      "checkpointed_at": "2026-10-31T03:42:37Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:34:08Z"
+      "checkpointed_at": "2026-10-31T03:43:25Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:35:06Z"
+      "checkpointed_at": "2026-10-31T03:44:21Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -44424,7 +44424,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:36:22Z"
+      "checkpointed_at": "2026-10-31T03:45:33Z"
     },
     {
       "asset_id": "02cdb1f955dd51e569c06039",
@@ -46351,6 +46351,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41145791769",
       "checkpointed_at": "2026-10-31T01:30:59Z"
+    },
+    {
+      "asset_id": "7584ab2ce1a03efc325b4efa",
+      "asset_sha256": "d323da4d08cecdbff9637cdb16d1e2965c537fe16cbfe3e01ba6b21d40dc446a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 120,
+      "asset_path": "assets/d323da4d08cecdbff9637cdb16d1e2965c537fe16cbfe3e01ba6b21d40dc446a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "892319e7e877ce5c035164db9b1aee2f0b6d51e1ce0585455125d9bf352e12ac",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing traditional attire, possibly a saree, with a braid in their hair and a bracelet on their wrist.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41155951709",
+      "checkpointed_at": "2026-10-31T03:47:06Z"
     }
   ]
 }
