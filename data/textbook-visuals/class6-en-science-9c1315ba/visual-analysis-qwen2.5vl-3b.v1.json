@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1544,
+    "assets_selected": 1545,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "a5c1484ab6df1a2776c3833a",
-      "0e7596ef9ad0ae8573e53791"
+      "874c949f104133e4f12447ec",
+      "221f9910b737c75ecb4f3b4a"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1540,
-    "assets_remaining": 538,
-    "assets_completion_percent": 74.1,
+    "assets_analyzed": 1542,
+    "assets_remaining": 536,
+    "assets_completion_percent": 74.2,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1539,
+    "assets_skipped_from_checkpoint": 1540,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:40:07Z"
+      "checkpointed_at": "2026-10-31T09:52:23Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:41:10Z"
+      "checkpointed_at": "2026-10-31T09:53:22Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:41:58Z"
+      "checkpointed_at": "2026-10-31T09:54:11Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -52498,6 +52498,88 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
       "checkpointed_at": "2026-10-31T09:51:08Z"
+    },
+    {
+      "asset_id": "874c949f104133e4f12447ec",
+      "asset_sha256": "c0dda9313cf2251c76242d8317520568dd7d8721e3e1129ca222631e80bfcef9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 177,
+      "asset_path": "assets/c0dda9313cf2251c76242d8317520568dd7d8721e3e1129ca222631e80bfcef9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7ddebff5a357d7068e2dedd56b3f950d145671ae920342549ff00e043fd6bd2b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the movement and changes of water in different states and locations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cloud",
+          "Lake",
+          "Ocean",
+          "River",
+          "Groundwater",
+          "Evaporation",
+          "Condensation",
+          "Rain",
+          "Snow"
+        ],
+        "concepts": [
+          "Water cycle",
+          "Evaporation",
+          "Condensation",
+          "Precipitation",
+          "Runoff"
+        ],
+        "context_relation": "The image illustrates the water cycle, showing how water moves from the ocean to the atmosphere and back to the Earth's surface.",
+        "limitations": [
+          "The image does not show the exact path of water movement."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T09:55:54Z"
+    },
+    {
+      "asset_id": "221f9910b737c75ecb4f3b4a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 177,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7ddebff5a357d7068e2dedd56b3f950d145671ae920342549ff00e043fd6bd2b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the process of water changing states and moving through various environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.11: Let us understand the process",
+          "Label Fig. 8.9 using arrows shown and the words given in the box to show where water is stored, how water changes its state and where it moves.",
+          "Cloud, Lake, Ocean, River, Groundwater, Evaporation, Condensation, Rain, Snow",
+          "What did I do well?",
+          "Was I able to label all the parts of the water?"
+        ],
+        "concepts": [
+          "Water cycle",
+          "State changes",
+          "Movement of water"
+        ],
+        "context_relation": "The image is a visual representation of the water cycle, explaining the process of water changing states and moving through different environments.",
+        "limitations": [
+          "The image does not show the actual movement of water, only the states and environments it can be found in."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T09:56:29Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ba89628e702c7e11a521543e686c5347d7c20bf109fcb0328a9f1c7bd2bfc21b",
+  "raw_analysis_sha256": "1f878d3ff7ef9b35f2f7c97f32ce70bf782b80c57ab94374a86f3d98b8bf015d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:40:07Z",
+      "checkpointed_at": "2026-10-31T09:52:23Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:41:10Z",
+      "checkpointed_at": "2026-10-31T09:53:22Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:41:58Z",
+      "checkpointed_at": "2026-10-31T09:54:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -79966,6 +79966,138 @@
         "limitations": [
           "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "874c949f104133e4f12447ec",
+      "asset_sha256": "c0dda9313cf2251c76242d8317520568dd7d8721e3e1129ca222631e80bfcef9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 177,
+      "asset_path": "assets/c0dda9313cf2251c76242d8317520568dd7d8721e3e1129ca222631e80bfcef9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7ddebff5a357d7068e2dedd56b3f950d145671ae920342549ff00e043fd6bd2b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the movement and changes of water in different states and locations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cloud",
+          "Lake",
+          "Ocean",
+          "River",
+          "Groundwater",
+          "Evaporation",
+          "Condensation",
+          "Rain",
+          "Snow"
+        ],
+        "concepts": [
+          "Water cycle",
+          "Evaporation",
+          "Condensation",
+          "Precipitation",
+          "Runoff"
+        ],
+        "context_relation": "The image illustrates the water cycle, showing how water moves from the ocean to the atmosphere and back to the Earth's surface.",
+        "limitations": [
+          "The image does not show the exact path of water movement."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T09:55:54Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the movement and changes of water in different states and locations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cloud",
+          "Lake",
+          "Ocean",
+          "River",
+          "Groundwater",
+          "Evaporation",
+          "Condensation",
+          "Rain",
+          "Snow"
+        ],
+        "concepts": [
+          "Water cycle",
+          "Evaporation",
+          "Condensation",
+          "Precipitation",
+          "Runoff"
+        ],
+        "context_relation": "The image illustrates the water cycle, showing how water moves from the ocean to the atmosphere and back to the Earth's surface.",
+        "limitations": [
+          "The image does not show the exact path of water movement."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "221f9910b737c75ecb4f3b4a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 177,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7ddebff5a357d7068e2dedd56b3f950d145671ae920342549ff00e043fd6bd2b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the process of water changing states and moving through various environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.11: Let us understand the process",
+          "Label Fig. 8.9 using arrows shown and the words given in the box to show where water is stored, how water changes its state and where it moves.",
+          "Cloud, Lake, Ocean, River, Groundwater, Evaporation, Condensation, Rain, Snow",
+          "What did I do well?",
+          "Was I able to label all the parts of the water?"
+        ],
+        "concepts": [
+          "Water cycle",
+          "State changes",
+          "Movement of water"
+        ],
+        "context_relation": "The image is a visual representation of the water cycle, explaining the process of water changing states and moving through different environments.",
+        "limitations": [
+          "The image does not show the actual movement of water, only the states and environments it can be found in."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T09:56:29Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the process of water changing states and moving through various environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.11: Let us understand the process",
+          "Label Fig. 8.9 using arrows shown and the words given in the box to show where water is stored, how water changes its state and where it moves.",
+          "Cloud, Lake, Ocean, River, Groundwater, Evaporation, Condensation, Rain, Snow",
+          "What did I do well?",
+          "Was I able to label all the parts of the water?"
+        ],
+        "concepts": [
+          "Water cycle",
+          "State changes",
+          "Movement of water"
+        ],
+        "context_relation": "The image is a visual representation of the water cycle, explaining the process of water changing states and moving through different environments.",
+        "limitations": [
+          "The image does not show the actual movement of water, only the states and environments it can be found in."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

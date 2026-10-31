@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1564,
-    "successful_visual_analyses": 1543,
-    "missing_visual_analyses": 514,
+    "raw_analysis_result_rows": 1566,
+    "successful_visual_analyses": 1545,
+    "missing_visual_analyses": 512,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 535,
+    "unresolved_count": 533,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -58792,9 +58792,34 @@
       "asset_path": "assets/c0dda9313cf2251c76242d8317520568dd7d8721e3e1129ca222631e80bfcef9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the movement and changes of water in different states and locations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cloud",
+          "Lake",
+          "Ocean",
+          "River",
+          "Groundwater",
+          "Evaporation",
+          "Condensation",
+          "Rain",
+          "Snow"
+        ],
+        "concepts": [
+          "Water cycle",
+          "Evaporation",
+          "Condensation",
+          "Precipitation",
+          "Runoff"
+        ],
+        "context_relation": "The image illustrates the water cycle, showing how water moves from the ocean to the atmosphere and back to the Earth's surface.",
+        "limitations": [
+          "The image does not show the exact path of water movement."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -58810,9 +58835,28 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the process of water changing states and moving through various environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.11: Let us understand the process",
+          "Label Fig. 8.9 using arrows shown and the words given in the box to show where water is stored, how water changes its state and where it moves.",
+          "Cloud, Lake, Ocean, River, Groundwater, Evaporation, Condensation, Rain, Snow",
+          "What did I do well?",
+          "Was I able to label all the parts of the water?"
+        ],
+        "concepts": [
+          "Water cycle",
+          "State changes",
+          "Movement of water"
+        ],
+        "context_relation": "The image is a visual representation of the water cycle, explaining the process of water changing states and moving through different environments.",
+        "limitations": [
+          "The image does not show the actual movement of water, only the states and environments it can be found in."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
