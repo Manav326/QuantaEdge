@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1392,
+    "assets_selected": 1393,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "52885281ae21238e9ccc031f",
-      "7584ab2ce1a03efc325b4efa"
+      "5e56a353557969069d243bda"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1388,
-    "assets_remaining": 903,
+    "assets_analyzed": 1389,
+    "assets_remaining": 902,
     "assets_completion_percent": 60.6,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1387,
+    "assets_skipped_from_checkpoint": 1388,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:42:37Z"
+      "checkpointed_at": "2026-10-31T03:48:20Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:43:25Z"
+      "checkpointed_at": "2026-10-31T03:49:06Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:44:21Z"
+      "checkpointed_at": "2026-10-31T03:50:01Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -44424,7 +44424,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:45:33Z"
+      "checkpointed_at": "2026-10-31T03:51:14Z"
     },
     {
       "asset_id": "02cdb1f955dd51e569c06039",
@@ -46379,6 +46379,36 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
       "checkpointed_at": "2026-10-31T03:47:06Z"
+    },
+    {
+      "asset_id": "5e56a353557969069d243bda",
+      "asset_sha256": "bbce0d8a4b6940c3c2ad010990f665419911e0b8c150f89de37fe2267f8045b8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 120,
+      "asset_path": "assets/bbce0d8a4b6940c3c2ad010990f665419911e0b8c150f89de37fe2267f8045b8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "892319e7e877ce5c035164db9b1aee2f0b6d51e1ce0585455125d9bf352e12ac",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a spoon, stirring a glass of water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "stirring",
+          "glass of water",
+          "spoon"
+        ],
+        "context_relation": "The image shows a hand stirring a glass of water with a spoon.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41155951709",
+      "checkpointed_at": "2026-10-31T03:52:48Z"
     }
   ]
 }

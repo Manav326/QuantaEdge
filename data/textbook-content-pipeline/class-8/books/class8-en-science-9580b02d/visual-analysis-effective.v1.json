@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d59dc9f41bcdd77615f63dc34ba5fbf0df00461e98f11cdac9e4541a96ac7e1d",
+  "raw_analysis_sha256": "089ae075983e2118b8dfab4ba39d42441d196debdcc73dca0ad12599e3a41063",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:42:37Z",
+      "checkpointed_at": "2026-10-31T03:48:20Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:43:25Z",
+      "checkpointed_at": "2026-10-31T03:49:06Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:44:21Z",
+      "checkpointed_at": "2026-10-31T03:50:01Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -67147,7 +67147,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41155951709",
-      "checkpointed_at": "2026-10-31T03:45:33Z",
+      "checkpointed_at": "2026-10-31T03:51:14Z",
       "effective_analysis": {
         "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds, with a caption indicating that the positively charged particles move upwards and the negatively charged particles move downwards.",
         "visual_type": "diagram",
@@ -70201,6 +70201,50 @@
         "limitations": [
           "The image does not contain any text or labels that provide additional information or context."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5e56a353557969069d243bda",
+      "asset_sha256": "bbce0d8a4b6940c3c2ad010990f665419911e0b8c150f89de37fe2267f8045b8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 120,
+      "asset_path": "assets/bbce0d8a4b6940c3c2ad010990f665419911e0b8c150f89de37fe2267f8045b8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "892319e7e877ce5c035164db9b1aee2f0b6d51e1ce0585455125d9bf352e12ac",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a spoon, stirring a glass of water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "stirring",
+          "glass of water",
+          "spoon"
+        ],
+        "context_relation": "The image shows a hand stirring a glass of water with a spoon.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41155951709",
+      "checkpointed_at": "2026-10-31T03:52:48Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a spoon, stirring a glass of water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "stirring",
+          "glass of water",
+          "spoon"
+        ],
+        "context_relation": "The image shows a hand stirring a glass of water with a spoon.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
