@@ -15,13 +15,13 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "ed47972eb74639ec9bc709d3"
+      "52885281ae21238e9ccc031f"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1392,
     "assets_remaining": 899,
     "assets_completion_percent": 60.8,
-    "assets_failed": 17,
+    "assets_failed": 16,
     "assets_skipped_from_checkpoint": 1392,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1229,7 +1229,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T09:03:52Z"
+      "checkpointed_at": "2026-10-31T09:15:45Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20171,7 +20171,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T09:04:43Z"
+      "checkpointed_at": "2026-10-31T09:16:36Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38449,7 +38449,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T09:05:39Z"
+      "checkpointed_at": "2026-10-31T09:17:32Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43461,11 +43461,9 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface, with instructions on how to perform an activity related to atmospheric pressure.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
         "visual_type": "diagram",
         "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -43481,27 +43479,24 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "pressure difference",
-          "atmospheric force",
+          "air pressure",
           "SI unit of pressure",
-          "practical unit of air pressure",
           "millibar",
           "hectopascal",
           "wind formation",
           "inflated balloon",
           "puncture in the bicycle tube"
         ],
-        "context_relation": "educational",
+        "context_relation": "descriptive",
         "limitations": [
-          "The image does not show the actual experiment of pulling the sucker off the surface.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not show the actual experiment of pulling the sucker off the surface."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T09:09:13Z"
+      "checkpointed_at": "2026-10-31T09:18:53Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44416,19 +44411,54 @@
     {
       "asset_id": "52885281ae21238e9ccc031f",
       "asset_sha256": "fe59359cb8342e88b557d6166a640b2ef6acf08ebc62aa0c63e90e8dec6d5b45",
-      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 111,
       "asset_path": "page-0111.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41174381479",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "and  ice  particles. You have learnt in the chapter\n‘Exploring Forces’ that when two objects are rubbed\nagainst each other, they get charged. In this case, strong\nwinds blowing upwards and downwards and rubbing\nagainst each other cause  static  electric charges to\ndevelop within the clouds.\n\nThe pos",
+          "Fig. 6.16: Lightning",
+          "A step further",
+          "Isolated and localised thunderstorms can sometimes occur in various\nregions of India. These thunderstorms are known by various names\nsuch as Kalboishakhi in West Bengal, Bihar, and Jharkhand and\nBordoisila in Assam. They occur before the arrival of the monsoon,\nthereby helping kharif crops to grow. "
+        ],
+        "concepts": [
+          "static electric charges",
+          "clouds",
+          "positive and negative charges",
+          "lightning",
+          "thunderstorms",
+          "monsoon",
+          "kharif crops",
+          "mango showers",
+          "coffee plants",
+          "precautions",
+          "lightning",
+          "tall objects",
+          "low-lying open area",
+          "crouching down",
+          "umbrella with a metallic rod",
+          "water",
+          "bus or a car"
+        ],
+        "context_relation": "The image is a diagram showing the movement of positively and negatively charged particles in clouds.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of the particles or the exact mechanism of charge separation.",
+          "The image does not show the actual movement of the particles or the formation of clouds."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41182122873",
+      "checkpointed_at": "2026-10-31T09:22:14Z"
     },
     {
       "asset_id": "02cdb1f955dd51e569c06039",
