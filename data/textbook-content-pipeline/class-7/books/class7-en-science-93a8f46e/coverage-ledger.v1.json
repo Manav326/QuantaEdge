@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3028,
-    "successful_visual_analyses": 3008,
-    "missing_visual_analyses": 4460,
+    "raw_analysis_result_rows": 3030,
+    "successful_visual_analyses": 3010,
+    "missing_visual_analyses": 4458,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4480,
+    "unresolved_count": 4478,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -121163,9 +121163,18 @@
       "asset_path": "assets/192a572448eb2d20bbd06371039290186a5b196b52ee952cec4f94825a3dbb23.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue ring attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about erosion.",
+        "limitations": [
+          "The image does not provide any specific information about erosion or its effects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -121181,9 +121190,32 @@
       "asset_path": "assets/0b53ad29e67ee55dfae473297c0280db6a0fba94f2435412be4c3c08762b63da.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a person's face, possibly a student, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "river rocks",
+          "pebbles",
+          "smoothness",
+          "flowing water"
+        ],
+        "context_relation": "The image is a close-up of a student's face, possibly related to the topic of erosion.",
+        "limitations": [
+          "The image does not provide a diagram, chart, graph, table, map, cartoon, or equation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

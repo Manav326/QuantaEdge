@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f50e84a5050aed662531d5668dc903f1fbe20f1b28ebabe4537b9577e3c85a79",
+  "raw_analysis_sha256": "4fc413cfd16cbe17a24d96ad10cb1a9987b75a7998be52db73139015bb077eb7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:48:11Z",
+      "checkpointed_at": "2026-10-31T17:56:16Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:49:38Z",
+      "checkpointed_at": "2026-10-31T17:57:40Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164714,7 +164714,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:51:09Z",
+      "checkpointed_at": "2026-10-31T17:59:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -176082,6 +176082,114 @@
         "context_relation": "The image visually represents the concept of erosion as described in the text.",
         "limitations": [
           "The image does not show the actual process of erosion, but rather a result of it."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6d0863277c050d53889f9f4b",
+      "asset_sha256": "192a572448eb2d20bbd06371039290186a5b196b52ee952cec4f94825a3dbb23",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/192a572448eb2d20bbd06371039290186a5b196b52ee952cec4f94825a3dbb23.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue ring attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about erosion.",
+        "limitations": [
+          "The image does not provide any specific information about erosion or its effects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T18:00:38Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue ring attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about erosion.",
+        "limitations": [
+          "The image does not provide any specific information about erosion or its effects."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b55918d8255943a96f7cd0e0",
+      "asset_sha256": "0b53ad29e67ee55dfae473297c0280db6a0fba94f2435412be4c3c08762b63da",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/0b53ad29e67ee55dfae473297c0280db6a0fba94f2435412be4c3c08762b63da.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a person's face, possibly a student, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "river rocks",
+          "pebbles",
+          "smoothness",
+          "flowing water"
+        ],
+        "context_relation": "The image is a close-up of a student's face, possibly related to the topic of erosion.",
+        "limitations": [
+          "The image does not provide a diagram, chart, graph, table, map, cartoon, or equation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T18:02:32Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a person's face, possibly a student, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "river rocks",
+          "pebbles",
+          "smoothness",
+          "flowing water"
+        ],
+        "context_relation": "The image is a close-up of a student's face, possibly related to the topic of erosion.",
+        "limitations": [
+          "The image does not provide a diagram, chart, graph, table, map, cartoon, or equation."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

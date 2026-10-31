@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3008,
+    "assets_selected": 3010,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "b7550bcd2c939b16a62fe0e4",
-      "d0bfb391c33a07557ddc588d"
+      "6d0863277c050d53889f9f4b",
+      "b55918d8255943a96f7cd0e0"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3005,
-    "assets_remaining": 4483,
-    "assets_completion_percent": 40.1,
+    "assets_analyzed": 3007,
+    "assets_remaining": 4481,
+    "assets_completion_percent": 40.2,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3003,
+    "assets_skipped_from_checkpoint": 3005,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:48:11Z"
+      "checkpointed_at": "2026-10-31T17:56:16Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:49:38Z"
+      "checkpointed_at": "2026-10-31T17:57:40Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104925,7 +104925,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:51:09Z"
+      "checkpointed_at": "2026-10-31T17:59:11Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -112269,6 +112269,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
       "checkpointed_at": "2026-10-31T17:55:02Z"
+    },
+    {
+      "asset_id": "6d0863277c050d53889f9f4b",
+      "asset_sha256": "192a572448eb2d20bbd06371039290186a5b196b52ee952cec4f94825a3dbb23",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/192a572448eb2d20bbd06371039290186a5b196b52ee952cec4f94825a3dbb23.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue ring attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about erosion.",
+        "limitations": [
+          "The image does not provide any specific information about erosion or its effects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T18:00:38Z"
+    },
+    {
+      "asset_id": "b55918d8255943a96f7cd0e0",
+      "asset_sha256": "0b53ad29e67ee55dfae473297c0280db6a0fba94f2435412be4c3c08762b63da",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/0b53ad29e67ee55dfae473297c0280db6a0fba94f2435412be4c3c08762b63da.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a person's face, possibly a student, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "river rocks",
+          "pebbles",
+          "smoothness",
+          "flowing water"
+        ],
+        "context_relation": "The image is a close-up of a student's face, possibly related to the topic of erosion.",
+        "limitations": [
+          "The image does not provide a diagram, chart, graph, table, map, cartoon, or equation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T18:02:32Z"
     }
   ]
 }
