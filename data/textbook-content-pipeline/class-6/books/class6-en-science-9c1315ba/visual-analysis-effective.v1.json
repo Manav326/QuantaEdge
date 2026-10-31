@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ffc624c26a40452e999caea7a6103d50f4f2e7f1475d09a2415951fcb6640a8c",
+  "raw_analysis_sha256": "9145df8c96cd4adce896ff1017613aba3b0fa58c868c6b83f8dcc9e43ec29277",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T02:02:58Z",
+      "checkpointed_at": "2026-10-31T02:07:27Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T02:04:00Z",
+      "checkpointed_at": "2026-10-31T02:08:29Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T02:04:51Z",
+      "checkpointed_at": "2026-10-31T02:09:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -79660,6 +79660,134 @@
         "limitations": [
           "The image does not provide specific instructions or measurements for the pot-in-pot cooler.",
           "The image does not show the final product or the cooling process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7f3f3433bb347966b9be1c53",
+      "asset_sha256": "0250e11bc00d0fbc44b81744b77851b64b7e6bbd66f74d02b75d19133b96ef4e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 175,
+      "asset_path": "page-0175.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "23efa6e96bdf60cef8b4d3a915b5645446863cb2113a8e3e547a61d50a15c80d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the components of a pot-in-pot cooler, including a small pot, a lid, a wet jute sack, a layer of sand, and a large pot.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Small pot",
+          "Wet jute sack",
+          "Layer of sand",
+          "Lid",
+          "Fig. 8.7: A pot-in-pot cooler",
+          "Allow 4–5 hours for the mini pot-in-pot cooler to cool down. The time range can be influenced by many conditions. Observe and discuss how it creates a cooling effect inside the pots. Keep some vegetables and fruits in it and observe for a week on a daily basis to check for the freshness of the veget",
+          "You all may be familiar with this unique clay pot which is called Surahi (Fig. 8.8). In summers, surahi is used to keep the water cold.",
+          "8.7 How Do Clouds Give Us Rain?",
+          "Condensation plays a significant role in the process of bringing evaporated water back to the Earth’s surface. How does this happen? When air moves higher above the Earth’s surface, it becomes cooler and cooler. At certain heights, the air gets so cool that the water vapour in it turns into droplets"
+        ],
+        "concepts": [
+          "pot-in-pot cooler",
+          "surahi",
+          "condensation",
+          "clouds",
+          "rain"
+        ],
+        "context_relation": "illustration",
+        "limitations": [
+          "The image does not provide specific details about the materials used in the pot-in-pot cooler or the specific conditions under which the cooler works."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141375591",
+      "checkpointed_at": "2026-10-31T02:13:50Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the components of a pot-in-pot cooler, including a small pot, a lid, a wet jute sack, a layer of sand, and a large pot.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Small pot",
+          "Wet jute sack",
+          "Layer of sand",
+          "Lid",
+          "Fig. 8.7: A pot-in-pot cooler",
+          "Allow 4–5 hours for the mini pot-in-pot cooler to cool down. The time range can be influenced by many conditions. Observe and discuss how it creates a cooling effect inside the pots. Keep some vegetables and fruits in it and observe for a week on a daily basis to check for the freshness of the veget",
+          "You all may be familiar with this unique clay pot which is called Surahi (Fig. 8.8). In summers, surahi is used to keep the water cold.",
+          "8.7 How Do Clouds Give Us Rain?",
+          "Condensation plays a significant role in the process of bringing evaporated water back to the Earth’s surface. How does this happen? When air moves higher above the Earth’s surface, it becomes cooler and cooler. At certain heights, the air gets so cool that the water vapour in it turns into droplets"
+        ],
+        "concepts": [
+          "pot-in-pot cooler",
+          "surahi",
+          "condensation",
+          "clouds",
+          "rain"
+        ],
+        "context_relation": "illustration",
+        "limitations": [
+          "The image does not provide specific details about the materials used in the pot-in-pot cooler or the specific conditions under which the cooler works."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0ebdf08a15db228870639038",
+      "asset_sha256": "1e3933de67045437ae0ab60f1aaaaa888705ce21ddf86b7587684e19dd96f229",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 176,
+      "asset_path": "assets/1e3933de67045437ae0ab60f1aaaaa888705ce21ddf86b7587684e19dd96f229.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9fcd0315a418343f2c8f40254a127d741ecd526d97d430a3223831816c97564a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A snowy forest scene with trees covered in snow, a house partially visible, and a misty background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "snow",
+          "forest",
+          "house",
+          "winter",
+          "landscape"
+        ],
+        "context_relation": "The image depicts a winter scene with snow-covered trees and a house, likely illustrating the concept of winter weather.",
+        "limitations": [
+          "The image does not contain any text or formulas.",
+          "The image is a photograph and does not represent a diagram, chart, or table.",
+          "The image is a single frame and does not represent a sequence or process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141375591",
+      "checkpointed_at": "2026-10-31T02:15:34Z",
+      "effective_analysis": {
+        "visual_summary": "A snowy forest scene with trees covered in snow, a house partially visible, and a misty background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "snow",
+          "forest",
+          "house",
+          "winter",
+          "landscape"
+        ],
+        "context_relation": "The image depicts a winter scene with snow-covered trees and a house, likely illustrating the concept of winter weather.",
+        "limitations": [
+          "The image does not contain any text or formulas.",
+          "The image is a photograph and does not represent a diagram, chart, or table.",
+          "The image is a single frame and does not represent a sequence or process."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

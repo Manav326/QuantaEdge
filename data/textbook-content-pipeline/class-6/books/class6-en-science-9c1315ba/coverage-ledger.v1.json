@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1559,
-    "successful_visual_analyses": 1538,
-    "missing_visual_analyses": 519,
+    "raw_analysis_result_rows": 1561,
+    "successful_visual_analyses": 1540,
+    "missing_visual_analyses": 517,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 540,
+    "unresolved_count": 538,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -58604,9 +58604,34 @@
       "asset_path": "page-0175.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the components of a pot-in-pot cooler, including a small pot, a lid, a wet jute sack, a layer of sand, and a large pot.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Small pot",
+          "Wet jute sack",
+          "Layer of sand",
+          "Lid",
+          "Fig. 8.7: A pot-in-pot cooler",
+          "Allow 4–5 hours for the mini pot-in-pot cooler to cool down. The time range can be influenced by many conditions. Observe and discuss how it creates a cooling effect inside the pots. Keep some vegetables and fruits in it and observe for a week on a daily basis to check for the freshness of the veget",
+          "You all may be familiar with this unique clay pot which is called Surahi (Fig. 8.8). In summers, surahi is used to keep the water cold.",
+          "8.7 How Do Clouds Give Us Rain?",
+          "Condensation plays a significant role in the process of bringing evaporated water back to the Earth’s surface. How does this happen? When air moves higher above the Earth’s surface, it becomes cooler and cooler. At certain heights, the air gets so cool that the water vapour in it turns into droplets"
+        ],
+        "concepts": [
+          "pot-in-pot cooler",
+          "surahi",
+          "condensation",
+          "clouds",
+          "rain"
+        ],
+        "context_relation": "illustration",
+        "limitations": [
+          "The image does not provide specific details about the materials used in the pot-in-pot cooler or the specific conditions under which the cooler works."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -58622,9 +58647,26 @@
       "asset_path": "assets/1e3933de67045437ae0ab60f1aaaaa888705ce21ddf86b7587684e19dd96f229.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A snowy forest scene with trees covered in snow, a house partially visible, and a misty background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "snow",
+          "forest",
+          "house",
+          "winter",
+          "landscape"
+        ],
+        "context_relation": "The image depicts a winter scene with snow-covered trees and a house, likely illustrating the concept of winter weather.",
+        "limitations": [
+          "The image does not contain any text or formulas.",
+          "The image is a photograph and does not represent a diagram, chart, or table.",
+          "The image is a single frame and does not represent a sequence or process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
