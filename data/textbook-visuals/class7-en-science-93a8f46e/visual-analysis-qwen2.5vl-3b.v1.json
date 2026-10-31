@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2977,
+    "assets_selected": 2981,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "edf16a722adf03cb55f8129d",
-      "0edd5bd3e6732d309375aca4",
-      "baff36484bc494690559b257",
-      "b205e4378663812a29605b35"
+      "461dbbb7635ed251ccd9dfe3",
+      "81be8a624dd2226e87981186",
+      "115087937cbfcd81208c58ed",
+      "86cf7e87c1cce760051ea047"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2976,
-    "assets_remaining": 4512,
-    "assets_completion_percent": 39.7,
+    "assets_analyzed": 2980,
+    "assets_remaining": 4508,
+    "assets_completion_percent": 39.8,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2972,
+    "assets_skipped_from_checkpoint": 2976,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41174380359",
-      "checkpointed_at": "2026-10-31T10:39:02Z"
+      "checkpointed_at": "2026-10-31T10:46:50Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -111267,6 +111267,144 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41174380359",
       "checkpointed_at": "2026-10-31T10:45:33Z"
+    },
+    {
+      "asset_id": "461dbbb7635ed251ccd9dfe3",
+      "asset_sha256": "a10dc670ee302527324ba4cc0b686e561ee0037ebc70c9e00718938db706aad5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/a10dc670ee302527324ba4cc0b686e561ee0037ebc70c9e00718938db706aad5.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific applications"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or details about the undesirable changes or their desirable outcomes.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:48:32Z"
+    },
+    {
+      "asset_id": "81be8a624dd2226e87981186",
+      "asset_sha256": "57ad4ca0d98af362d4a7bfe3237906ede307f303224b849e2daa39df8ebbd9c6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/57ad4ca0d98af362d4a7bfe3237906ede307f303224b849e2daa39df8ebbd9c6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:49:59Z"
+    },
+    {
+      "asset_id": "115087937cbfcd81208c58ed",
+      "asset_sha256": "243858c9bddd761d24380c7cb1029d84a003cc002c3d630bac8f463a238feef1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/243858c9bddd761d24380c7cb1029d84a003cc002c3d630bac8f463a238feef1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of undesirable changes in materials and their potential for beneficial use in different contexts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations. For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "rusting of iron",
+          "decay of food",
+          "beneficial use",
+          "conversion of food waste into compost"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for why the changes are undesirable or beneficial."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:51:45Z"
+    },
+    {
+      "asset_id": "86cf7e87c1cce760051ea047",
+      "asset_sha256": "aab289addc2691cef64e12e5c270944d2e661ffbe263bb95a0e46d775a31244a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/aab289addc2691cef64e12e5c270944d2e661ffbe263bb95a0e46d775a31244a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the concept of undesirable changes in materials and their potential benefits in different contexts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations. For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "rusting of iron",
+          "decay of food",
+          "benefits of decomposition",
+          "conversion of food waste into compost"
+        ],
+        "context_relation": "The text discusses the idea that changes can be beneficial in different contexts, contrasting undesirable changes with their potential positive outcomes.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for the benefits of decomposition.",
+          "The text does not include any visual aids or diagrams to support the concepts discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:53:26Z"
     }
   ]
 }
