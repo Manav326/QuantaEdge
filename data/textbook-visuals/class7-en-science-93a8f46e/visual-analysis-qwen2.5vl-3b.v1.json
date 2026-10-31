@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2895,
+    "assets_selected": 2896,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "d47922da2fc4fd50cfe5a9bb"
+      "3c3f4a27af593cd95f27e83f"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2891,
-    "assets_remaining": 4597,
+    "assets_analyzed": 2892,
+    "assets_remaining": 4596,
     "assets_completion_percent": 38.6,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2890,
+    "assets_skipped_from_checkpoint": 2891,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:25:03Z"
+      "checkpointed_at": "2026-10-31T00:29:36Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:25:43Z"
+      "checkpointed_at": "2026-10-31T00:30:16Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:26:35Z"
+      "checkpointed_at": "2026-10-31T00:31:08Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
-      "checkpointed_at": "2026-10-31T00:27:29Z"
+      "checkpointed_at": "2026-10-31T00:32:03Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -108498,6 +108498,46 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141287258",
       "checkpointed_at": "2026-10-31T00:28:34Z"
+    },
+    {
+      "asset_id": "3c3f4a27af593cd95f27e83f",
+      "asset_sha256": "f0b499a8e387332bc0ef3227303c840b0b588f1b38eda2dc565166c4f9500a30",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/f0b499a8e387332bc0ef3227303c840b0b588f1b38eda2dc565166c4f9500a30.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with?",
+          "Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in objects or substances",
+          "original form",
+          "Activity 5.8"
+        ],
+        "context_relation": "The page is discussing the concept of reversibility of changes in objects or substances.",
+        "limitations": [
+          "The page does not provide specific examples or details about the reversibility of changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141287258",
+      "checkpointed_at": "2026-10-31T00:33:27Z"
     }
   ]
 }
