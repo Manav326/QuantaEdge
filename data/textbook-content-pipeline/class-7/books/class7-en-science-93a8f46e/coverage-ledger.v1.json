@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2989,
-    "successful_visual_analyses": 2965,
-    "missing_visual_analyses": 4499,
+    "raw_analysis_result_rows": 2993,
+    "successful_visual_analyses": 2969,
+    "missing_visual_analyses": 4495,
     "failed_visual_analyses": 24,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4523,
+    "unresolved_count": 4519,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -119827,9 +119827,16 @@
       "asset_path": "assets/509daaf21328a0cc6fbbee8b77031b46bc29cbc10b3ee01c47574510b045aaeb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -119845,9 +119852,34 @@
       "asset_path": "assets/b62467acdb72f02c2a0e4f23dc0d74b47b22febc5e04a47c9f6c75e7241c8a4c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a series of loops or knots.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "67",
+          "On the other hand, some changes may be undesirable, such",
+          "as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable",
+          "in other situations. For example, decomposition of food can be",
+          "very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "rusting",
+          "decay",
+          "change",
+          "undesirable",
+          "desirable",
+          "decomposition",
+          "food waste",
+          "compost"
+        ],
+        "context_relation": "The image is a visual representation of the text content.",
+        "limitations": [
+          "The image is a single object and does not represent a complex diagram or chart."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -119863,9 +119895,27 @@
       "asset_path": "assets/b8d1a1783f855e7bccd48a7cd0847033789ca557b77a8e02e912237ef3f70e5c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific applications"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or details about the undesirable changes or their desirable outcomes.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -119881,9 +119931,16 @@
       "asset_path": "assets/f15aaacae99b96d218f6e2100831fd84f3e8ec35ccfe0a67c37f8b3b5c3aebf6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

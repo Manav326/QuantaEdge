@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2965,
+    "assets_selected": 2969,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "33bd80baa80f815471693e45",
-      "786624b1bc4d232f51caf82b",
-      "2ba8331f04ac4f8b0b28daba",
-      "739d35007ed249a181d80d63"
+      "7cf3741e9606341c091293c4",
+      "dd9b6876840356822de58600",
+      "fa10245fdba090dfb2b59bdd",
+      "22d72cdc6f630d0f9cf3ea2b"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2964,
-    "assets_remaining": 4524,
+    "assets_analyzed": 2968,
+    "assets_remaining": 4520,
     "assets_completion_percent": 39.6,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2960,
+    "assets_skipped_from_checkpoint": 2964,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41174380359",
-      "checkpointed_at": "2026-10-31T10:16:15Z"
+      "checkpointed_at": "2026-10-31T10:23:14Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -110886,6 +110886,139 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41174380359",
       "checkpointed_at": "2026-10-31T10:21:54Z"
+    },
+    {
+      "asset_id": "7cf3741e9606341c091293c4",
+      "asset_sha256": "509daaf21328a0cc6fbbee8b77031b46bc29cbc10b3ee01c47574510b045aaeb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/509daaf21328a0cc6fbbee8b77031b46bc29cbc10b3ee01c47574510b045aaeb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:24:53Z"
+    },
+    {
+      "asset_id": "dd9b6876840356822de58600",
+      "asset_sha256": "b62467acdb72f02c2a0e4f23dc0d74b47b22febc5e04a47c9f6c75e7241c8a4c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/b62467acdb72f02c2a0e4f23dc0d74b47b22febc5e04a47c9f6c75e7241c8a4c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a series of loops or knots.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "67",
+          "On the other hand, some changes may be undesirable, such",
+          "as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable",
+          "in other situations. For example, decomposition of food can be",
+          "very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "rusting",
+          "decay",
+          "change",
+          "undesirable",
+          "desirable",
+          "decomposition",
+          "food waste",
+          "compost"
+        ],
+        "context_relation": "The image is a visual representation of the text content.",
+        "limitations": [
+          "The image is a single object and does not represent a complex diagram or chart."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:26:39Z"
+    },
+    {
+      "asset_id": "fa10245fdba090dfb2b59bdd",
+      "asset_sha256": "b8d1a1783f855e7bccd48a7cd0847033789ca557b77a8e02e912237ef3f70e5c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/b8d1a1783f855e7bccd48a7cd0847033789ca557b77a8e02e912237ef3f70e5c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific applications"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or details about the undesirable changes or their desirable outcomes.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:28:29Z"
+    },
+    {
+      "asset_id": "22d72cdc6f630d0f9cf3ea2b",
+      "asset_sha256": "f15aaacae99b96d218f6e2100831fd84f3e8ec35ccfe0a67c37f8b3b5c3aebf6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/f15aaacae99b96d218f6e2100831fd84f3e8ec35ccfe0a67c37f8b3b5c3aebf6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:30:03Z"
     }
   ]
 }
