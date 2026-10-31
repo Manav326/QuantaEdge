@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2943,
+    "assets_selected": 2947,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "acba594fb4dbdc0cad56644c",
-      "7e89510e7a56cbb4388eed31",
-      "e8631c720af9718f9671d523",
-      "c1e3b846872a42ecf2865828"
+      "df88e13bf168b0bd24756b97",
+      "fc7747e5efed5d751fbef4a3",
+      "b1b38059000a36fb71868c87",
+      "c9243e4db2603d76696814d0"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2942,
-    "assets_remaining": 4546,
+    "assets_analyzed": 2946,
+    "assets_remaining": 4542,
     "assets_completion_percent": 39.3,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2938,
+    "assets_skipped_from_checkpoint": 2942,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41163662926",
-      "checkpointed_at": "2026-10-31T07:38:11Z"
+      "checkpointed_at": "2026-10-31T07:46:15Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -110126,6 +110126,128 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41163662926",
       "checkpointed_at": "2026-10-31T07:45:00Z"
+    },
+    {
+      "asset_id": "df88e13bf168b0bd24756b97",
+      "asset_sha256": "bdbef136963e37fa3223f4324b1e3ea0800bc5c316e869747a612a053cc088a5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/bdbef136963e37fa3223f4324b1e3ea0800bc5c316e869747a612a053cc088a5.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:47:45Z"
+    },
+    {
+      "asset_id": "fc7747e5efed5d751fbef4a3",
+      "asset_sha256": "0a020bce6d0bcedbe357b067363eb042881dfb8514b65a8d39dac54a94805a52",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/0a020bce6d0bcedbe357b067363eb042881dfb8514b65a8d39dac54a94805a52.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the permanence of changes in objects or substances.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "Changes",
+          "Permanence of changes",
+          "Reversibility of changes",
+          "Observations"
+        ],
+        "context_relation": "The text is discussing the permanence of changes in objects or substances.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for the permanence of changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:49:34Z"
+    },
+    {
+      "asset_id": "b1b38059000a36fb71868c87",
+      "asset_sha256": "7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a yellowish color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide specific information about the text content.",
+          "The image is a visual representation of a rope, not a diagram or chart related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:51:09Z"
+    },
+    {
+      "asset_id": "c9243e4db2603d76696814d0",
+      "asset_sha256": "7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a yellowish color.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide specific information about the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:51:16Z"
     }
   ]
 }

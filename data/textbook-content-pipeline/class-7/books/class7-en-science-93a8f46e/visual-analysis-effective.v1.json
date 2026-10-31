@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e548ae80b2fb6ab7d63b14fb16df90daad571011c02df30673f7dd50d75207dd",
+  "raw_analysis_sha256": "ad3e1f0118b9fbf9fb8d713446ecd8e78e9614f52c197578f7ef7ca0ce641ec5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41163662926",
-      "checkpointed_at": "2026-10-31T07:38:11Z",
+      "checkpointed_at": "2026-10-31T07:46:15Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -172808,6 +172808,186 @@
         "context_relation": "The page discusses the concept of reversibility of changes in objects or substances.",
         "limitations": [
           "The page does not provide specific examples or illustrations of reversible changes."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "df88e13bf168b0bd24756b97",
+      "asset_sha256": "bdbef136963e37fa3223f4324b1e3ea0800bc5c316e869747a612a053cc088a5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/bdbef136963e37fa3223f4324b1e3ea0800bc5c316e869747a612a053cc088a5.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:47:45Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fc7747e5efed5d751fbef4a3",
+      "asset_sha256": "0a020bce6d0bcedbe357b067363eb042881dfb8514b65a8d39dac54a94805a52",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/0a020bce6d0bcedbe357b067363eb042881dfb8514b65a8d39dac54a94805a52.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the permanence of changes in objects or substances.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "Changes",
+          "Permanence of changes",
+          "Reversibility of changes",
+          "Observations"
+        ],
+        "context_relation": "The text is discussing the permanence of changes in objects or substances.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for the permanence of changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:49:34Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the permanence of changes in objects or substances.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "Changes",
+          "Permanence of changes",
+          "Reversibility of changes",
+          "Observations"
+        ],
+        "context_relation": "The text is discussing the permanence of changes in objects or substances.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for the permanence of changes."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b1b38059000a36fb71868c87",
+      "asset_sha256": "7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a yellowish color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide specific information about the text content.",
+          "The image is a visual representation of a rope, not a diagram or chart related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:51:09Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a yellowish color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide specific information about the text content.",
+          "The image is a visual representation of a rope, not a diagram or chart related to the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c9243e4db2603d76696814d0",
+      "asset_sha256": "7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a yellowish color.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide specific information about the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:51:16Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a yellowish color.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide specific information about the text content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

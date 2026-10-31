@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2965,
-    "successful_visual_analyses": 2943,
-    "missing_visual_analyses": 4523,
+    "raw_analysis_result_rows": 2969,
+    "successful_visual_analyses": 2947,
+    "missing_visual_analyses": 4519,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4545,
+    "unresolved_count": 4541,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -119087,9 +119087,16 @@
       "asset_path": "assets/bdbef136963e37fa3223f4324b1e3ea0800bc5c316e869747a612a053cc088a5.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -119105,9 +119112,29 @@
       "asset_path": "assets/0a020bce6d0bcedbe357b067363eb042881dfb8514b65a8d39dac54a94805a52.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the permanence of changes in objects or substances.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "Changes",
+          "Permanence of changes",
+          "Reversibility of changes",
+          "Observations"
+        ],
+        "context_relation": "The text is discussing the permanence of changes in objects or substances.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for the permanence of changes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -119123,9 +119150,19 @@
       "asset_path": "assets/7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a yellowish color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide specific information about the text content.",
+          "The image is a visual representation of a rope, not a diagram or chart related to the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -119141,9 +119178,18 @@
       "asset_path": "assets/7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a yellowish color.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide specific information about the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
