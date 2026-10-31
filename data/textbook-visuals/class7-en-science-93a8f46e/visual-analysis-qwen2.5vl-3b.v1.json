@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3021,
+    "assets_selected": 3025,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "e1a7ab00f696c6dda37de901",
-      "578b34cd42eddbb6ac6de97f",
-      "032d704b0e8c981b92691f0c",
-      "14871711928bf13b253edff9"
+      "3036771edd0ab793311047da",
+      "a60beae11326436d802da076",
+      "3af8285ccec440c03641ed3f",
+      "fa5105953be5a48d1d384868"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3020,
-    "assets_remaining": 4468,
-    "assets_completion_percent": 40.3,
-    "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 3016,
+    "assets_analyzed": 3023,
+    "assets_remaining": 4465,
+    "assets_completion_percent": 40.4,
+    "assets_failed": 23,
+    "assets_skipped_from_checkpoint": 3020,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
-      "checkpointed_at": "2026-10-31T20:09:55Z"
+      "checkpointed_at": "2026-10-31T20:16:22Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -112775,6 +112775,156 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
       "checkpointed_at": "2026-10-31T20:15:06Z"
+    },
+    {
+      "asset_id": "3036771edd0ab793311047da",
+      "asset_sha256": "1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "river rocks",
+          "pebbles",
+          "sediments",
+          "wind",
+          "flowing water"
+        ],
+        "context_relation": "The image is related to the text discussing erosion and its effects on riverbeds and lakes.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:16:34Z"
+    },
+    {
+      "asset_id": "a60beae11326436d802da076",
+      "asset_sha256": "6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a smooth, rounded rock.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water.",
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "flowing water",
+          "rock pebbles",
+          "soil",
+          "sediments",
+          "wind",
+          "riverbeds",
+          "lakes",
+          "smooth",
+          "rounded rock"
+        ],
+        "context_relation": "The image is a close-up of a smooth, rounded rock, which is an example of the concept of erosion.",
+        "limitations": [
+          "The image does not provide a full context of the entire page text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:18:26Z"
+    },
+    {
+      "asset_id": "3af8285ccec440c03641ed3f",
+      "asset_sha256": "6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a smooth, rounded rock.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water.",
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "flowing water",
+          "rock pebbles",
+          "soil",
+          "sediments",
+          "wind",
+          "riverbeds",
+          "lakes",
+          "smooth",
+          "rounded rock"
+        ],
+        "context_relation": "The image is a close-up of a smooth, rounded rock, which is an example of erosion.",
+        "limitations": [
+          "The image does not show the entire page text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:18:52Z"
+    },
+    {
+      "asset_id": "fa5105953be5a48d1d384868",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
