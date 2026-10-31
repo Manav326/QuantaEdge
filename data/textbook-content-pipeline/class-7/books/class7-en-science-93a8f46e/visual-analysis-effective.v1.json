@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2e30207a6f1194ec3534f1e3e01b68e3eb0a59365468cb7e4663c25f4c05a059",
+  "raw_analysis_sha256": "e9fd6120ce6920309c5e92cb157a02e31dae22a4d7e098ebfd4465f3ddb9caca",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T18:03:51Z",
+      "checkpointed_at": "2026-10-31T18:11:52Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T18:05:22Z",
+      "checkpointed_at": "2026-10-31T18:13:19Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164714,7 +164714,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T18:06:59Z",
+      "checkpointed_at": "2026-10-31T18:14:52Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -176333,6 +176333,106 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3342191d36cb15a2adabe85c",
+      "asset_sha256": "902480b8039f31a5a456b143898329f557e9ad7c67bce96bfaf7a08ba5ca17d2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/902480b8039f31a5a456b143898329f557e9ad7c67bce96bfaf7a08ba5ca17d2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a full-page illustration of a textbook page discussing erosion, specifically mentioning fine sand and its formation from rock pebbles, soil, and sediments due to natural forces like wind and flowing water. It also mentions an example of erosion during a landslide and how river rocks and pebbles can appear smoother due to constant erosion.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "fine sand",
+          "rock pebbles",
+          "soil",
+          "sediments",
+          "natural forces",
+          "wind",
+          "flowing water",
+          "landslide",
+          "physical change",
+          "river rocks",
+          "pebbles",
+          "constant erosion"
+        ],
+        "context_relation": "The image is a textbook page discussing erosion, specifically mentioning fine sand and its formation from rock pebbles, soil, and sediments due to natural forces like wind and flowing water. It also mentions an example of erosion during a landslide and how river rocks and pebbles can appear smoother due to constant erosion.",
+        "limitations": [
+          "The image does not provide specific examples or details of the erosion process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T18:17:02Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a full-page illustration of a textbook page discussing erosion, specifically mentioning fine sand and its formation from rock pebbles, soil, and sediments due to natural forces like wind and flowing water. It also mentions an example of erosion during a landslide and how river rocks and pebbles can appear smoother due to constant erosion.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "fine sand",
+          "rock pebbles",
+          "soil",
+          "sediments",
+          "natural forces",
+          "wind",
+          "flowing water",
+          "landslide",
+          "physical change",
+          "river rocks",
+          "pebbles",
+          "constant erosion"
+        ],
+        "context_relation": "The image is a textbook page discussing erosion, specifically mentioning fine sand and its formation from rock pebbles, soil, and sediments due to natural forces like wind and flowing water. It also mentions an example of erosion during a landslide and how river rocks and pebbles can appear smoother due to constant erosion.",
+        "limitations": [
+          "The image does not provide specific examples or details of the erosion process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "15d2f12a252eeb6e17e7336f",
+      "asset_sha256": "d48a233dbe7c745defaac3d1be44516fb601e7c9d0363c277bbbd9d10a0e1ae7",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/d48a233dbe7c745defaac3d1be44516fb601e7c9d0363c277bbbd9d10a0e1ae7.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],

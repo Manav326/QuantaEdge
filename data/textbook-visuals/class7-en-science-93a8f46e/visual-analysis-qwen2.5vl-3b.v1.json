@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3012,
+    "assets_selected": 3014,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "50d72bf166da2b44d7235e02",
-      "b1559c186d4f49df795e9113"
+      "3342191d36cb15a2adabe85c",
+      "15d2f12a252eeb6e17e7336f"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3009,
-    "assets_remaining": 4479,
+    "assets_analyzed": 3010,
+    "assets_remaining": 4478,
     "assets_completion_percent": 40.2,
-    "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3007,
+    "assets_failed": 21,
+    "assets_skipped_from_checkpoint": 3009,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T18:03:51Z"
+      "checkpointed_at": "2026-10-31T18:11:52Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T18:05:22Z"
+      "checkpointed_at": "2026-10-31T18:13:19Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104925,7 +104925,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T18:06:59Z"
+      "checkpointed_at": "2026-10-31T18:14:52Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -112425,6 +112425,71 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
       "checkpointed_at": "2026-10-31T18:10:37Z"
+    },
+    {
+      "asset_id": "3342191d36cb15a2adabe85c",
+      "asset_sha256": "902480b8039f31a5a456b143898329f557e9ad7c67bce96bfaf7a08ba5ca17d2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/902480b8039f31a5a456b143898329f557e9ad7c67bce96bfaf7a08ba5ca17d2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a full-page illustration of a textbook page discussing erosion, specifically mentioning fine sand and its formation from rock pebbles, soil, and sediments due to natural forces like wind and flowing water. It also mentions an example of erosion during a landslide and how river rocks and pebbles can appear smoother due to constant erosion.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "fine sand",
+          "rock pebbles",
+          "soil",
+          "sediments",
+          "natural forces",
+          "wind",
+          "flowing water",
+          "landslide",
+          "physical change",
+          "river rocks",
+          "pebbles",
+          "constant erosion"
+        ],
+        "context_relation": "The image is a textbook page discussing erosion, specifically mentioning fine sand and its formation from rock pebbles, soil, and sediments due to natural forces like wind and flowing water. It also mentions an example of erosion during a landslide and how river rocks and pebbles can appear smoother due to constant erosion.",
+        "limitations": [
+          "The image does not provide specific examples or details of the erosion process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T18:17:02Z"
+    },
+    {
+      "asset_id": "15d2f12a252eeb6e17e7336f",
+      "asset_sha256": "d48a233dbe7c745defaac3d1be44516fb601e7c9d0363c277bbbd9d10a0e1ae7",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/d48a233dbe7c745defaac3d1be44516fb601e7c9d0363c277bbbd9d10a0e1ae7.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
