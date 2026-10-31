@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1545,
+    "assets_selected": 1547,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "874c949f104133e4f12447ec",
-      "221f9910b737c75ecb4f3b4a"
+      "2117ef1dbcc04e031baf9b4d",
+      "b7e9b122156c01a64ccda0f9"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1542,
-    "assets_remaining": 536,
-    "assets_completion_percent": 74.2,
+    "assets_analyzed": 1544,
+    "assets_remaining": 534,
+    "assets_completion_percent": 74.3,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1540,
+    "assets_skipped_from_checkpoint": 1542,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:52:23Z"
+      "checkpointed_at": "2026-10-31T09:57:44Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:53:22Z"
+      "checkpointed_at": "2026-10-31T09:58:43Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:54:11Z"
+      "checkpointed_at": "2026-10-31T09:59:31Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -52580,6 +52580,110 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
       "checkpointed_at": "2026-10-31T09:56:29Z"
+    },
+    {
+      "asset_id": "2117ef1dbcc04e031baf9b4d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 177,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7ddebff5a357d7068e2dedd56b3f950d145671ae920342549ff00e043fd6bd2b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational diagram showing the process of water change and movement.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cloud, Lake, Ocean, River, Groundwater, Evaporation, Condensation, Rain, Snow",
+          "Activity 8.11: Let us understand the process",
+          "Label Fig. 8.9 using arrows shown and the words given in the box to show where water is stored, how water changes its state and where it moves.",
+          "What did I do well?",
+          "Was I able to label all the parts of the water?"
+        ],
+        "concepts": [
+          "Water cycle",
+          "Evaporation",
+          "Condensation",
+          "Rain",
+          "Snow",
+          "Groundwater"
+        ],
+        "context_relation": "Educational",
+        "limitations": [
+          "The image does not show the actual diagram or labels."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T10:00:04Z"
+    },
+    {
+      "asset_id": "b7e9b122156c01a64ccda0f9",
+      "asset_sha256": "ba63a854c63067c262a984fde8e897f21a289c679ca08850be1256d57b9f1aa4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 177,
+      "asset_path": "page-0177.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7ddebff5a357d7068e2dedd56b3f950d145671ae920342549ff00e043fd6bd2b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram illustrating the water cycle, including clouds, lakes, oceans, rivers, groundwater, evaporation, condensation, rain, and snow.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 8.11: Let us understand the process",
+          "Label Fig. 8.9 using arrows shown and the words given in",
+          "the box to show where water is stored, how water changes",
+          "its state and where it moves.",
+          "Cloud, Lake, Ocean, River, Groundwater, Evaporation,",
+          "Condensation, Rain, Snow",
+          "Fig. 8.9: Change of states and movement of water",
+          "The water from the ocean and the Earth’s",
+          "surface evaporates into the atmosphere as",
+          "vapour and returns as rain, hail or snow,",
+          "ultimately flowing back to the oceans.",
+          "This circulation of water is known as the",
+          "water cycle.",
+          "Only a small portion of water available on the Earth is",
+          "fit for use by plants, animals and humans. Most of the water",
+          "is in the oceans and it cannot be used directly. We use water",
+          "for drinking and also for many other activities. The number",
+          "of people using water is increasing with a rise in population.",
+          "The increasing demand for water causes its shortage in",
+          "many parts of the world. Hence, it is very important to use",
+          "water wisely and avoid wasting it. Let us keep our water",
+          "bodies free from pollution. You will learn more about water water",
+          "and its conservation in the chapter 'Nature’s Treasures'."
+        ],
+        "concepts": [
+          "Water Cycle",
+          "Evaporation",
+          "Condensation",
+          "Rain",
+          "Snow",
+          "Oceans",
+          "Rivers",
+          "Groundwater",
+          "Clouds",
+          "Lakes"
+        ],
+        "context_relation": "The image is a visual representation of the water cycle, which is a concept from the chapter 'Nature’s Treasures'.",
+        "limitations": [
+          "The image does not provide specific details about the water cycle process, such as the exact steps or the role of each element."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T10:04:35Z"
     }
   ]
 }
