@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8a9814e844b333d400193f53a22a146554239a70f3e91e17856120fd08050518",
+  "raw_analysis_sha256": "c773bd2a1cb8af1fbdb9561f1d5fafdd4b0c325706258cf5a102d612e7033a91",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41209997648",
-      "checkpointed_at": "2026-10-31T15:25:02Z",
+      "checkpointed_at": "2026-10-31T15:28:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41209997648",
-      "checkpointed_at": "2026-10-31T15:25:33Z",
+      "checkpointed_at": "2026-10-31T15:28:55Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41209997648",
-      "checkpointed_at": "2026-10-31T15:26:14Z",
+      "checkpointed_at": "2026-10-31T15:29:34Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41209997648",
-      "checkpointed_at": "2026-10-31T15:26:56Z",
+      "checkpointed_at": "2026-10-31T15:30:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -175658,6 +175658,46 @@
         "context_relation": "The page is a blank page with no visible content.",
         "limitations": [
           "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9822df5b282e63e0a25b228e",
+      "asset_sha256": "52f56b5fc272f3f088442e5e1ae0c1c62d582b1715b70b7f5cff48f4e52acaa0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/52f56b5fc272f3f088442e5e1ae0c1c62d582b1715b70b7f5cff48f4e52acaa0.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a person's face, possibly a close-up or portrait.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": [
+          "The image is blurred and not clear enough to identify specific details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41209997648",
+      "checkpointed_at": "2026-10-31T15:30:53Z",
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a person's face, possibly a close-up or portrait.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": [
+          "The image is blurred and not clear enough to identify specific details."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
