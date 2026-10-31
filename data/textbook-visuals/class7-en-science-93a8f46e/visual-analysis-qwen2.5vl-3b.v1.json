@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3032,
+    "assets_selected": 3036,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "34b2fbd93d952126f627d748",
-      "fce02a02f5ca830bd82f7295",
-      "977272dcd62b85296a232ed6",
-      "7f08ee93ef30e634f7df449a"
+      "894a013f25bd8af0b3a07a0f",
+      "5d30d4aeab109513dec3fb3a",
+      "6b095e00056ae612c05b3cc7",
+      "9ad48450fac005d092364646"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3031,
-    "assets_remaining": 4457,
+    "assets_analyzed": 3035,
+    "assets_remaining": 4453,
     "assets_completion_percent": 40.5,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 3027,
+    "assets_skipped_from_checkpoint": 3031,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
-      "checkpointed_at": "2026-10-31T20:35:43Z"
+      "checkpointed_at": "2026-10-31T20:41:45Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -113168,6 +113168,144 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
       "checkpointed_at": "2026-10-31T20:40:29Z"
+    },
+    {
+      "asset_id": "894a013f25bd8af0b3a07a0f",
+      "asset_sha256": "d7f3f1fe2a8cb18ab9fcb7f72874ee8a847b5286268eacca5159945e05d2ca97",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/d7f3f1fe2a8cb18ab9fcb7f72874ee8a847b5286268eacca5159945e05d2ca97.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three yellow objects with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "69",
+          "Let Us Enhance Our Learning",
+          "1. Which of the following statements are the characteristics of",
+          "a physical change?",
+          "Chemical",
+          "(i) The state of the substance may or may not change.",
+          "and",
+          "(ii) A substance with d"
+        ],
+        "concepts": [
+          "physical change",
+          "chemical change"
+        ],
+        "context_relation": "The image is not directly related to the text in the image.",
+        "limitations": [
+          "The image is blurred and not clearly visible.",
+          "The text in the image is partially obscured and not fully readable."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:43:22Z"
+    },
+    {
+      "asset_id": "5d30d4aeab109513dec3fb3a",
+      "asset_sha256": "1a3e22380ad7bda4becb52a0522693baa941c32a9db530b03de6e4359a05ec0e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/1a3e22380ad7bda4becb52a0522693baa941c32a9db530b03de6e4359a05ec0e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue hook attached to one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a hook, possibly used as a metaphor or an illustration for a concept.",
+        "limitations": [
+          "The image does not provide any specific information or context about the concept it is illustrating."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:44:55Z"
+    },
+    {
+      "asset_id": "6b095e00056ae612c05b3cc7",
+      "asset_sha256": "b64ff9e9c03978bd47ffc456723b3edf8239ba1e258e1e28e597d901ef136285",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/b64ff9e9c03978bd47ffc456723b3edf8239ba1e258e1e28e597d901ef136285.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow substance with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear background",
+          "possible blurriness"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:46:25Z"
+    },
+    {
+      "asset_id": "9ad48450fac005d092364646",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing physical changes in substances.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "69",
+          "Let Us Enhance Our Learning",
+          "1. Which of the following statements are the characteristics of",
+          "a physical change?",
+          "Chemical",
+          "(i) The state of the substance may or may not change.",
+          "and",
+          "(ii) A substance with d"
+        ],
+        "concepts": [
+          "physical change",
+          "chemical change"
+        ],
+        "context_relation": "The page is discussing the characteristics of physical and chemical changes.",
+        "limitations": [
+          "The text is incomplete and does not provide a full explanation of the characteristics of physical and chemical changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:48:01Z"
     }
   ]
 }

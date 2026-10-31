@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "689b0f3fb0463f6971c844e6b12d398cd3725629b94b072532de201cbde82393",
+  "raw_analysis_sha256": "d38054e678774f2748a093d78be85d71c4b833a3317e1dfe8cc04be56e0f48f2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
-      "checkpointed_at": "2026-10-31T20:35:43Z",
+      "checkpointed_at": "2026-10-31T20:41:45Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -177455,6 +177455,218 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "894a013f25bd8af0b3a07a0f",
+      "asset_sha256": "d7f3f1fe2a8cb18ab9fcb7f72874ee8a847b5286268eacca5159945e05d2ca97",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/d7f3f1fe2a8cb18ab9fcb7f72874ee8a847b5286268eacca5159945e05d2ca97.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three yellow objects with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "69",
+          "Let Us Enhance Our Learning",
+          "1. Which of the following statements are the characteristics of",
+          "a physical change?",
+          "Chemical",
+          "(i) The state of the substance may or may not change.",
+          "and",
+          "(ii) A substance with d"
+        ],
+        "concepts": [
+          "physical change",
+          "chemical change"
+        ],
+        "context_relation": "The image is not directly related to the text in the image.",
+        "limitations": [
+          "The image is blurred and not clearly visible.",
+          "The text in the image is partially obscured and not fully readable."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:43:22Z",
+      "effective_analysis": {
+        "visual_summary": "Three yellow objects with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "69",
+          "Let Us Enhance Our Learning",
+          "1. Which of the following statements are the characteristics of",
+          "a physical change?",
+          "Chemical",
+          "(i) The state of the substance may or may not change.",
+          "and",
+          "(ii) A substance with d"
+        ],
+        "concepts": [
+          "physical change",
+          "chemical change"
+        ],
+        "context_relation": "The image is not directly related to the text in the image.",
+        "limitations": [
+          "The image is blurred and not clearly visible.",
+          "The text in the image is partially obscured and not fully readable."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5d30d4aeab109513dec3fb3a",
+      "asset_sha256": "1a3e22380ad7bda4becb52a0522693baa941c32a9db530b03de6e4359a05ec0e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/1a3e22380ad7bda4becb52a0522693baa941c32a9db530b03de6e4359a05ec0e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue hook attached to one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a hook, possibly used as a metaphor or an illustration for a concept.",
+        "limitations": [
+          "The image does not provide any specific information or context about the concept it is illustrating."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:44:55Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue hook attached to one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a hook, possibly used as a metaphor or an illustration for a concept.",
+        "limitations": [
+          "The image does not provide any specific information or context about the concept it is illustrating."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6b095e00056ae612c05b3cc7",
+      "asset_sha256": "b64ff9e9c03978bd47ffc456723b3edf8239ba1e258e1e28e597d901ef136285",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/b64ff9e9c03978bd47ffc456723b3edf8239ba1e258e1e28e597d901ef136285.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow substance with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear background",
+          "possible blurriness"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:46:25Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow substance with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear background",
+          "possible blurriness"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9ad48450fac005d092364646",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing physical changes in substances.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "69",
+          "Let Us Enhance Our Learning",
+          "1. Which of the following statements are the characteristics of",
+          "a physical change?",
+          "Chemical",
+          "(i) The state of the substance may or may not change.",
+          "and",
+          "(ii) A substance with d"
+        ],
+        "concepts": [
+          "physical change",
+          "chemical change"
+        ],
+        "context_relation": "The page is discussing the characteristics of physical and chemical changes.",
+        "limitations": [
+          "The text is incomplete and does not provide a full explanation of the characteristics of physical and chemical changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:48:01Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing physical changes in substances.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "69",
+          "Let Us Enhance Our Learning",
+          "1. Which of the following statements are the characteristics of",
+          "a physical change?",
+          "Chemical",
+          "(i) The state of the substance may or may not change.",
+          "and",
+          "(ii) A substance with d"
+        ],
+        "concepts": [
+          "physical change",
+          "chemical change"
+        ],
+        "context_relation": "The page is discussing the characteristics of physical and chemical changes.",
+        "limitations": [
+          "The text is incomplete and does not provide a full explanation of the characteristics of physical and chemical changes."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
