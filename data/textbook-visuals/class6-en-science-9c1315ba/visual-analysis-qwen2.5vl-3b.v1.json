@@ -14,12 +14,12 @@
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "2249feba9d9de2d28593e04b",
-      "8e056534d5a845bf27f6cb6e"
+      "a5c1484ab6df1a2776c3833a",
+      "0e7596ef9ad0ae8573e53791"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1539,
-    "assets_remaining": 539,
+    "assets_analyzed": 1540,
+    "assets_remaining": 538,
     "assets_completion_percent": 74.1,
     "assets_failed": 21,
     "assets_skipped_from_checkpoint": 1539,
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:27:20Z"
+      "checkpointed_at": "2026-10-31T09:40:07Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:28:20Z"
+      "checkpointed_at": "2026-10-31T09:41:10Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:29:12Z"
+      "checkpointed_at": "2026-10-31T09:41:58Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -52080,7 +52080,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41141375591",
+      "run_id": "41180813578",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -52451,6 +52451,53 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
       "checkpointed_at": "2026-10-31T02:19:36Z"
+    },
+    {
+      "asset_id": "0e7596ef9ad0ae8573e53791",
+      "asset_sha256": "b3006c3d58c2d1c37009d0eb114f56336935bb33620215f71d44dd2ce3ceefb9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 176,
+      "asset_path": "page-0176.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9fcd0315a418343f2c8f40254a127d741ecd526d97d430a3223831816c97564a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook showing a poem about rain and snow, with a caution symbol and instructions for an activity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Under special conditions, it might also fall as hail or snow.",
+          "Aavi enjoys the rain and creates a poem. You can complete",
+          "the poem and present it in your class.",
+          "I wonder, oh! I wonder so,",
+          "Which path does water choose to go?",
+          "I wonder, oh! I wonder so,",
+          "When does it snow?",
+          "I wonder, oh! I got a wonder call,",
+          "How does rain fall?",
+          "………………………………………………",
+          "………………………………………………",
+          "I wonder, ponder and dream each day,",
+          "As water's journey takes its way."
+        ],
+        "concepts": [
+          "Poetry",
+          "Water cycle",
+          "Cloud formation"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T09:51:08Z"
     }
   ]
 }

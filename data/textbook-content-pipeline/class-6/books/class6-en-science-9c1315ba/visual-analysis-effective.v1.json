@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "cacada3666cecd29bacd8ab9cfb9456969839a78589a9c9a4de4d18e4dfd3a9b",
+  "raw_analysis_sha256": "ba89628e702c7e11a521543e686c5347d7c20bf109fcb0328a9f1c7bd2bfc21b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:27:20Z",
+      "checkpointed_at": "2026-10-31T09:40:07Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:28:20Z",
+      "checkpointed_at": "2026-10-31T09:41:10Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41180813578",
-      "checkpointed_at": "2026-10-31T09:29:12Z",
+      "checkpointed_at": "2026-10-31T09:41:58Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -79296,7 +79296,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41141375591",
+      "run_id": "41180813578",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -79889,6 +79889,84 @@
         "concepts": [],
         "context_relation": "unclear",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0e7596ef9ad0ae8573e53791",
+      "asset_sha256": "b3006c3d58c2d1c37009d0eb114f56336935bb33620215f71d44dd2ce3ceefb9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 176,
+      "asset_path": "page-0176.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9fcd0315a418343f2c8f40254a127d741ecd526d97d430a3223831816c97564a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook showing a poem about rain and snow, with a caution symbol and instructions for an activity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Under special conditions, it might also fall as hail or snow.",
+          "Aavi enjoys the rain and creates a poem. You can complete",
+          "the poem and present it in your class.",
+          "I wonder, oh! I wonder so,",
+          "Which path does water choose to go?",
+          "I wonder, oh! I wonder so,",
+          "When does it snow?",
+          "I wonder, oh! I got a wonder call,",
+          "How does rain fall?",
+          "………………………………………………",
+          "………………………………………………",
+          "I wonder, ponder and dream each day,",
+          "As water's journey takes its way."
+        ],
+        "concepts": [
+          "Poetry",
+          "Water cycle",
+          "Cloud formation"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41180813578",
+      "checkpointed_at": "2026-10-31T09:51:08Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook showing a poem about rain and snow, with a caution symbol and instructions for an activity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Under special conditions, it might also fall as hail or snow.",
+          "Aavi enjoys the rain and creates a poem. You can complete",
+          "the poem and present it in your class.",
+          "I wonder, oh! I wonder so,",
+          "Which path does water choose to go?",
+          "I wonder, oh! I wonder so,",
+          "When does it snow?",
+          "I wonder, oh! I got a wonder call,",
+          "How does rain fall?",
+          "………………………………………………",
+          "………………………………………………",
+          "I wonder, ponder and dream each day,",
+          "As water's journey takes its way."
+        ],
+        "concepts": [
+          "Poetry",
+          "Water cycle",
+          "Cloud formation"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
