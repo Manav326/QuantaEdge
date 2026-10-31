@@ -114019,8 +114019,8 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
           "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
@@ -114031,19 +114031,16 @@
           "combustion",
           "oxygen",
           "carbon dioxide",
-          "fireflies",
           "bioluminescence",
+          "fireflies",
           "combustible substances",
-          "paper",
-          "combustible",
-          "chemical change",
           "air",
-          "fire",
           "combustion"
         ],
-        "context_relation": "The page discusses the role of oxygen in combustion and provides examples of how it affects the burning of candles and fireflies.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of carbon dioxide gas in the air.",
         "limitations": [
-          "The page does not provide specific instructions on how to test for carbon dioxide gas."
+          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "chapter_id": null,

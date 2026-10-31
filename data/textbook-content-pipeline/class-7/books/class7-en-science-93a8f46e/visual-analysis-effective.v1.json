@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "38f410d8653f0a1356baca3bd84ea8b58b5f4adc39bcb6f6e230513b53aff8e7",
+  "raw_analysis_sha256": "7148fc0501fe288724e26064e827a3e7f15a71fc3d75cf41e35173f4d29c3ef1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:25:27Z",
+      "checkpointed_at": "2026-10-31T12:32:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:26:05Z",
+      "checkpointed_at": "2026-10-31T12:33:22Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:26:54Z",
+      "checkpointed_at": "2026-10-31T12:34:11Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -142384,7 +142384,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41174380359",
+      "run_id": "41195883841",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -164748,8 +164748,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
           "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
@@ -164760,29 +164760,26 @@
           "combustion",
           "oxygen",
           "carbon dioxide",
-          "fireflies",
           "bioluminescence",
+          "fireflies",
           "combustible substances",
-          "paper",
-          "combustible",
-          "chemical change",
           "air",
-          "fire",
           "combustion"
         ],
-        "context_relation": "The page discusses the role of oxygen in combustion and provides examples of how it affects the burning of candles and fireflies.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of carbon dioxide gas in the air.",
         "limitations": [
-          "The page does not provide specific instructions on how to test for carbon dioxide gas."
+          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41174380359",
-      "checkpointed_at": "2026-10-31T11:02:28Z",
+      "run_id": "41195883841",
+      "checkpointed_at": "2026-10-31T12:39:54Z",
       "effective_analysis": {
-        "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
           "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
@@ -164793,19 +164790,16 @@
           "combustion",
           "oxygen",
           "carbon dioxide",
-          "fireflies",
           "bioluminescence",
+          "fireflies",
           "combustible substances",
-          "paper",
-          "combustible",
-          "chemical change",
           "air",
-          "fire",
           "combustion"
         ],
-        "context_relation": "The page discusses the role of oxygen in combustion and provides examples of how it affects the burning of candles and fireflies.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of carbon dioxide gas in the air.",
         "limitations": [
-          "The page does not provide specific instructions on how to test for carbon dioxide gas."
+          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
