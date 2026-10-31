@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2998,
+    "assets_selected": 2999,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c2b02940b2dd44dc8de17b5"
+      "5ff670c16bb804d48d38a998"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2994,
-    "assets_remaining": 4494,
+    "assets_analyzed": 2995,
+    "assets_remaining": 4493,
     "assets_completion_percent": 40.0,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2993,
+    "assets_skipped_from_checkpoint": 2994,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41204283394",
-      "checkpointed_at": "2026-10-31T14:15:51Z"
+      "checkpointed_at": "2026-10-31T14:18:58Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41204283394",
-      "checkpointed_at": "2026-10-31T14:16:20Z"
+      "checkpointed_at": "2026-10-31T14:19:28Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41204283394",
-      "checkpointed_at": "2026-10-31T14:16:57Z"
+      "checkpointed_at": "2026-10-31T14:20:07Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41204283394",
-      "checkpointed_at": "2026-10-31T14:17:37Z"
+      "checkpointed_at": "2026-10-31T14:20:47Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -111918,6 +111918,46 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41204283394",
       "checkpointed_at": "2026-10-31T14:18:12Z"
+    },
+    {
+      "asset_id": "5ff670c16bb804d48d38a998",
+      "asset_sha256": "7d8cbbacd4160dfe7017cb10831f16d070d0e44b4e19d52635312c01899a4d11",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/7d8cbbacd4160dfe7017cb10831f16d070d0e44b4e19d52635312c01899a4d11.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for beneficial outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "beneficial outcomes",
+          "context-specific",
+          "decomposition",
+          "food waste",
+          "compost"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for why the changes are undesirable or beneficial.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41204283394",
+      "checkpointed_at": "2026-10-31T14:21:33Z"
     }
   ]
 }
