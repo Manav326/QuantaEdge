@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 3013,
-    "successful_visual_analyses": 2992,
+    "successful_visual_analyses": 2993,
     "missing_visual_analyses": 4475,
-    "failed_visual_analyses": 21,
+    "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4496,
+    "unresolved_count": 4495,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -119444,9 +119444,31 @@
       "asset_path": "page-0086.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table listing changes and whether they can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "S.No. | Change | The original state can be brought back (Yes/No)",
+          "1. | Melting ice cubes | Yes",
+          "2. | Chopping vegetables | No",
+          "3. | Boiling water | Yes",
+          "4. | Making popcorn from corn | No",
+          "5. | ...",
+          "12. | ..."
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility of changes",
+          "Desirability of changes"
+        ],
+        "context_relation": "The table is a continuation of the discussion on changes and their reversibility.",
+        "limitations": [
+          "The table does not include all possible changes or their reversibility."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

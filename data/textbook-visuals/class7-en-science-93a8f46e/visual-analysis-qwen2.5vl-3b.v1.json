@@ -15,13 +15,13 @@
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "eeab43004f2dfd8c94ad7acc"
+      "4f12060f42d06a864b48d260"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2988,
-    "assets_remaining": 4500,
+    "assets_analyzed": 2989,
+    "assets_remaining": 4499,
     "assets_completion_percent": 39.9,
-    "assets_failed": 21,
+    "assets_failed": 20,
     "assets_skipped_from_checkpoint": 2988,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:40:55Z"
+      "checkpointed_at": "2026-10-31T12:49:15Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:41:33Z"
+      "checkpointed_at": "2026-10-31T12:49:52Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:42:22Z"
+      "checkpointed_at": "2026-10-31T12:50:41Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:43:15Z"
+      "checkpointed_at": "2026-10-31T12:51:33Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -110500,19 +110500,43 @@
     {
       "asset_id": "4f12060f42d06a864b48d260",
       "asset_sha256": "6db17cd516873268969b33803cad16735f35abbeb1520aab992ca6f6b025df2f",
-      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 86,
       "asset_path": "page-0086.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41174380359",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing changes and whether they can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "S.No. | Change | The original state can be brought back (Yes/No)",
+          "1. | Melting ice cubes | Yes",
+          "2. | Chopping vegetables | No",
+          "3. | Boiling water | Yes",
+          "4. | Making popcorn from corn | No",
+          "5. | ...",
+          "12. | ..."
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility of changes",
+          "Desirability of changes"
+        ],
+        "context_relation": "The table is a continuation of the discussion on changes and their reversibility.",
+        "limitations": [
+          "The table does not include all possible changes or their reversibility."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41195883841",
+      "checkpointed_at": "2026-10-31T12:54:26Z"
     },
     {
       "asset_id": "aee293cfb8c4916e17d4fc7e",

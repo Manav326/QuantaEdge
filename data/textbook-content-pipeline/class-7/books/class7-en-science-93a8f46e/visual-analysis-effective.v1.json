@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b50e7da06ce6e69b2dd4c566d7433b6f7e7ef031720204bd95701b1dbf52d762",
+  "raw_analysis_sha256": "58a6a10451221fbb761bfc6a09539988d65218599c2c003a0c888cb5378f55a7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:40:55Z",
+      "checkpointed_at": "2026-10-31T12:49:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:41:33Z",
+      "checkpointed_at": "2026-10-31T12:49:52Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:42:22Z",
+      "checkpointed_at": "2026-10-31T12:50:41Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:43:15Z",
+      "checkpointed_at": "2026-10-31T12:51:33Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -173408,21 +173408,67 @@
     {
       "asset_id": "4f12060f42d06a864b48d260",
       "asset_sha256": "6db17cd516873268969b33803cad16735f35abbeb1520aab992ca6f6b025df2f",
-      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 86,
       "asset_path": "page-0086.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41174380359",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing changes and whether they can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "S.No. | Change | The original state can be brought back (Yes/No)",
+          "1. | Melting ice cubes | Yes",
+          "2. | Chopping vegetables | No",
+          "3. | Boiling water | Yes",
+          "4. | Making popcorn from corn | No",
+          "5. | ...",
+          "12. | ..."
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility of changes",
+          "Desirability of changes"
+        ],
+        "context_relation": "The table is a continuation of the discussion on changes and their reversibility.",
+        "limitations": [
+          "The table does not include all possible changes or their reversibility."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41195883841",
+      "checkpointed_at": "2026-10-31T12:54:26Z",
+      "effective_analysis": {
+        "visual_summary": "Table listing changes and whether they can be reversed.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.2: Can changes be reversed?",
+          "S.No. | Change | The original state can be brought back (Yes/No)",
+          "1. | Melting ice cubes | Yes",
+          "2. | Chopping vegetables | No",
+          "3. | Boiling water | Yes",
+          "4. | Making popcorn from corn | No",
+          "5. | ...",
+          "12. | ..."
+        ],
+        "concepts": [
+          "Changes",
+          "Reversibility of changes",
+          "Desirability of changes"
+        ],
+        "context_relation": "The table is a continuation of the discussion on changes and their reversibility.",
+        "limitations": [
+          "The table does not include all possible changes or their reversibility."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
