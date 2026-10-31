@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3028,
+    "assets_selected": 3032,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "20f31597c314541a177987bb",
-      "f9b8ff99853daa8c9856a87a",
-      "755efa29914b62bb2e2b2fda",
-      "ad4732f07f7f9a08b38915dd"
+      "34b2fbd93d952126f627d748",
+      "fce02a02f5ca830bd82f7295",
+      "977272dcd62b85296a232ed6",
+      "7f08ee93ef30e634f7df449a"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3027,
-    "assets_remaining": 4461,
-    "assets_completion_percent": 40.4,
+    "assets_analyzed": 3031,
+    "assets_remaining": 4457,
+    "assets_completion_percent": 40.5,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 3023,
+    "assets_skipped_from_checkpoint": 3027,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
-      "checkpointed_at": "2026-10-31T20:26:57Z"
+      "checkpointed_at": "2026-10-31T20:35:43Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -113062,6 +113062,112 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
       "checkpointed_at": "2026-10-31T20:34:27Z"
+    },
+    {
+      "asset_id": "34b2fbd93d952126f627d748",
+      "asset_sha256": "9f9039c01b115584d524680619eeb3c8bca3b17f98b5d54166dd5263b6b970cc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/9f9039c01b115584d524680619eeb3c8bca3b17f98b5d54166dd5263b6b970cc.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred and indistinct image with a gradient background transitioning from white to dark brown.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "The image is blurred and indistinct, making it difficult to discern any specific details or text. The visible text is not clear enough to provide any meaningful information. The background gradient suggests a possible educational or informational context, but the exact nature of the content is obscu"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:37:24Z"
+    },
+    {
+      "asset_id": "fce02a02f5ca830bd82f7295",
+      "asset_sha256": "cd72410e92a12089f30b2cc8d04baf61ffc685a6de1d8e8762924b1f8d71d482",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/cd72410e92a12089f30b2cc8d04baf61ffc685a6de1d8e8762924b1f8d71d482.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:38:56Z"
+    },
+    {
+      "asset_id": "977272dcd62b85296a232ed6",
+      "asset_sha256": "cd72410e92a12089f30b2cc8d04baf61ffc685a6de1d8e8762924b1f8d71d482",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/cd72410e92a12089f30b2cc8d04baf61ffc685a6de1d8e8762924b1f8d71d482.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:39:00Z"
+    },
+    {
+      "asset_id": "7f08ee93ef30e634f7df449a",
+      "asset_sha256": "011af9fc88ed725557b993afda290e4e65545c1ec311f8f073f503948440d112",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/011af9fc88ed725557b993afda290e4e65545c1ec311f8f073f503948440d112.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with multiple loops.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:40:29Z"
     }
   ]
 }
