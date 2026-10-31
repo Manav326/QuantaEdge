@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9628fb5891844322c5506a49395404147709ae13dccc0bdc500fe33052c56eca",
+  "raw_analysis_sha256": "f3a4d972d49a0972cfa82ddc401a4a52bb1c669c21024df82649d8fa3c3121c9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164536,11 +164536,11 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
-        "visual_type": "uncertain",
+        "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt ",
+          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
           "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
@@ -164548,32 +164548,32 @@
           "combustion",
           "oxygen",
           "carbon dioxide",
-          "fire",
+          "fireflies",
           "bioluminescence",
           "combustible substances",
           "paper",
-          "fireflies",
-          "carbon",
-          "oxygen",
+          "combustible",
+          "chemical change",
+          "air",
+          "fire",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the role of oxygen in combustion and provides examples of how it affects the burning of candles and fireflies.",
         "limitations": [
-          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not provide specific instructions on how to test for carbon dioxide gas."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41229189518",
-      "checkpointed_at": "2026-10-31T19:57:04Z",
+      "checkpointed_at": "2026-10-31T20:01:55Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
-        "visual_type": "uncertain",
+        "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt ",
+          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
           "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
@@ -164581,19 +164581,19 @@
           "combustion",
           "oxygen",
           "carbon dioxide",
-          "fire",
+          "fireflies",
           "bioluminescence",
           "combustible substances",
           "paper",
-          "fireflies",
-          "carbon",
-          "oxygen",
+          "combustible",
+          "chemical change",
+          "air",
+          "fire",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the role of oxygen in combustion and provides examples of how it affects the burning of candles and fireflies.",
         "limitations": [
-          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not provide specific instructions on how to test for carbon dioxide gas."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -176407,6 +176407,230 @@
           "The image does not show any diagrams or charts.",
           "The image does not include any equations or formulas."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "745d27b3a4cd09caa530e26b",
+      "asset_sha256": "1bbc671ea56d105ead306266623aa69aa3ea560463f552ca174d04ea0ca1359b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/1bbc671ea56d105ead306266623aa69aa3ea560463f552ca174d04ea0ca1359b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a hook at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:03:23Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a hook at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f6e11a5ac620038abc1b9ecb",
+      "asset_sha256": "1a7824f53fbd9b5968035ac33a010f7469e2e24e44d40e9593f3e357cf6c498d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/1a7824f53fbd9b5968035ac33a010f7469e2e24e44d40e9593f3e357cf6c498d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue carabiner attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "rocks",
+          "pebbles",
+          "sediments",
+          "wind",
+          "flowing water"
+        ],
+        "context_relation": "The image is related to the topic of erosion, which is discussed in the text.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is stated in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:05:11Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue carabiner attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "rocks",
+          "pebbles",
+          "sediments",
+          "wind",
+          "flowing water"
+        ],
+        "context_relation": "The image is related to the topic of erosion, which is discussed in the text.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is stated in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f19a5617b3cb4794ccdc69dd",
+      "asset_sha256": "092ddb1eca27b143d2dfe8a7fe09d07a573a21401f5881ffa20e0a9f39b05f55",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/092ddb1eca27b143d2dfe8a7fe09d07a573a21401f5881ffa20e0a9f39b05f55.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a full page from a textbook discussing erosion, specifically mentioning fine sand and its formation from rock pebbles, soil, and sediments due to natural forces like wind and flowing water. It also mentions an example of erosion during a landslide and how river rocks and pebbles can appear smoother due to constant erosion.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "fine sand",
+          "rock pebbles",
+          "soil",
+          "sediments",
+          "natural forces",
+          "wind",
+          "flowing water",
+          "landslide",
+          "physical change",
+          "river rocks",
+          "pebbles",
+          "constant erosion"
+        ],
+        "context_relation": "The image is a textbook page discussing erosion, its causes, and effects.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or graphs.",
+          "The image does not include any equations or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:07:13Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a full page from a textbook discussing erosion, specifically mentioning fine sand and its formation from rock pebbles, soil, and sediments due to natural forces like wind and flowing water. It also mentions an example of erosion during a landslide and how river rocks and pebbles can appear smoother due to constant erosion.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "fine sand",
+          "rock pebbles",
+          "soil",
+          "sediments",
+          "natural forces",
+          "wind",
+          "flowing water",
+          "landslide",
+          "physical change",
+          "river rocks",
+          "pebbles",
+          "constant erosion"
+        ],
+        "context_relation": "The image is a textbook page discussing erosion, its causes, and effects.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or graphs.",
+          "The image does not include any equations or formulas."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4e4b807c09d95334dd03e153",
+      "asset_sha256": "4548d194dcbde3a25c22f6a36d4d0ed95cbc594295de45699c91a8a37286c35c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/4548d194dcbde3a25c22f6a36d4d0ed95cbc594295de45699c91a8a37286c35c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with yellow and green colors.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41229189518",
+      "checkpointed_at": "2026-10-31T20:08:38Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with yellow and green colors.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
