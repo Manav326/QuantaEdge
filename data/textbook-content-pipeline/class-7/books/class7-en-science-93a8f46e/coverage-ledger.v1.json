@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2923,
-    "successful_visual_analyses": 2904,
-    "missing_visual_analyses": 4565,
+    "raw_analysis_result_rows": 2924,
+    "successful_visual_analyses": 2905,
+    "missing_visual_analyses": 4564,
     "failed_visual_analyses": 19,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4584,
+    "unresolved_count": 4583,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -117831,9 +117831,29 @@
       "asset_path": "assets/20df06e2ac110fee00f6e911754cd924a9ce5bfc6e7d56fc4adc2e86eb8563a6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in objects or substances",
+          "recovery of original form"
+        ],
+        "context_relation": "The page is discussing the concept of reversibility in changes, specifically asking students to think about which changes can be reversed and record their observations in a table.",
+        "limitations": [
+          "The page does not provide specific examples or examples of changes that can be reversed.",
+          "The page does not provide a solution or answer to the question about reversibility."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

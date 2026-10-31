@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2904,
+    "assets_selected": 2905,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "370a14cd047cb3749c3f5b8f"
+      "303e10143b2571fcd35087bc"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2900,
-    "assets_remaining": 4588,
+    "assets_analyzed": 2901,
+    "assets_remaining": 4587,
     "assets_completion_percent": 38.7,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 2899,
+    "assets_skipped_from_checkpoint": 2900,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41151884061",
-      "checkpointed_at": "2026-10-31T03:04:16Z"
+      "checkpointed_at": "2026-10-31T03:07:28Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41151884061",
-      "checkpointed_at": "2026-10-31T03:04:45Z"
+      "checkpointed_at": "2026-10-31T03:07:58Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41151884061",
-      "checkpointed_at": "2026-10-31T03:05:23Z"
+      "checkpointed_at": "2026-10-31T03:08:36Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41151884061",
-      "checkpointed_at": "2026-10-31T03:06:04Z"
+      "checkpointed_at": "2026-10-31T03:09:17Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -108834,6 +108834,45 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41151884061",
       "checkpointed_at": "2026-10-31T03:06:40Z"
+    },
+    {
+      "asset_id": "303e10143b2571fcd35087bc",
+      "asset_sha256": "20df06e2ac110fee00f6e911754cd924a9ce5bfc6e7d56fc4adc2e86eb8563a6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/20df06e2ac110fee00f6e911754cd924a9ce5bfc6e7d56fc4adc2e86eb8563a6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in objects or substances",
+          "recovery of original form"
+        ],
+        "context_relation": "The page is discussing the concept of reversibility in changes, specifically asking students to think about which changes can be reversed and record their observations in a table.",
+        "limitations": [
+          "The page does not provide specific examples or examples of changes that can be reversed.",
+          "The page does not provide a solution or answer to the question about reversibility."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41151884061",
+      "checkpointed_at": "2026-10-31T03:10:06Z"
     }
   ]
 }
