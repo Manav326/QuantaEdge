@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2961,
-    "successful_visual_analyses": 2939,
-    "missing_visual_analyses": 4527,
+    "raw_analysis_result_rows": 2965,
+    "successful_visual_analyses": 2943,
+    "missing_visual_analyses": 4523,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4549,
+    "unresolved_count": 4545,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -118948,9 +118948,29 @@
       "asset_path": "assets/f7db10431240fa37493a87d3e6c06ea972353dae12a173e86a741111f7c2c30a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with?",
+          "Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in objects or substances",
+          "recovery of original form"
+        ],
+        "context_relation": "The page discusses the concept of reversibility of changes in objects or substances.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations of reversible changes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -118966,9 +118986,16 @@
       "asset_path": "assets/f1a51538cc3f04efb8245ed419968b3e2cc00e159bc37c14862bc16c3115bcdb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -118984,9 +119011,29 @@
       "asset_path": "assets/4b557fc014662a74b1872b178fd1cd6832264473a5a89822c1751fc00269f73e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in objects or substances",
+          "recovery of original form"
+        ],
+        "context_relation": "The text is discussing the concept of reversibility in changes, specifically asking students to think about which changes can be reversed and record their observations in a table.",
+        "limitations": [
+          "The text does not provide specific examples or examples of changes that can be reversed.",
+          "The text does not provide a solution or answer to the question of whether changes are permanent or reversible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -119002,9 +119049,29 @@
       "asset_path": "assets/5b45af1669360c92dc75f0ca32d03dd145a6d4fc9f7a014b950e023ad3a960cc.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with?",
+          "Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in objects or substances",
+          "recovery of original form"
+        ],
+        "context_relation": "The page discusses the concept of reversibility of changes in objects or substances.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations of reversible changes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

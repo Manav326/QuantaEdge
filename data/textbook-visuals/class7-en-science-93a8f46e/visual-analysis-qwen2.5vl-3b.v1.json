@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2939,
+    "assets_selected": 2943,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "b87e826217d23ed980f7e59b",
-      "e93f041fdf251bffd3defffd",
-      "ebd11ff83f7b30364b62f1f6",
-      "d4221eef7dc9649791341f0a"
+      "acba594fb4dbdc0cad56644c",
+      "7e89510e7a56cbb4388eed31",
+      "e8631c720af9718f9671d523",
+      "c1e3b846872a42ecf2865828"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2938,
-    "assets_remaining": 4550,
-    "assets_completion_percent": 39.2,
+    "assets_analyzed": 2942,
+    "assets_remaining": 4546,
+    "assets_completion_percent": 39.3,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2934,
+    "assets_skipped_from_checkpoint": 2938,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41163662926",
-      "checkpointed_at": "2026-10-31T07:30:47Z"
+      "checkpointed_at": "2026-10-31T07:38:11Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -109983,6 +109983,149 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41163662926",
       "checkpointed_at": "2026-10-31T07:36:56Z"
+    },
+    {
+      "asset_id": "acba594fb4dbdc0cad56644c",
+      "asset_sha256": "f7db10431240fa37493a87d3e6c06ea972353dae12a173e86a741111f7c2c30a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/f7db10431240fa37493a87d3e6c06ea972353dae12a173e86a741111f7c2c30a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with?",
+          "Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in objects or substances",
+          "recovery of original form"
+        ],
+        "context_relation": "The page discusses the concept of reversibility of changes in objects or substances.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations of reversible changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:39:59Z"
+    },
+    {
+      "asset_id": "7e89510e7a56cbb4388eed31",
+      "asset_sha256": "f1a51538cc3f04efb8245ed419968b3e2cc00e159bc37c14862bc16c3115bcdb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/f1a51538cc3f04efb8245ed419968b3e2cc00e159bc37c14862bc16c3115bcdb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:41:32Z"
+    },
+    {
+      "asset_id": "e8631c720af9718f9671d523",
+      "asset_sha256": "4b557fc014662a74b1872b178fd1cd6832264473a5a89822c1751fc00269f73e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/4b557fc014662a74b1872b178fd1cd6832264473a5a89822c1751fc00269f73e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in objects or substances",
+          "recovery of original form"
+        ],
+        "context_relation": "The text is discussing the concept of reversibility in changes, specifically asking students to think about which changes can be reversed and record their observations in a table.",
+        "limitations": [
+          "The text does not provide specific examples or examples of changes that can be reversed.",
+          "The text does not provide a solution or answer to the question of whether changes are permanent or reversible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:43:18Z"
+    },
+    {
+      "asset_id": "c1e3b846872a42ecf2865828",
+      "asset_sha256": "5b45af1669360c92dc75f0ca32d03dd145a6d4fc9f7a014b950e023ad3a960cc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/5b45af1669360c92dc75f0ca32d03dd145a6d4fc9f7a014b950e023ad3a960cc.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with?",
+          "Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in objects or substances",
+          "recovery of original form"
+        ],
+        "context_relation": "The page discusses the concept of reversibility of changes in objects or substances.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations of reversible changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41163662926",
+      "checkpointed_at": "2026-10-31T07:45:00Z"
     }
   ]
 }
