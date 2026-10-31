@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1c357305ebbbf0ce8593e065fd3f659dcf96bddf59febc4cbe1a929c95234072",
+  "raw_analysis_sha256": "0f3f1c14a5c67157ed1fa4bd0ff13b7a8ea95bed1b3fad86013b16c46ef992c6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:55:26Z",
+      "checkpointed_at": "2026-10-31T12:59:56Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:56:04Z",
+      "checkpointed_at": "2026-10-31T13:00:34Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:56:54Z",
+      "checkpointed_at": "2026-10-31T13:01:24Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:57:48Z",
+      "checkpointed_at": "2026-10-31T13:02:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -175416,6 +175416,50 @@
         "limitations": [
           "The image does not provide specific details about the location or the geological features.",
           "The image does not contain any text or labels that provide additional context or information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0a45bf66257dde07794c760e",
+      "asset_sha256": "9b2ca58169191f9956ab9c624665174239165c83c72dd12c943c1016e0f041bb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/9b2ca58169191f9956ab9c624665174239165c83c72dd12c943c1016e0f041bb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rocky coastal area with a red ribbon tied to a rock.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a natural coastal scene with a red ribbon tied to a rock.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a still photograph, not a diagram or chart.",
+          "The image does not provide any information about the location or context of the scene."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41195883841",
+      "checkpointed_at": "2026-10-31T13:03:25Z",
+      "effective_analysis": {
+        "visual_summary": "A rocky coastal area with a red ribbon tied to a rock.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a natural coastal scene with a red ribbon tied to a rock.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a still photograph, not a diagram or chart.",
+          "The image does not provide any information about the location or context of the scene."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

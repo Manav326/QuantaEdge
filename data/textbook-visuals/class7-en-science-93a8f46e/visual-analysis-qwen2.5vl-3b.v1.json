@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2994,
+    "assets_selected": 2995,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "6e136be486882eb838d480ad"
+      "0a45bf66257dde07794c760e"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2990,
-    "assets_remaining": 4498,
+    "assets_analyzed": 2991,
+    "assets_remaining": 4497,
     "assets_completion_percent": 39.9,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 2989,
+    "assets_skipped_from_checkpoint": 2990,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:55:26Z"
+      "checkpointed_at": "2026-10-31T12:59:56Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:56:04Z"
+      "checkpointed_at": "2026-10-31T13:00:34Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:56:54Z"
+      "checkpointed_at": "2026-10-31T13:01:24Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
-      "checkpointed_at": "2026-10-31T12:57:48Z"
+      "checkpointed_at": "2026-10-31T13:02:17Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -111824,6 +111824,36 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41195883841",
       "checkpointed_at": "2026-10-31T12:58:55Z"
+    },
+    {
+      "asset_id": "0a45bf66257dde07794c760e",
+      "asset_sha256": "9b2ca58169191f9956ab9c624665174239165c83c72dd12c943c1016e0f041bb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/9b2ca58169191f9956ab9c624665174239165c83c72dd12c943c1016e0f041bb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rocky coastal area with a red ribbon tied to a rock.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a natural coastal scene with a red ribbon tied to a rock.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a still photograph, not a diagram or chart.",
+          "The image does not provide any information about the location or context of the scene."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41195883841",
+      "checkpointed_at": "2026-10-31T13:03:25Z"
     }
   ]
 }
