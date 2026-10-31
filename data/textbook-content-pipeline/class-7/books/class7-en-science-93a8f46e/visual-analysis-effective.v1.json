@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2b9689b3d5a4fb43cae9af9d52f50e10c7dbd2ead600579465ec652b1f19f87f",
+  "raw_analysis_sha256": "49bf89491a20809b652fbccfca29c5dda8ffd567b269ec30725793580ea41653",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41241313268",
-      "checkpointed_at": "2026-10-31T22:08:49Z",
+      "checkpointed_at": "2026-10-31T22:12:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41241313268",
-      "checkpointed_at": "2026-10-31T22:09:19Z",
+      "checkpointed_at": "2026-10-31T22:12:35Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41241313268",
-      "checkpointed_at": "2026-10-31T22:09:58Z",
+      "checkpointed_at": "2026-10-31T22:13:13Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41241313268",
-      "checkpointed_at": "2026-10-31T22:10:40Z",
+      "checkpointed_at": "2026-10-31T22:13:54Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -178199,6 +178199,46 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4e23e4954ea9696dd7b81464",
+      "asset_sha256": "5b9ef839a55a731a976ac0c5513189eba11091c809e8df1978d6795ac2ee12ac",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/5b9ef839a55a731a976ac0c5513189eba11091c809e8df1978d6795ac2ee12ac.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a person's face with a neutral expression.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear if the image is a full page or a cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41241313268",
+      "checkpointed_at": "2026-10-31T22:14:29Z",
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a person's face with a neutral expression.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear if the image is a full page or a cropped figure."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
