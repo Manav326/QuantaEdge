@@ -78,9 +78,26 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual("DRAFT_VISION_ANALYSIS_ONLY", result["analysis_status"])
         self.assertEqual(1, result["summary"]["assets_analyzed"])
         self.assertFalse(result["summary"]["publication_allowed"])
+        self.assertIn("duration_sample_count", result["summary"])
+        self.assertIn("total_model_seconds_recorded", result["summary"])
+        self.assertIn("started_at", result["results"][0])
+        self.assertIn("completed_at", result["results"][0])
+        self.assertIn("duration_seconds", result["results"][0])
         self.assertEqual("diagram", result["results"][0]["analysis"]["visual_type"])
         self.assertEqual(original, self.inventory_path.read_bytes())
 
+
+    def test_empty_visual_inventory_does_not_claim_complete_or_one_hundred_percent(self):
+        inventory = json.loads(self.inventory_path.read_text(encoding="utf-8"))
+        inventory["assets"] = []
+        self.inventory_path.write_text(json.dumps(inventory), encoding="utf-8")
+        result = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434", model="qwen2.5vl:3b",
+            max_assets=1, include_page_previews=True, opener=self._opener,
+        )
+        self.assertEqual("IN_PROGRESS", result["layer_status"])
+        self.assertIsNone(result["completed_at"])
+        self.assertEqual(0.0, result["summary"]["assets_completion_percent"])
 
     def test_unknown_visual_type_is_conservatively_normalized_for_review(self):
         result = _json_object_from_response({

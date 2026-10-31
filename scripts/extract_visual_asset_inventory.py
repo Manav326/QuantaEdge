@@ -13,6 +13,8 @@ import json
 import mimetypes
 import re
 import sys
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -99,6 +101,15 @@ def build_inventory(
     render_page_previews: bool = True,
     preview_width: int = 1200,
 ) -> dict[str, Any]:
+    layer_started_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    layer_started_clock = time.monotonic()
+    prior_timing: dict[str, Any] = {}
+    previous_path = output_dir / "visual-inventory.v1.json"
+    if previous_path.is_file():
+        try:
+            prior_timing = (json.loads(previous_path.read_text(encoding="utf-8")).get("timing") or {})
+        except (OSError, UnicodeError, json.JSONDecodeError, AttributeError):
+            prior_timing = {}
     if fitz is None:
         raise RuntimeError("PyMuPDF is required. Install it with: python -m pip install 'PyMuPDF>=1.24,<2'")
     if not pdf_path.is_file():
@@ -240,8 +251,19 @@ def build_inventory(
                 "human_review_required": True,
             })
 
+        layer_completed_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        layer_elapsed = round(time.monotonic() - layer_started_clock, 3)
         result = {
             "schema_version": "quantaedge.visual-inventory.v1",
+            "timing": {
+                "layer": 1, "status": "COMPLETE",
+                "created_at": prior_timing.get("created_at") or layer_started_at,
+                "started_at": layer_started_at, "completed_at": layer_completed_at,
+                "last_progress_at": layer_completed_at,
+                "attempt_elapsed_seconds": layer_elapsed,
+                "total_elapsed_seconds": round(float(prior_timing.get("total_elapsed_seconds", 0) or 0) + layer_elapsed, 3),
+                "timing_basis": "Monotonic time around PDF scan, embedded-image extraction and page-preview rendering",
+            },
             "inventory_status": "DRAFT_VISUAL_INVENTORY_ONLY",
             "source": {
                 "book_id": book_id,
