@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6403bdcc915a8303fb831239c704b4da2813e5f2cd7fe1c1b800a94882877291",
+  "raw_analysis_sha256": "43728a2da349abdeb6d60bc5aa7ebd8b583f01ae02fd0dc60975dd220932b0fa",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T01:40:03Z",
+      "checkpointed_at": "2026-10-31T01:52:54Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T01:41:06Z",
+      "checkpointed_at": "2026-10-31T01:53:55Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T01:41:57Z",
+      "checkpointed_at": "2026-10-31T01:54:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -79296,7 +79296,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41061654369",
+      "run_id": "41141375591",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -79423,6 +79423,84 @@
         "concepts": [],
         "context_relation": "The image is a background or border for a diagram or illustration.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6193543afdeb9ed0be2df4f7",
+      "asset_sha256": "fbbcfaa47d5171185da1bcb99ed18e5652222e297c775c4b516af544f7afee2d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 175,
+      "asset_path": "assets/fbbcfaa47d5171185da1bcb99ed18e5652222e297c775c4b516af544f7afee2d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23efa6e96bdf60cef8b4d3a915b5645446863cb2113a8e3e547a61d50a15c80d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pot-in-pot cooler setup with a small pot inside a larger pot, covered with a lid or wet jute sack.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Small pot",
+          "Place a lid or wet jute",
+          "sack to cover the top of",
+          "the smaller pot.",
+          "You can also make",
+          "a drawing of the",
+          "pot-in-pot cooler once it",
+          "is ready.",
+          "Allow 4–5 hours fo",
+          "Layer of sand",
+          "Large pot",
+          "Fig. 8.7: A pot-in-pot cooler"
+        ],
+        "concepts": [
+          "Pot-in-pot cooler",
+          "Lid",
+          "Wet jute sack",
+          "Sand layer",
+          "Drawing"
+        ],
+        "context_relation": "The image is a visual representation of a step-by-step guide for creating a pot-in-pot cooler.",
+        "limitations": [
+          "The image does not show the actual process of creating the pot-in-pot cooler."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141375591",
+      "checkpointed_at": "2026-10-31T02:01:35Z",
+      "effective_analysis": {
+        "visual_summary": "A pot-in-pot cooler setup with a small pot inside a larger pot, covered with a lid or wet jute sack.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Small pot",
+          "Place a lid or wet jute",
+          "sack to cover the top of",
+          "the smaller pot.",
+          "You can also make",
+          "a drawing of the",
+          "pot-in-pot cooler once it",
+          "is ready.",
+          "Allow 4–5 hours fo",
+          "Layer of sand",
+          "Large pot",
+          "Fig. 8.7: A pot-in-pot cooler"
+        ],
+        "concepts": [
+          "Pot-in-pot cooler",
+          "Lid",
+          "Wet jute sack",
+          "Sand layer",
+          "Drawing"
+        ],
+        "context_relation": "The image is a visual representation of a step-by-step guide for creating a pot-in-pot cooler.",
+        "limitations": [
+          "The image does not show the actual process of creating the pot-in-pot cooler."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

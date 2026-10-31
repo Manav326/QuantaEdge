@@ -14,13 +14,13 @@
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "2249feba9d9de2d28593e04b",
-      "8e056534d5a845bf27f6cb6e"
+      "a5c1484ab6df1a2776c3833a",
+      "6193543afdeb9ed0be2df4f7"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1532,
-    "assets_remaining": 546,
-    "assets_completion_percent": 73.7,
+    "assets_analyzed": 1533,
+    "assets_remaining": 545,
+    "assets_completion_percent": 73.8,
     "assets_failed": 21,
     "assets_skipped_from_checkpoint": 1532,
     "batch_limit": 5,
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T01:40:03Z"
+      "checkpointed_at": "2026-10-31T01:52:54Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T01:41:06Z"
+      "checkpointed_at": "2026-10-31T01:53:55Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T01:41:57Z"
+      "checkpointed_at": "2026-10-31T01:54:45Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -52080,7 +52080,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41061654369",
+      "run_id": "41141375591",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -52162,6 +52162,53 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41061654369",
       "checkpointed_at": "2026-10-30T15:57:02Z"
+    },
+    {
+      "asset_id": "6193543afdeb9ed0be2df4f7",
+      "asset_sha256": "fbbcfaa47d5171185da1bcb99ed18e5652222e297c775c4b516af544f7afee2d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 175,
+      "asset_path": "assets/fbbcfaa47d5171185da1bcb99ed18e5652222e297c775c4b516af544f7afee2d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23efa6e96bdf60cef8b4d3a915b5645446863cb2113a8e3e547a61d50a15c80d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pot-in-pot cooler setup with a small pot inside a larger pot, covered with a lid or wet jute sack.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Small pot",
+          "Place a lid or wet jute",
+          "sack to cover the top of",
+          "the smaller pot.",
+          "You can also make",
+          "a drawing of the",
+          "pot-in-pot cooler once it",
+          "is ready.",
+          "Allow 4–5 hours fo",
+          "Layer of sand",
+          "Large pot",
+          "Fig. 8.7: A pot-in-pot cooler"
+        ],
+        "concepts": [
+          "Pot-in-pot cooler",
+          "Lid",
+          "Wet jute sack",
+          "Sand layer",
+          "Drawing"
+        ],
+        "context_relation": "The image is a visual representation of a step-by-step guide for creating a pot-in-pot cooler.",
+        "limitations": [
+          "The image does not show the actual process of creating the pot-in-pot cooler."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41141375591",
+      "checkpointed_at": "2026-10-31T02:01:35Z"
     }
   ]
 }
