@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fdfb6991568556ad20e87d946aca0e92ff9d176539b87cbad7d93acb06040c93",
+  "raw_analysis_sha256": "2b9689b3d5a4fb43cae9af9d52f50e10c7dbd2ead600579465ec652b1f19f87f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41241313268",
-      "checkpointed_at": "2026-10-31T22:05:32Z",
+      "checkpointed_at": "2026-10-31T22:08:49Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41241313268",
-      "checkpointed_at": "2026-10-31T22:06:02Z",
+      "checkpointed_at": "2026-10-31T22:09:19Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41241313268",
-      "checkpointed_at": "2026-10-31T22:06:42Z",
+      "checkpointed_at": "2026-10-31T22:09:58Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41241313268",
-      "checkpointed_at": "2026-10-31T22:07:24Z",
+      "checkpointed_at": "2026-10-31T22:10:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -178158,6 +178158,42 @@
       "checkpointed_at": "2026-10-31T22:08:01Z",
       "effective_analysis": {
         "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f9b0e158ee4fce7bd31ee440",
+      "asset_sha256": "91db0bb0bdf5daabe46664b1db27783c1ec80abea77909700ccb37f513ecd4ba",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/91db0bb0bdf5daabe46664b1db27783c1ec80abea77909700ccb37f513ecd4ba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e394dc595f0caaf00e65903298997560f2e6a5605ab03f5eb966d069aa7330ed",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41241313268",
+      "checkpointed_at": "2026-10-31T22:11:16Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like object.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
