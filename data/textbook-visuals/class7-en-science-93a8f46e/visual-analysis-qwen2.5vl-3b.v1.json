@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2909,
+    "assets_selected": 2913,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "83302c1af541a4059f4baf51",
-      "63d5f205557bf8d1aebf7afc",
-      "df2b913ae1d9901abd9af9da",
-      "a992fb5dcff93cb443b9e520"
+      "6bab1e66aba3f02bc8a8e450",
+      "dd39affa2a85e48acab3ffae",
+      "d0954a79df81bdaef5ff1f57",
+      "b42ed7ec4527f624a73efca5"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2908,
-    "assets_remaining": 4580,
-    "assets_completion_percent": 38.8,
+    "assets_analyzed": 2912,
+    "assets_remaining": 4576,
+    "assets_completion_percent": 38.9,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2904,
+    "assets_skipped_from_checkpoint": 2908,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41157962776",
-      "checkpointed_at": "2026-10-31T04:54:33Z"
+      "checkpointed_at": "2026-10-31T05:03:00Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -108975,6 +108975,135 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41157962776",
       "checkpointed_at": "2026-10-31T05:01:40Z"
+    },
+    {
+      "asset_id": "6bab1e66aba3f02bc8a8e450",
+      "asset_sha256": "65293e89cbe98a1ca8953ba7aa3600f0928bb0b9f7df83e0337bf5d7a7bfd298",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/65293e89cbe98a1ca8953ba7aa3600f0928bb0b9f7df83e0337bf5d7a7bfd298.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with?",
+          "Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in objects or substances",
+          "recovery of original form"
+        ],
+        "context_relation": "The page discusses the concept of reversibility of changes in objects or substances.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations of reversible changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:04:52Z"
+    },
+    {
+      "asset_id": "dd39affa2a85e48acab3ffae",
+      "asset_sha256": "f0ddd6fd8417f12addd88b9f148dd678c2c6d6f221c4de1a389c9d59fe8c8720",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/f0ddd6fd8417f12addd88b9f148dd678c2c6d6f221c4de1a389c9d59fe8c8720.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:06:26Z"
+    },
+    {
+      "asset_id": "d0954a79df81bdaef5ff1f57",
+      "asset_sha256": "8f7cc3669dc5ae3c0ff90ecb21299eb316c42b0044c2b3b4e8d04b789c000747",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/8f7cc3669dc5ae3c0ff90ecb21299eb316c42b0044c2b3b4e8d04b789c000747.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Activity 5.8: Let us think",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:07:58Z"
+    },
+    {
+      "asset_id": "b42ed7ec4527f624a73efca5",
+      "asset_sha256": "b5ff6c9df9388bf68241f993c65e3389cb3163ca7471109e807a7142db5c9078",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 86,
+      "asset_path": "assets/b5ff6c9df9388bf68241f993c65e3389cb3163ca7471109e807a7142db5c9078.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "502f9eabb163b408ba7a07c893840778d8152e82c01cdc5c0604169fde341207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the reversibility of changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5.5 Are Changes Permanent?",
+          "Once something has undergone a change, can we get it back in its original form?",
+          "Activity 5.8: Let us think",
+          "Think again about all the changes that we have discussed or talked about so far. In which of these can we get back the object or substance in the form we started with? Record your observations in Table 5.2.",
+          "Table 5.2: Can changes be reversed?"
+        ],
+        "concepts": [
+          "reversibility of changes",
+          "changes in substances",
+          "reversing changes"
+        ],
+        "context_relation": "The page is discussing the concept of reversibility of changes in substances.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations of reversible changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41157962776",
+      "checkpointed_at": "2026-10-31T05:09:53Z"
     }
   ]
 }
