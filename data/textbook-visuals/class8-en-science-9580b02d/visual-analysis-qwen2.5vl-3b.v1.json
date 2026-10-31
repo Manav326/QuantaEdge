@@ -14,8 +14,8 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "35ff0b921f1e0b0945a8f8df",
-      "1851a22784c9105601dfe039"
+      "2e220d251d13a2e76c57e33b",
+      "ed47972eb74639ec9bc709d3"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1392,
@@ -1229,7 +1229,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T08:53:11Z"
+      "checkpointed_at": "2026-10-31T09:03:52Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20171,7 +20171,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T08:54:02Z"
+      "checkpointed_at": "2026-10-31T09:04:43Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38449,7 +38449,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T08:54:58Z"
+      "checkpointed_at": "2026-10-31T09:05:39Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43461,7 +43461,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface, with instructions on how to perform an activity related to atmospheric pressure.",
         "visual_type": "diagram",
         "visible_text": [
           "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
@@ -43481,30 +43481,27 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "air pressure",
+          "pressure difference",
+          "atmospheric force",
           "SI unit of pressure",
+          "practical unit of air pressure",
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
         "context_relation": "educational",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual experiment of pulling the sucker off the surface.",
           "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41174381479",
-      "checkpointed_at": "2026-10-31T07:46:25Z"
+      "run_id": "41182122873",
+      "checkpointed_at": "2026-10-31T09:09:13Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44162,7 +44159,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41174381479",
+      "run_id": "41182122873",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8453ed48b424d35135da97dc7e71bee083fa1f723c8a8c6a82f0180913e97114",
+  "raw_analysis_sha256": "049ab5ca97280e0bdd103bb87590f3592cab73a8fce294efa69cb53a2ae9c7bd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T08:53:11Z",
+      "checkpointed_at": "2026-10-31T09:03:52Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29347,7 +29347,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T08:54:02Z",
+      "checkpointed_at": "2026-10-31T09:04:43Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
         "visual_type": "page_with_multiple_visuals",
@@ -57868,7 +57868,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41182122873",
-      "checkpointed_at": "2026-10-31T08:54:58Z",
+      "checkpointed_at": "2026-10-31T09:05:39Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
@@ -65672,7 +65672,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface, with instructions on how to perform an activity related to atmospheric pressure.",
         "visual_type": "diagram",
         "visible_text": [
           "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
@@ -65692,32 +65692,29 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "air pressure",
+          "pressure difference",
+          "atmospheric force",
           "SI unit of pressure",
+          "practical unit of air pressure",
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
         "context_relation": "educational",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual experiment of pulling the sucker off the surface.",
           "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41174381479",
-      "checkpointed_at": "2026-10-31T07:46:25Z",
+      "run_id": "41182122873",
+      "checkpointed_at": "2026-10-31T09:09:13Z",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface, with instructions on how to perform an activity related to atmospheric pressure.",
         "visual_type": "diagram",
         "visible_text": [
           "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
@@ -65737,22 +65734,19 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "air pressure",
+          "pressure difference",
+          "atmospheric force",
           "SI unit of pressure",
+          "practical unit of air pressure",
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
         "context_relation": "educational",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual experiment of pulling the sucker off the surface.",
           "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
@@ -66772,7 +66766,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41174381479",
+      "run_id": "41182122873",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
