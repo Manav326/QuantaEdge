@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3010,
+    "assets_selected": 3012,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "6d0863277c050d53889f9f4b",
-      "b55918d8255943a96f7cd0e0"
+      "50d72bf166da2b44d7235e02",
+      "b1559c186d4f49df795e9113"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3007,
-    "assets_remaining": 4481,
+    "assets_analyzed": 3009,
+    "assets_remaining": 4479,
     "assets_completion_percent": 40.2,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3005,
+    "assets_skipped_from_checkpoint": 3007,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:56:16Z"
+      "checkpointed_at": "2026-10-31T18:03:51Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:57:40Z"
+      "checkpointed_at": "2026-10-31T18:05:22Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104925,7 +104925,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
-      "checkpointed_at": "2026-10-31T17:59:11Z"
+      "checkpointed_at": "2026-10-31T18:06:59Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -112339,6 +112339,92 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41216099484",
       "checkpointed_at": "2026-10-31T18:02:32Z"
+    },
+    {
+      "asset_id": "50d72bf166da2b44d7235e02",
+      "asset_sha256": "3ebd3ba0667e3d5ff7c624f8e1a455b75173ed651d85e0d7be51736e517db69a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/3ebd3ba0667e3d5ff7c624f8e1a455b75173ed651d85e0d7be51736e517db69a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a piece of paper and gesturing with her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "river rocks",
+          "pebbles",
+          "sediments",
+          "wind",
+          "flowing water"
+        ],
+        "context_relation": "The image is related to the topic of erosion, which is discussed in the text.",
+        "limitations": [
+          "The image does not show the actual process of erosion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T18:08:48Z"
+    },
+    {
+      "asset_id": "b1559c186d4f49df795e9113",
+      "asset_sha256": "8eb9b768d38e17a0bf91c4bf098c20316e86a56663f5d6eda98ff350cca86a7a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/8eb9b768d38e17a0bf91c4bf098c20316e86a56663f5d6eda98ff350cca86a7a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d6fd5df8b18b30c1856f5ac2f3d0242c5cb16e222263d0d15ce21b42b74b4187",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a muddy riverbed with fine sand and rocks.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "5.7.2 Erosion",
+          "Have you noticed fine sand collecting on riverbeds or in lakes?",
+          "This sand is formed when rock pebbles, soil, and sediments are broken down and moved from one location to another by natural forces like wind and flowing water. This process is called erosion.",
+          "Erosion during a landslide is an example of a physical change.",
+          "River rocks and pebbles often appear smoother due to the constant erosion caused by the flowing water."
+        ],
+        "concepts": [
+          "erosion",
+          "physical change",
+          "landslide",
+          "flowing water",
+          "rock pebbles",
+          "soil",
+          "sediments",
+          "natural forces"
+        ],
+        "context_relation": "The image illustrates the concept of erosion, showing how fine sand and rocks are formed and moved by natural forces.",
+        "limitations": [
+          "The image does not show the actual process of erosion, but rather a result of it."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41216099484",
+      "checkpointed_at": "2026-10-31T18:10:37Z"
     }
   ]
 }
