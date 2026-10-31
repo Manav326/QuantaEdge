@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3005,
-    "successful_visual_analyses": 2981,
-    "missing_visual_analyses": 4483,
+    "raw_analysis_result_rows": 3009,
+    "successful_visual_analyses": 2985,
+    "missing_visual_analyses": 4479,
     "failed_visual_analyses": 24,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4507,
+    "unresolved_count": 4503,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -120330,9 +120330,18 @@
       "asset_path": "assets/f6723b509cbadf7e9e43c5bab14ce763482dc639bc1a20aad610ea35b186d2b0.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is a blank page with no visible content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -120348,9 +120357,16 @@
       "asset_path": "assets/59e4ae3c1044dc2000ad79a3c68184fa2ac27a0898040b33b3024085559eaf89.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -120366,9 +120382,28 @@
       "asset_path": "assets/9c02c1f74880fef6334dc97b0a3c19b9dea56b1f47cc176b8b2523a1d216d533.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific applications"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for why the changes are undesirable or desirable.",
+          "The text does not include any visual aids or diagrams to support the discussion.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -120384,9 +120419,16 @@
       "asset_path": "assets/6cbedf1a35f0bf15ddc34e5014431ca496ea6fafbb6952c81f877593e5ca7995.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

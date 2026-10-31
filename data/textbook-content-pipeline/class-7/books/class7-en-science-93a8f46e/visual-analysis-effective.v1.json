@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ac79ff8a4de7047aa97c0daa1a5763d251b37311eea5cfc98e37d7373b1cfe44",
+  "raw_analysis_sha256": "0b43e8d9dd4652b65ab299f92f867fe4a8203ace57068a84763d23852efc83be",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41174380359",
-      "checkpointed_at": "2026-10-31T10:46:50Z",
+      "checkpointed_at": "2026-10-31T10:54:44Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -174731,6 +174731,178 @@
           "The text does not provide specific examples or explanations for the benefits of decomposition.",
           "The text does not include any visual aids or diagrams to support the concepts discussed."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3e2700a73d807ca772ee73fd",
+      "asset_sha256": "f6723b509cbadf7e9e43c5bab14ce763482dc639bc1a20aad610ea35b186d2b0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/f6723b509cbadf7e9e43c5bab14ce763482dc639bc1a20aad610ea35b186d2b0.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is a blank page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:56:11Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is a blank page with no visible content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cfdad47fb45f366f229f7002",
+      "asset_sha256": "59e4ae3c1044dc2000ad79a3c68184fa2ac27a0898040b33b3024085559eaf89",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/59e4ae3c1044dc2000ad79a3c68184fa2ac27a0898040b33b3024085559eaf89.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:57:41Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "057c9714c69e7d2cf319e866",
+      "asset_sha256": "9c02c1f74880fef6334dc97b0a3c19b9dea56b1f47cc176b8b2523a1d216d533",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/9c02c1f74880fef6334dc97b0a3c19b9dea56b1f47cc176b8b2523a1d216d533.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific applications"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for why the changes are undesirable or desirable.",
+          "The text does not include any visual aids or diagrams to support the discussion.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T10:59:32Z",
+      "effective_analysis": {
+        "visual_summary": "Text discussing the concept of undesirable changes and their potential for desirable outcomes in different contexts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "On the other hand, some changes may be undesirable, such as the rusting of iron or the decay of food during its storage.",
+          "A change that is undesirable in some situations may be desirable in other situations.",
+          "For example, decomposition of food can be very useful in converting food waste into compost."
+        ],
+        "concepts": [
+          "undesirable changes",
+          "desirable outcomes",
+          "context-specific applications"
+        ],
+        "context_relation": "The text discusses the idea that changes that are undesirable in one context can be beneficial in another, using the example of food decomposition.",
+        "limitations": [
+          "The text does not provide specific examples or explanations for why the changes are undesirable or desirable.",
+          "The text does not include any visual aids or diagrams to support the discussion.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8d1bc5fb67613aced749a0ee",
+      "asset_sha256": "6cbedf1a35f0bf15ddc34e5014431ca496ea6fafbb6952c81f877593e5ca7995",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/6cbedf1a35f0bf15ddc34e5014431ca496ea6fafbb6952c81f877593e5ca7995.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab10a1db89b87dd0d1283bee5e1136dbca21ad17399443ff557cf2e29f5429e0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41174380359",
+      "checkpointed_at": "2026-10-31T11:01:09Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
