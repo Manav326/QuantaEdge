@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1067a7ae9ca748971a1af3662f0fd412265da4fe3dafaa65f13f116cbe5d1568",
+  "raw_analysis_sha256": "9073fa12c8c83eefa957751dafd6dce23316efe0da5f9a721e60782c5c90f20c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T00:12:47Z",
+      "checkpointed_at": "2026-10-31T00:30:02Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -51124,79 +51124,21 @@
     {
       "asset_id": "9f232483ce16973cb62998c9",
       "asset_sha256": "7454fc423f4fb78f48d2de98763f7fb9e48ffd0de92a90a79ec9fed660a27a8c",
+      "page_text_context_sha256": "5bde1d283bd7146d7766dafe9af7c2dcb529978fc840569292aa4955ea365085",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 82,
       "asset_path": "page-0082.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "5bde1d283bd7146d7766dafe9af7c2dcb529978fc840569292aa4955ea365085",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Question about prediction and conclusion of magnetic materials.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "Was your prediction correct for all objects? Which\nmaterials stuck to the magnet? What conclusion can you\ndraw?",
-          "Through this activity, we found out that some of the\nobjects were attracted to the magnet and stuck to it, while\nothers were not. The materials which are attracted towards\na magnet are called magnetic materials.\nThe metal iron is a magnetic material.\nNickel and cobalt are other metals that are\nalso ",
-          "Which materials listed in Table 4.1 were\nfound to be non-magnetic?",
-          "4.2 Poles of Magnet",
-          "Activity 4.2: Let us investigate",
-          "Spread some iron filings (very small pieces of iron) on a\nsheet of paper.",
-          "Place a bar magnet over them. Tap the paper and\nobserve carefully what happens to the iron filings.",
-          "Do you observe anything special about the way they stick\nto the magnet? Do the iron filings stick all over the magnet\nuniformly? Or do the iron filings stick more at some places?",
-          "We find that maximum iron filings stick near the ends of\nthe bar magnet, as shown in Fig. 4.4, while a very few iron\nfilings stick at the remaining part of the magnet.",
-          "Fig. 4.4: Iron filings sticking\n    to a bar magnet",
-          "If we repeat this\n    activity with\n    magnets of other\n    shapes, do we get\n    the same result?"
-        ],
-        "concepts": [
-          "magnetic materials",
-          "non-magnetic materials",
-          "magnetic poles",
-          "iron filings",
-          "magnet"
-        ],
-        "context_relation": "exploration of magnetic properties and behavior",
-        "limitations": [
-          "No specific figures or equations are provided.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41141375591",
-      "checkpointed_at": "2026-10-31T00:17:10Z",
-      "effective_analysis": {
-        "visual_summary": "Question about prediction and conclusion of magnetic materials.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "Was your prediction correct for all objects? Which\nmaterials stuck to the magnet? What conclusion can you\ndraw?",
-          "Through this activity, we found out that some of the\nobjects were attracted to the magnet and stuck to it, while\nothers were not. The materials which are attracted towards\na magnet are called magnetic materials.\nThe metal iron is a magnetic material.\nNickel and cobalt are other metals that are\nalso ",
-          "Which materials listed in Table 4.1 were\nfound to be non-magnetic?",
-          "4.2 Poles of Magnet",
-          "Activity 4.2: Let us investigate",
-          "Spread some iron filings (very small pieces of iron) on a\nsheet of paper.",
-          "Place a bar magnet over them. Tap the paper and\nobserve carefully what happens to the iron filings.",
-          "Do you observe anything special about the way they stick\nto the magnet? Do the iron filings stick all over the magnet\nuniformly? Or do the iron filings stick more at some places?",
-          "We find that maximum iron filings stick near the ends of\nthe bar magnet, as shown in Fig. 4.4, while a very few iron\nfilings stick at the remaining part of the magnet.",
-          "Fig. 4.4: Iron filings sticking\n    to a bar magnet",
-          "If we repeat this\n    activity with\n    magnets of other\n    shapes, do we get\n    the same result?"
-        ],
-        "concepts": [
-          "magnetic materials",
-          "non-magnetic materials",
-          "magnetic poles",
-          "iron filings",
-          "magnet"
-        ],
-        "context_relation": "exploration of magnetic properties and behavior",
-        "limitations": [
-          "No specific figures or equations are provided.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -57344,8 +57286,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41136561707",
-      "checkpointed_at": "2026-10-30T23:34:28Z",
+      "run_id": "41141375591",
+      "checkpointed_at": "2026-10-31T00:36:39Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -58558,7 +58500,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41136561707",
+      "run_id": "41141375591",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -60540,7 +60482,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41136561707",
+      "run_id": "41141375591",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
