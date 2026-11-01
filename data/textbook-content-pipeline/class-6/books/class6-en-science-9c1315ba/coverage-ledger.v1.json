@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1583,
-    "successful_visual_analyses": 1558,
-    "missing_visual_analyses": 495,
+    "raw_analysis_result_rows": 1586,
+    "successful_visual_analyses": 1561,
+    "missing_visual_analyses": 492,
     "failed_visual_analyses": 25,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 520,
+    "unresolved_count": 517,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -59387,9 +59387,20 @@
       "asset_path": "assets/ac916e935d9487df5f34267f13278eea815d521812e91322672c1837569bad38.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0677CH09' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH09"
+        ],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59405,9 +59416,19 @@
       "asset_path": "assets/85b50fdc8f376c439d4c9feea351118735df0ab5bf5bd56ad9956c947b5320ce.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of aged, brown paper with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear content of the paper",
+          "Torn edge suggests it might be a page from a book"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59423,9 +59444,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

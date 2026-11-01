@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8cc24e90bc6b1a081b689689006a3e60999f7dc0b4d2ad40b83f4f65b6c9906e",
+  "raw_analysis_sha256": "8da1eb3a8ff37c2b11cd86e09e362ce38a291655e93b3dc5bf0b3f0cc81c3a10",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41351477202",
-      "checkpointed_at": "2026-11-01T23:33:58Z",
+      "checkpointed_at": "2026-11-01T23:45:31Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41351477202",
-      "checkpointed_at": "2026-11-01T23:34:50Z",
+      "checkpointed_at": "2026-11-01T23:46:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -80882,6 +80882,132 @@
           "The image does not provide any specific information or context related to the textbook content.",
           "The visible text is incomplete and does not contribute to the understanding of the image.",
           "The image does not show any educational content or educational material."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fadb43eee99e694f460b7aac",
+      "asset_sha256": "ac916e935d9487df5f34267f13278eea815d521812e91322672c1837569bad38",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 181,
+      "asset_path": "assets/ac916e935d9487df5f34267f13278eea815d521812e91322672c1837569bad38.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d93593f8f0d06587366e719ec60d9ed4cc18b0741f9bb56ca32a66e598d60ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0677CH09' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH09"
+        ],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "checkpointed_at": "2026-11-01T23:48:08Z",
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0677CH09' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH09"
+        ],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7bb896c866006e122be05813",
+      "asset_sha256": "85b50fdc8f376c439d4c9feea351118735df0ab5bf5bd56ad9956c947b5320ce",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 181,
+      "asset_path": "assets/85b50fdc8f376c439d4c9feea351118735df0ab5bf5bd56ad9956c947b5320ce.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d93593f8f0d06587366e719ec60d9ed4cc18b0741f9bb56ca32a66e598d60ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of aged, brown paper with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear content of the paper",
+          "Torn edge suggests it might be a page from a book"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "checkpointed_at": "2026-11-01T23:49:47Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of aged, brown paper with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear content of the paper",
+          "Torn edge suggests it might be a page from a book"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2a184c2c5c3e9e2c7056305f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 181,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d93593f8f0d06587366e719ec60d9ed4cc18b0741f9bb56ca32a66e598d60ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "checkpointed_at": "2026-11-01T23:50:06Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "No visible text or images present on the page."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
