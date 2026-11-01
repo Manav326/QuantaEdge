@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3086,
+    "assets_selected": 3087,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "8dc8ef2cc75dfbb85bf9f7ff"
+      "eeca27a2c1b40c35264400a8"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3082,
-    "assets_remaining": 4406,
+    "assets_analyzed": 3083,
+    "assets_remaining": 4405,
     "assets_completion_percent": 41.2,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 3081,
+    "assets_skipped_from_checkpoint": 3082,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:10:09Z"
+      "checkpointed_at": "2026-11-01T05:13:26Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:10:39Z"
+      "checkpointed_at": "2026-11-01T05:13:56Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:11:19Z"
+      "checkpointed_at": "2026-11-01T05:14:35Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:12:01Z"
+      "checkpointed_at": "2026-11-01T05:15:16Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -114874,6 +114874,39 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
       "checkpointed_at": "2026-11-01T05:12:37Z"
+    },
+    {
+      "asset_id": "eeca27a2c1b40c35264400a8",
+      "asset_sha256": "409de6c41d9e91594eaecbab078f63a52b49cb979530f89a7c38289cbe80b8ce",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/409de6c41d9e91594eaecbab078f63a52b49cb979530f89a7c38289cbe80b8ce.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ddd6f0ea35e2763ec2a507e595fcf8ccaa58b531929960f2347386ba22dad548",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green chameleon perched on a branch with leaves in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "chameleon",
+          "branch",
+          "leaves",
+          "background"
+        ],
+        "context_relation": "The image is a visual representation of a chameleon in its natural habitat.",
+        "limitations": [
+          "The image does not provide any information about the chameleon's behavior or environment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41271484658",
+      "checkpointed_at": "2026-11-01T05:15:54Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9f6c23a542354c107ddb92721f610893fd68b8c9db05f0433e400ea7e050a3a8",
+  "raw_analysis_sha256": "96739554e8cf2acf7c98058e3c62e24f0f37f7b4fe255d7fdbde54cb7f2fb857",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:10:09Z",
+      "checkpointed_at": "2026-11-01T05:13:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:10:39Z",
+      "checkpointed_at": "2026-11-01T05:13:56Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:11:19Z",
+      "checkpointed_at": "2026-11-01T05:14:35Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:12:01Z",
+      "checkpointed_at": "2026-11-01T05:15:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -180058,6 +180058,56 @@
         "context_relation": "The image is unrelated to the text about yeast and baking bread.",
         "limitations": [
           "The image is a simple illustration and does not provide any information about yeast or baking bread."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eeca27a2c1b40c35264400a8",
+      "asset_sha256": "409de6c41d9e91594eaecbab078f63a52b49cb979530f89a7c38289cbe80b8ce",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/409de6c41d9e91594eaecbab078f63a52b49cb979530f89a7c38289cbe80b8ce.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ddd6f0ea35e2763ec2a507e595fcf8ccaa58b531929960f2347386ba22dad548",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green chameleon perched on a branch with leaves in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "chameleon",
+          "branch",
+          "leaves",
+          "background"
+        ],
+        "context_relation": "The image is a visual representation of a chameleon in its natural habitat.",
+        "limitations": [
+          "The image does not provide any information about the chameleon's behavior or environment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41271484658",
+      "checkpointed_at": "2026-11-01T05:15:54Z",
+      "effective_analysis": {
+        "visual_summary": "A green chameleon perched on a branch with leaves in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "chameleon",
+          "branch",
+          "leaves",
+          "background"
+        ],
+        "context_relation": "The image is a visual representation of a chameleon in its natural habitat.",
+        "limitations": [
+          "The image does not provide any information about the chameleon's behavior or environment."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
