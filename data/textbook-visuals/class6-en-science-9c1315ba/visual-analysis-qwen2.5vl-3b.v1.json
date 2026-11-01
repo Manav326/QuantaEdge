@@ -14,8 +14,8 @@
       "8d35dc673109641624e2223c",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "f9f31ac3c179b5d02598fdea",
-      "c48690152ba372ff22e25783"
+      "574da890e37eba2e524a04ad",
+      "6333fd35b5de4c52b03510d8"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1546,
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T14:31:44Z"
+      "checkpointed_at": "2026-11-01T14:46:44Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -37948,7 +37948,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T14:32:42Z"
+      "checkpointed_at": "2026-11-01T14:47:42Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44108,7 +44108,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T14:33:29Z"
+      "checkpointed_at": "2026-11-01T14:48:29Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -47829,7 +47829,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41249191043",
+      "run_id": "41310160876",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -47901,7 +47901,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41249191043",
+      "run_id": "41310160876",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
