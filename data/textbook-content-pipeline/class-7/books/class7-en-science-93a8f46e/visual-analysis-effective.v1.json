@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "429e74f3ebc7bbdb3e295d22b6ce9861af3bcbd1a7b2c7b6f1c943a9df46a860",
+  "raw_analysis_sha256": "27e88dba1a4c3746df530cd137f7cc16daad8b3320272542ad855b8887475208",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41276460075",
-      "checkpointed_at": "2026-11-01T07:14:11Z",
+      "checkpointed_at": "2026-11-01T07:21:15Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -180419,6 +180419,222 @@
           "The image does not contain any visual elements.",
           "The visible text is a continuous paragraph without any diagrams or illustrations."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "afa6e87ba78192ecb835ef23",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 93,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "24180151b14ae0ffbe85fd44abf5059f926784f91672d056f857265f152ab987",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about the growth and changes of a plant from seed to seedling.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Adolescence:\nA Stage of Growth 6\nand Change",
+          "The journey of a plant generally begins with the germination of a seed. With proper nourishment, the seed becomes a sapling and matures into a young plant. This journey is marked by some specific changes. Some of the visible changes are an increase in its height, the appearance of more leaves, and t",
+          "It is quite unlikely that a seedling will develop the capabilities to produce its own seeds immediately after germination. It needs to grow and",
+          "The journey of a plant generally begins with the germination of a seed. With proper nourishment, the seed becomes a sapling and matures into a young plant. This journey is marked by some specific changes. Some of the visible changes are an increase in its height, the appearance of more leaves, and t",
+          "It is quite unlikely that a seedling will develop the capabilities to produce its own seeds immediately after germination. It needs to grow and"
+        ],
+        "concepts": [
+          "plant growth",
+          "germination",
+          "sapling",
+          "seedling",
+          "changes in plant development"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text is incomplete and does not provide a full explanation of the plant's growth cycle."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:22:10Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page about the growth and changes of a plant from seed to seedling.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Adolescence:\nA Stage of Growth 6\nand Change",
+          "The journey of a plant generally begins with the germination of a seed. With proper nourishment, the seed becomes a sapling and matures into a young plant. This journey is marked by some specific changes. Some of the visible changes are an increase in its height, the appearance of more leaves, and t",
+          "It is quite unlikely that a seedling will develop the capabilities to produce its own seeds immediately after germination. It needs to grow and",
+          "The journey of a plant generally begins with the germination of a seed. With proper nourishment, the seed becomes a sapling and matures into a young plant. This journey is marked by some specific changes. Some of the visible changes are an increase in its height, the appearance of more leaves, and t",
+          "It is quite unlikely that a seedling will develop the capabilities to produce its own seeds immediately after germination. It needs to grow and"
+        ],
+        "concepts": [
+          "plant growth",
+          "germination",
+          "sapling",
+          "seedling",
+          "changes in plant development"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text is incomplete and does not provide a full explanation of the plant's growth cycle."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "02bc6dcb5f432dbffe778e67",
+      "asset_sha256": "d1c4706d2d8820b4df758af06be2deabebb4c88a66d8b43428a7ab636adfb97e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 93,
+      "asset_path": "page-0093.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "24180151b14ae0ffbe85fd44abf5059f926784f91672d056f857265f152ab987",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of children walking in the rain, with a background of words related to adolescence and growth.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Adolescence:",
+          "A Stage of Growth and Change",
+          "The journey of a plant generally begins with the germination of a seed. With proper nourishment, the seed becomes a sapling and matures into a young plant. This journey is marked by some specific changes. Some of the visible changes are an increase in its height, the appearance of more leaves, and t",
+          "It is quite unlikely that a seedling will develop the capabilities to produce its own seeds immediately after germination. It needs to grow and reach maturity to become capable of producing seeds. Similarly, animals also need to grow and reach maturity before they can reproduce. Some animals lay egg",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Adolescence",
+          "Growth",
+          "Change",
+          "Germination",
+          "Sapling",
+          "Maturity",
+          "Reproduction",
+          "Eggs",
+          "Birth",
+          "Growth in size",
+          "Development over time"
+        ],
+        "context_relation": "The image illustrates the concept of growth and change in adolescence, using the analogy of a plant's growth from a seed to a mature plant.",
+        "limitations": [
+          "The image does not provide specific details about the stages of adolescence or the changes that occur during this period."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:26:24Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of children walking in the rain, with a background of words related to adolescence and growth.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Adolescence:",
+          "A Stage of Growth and Change",
+          "The journey of a plant generally begins with the germination of a seed. With proper nourishment, the seed becomes a sapling and matures into a young plant. This journey is marked by some specific changes. Some of the visible changes are an increase in its height, the appearance of more leaves, and t",
+          "It is quite unlikely that a seedling will develop the capabilities to produce its own seeds immediately after germination. It needs to grow and reach maturity to become capable of producing seeds. Similarly, animals also need to grow and reach maturity before they can reproduce. Some animals lay egg",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Adolescence",
+          "Growth",
+          "Change",
+          "Germination",
+          "Sapling",
+          "Maturity",
+          "Reproduction",
+          "Eggs",
+          "Birth",
+          "Growth in size",
+          "Development over time"
+        ],
+        "context_relation": "The image illustrates the concept of growth and change in adolescence, using the analogy of a plant's growth from a seed to a mature plant.",
+        "limitations": [
+          "The image does not provide specific details about the stages of adolescence or the changes that occur during this period."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "646805f64b10655addfb5b8d",
+      "asset_sha256": "80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about the stages of human life.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:27:58Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about the stages of human life.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6a530d286df64891da01fe89",
+      "asset_sha256": "f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:29:29Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
