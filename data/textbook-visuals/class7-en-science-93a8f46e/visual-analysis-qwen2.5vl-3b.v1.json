@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3049,
+    "assets_selected": 3053,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "ef9071583e23cd6c3a03f9a5",
-      "87ab3fe7b5e2dba9a8b75342",
-      "9713c0d59907ab064853358f",
-      "5eb81bfd67723a92db2badc4"
+      "019b5000cb2ae7b1ab4aed3c",
+      "813c9b4581643ea93822317c",
+      "7a62252d3d800122383671ed",
+      "9e593e37c8ba4e8104a0d928"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3048,
-    "assets_remaining": 4440,
-    "assets_completion_percent": 40.7,
+    "assets_analyzed": 3052,
+    "assets_remaining": 4436,
+    "assets_completion_percent": 40.8,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 3044,
+    "assets_skipped_from_checkpoint": 3048,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41247523567",
-      "checkpointed_at": "2026-11-01T00:00:14Z"
+      "checkpointed_at": "2026-11-01T00:09:22Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -113725,6 +113725,143 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41247523567",
       "checkpointed_at": "2026-11-01T00:08:11Z"
+    },
+    {
+      "asset_id": "019b5000cb2ae7b1ab4aed3c",
+      "asset_sha256": "c1f9664794b106672f6b4be48c5225028886eab8b0d37b2ca70fa256dedf2ff5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/c1f9664794b106672f6b4be48c5225028886eab8b0d37b2ca70fa256dedf2ff5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "486e8ce4edb099bd6219de13976026b9c2221b2a205547c55f1d0826b2e6166d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl climbing a rope ladder.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A girl climbing a rope ladder."
+        ],
+        "concepts": [
+          "climbing",
+          "rope ladder",
+          "girl"
+        ],
+        "context_relation": "The image shows a girl climbing a rope ladder, which is an illustration.",
+        "limitations": [
+          "The image does not provide information about the girl's actions or the ladder's purpose."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:11:01Z"
+    },
+    {
+      "asset_id": "813c9b4581643ea93822317c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "486e8ce4edb099bd6219de13976026b9c2221b2a205547c55f1d0826b2e6166d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:11:14Z"
+    },
+    {
+      "asset_id": "7a62252d3d800122383671ed",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "486e8ce4edb099bd6219de13976026b9c2221b2a205547c55f1d0826b2e6166d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:11:26Z"
+    },
+    {
+      "asset_id": "9e593e37c8ba4e8104a0d928",
+      "asset_sha256": "44cc8f565f5a36a054bfbd2b0cca9d0f4458b17e03824515ca58d3a7b6bae2fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 90,
+      "asset_path": "page-0090.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "486e8ce4edb099bd6219de13976026b9c2221b2a205547c55f1d0826b2e6166d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a question about physical and chemical changes.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "4. Fill in the blanks in the following statements:",
+          "(i) Nalini observed that the handle of her cycle has got brown deposits. The brown deposits are due to ________, and this is a________ change.",
+          "(ii) Folding a handkerchief is a _________________ change and can be________.",
+          "(iii) A chemical process in which a substance reacts with oxygen with evolution of heat is called ________, and this is a ________ change.",
+          "(iv) Magnesium, when burnt in air, produces a substance called ________. The substance formed is ________ in nature. Burning of magnesium is a ________ change.",
+          "5. Are the changes of water to ice and water to steam, physical or chemical? Explain.",
+          "6. Is curdling of milk a physical or chemical change? Justify your statement.",
+          "7. Natural factors, such as wind, rain, etc., help in the formation of soil from rocks. Is this change physical or chemical and why?",
+          "8. Read the following story titled 'Eco-friendly Prithvi', and tick the most appropriate option(s) given in the brackets. Provide a suitable title of your choice for the story.",
+          "Prithvi is preparing a meal in the kitchen. He chops vegetables, peels potatoes, and cuts fruits (physical changes/chemical changes). He collects the seeds, fruits, and vegetable peels into a clay pot (physical change/chemical change). The fruits, vegetable peels, and other materials begin to decomp",
+          "9. Some changes are given here. Write physical changes in the area marked 'A' and chemical changes in the area marked 'B'. Enter the changes which are both physical and chemical in the area marked 'C'."
+        ],
+        "concepts": [
+          "physical change",
+          "chemical change",
+          "curdling of milk",
+          "formation of soil",
+          "Eco-friendly Prithvi"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:16:07Z"
     }
   ]
 }

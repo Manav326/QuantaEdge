@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3072,
-    "successful_visual_analyses": 3049,
-    "missing_visual_analyses": 4416,
+    "raw_analysis_result_rows": 3076,
+    "successful_visual_analyses": 3053,
+    "missing_visual_analyses": 4412,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4439,
+    "unresolved_count": 4435,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -122581,9 +122581,24 @@
       "asset_path": "assets/c1f9664794b106672f6b4be48c5225028886eab8b0d37b2ca70fa256dedf2ff5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl climbing a rope ladder.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A girl climbing a rope ladder."
+        ],
+        "concepts": [
+          "climbing",
+          "rope ladder",
+          "girl"
+        ],
+        "context_relation": "The image shows a girl climbing a rope ladder, which is an illustration.",
+        "limitations": [
+          "The image does not provide information about the girl's actions or the ladder's purpose."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -122599,9 +122614,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -122617,9 +122641,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -122635,9 +122668,37 @@
       "asset_path": "page-0090.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a question about physical and chemical changes.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "4. Fill in the blanks in the following statements:",
+          "(i) Nalini observed that the handle of her cycle has got brown deposits. The brown deposits are due to ________, and this is a________ change.",
+          "(ii) Folding a handkerchief is a _________________ change and can be________.",
+          "(iii) A chemical process in which a substance reacts with oxygen with evolution of heat is called ________, and this is a ________ change.",
+          "(iv) Magnesium, when burnt in air, produces a substance called ________. The substance formed is ________ in nature. Burning of magnesium is a ________ change.",
+          "5. Are the changes of water to ice and water to steam, physical or chemical? Explain.",
+          "6. Is curdling of milk a physical or chemical change? Justify your statement.",
+          "7. Natural factors, such as wind, rain, etc., help in the formation of soil from rocks. Is this change physical or chemical and why?",
+          "8. Read the following story titled 'Eco-friendly Prithvi', and tick the most appropriate option(s) given in the brackets. Provide a suitable title of your choice for the story.",
+          "Prithvi is preparing a meal in the kitchen. He chops vegetables, peels potatoes, and cuts fruits (physical changes/chemical changes). He collects the seeds, fruits, and vegetable peels into a clay pot (physical change/chemical change). The fruits, vegetable peels, and other materials begin to decomp",
+          "9. Some changes are given here. Write physical changes in the area marked 'A' and chemical changes in the area marked 'B'. Enter the changes which are both physical and chemical in the area marked 'C'."
+        ],
+        "concepts": [
+          "physical change",
+          "chemical change",
+          "curdling of milk",
+          "formation of soil",
+          "Eco-friendly Prithvi"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
