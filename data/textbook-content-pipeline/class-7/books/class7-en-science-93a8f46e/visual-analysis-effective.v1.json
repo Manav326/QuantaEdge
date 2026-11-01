@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "25b05801b86e411b82f0f73519d25399577db6c526fc008b0806638ba253938c",
+  "raw_analysis_sha256": "313ccf919a76ee2815ef2da3a16a155406eb8169163da8edc7ea94239ee7fb2f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41276460075",
-      "checkpointed_at": "2026-11-01T07:33:59Z",
+      "checkpointed_at": "2026-11-01T07:38:37Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -180958,6 +180958,158 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is a visual representation of a diagram or illustration.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f8c7eee86c3f1981f51209b6",
+      "asset_sha256": "4491983e26f19f37ea131955573015aeccd0c5df5af1bf08ff1cc51e4a174bfd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/4491983e26f19f37ea131955573015aeccd0c5df5af1bf08ff1cc51e4a174bfd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue speech bubble with a jagged edge, possibly representing a thought or idea.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a thought or idea, possibly related to the text about the stages of life.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:40:07Z",
+      "effective_analysis": {
+        "visual_summary": "A blue speech bubble with a jagged edge, possibly representing a thought or idea.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a thought or idea, possibly related to the text about the stages of life.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ad4cd1a99cd633c5f341f9b5",
+      "asset_sha256": "954c398d9057700ba173ba018a3bbddf8cf61cadbb84a194e0bf99cc07fc6fae",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/954c398d9057700ba173ba018a3bbddf8cf61cadbb84a194e0bf99cc07fc6fae.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue outlined rectangle with a pointed tail, resembling a speech bubble or a label.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a label or a speech bubble, possibly used to highlight or annotate text.",
+        "limitations": [
+          "The image does not contain any text or information that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:41:44Z",
+      "effective_analysis": {
+        "visual_summary": "A blue outlined rectangle with a pointed tail, resembling a speech bubble or a label.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a label or a speech bubble, possibly used to highlight or annotate text.",
+        "limitations": [
+          "The image does not contain any text or information that can be analyzed for content or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e475b6d07ab332bae9cc3508",
+      "asset_sha256": "e1585534ef1c451dc0f0059c9dab76925317af749720856dcce9c9f1032fbb02",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/e1585534ef1c451dc0f0059c9dab76925317af749720856dcce9c9f1032fbb02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long scroll with a golden frame, possibly representing a historical or literary text.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a decorative element or a placeholder for text.",
+        "limitations": [
+          "The image does not contain any text or information that can be analyzed for educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:43:17Z",
+      "effective_analysis": {
+        "visual_summary": "A long scroll with a golden frame, possibly representing a historical or literary text.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a decorative element or a placeholder for text.",
+        "limitations": [
+          "The image does not contain any text or information that can be analyzed for educational content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "95f596302efa6a56eb4bbec9",
+      "asset_sha256": "8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue line drawing of a person in a swimming position, with a dotted line indicating the path of the swimmer.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a swimming position, possibly related to the physical changes in human development stages.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:44:51Z",
+      "effective_analysis": {
+        "visual_summary": "A blue line drawing of a person in a swimming position, with a dotted line indicating the path of the swimmer.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a swimming position, possibly related to the physical changes in human development stages.",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
