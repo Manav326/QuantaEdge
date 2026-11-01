@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3096,
+    "assets_selected": 3100,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "afa6e87ba78192ecb835ef23",
-      "02bc6dcb5f432dbffe778e67",
-      "646805f64b10655addfb5b8d",
-      "6a530d286df64891da01fe89"
+      "db7b1b02de42a06492a125fc",
+      "5636f272ef0d6534e9853c16",
+      "c68c710b5f8ba50c07b25642",
+      "580c0beeabd138813364fec4"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3095,
-    "assets_remaining": 4393,
-    "assets_completion_percent": 41.3,
+    "assets_analyzed": 3099,
+    "assets_remaining": 4389,
+    "assets_completion_percent": 41.4,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 3091,
+    "assets_skipped_from_checkpoint": 3095,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41276460075",
-      "checkpointed_at": "2026-11-01T07:21:15Z"
+      "checkpointed_at": "2026-11-01T07:30:47Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -115277,6 +115277,118 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41276460075",
       "checkpointed_at": "2026-11-01T07:29:29Z"
+    },
+    {
+      "asset_id": "db7b1b02de42a06492a125fc",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about human stages of life.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about human stages of life."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:32:18Z"
+    },
+    {
+      "asset_id": "5636f272ef0d6534e9853c16",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about human stages of life.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about human stages of life."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:32:26Z"
+    },
+    {
+      "asset_id": "c68c710b5f8ba50c07b25642",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about human stages of life.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about human stages of life."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:32:34Z"
+    },
+    {
+      "asset_id": "580c0beeabd138813364fec4",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about human stages of life.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about human stages of life."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:32:42Z"
     }
   ]
 }
