@@ -14,12 +14,12 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "d6a3b284f120b97594630433",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "36ec2d1cc980e6810b5a1e89",
+      "293aa2158666ee1b7bf1ef43"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1392,
-    "assets_remaining": 899,
+    "assets_analyzed": 1393,
+    "assets_remaining": 898,
     "assets_completion_percent": 60.8,
     "assets_failed": 19,
     "assets_skipped_from_checkpoint": 1392,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:10:33Z"
+      "checkpointed_at": "2026-11-01T17:22:38Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:11:29Z"
+      "checkpointed_at": "2026-11-01T17:23:34Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:12:38Z"
+      "checkpointed_at": "2026-11-01T17:24:42Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -46467,11 +46467,40 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41313632671",
+      "run_id": "41320380183",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "293aa2158666ee1b7bf1ef43",
+      "asset_sha256": "47260830355595f97b79f97e42a48cfef72c1047d7e4ef8e3c9dd8037892f84a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 121,
+      "asset_path": "assets/47260830355595f97b79f97e42a48cfef72c1047d7e4ef8e3c9dd8037892f84a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76446f44fca13a85b60a76142df04ba10ba5cabaacdd39a0ac83b0e309c6aafc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a cigarette, with a thoughtful expression.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is a cartoon illustration and not a diagram or chart."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:31:21Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2a7afc3c34ccbbdb102bde3d6cf661ac0c6fac775949521cc37c2aa798f61bed",
+  "raw_analysis_sha256": "5f8e3a56114cded5c5a83d9c4de31d1fd51f1ff63904b6c5dc2402c543f611fc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:10:33Z",
+      "checkpointed_at": "2026-11-01T17:22:38Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:11:29Z",
+      "checkpointed_at": "2026-11-01T17:23:34Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:12:38Z",
+      "checkpointed_at": "2026-11-01T17:24:42Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -70306,13 +70306,55 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41313632671",
+      "run_id": "41320380183",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "293aa2158666ee1b7bf1ef43",
+      "asset_sha256": "47260830355595f97b79f97e42a48cfef72c1047d7e4ef8e3c9dd8037892f84a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 121,
+      "asset_path": "assets/47260830355595f97b79f97e42a48cfef72c1047d7e4ef8e3c9dd8037892f84a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76446f44fca13a85b60a76142df04ba10ba5cabaacdd39a0ac83b0e309c6aafc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a cigarette, with a thoughtful expression.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is a cartoon illustration and not a diagram or chart."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:31:21Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a cigarette, with a thoughtful expression.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is a cartoon illustration and not a diagram or chart."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
