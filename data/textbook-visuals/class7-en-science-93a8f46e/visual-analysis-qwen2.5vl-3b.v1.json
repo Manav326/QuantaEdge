@@ -15,11 +15,11 @@
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c16577a15e78e04e26b60ff"
+      "32f1bdd320890562fa75ba2c"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3113,
-    "assets_remaining": 4375,
+    "assets_analyzed": 3114,
+    "assets_remaining": 4374,
     "assets_completion_percent": 41.6,
     "assets_failed": 21,
     "assets_skipped_from_checkpoint": 3113,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41294928967",
-      "checkpointed_at": "2026-11-01T11:28:07Z"
+      "checkpointed_at": "2026-11-01T11:34:02Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41294928967",
-      "checkpointed_at": "2026-11-01T11:28:45Z"
+      "checkpointed_at": "2026-11-01T11:34:40Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41294928967",
-      "checkpointed_at": "2026-11-01T11:29:35Z"
+      "checkpointed_at": "2026-11-01T11:35:30Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41294928967",
-      "checkpointed_at": "2026-11-01T11:30:28Z"
+      "checkpointed_at": "2026-11-01T11:36:23Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -115947,6 +115947,48 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
       "checkpointed_at": "2026-11-01T09:48:29Z"
+    },
+    {
+      "asset_id": "32f1bdd320890562fa75ba2c",
+      "asset_sha256": "eb80e8c81e2f8c47d74e70c5d707cc86a611a2b4959cc54e7675dcde53f267f3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/eb80e8c81e2f8c47d74e70c5d707cc86a611a2b4959cc54e7675dcde53f267f3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "612e38325539f777ef55cda4e71365e1d181ad3b876602ba4be9a750207e3359",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is performing a push-up exercise on a green mat.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and",
+          "unfold the collected slips one by one. Based on the information",
+          "on the slips, discuss the changes with the students in the class.",
+          "Change",
+          "What were the most commonly observable changes among"
+        ],
+        "concepts": [
+          "push-up exercise",
+          "green mat",
+          "slips",
+          "jar",
+          "classroom activity"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not show the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41294928967",
+      "checkpointed_at": "2026-11-01T11:37:36Z"
     }
   ]
 }
