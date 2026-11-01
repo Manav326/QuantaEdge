@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3065,
+    "assets_selected": 3069,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "22d2e5460e61729b7076f1b0",
-      "23af01790aa4af7622cd92ad",
-      "2ca6c1ef39317c2593c4567a",
-      "3dc1cc793f2cde55b531be8f"
+      "f3615978a2d1dd76453c6ea8",
+      "0104042d84269289fb4531ca",
+      "6032c25d90f1650daf3e23a6",
+      "2e784246bbafcc7ce758630a"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3064,
-    "assets_remaining": 4424,
-    "assets_completion_percent": 40.9,
+    "assets_analyzed": 3068,
+    "assets_remaining": 4420,
+    "assets_completion_percent": 41.0,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 3060,
+    "assets_skipped_from_checkpoint": 3064,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41247523567",
-      "checkpointed_at": "2026-11-01T00:33:04Z"
+      "checkpointed_at": "2026-11-01T00:41:06Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -114251,6 +114251,127 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41247523567",
       "checkpointed_at": "2026-11-01T00:39:55Z"
+    },
+    {
+      "asset_id": "f3615978a2d1dd76453c6ea8",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A list of various chemical reactions or processes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "71",
+          "Process of burning a candle; Tearing of paper; Rusting;",
+          "Curdling of milk; Ripening of fruits; Melting of ice; Folding",
+          "of clothes; Burning of magnesium and Mixing baking soda",
+          "10. The experiments shown in Fig. 5.11a, b, c, and d were",
+          "performed. Find out in which case(s) did lime water turn",
+          "chemical",
+          "and",
+          "milky and why?"
+        ],
+        "concepts": [
+          "chemical reactions",
+          "chemical processes",
+          "lime water",
+          "chemical properties"
+        ],
+        "context_relation": "The text is related to a textbook discussing chemical reactions and their effects on lime water.",
+        "limitations": [
+          "The image does not show any visual representation of the chemical reactions or the lime water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:41:25Z"
+    },
+    {
+      "asset_id": "0104042d84269289fb4531ca",
+      "asset_sha256": "2e6fc0a595325b434849132586febb00abed99f8c685c35efd1d36b3fd144377",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/2e6fc0a595325b434849132586febb00abed99f8c685c35efd1d36b3fd144377.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes containing clear liquids are placed in a test tube rack. One test tube has a red filter paper hanging over it, and the other has a white filter paper hanging over it. The test tubes are filled with clear liquids, and the filter papers are hanging over the top of the test tubes.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a setup for a chemical experiment involving filter papers and test tubes.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:43:06Z"
+    },
+    {
+      "asset_id": "6032c25d90f1650daf3e23a6",
+      "asset_sha256": "2e6fc0a595325b434849132586febb00abed99f8c685c35efd1d36b3fd144377",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/2e6fc0a595325b434849132586febb00abed99f8c685c35efd1d36b3fd144377.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes with a red filter paper hanging above them, placed on a test tube rack.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a setup for a chemical experiment involving lime water and a red filter paper.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:43:12Z"
+    },
+    {
+      "asset_id": "2e784246bbafcc7ce758630a",
+      "asset_sha256": "2e6fc0a595325b434849132586febb00abed99f8c685c35efd1d36b3fd144377",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/2e6fc0a595325b434849132586febb00abed99f8c685c35efd1d36b3fd144377.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes with a red filter paper hanging above them, placed on a test tube rack.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a setup for a chemical experiment involving lime water and a red filter paper.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:43:19Z"
     }
   ]
 }
