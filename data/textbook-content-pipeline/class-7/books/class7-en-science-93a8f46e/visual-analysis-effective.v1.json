@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "76ef3ae5f3c21e10e26138ff4de1f672b543a6f1c7964e0b212c5a3c1b49e32d",
+  "raw_analysis_sha256": "679d627dc14d4c0213118f7d3ca1f1d359745df66d4329d62b82bcba2c3cdbe5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41312317588",
-      "checkpointed_at": "2026-11-01T15:15:12Z",
+      "checkpointed_at": "2026-11-01T15:20:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41312317588",
-      "checkpointed_at": "2026-11-01T15:15:49Z",
+      "checkpointed_at": "2026-11-01T15:21:36Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41312317588",
-      "checkpointed_at": "2026-11-01T15:16:38Z",
+      "checkpointed_at": "2026-11-01T15:22:25Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41312317588",
-      "checkpointed_at": "2026-11-01T15:17:30Z",
+      "checkpointed_at": "2026-11-01T15:23:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -181891,6 +181891,56 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "28f2e760e5e233b0ee66a127",
+      "asset_sha256": "968b29665b444ce0bc39d699b2ce9d2bb57a7b8112664c328bb21384469afb98",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/968b29665b444ce0bc39d699b2ce9d2bb57a7b8112664c328bb21384469afb98.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "612e38325539f777ef55cda4e71365e1d181ad3b876602ba4be9a750207e3359",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two women standing next to each other, one measuring the other's height.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "measuring height",
+          "comparison of heights",
+          "measurement"
+        ],
+        "context_relation": "The image is related to the concept of measuring height.",
+        "limitations": [
+          "The image does not provide specific measurements or numerical data.",
+          "The image does not show a full page or multiple visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41312317588",
+      "checkpointed_at": "2026-11-01T15:24:27Z",
+      "effective_analysis": {
+        "visual_summary": "Two women standing next to each other, one measuring the other's height.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "measuring height",
+          "comparison of heights",
+          "measurement"
+        ],
+        "context_relation": "The image is related to the concept of measuring height.",
+        "limitations": [
+          "The image does not provide specific measurements or numerical data.",
+          "The image does not show a full page or multiple visual elements."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
