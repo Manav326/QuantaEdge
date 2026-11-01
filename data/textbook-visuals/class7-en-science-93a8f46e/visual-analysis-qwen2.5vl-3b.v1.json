@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3134,
+    "assets_selected": 3136,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "d502858c96e471f42566025a",
-      "812ae0332851334f7d2ab707"
+      "efeaa41a5e9d4ddf820e2ec0",
+      "ae4c1c33854e89d14a92a8f1"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3131,
-    "assets_remaining": 4357,
+    "assets_analyzed": 3133,
+    "assets_remaining": 4355,
     "assets_completion_percent": 41.8,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 3129,
+    "assets_skipped_from_checkpoint": 3131,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T21:02:39Z"
+      "checkpointed_at": "2026-11-01T21:09:34Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T21:03:46Z"
+      "checkpointed_at": "2026-11-01T21:10:40Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T21:05:17Z"
+      "checkpointed_at": "2026-11-01T21:12:11Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -116588,6 +116588,67 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
       "checkpointed_at": "2026-11-01T21:07:52Z"
+    },
+    {
+      "asset_id": "efeaa41a5e9d4ddf820e2ec0",
+      "asset_sha256": "a75d7fd8a721f42e3625b252d6c22be8f47972a3b3ce65b64b4768d8834f3e01",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/a75d7fd8a721f42e3625b252d6c22be8f47972a3b3ce65b64b4768d8834f3e01.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T21:13:20Z"
+    },
+    {
+      "asset_id": "ae4c1c33854e89d14a92a8f1",
+      "asset_sha256": "ba2f69bb9155eab4ab5185e944430dc1d8dce92654de987e906c8c42d8fb5d6b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/ba2f69bb9155eab4ab5185e944430dc1d8dce92654de987e906c8c42d8fb5d6b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three men are looking at themselves in a mirror, with one man shaving his face.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "voice change",
+          "adolescent boys"
+        ],
+        "context_relation": "The image illustrates the concept of voice change in adolescent boys, showing them looking at themselves in a mirror, with one man shaving his face.",
+        "limitations": [
+          "The image does not provide specific details about the shaving process or the shaving products used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T21:14:35Z"
     }
   ]
 }

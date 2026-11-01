@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5e2d52d3d0b0b516841c6741068756d67b358354ec7564d29e4f83e848fe0aa6",
+  "raw_analysis_sha256": "021ce4fde1bef63c082afe1d26edd63825e66f297da591babb47d3d45b1873f4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T21:02:39Z",
+      "checkpointed_at": "2026-11-01T21:09:34Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T21:03:46Z",
+      "checkpointed_at": "2026-11-01T21:10:40Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -164684,7 +164684,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T21:05:17Z",
+      "checkpointed_at": "2026-11-01T21:12:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -182676,6 +182676,96 @@
         "context_relation": "The text discusses the growth of the voice box in adolescent boys and its effect on the voice.",
         "limitations": [
           "The visible text is incomplete and does not provide a full summary of the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "efeaa41a5e9d4ddf820e2ec0",
+      "asset_sha256": "a75d7fd8a721f42e3625b252d6c22be8f47972a3b3ce65b64b4768d8834f3e01",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/a75d7fd8a721f42e3625b252d6c22be8f47972a3b3ce65b64b4768d8834f3e01.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T21:13:20Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ae4c1c33854e89d14a92a8f1",
+      "asset_sha256": "ba2f69bb9155eab4ab5185e944430dc1d8dce92654de987e906c8c42d8fb5d6b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/ba2f69bb9155eab4ab5185e944430dc1d8dce92654de987e906c8c42d8fb5d6b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three men are looking at themselves in a mirror, with one man shaving his face.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "voice change",
+          "adolescent boys"
+        ],
+        "context_relation": "The image illustrates the concept of voice change in adolescent boys, showing them looking at themselves in a mirror, with one man shaving his face.",
+        "limitations": [
+          "The image does not provide specific details about the shaving process or the shaving products used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T21:14:35Z",
+      "effective_analysis": {
+        "visual_summary": "Three men are looking at themselves in a mirror, with one man shaving his face.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "voice change",
+          "adolescent boys"
+        ],
+        "context_relation": "The image illustrates the concept of voice change in adolescent boys, showing them looking at themselves in a mirror, with one man shaving his face.",
+        "limitations": [
+          "The image does not provide specific details about the shaving process or the shaving products used."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
