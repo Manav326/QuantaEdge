@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3127,
+    "assets_selected": 3128,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "de1de9561e45d0f03a78da47"
+      "1bad300fcf1a81b8244ec4d2"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3123,
-    "assets_remaining": 4365,
+    "assets_analyzed": 3124,
+    "assets_remaining": 4364,
     "assets_completion_percent": 41.7,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3122,
+    "assets_skipped_from_checkpoint": 3123,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41328329136",
-      "checkpointed_at": "2026-11-01T18:25:54Z"
+      "checkpointed_at": "2026-11-01T18:29:41Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41328329136",
-      "checkpointed_at": "2026-11-01T18:26:32Z"
+      "checkpointed_at": "2026-11-01T18:30:20Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41328329136",
-      "checkpointed_at": "2026-11-01T18:27:23Z"
+      "checkpointed_at": "2026-11-01T18:31:11Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41328329136",
-      "checkpointed_at": "2026-11-01T18:28:17Z"
+      "checkpointed_at": "2026-11-01T18:32:04Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -116301,6 +116301,68 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41328329136",
       "checkpointed_at": "2026-11-01T18:28:38Z"
+    },
+    {
+      "asset_id": "1bad300fcf1a81b8244ec4d2",
+      "asset_sha256": "a6a60263f8d24803537a80de0fb6cc4ef3cf498d06ce09c1499339d69909ff36",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 95,
+      "asset_path": "page-0095.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "612e38325539f777ef55cda4e71365e1d181ad3b876602ba4be9a750207e3359",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing changes during growing up, including height, weight, and appearance.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and unfold the collected slips one by one. Based on the information on the slips, discuss the changes with the students in the class.",
+          "What were the most commonly observable changes among students, as mentioned on the slips? List these in Table 6.1.",
+          "Table 6.1: Most common changes during growing up",
+          "S.No. Changes Your observations",
+          "1. Height",
+          "2. Weight and strength",
+          "3. Appearance",
+          "4. ...",
+          "Have you also experienced some of these changes? If yes, then it is because you are also reaching this stage gradually. This stage starts around 10 years of age and can continue up to the age of 19. It is usually a stage of development between childhood and adulthood, and is called adolescence.",
+          "While analysing Table 6.1, you might have noticed the following:",
+          "Increase in height",
+          "From birth, our body undergoes continuous growth and development including an increase in height. However, the increase in height becomes more prominent during adolescence.",
+          "Changes in body structure, weight gain, and strength",
+          "As boys grow, it might be seen that along with growing taller, they gain weight, their shoulders might become a bit broader, and their chests may get wider.",
+          "Girls also undergo changes in height and weight, and other body changes like development of breasts."
+        ],
+        "concepts": [
+          "height",
+          "weight",
+          "appearance",
+          "adolescence",
+          "growth",
+          "development",
+          "body structure",
+          "weight gain",
+          "strength",
+          "boys",
+          "girls",
+          "shoulders",
+          "chest",
+          "development of breasts"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text does not provide specific examples or data for the changes listed.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41328329136",
+      "checkpointed_at": "2026-11-01T18:35:19Z"
     }
   ]
 }
