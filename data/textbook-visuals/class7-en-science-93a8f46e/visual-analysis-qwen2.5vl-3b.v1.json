@@ -14,14 +14,14 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c16577a15e78e04e26b60ff",
-      "cc961779a46739fc9b3b3a08"
+      "90c0e946a2194b6a6883b979",
+      "4aaf455ac3caff420fe7c1bd"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3133,
-    "assets_remaining": 4355,
-    "assets_completion_percent": 41.8,
-    "assets_failed": 22,
+    "assets_analyzed": 3134,
+    "assets_remaining": 4354,
+    "assets_completion_percent": 41.9,
+    "assets_failed": 23,
     "assets_skipped_from_checkpoint": 3133,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-01T23:36:44Z"
+      "checkpointed_at": "2026-11-01T23:49:53Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-01T23:37:50Z"
+      "checkpointed_at": "2026-11-01T23:50:58Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-01T23:41:41Z"
+      "checkpointed_at": "2026-11-01T23:52:26Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -116649,6 +116649,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
       "checkpointed_at": "2026-11-01T21:14:35Z"
+    },
+    {
+      "asset_id": "90c0e946a2194b6a6883b979",
+      "asset_sha256": "6970228e656c8045348e0267284cf129dbcf1bad1b813ad4d8217afc228d502a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/6970228e656c8045348e0267284cf129dbcf1bad1b813ad4d8217afc228d502a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or document.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41353985174",
+      "checkpointed_at": "2026-11-01T23:53:25Z"
+    },
+    {
+      "asset_id": "4aaf455ac3caff420fe7c1bd",
+      "asset_sha256": "8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41353985174",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
