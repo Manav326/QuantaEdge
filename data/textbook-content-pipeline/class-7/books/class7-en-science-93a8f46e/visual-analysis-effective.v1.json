@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "313ccf919a76ee2815ef2da3a16a155406eb8169163da8edc7ea94239ee7fb2f",
+  "raw_analysis_sha256": "3ebfe3dbd250c88af31a0c2d3a1bcf5981b700c7ea54e361db3237d3f35cc1a1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41276460075",
-      "checkpointed_at": "2026-11-01T07:38:37Z",
+      "checkpointed_at": "2026-11-01T07:46:08Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -181111,6 +181111,266 @@
         "concepts": [],
         "context_relation": "The image represents a swimming position, possibly related to the physical changes in human development stages.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "73a783afcf4775502f11285c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in a textbook.",
+        "limitations": [
+          "The page is completely black and has no visible content.",
+          "No visible text or images are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:46:25Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in a textbook.",
+        "limitations": [
+          "The page is completely black and has no visible content.",
+          "No visible text or images are present on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3fb13ee3734ff2f70449dc65",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:46:41Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any visible content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7b6fcc6c1891674bb0f29082",
+      "asset_sha256": "12725cc2c24966c376fe4c764af9ec38818a01a84293ec096861ae9479a0463a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "page-0094.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the stages of human development, including infancy, childhood, adolescence, adulthood, and old age.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The journey of life of a human can be divided into different stages—infancy, childhood, adolescence, adulthood, and old age.",
+          "Each person experiences these stages at their own pace, and the duration of each stage may vary from one individual to another.",
+          "From infancy to adulthood, our bodies undergo various changes.",
+          "Until around 10–12 years of age, most changes are related to height and weight. After this, other noticeable changes begin to occur, marking the onset of adolescence. This is a period of rapid growth and development, typically occurring between the ages of 10–19. During adolescence, the body prepare",
+          "Humans, like most other living beings, can not reproduce immediately after their birth. Their bodies need to grow and reach a stage of maturity to be able to reproduce.",
+          "As humans grow and develop, they experience significant physical, emotional, and behavioural changes, along with the ability to reproduce. Some of these changes may be quite clearly observable, while others occur internally and may go unnoticed. In this chapter, you will explore adolescence, underst",
+          "During the summer vacation, Venkatesh visited his grandparents. As he entered the house, his 12-year-old cousin, Devyani came running to greet him.",
+          "Let us try to understand this interesting conversation between Venkatesh and Devyani.",
+          "Activity 6.1: Let us discuss",
+          "Take a jar and some paper slips.",
+          "Write down the changes you can notice among students as they go from Grades 5 to 8. These could be related to height, strength, behaviour, or any other aspect. Please avoid writing names on the slips."
+        ],
+        "concepts": [
+          "stages of human development",
+          "infancy",
+          "childhood",
+          "adolescence",
+          "adulthood",
+          "old age",
+          "growth and development",
+          "reproduction",
+          "adolescence",
+          "importance of adolescence",
+          "physical changes",
+          "emotional changes",
+          "behavioural changes",
+          "tallness",
+          "voice changes",
+          "height",
+          "strength",
+          "behaviour",
+          "writing names"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "The text does not provide specific examples or details about the physical, emotional, and behavioural changes mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:51:17Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the stages of human development, including infancy, childhood, adolescence, adulthood, and old age.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The journey of life of a human can be divided into different stages—infancy, childhood, adolescence, adulthood, and old age.",
+          "Each person experiences these stages at their own pace, and the duration of each stage may vary from one individual to another.",
+          "From infancy to adulthood, our bodies undergo various changes.",
+          "Until around 10–12 years of age, most changes are related to height and weight. After this, other noticeable changes begin to occur, marking the onset of adolescence. This is a period of rapid growth and development, typically occurring between the ages of 10–19. During adolescence, the body prepare",
+          "Humans, like most other living beings, can not reproduce immediately after their birth. Their bodies need to grow and reach a stage of maturity to be able to reproduce.",
+          "As humans grow and develop, they experience significant physical, emotional, and behavioural changes, along with the ability to reproduce. Some of these changes may be quite clearly observable, while others occur internally and may go unnoticed. In this chapter, you will explore adolescence, underst",
+          "During the summer vacation, Venkatesh visited his grandparents. As he entered the house, his 12-year-old cousin, Devyani came running to greet him.",
+          "Let us try to understand this interesting conversation between Venkatesh and Devyani.",
+          "Activity 6.1: Let us discuss",
+          "Take a jar and some paper slips.",
+          "Write down the changes you can notice among students as they go from Grades 5 to 8. These could be related to height, strength, behaviour, or any other aspect. Please avoid writing names on the slips."
+        ],
+        "concepts": [
+          "stages of human development",
+          "infancy",
+          "childhood",
+          "adolescence",
+          "adulthood",
+          "old age",
+          "growth and development",
+          "reproduction",
+          "adolescence",
+          "importance of adolescence",
+          "physical changes",
+          "emotional changes",
+          "behavioural changes",
+          "tallness",
+          "voice changes",
+          "height",
+          "strength",
+          "behaviour",
+          "writing names"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "The text does not provide specific examples or details about the physical, emotional, and behavioural changes mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "86bac4813479bcf6cf908715",
+      "asset_sha256": "ec7083a092a2e085067c79bda01ea88fa4f7e6929c553f0fd8eb9f52049e9545",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/ec7083a092a2e085067c79bda01ea88fa4f7e6929c553f0fd8eb9f52049e9545.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "612e38325539f777ef55cda4e71365e1d181ad3b876602ba4be9a750207e3359",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen or marker.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and",
+          "unfold the collected slips one by one. Based on the information",
+          "on the slips, discuss the changes with the students in the class.",
+          "Change",
+          "What were the most commonly observable changes among"
+        ],
+        "concepts": [
+          "slips",
+          "jar",
+          "class",
+          "information",
+          "changes",
+          "students",
+          "classroom discussion"
+        ],
+        "context_relation": "The image is related to the text about discussing changes among students in the class.",
+        "limitations": [
+          "The image does not provide specific details about the changes observed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:52:57Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen or marker.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and",
+          "unfold the collected slips one by one. Based on the information",
+          "on the slips, discuss the changes with the students in the class.",
+          "Change",
+          "What were the most commonly observable changes among"
+        ],
+        "concepts": [
+          "slips",
+          "jar",
+          "class",
+          "information",
+          "changes",
+          "students",
+          "classroom discussion"
+        ],
+        "context_relation": "The image is related to the text about discussing changes among students in the class.",
+        "limitations": [
+          "The image does not provide specific details about the changes observed."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
