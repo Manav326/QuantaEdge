@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3bd10c4da27b8a103656ddad0fc427491eefbf34908baea4c887aef914729c23",
+  "raw_analysis_sha256": "59e72023b59b981f9683e0997c392e29f8c4938623ab70d3934ed08bc7259ac5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41321735411",
-      "checkpointed_at": "2026-11-01T16:38:12Z",
+      "checkpointed_at": "2026-11-01T16:42:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41321735411",
-      "checkpointed_at": "2026-11-01T16:38:38Z",
+      "checkpointed_at": "2026-11-01T16:42:32Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41321735411",
-      "checkpointed_at": "2026-11-01T16:39:13Z",
+      "checkpointed_at": "2026-11-01T16:43:07Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41321735411",
-      "checkpointed_at": "2026-11-01T16:39:50Z",
+      "checkpointed_at": "2026-11-01T16:43:44Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -182050,6 +182050,72 @@
         "context_relation": "The image is related to the educational content about observing and discussing changes in a class setting.",
         "limitations": [
           "The image does not provide specific details about the changes being observed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "38099f9a19db63092fd0e317",
+      "asset_sha256": "101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "612e38325539f777ef55cda4e71365e1d181ad3b876602ba4be9a750207e3359",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane is flying through the air, leaving a trail of smoke behind it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and",
+          "unfold the collected slips one by one. Based on the information",
+          "on the slips, discuss the changes with the students in the class.",
+          "Change",
+          "What were the most commonly observable changes among"
+        ],
+        "concepts": [
+          "Paper airplane",
+          "Smoke trail",
+          "Class discussion",
+          "Change observation"
+        ],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide specific details about the changes observed in the slips."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41321735411",
+      "checkpointed_at": "2026-11-01T16:44:24Z",
+      "effective_analysis": {
+        "visual_summary": "A paper airplane is flying through the air, leaving a trail of smoke behind it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and",
+          "unfold the collected slips one by one. Based on the information",
+          "on the slips, discuss the changes with the students in the class.",
+          "Change",
+          "What were the most commonly observable changes among"
+        ],
+        "concepts": [
+          "Paper airplane",
+          "Smoke trail",
+          "Class discussion",
+          "Change observation"
+        ],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide specific details about the changes observed in the slips."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
