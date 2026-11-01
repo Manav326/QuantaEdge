@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "8604e838b1f1e41398ca72dd",
-      "1554b4067d24673fc7b88fc2",
-      "0d1c88ea0154d314c4c70259"
+      "f5cfd5f0dfcebd60e3212f1b",
+      "5c16577a15e78e04e26b60ff",
+      "cc961779a46739fc9b3b3a08"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3133,
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-01T23:24:25Z"
+      "checkpointed_at": "2026-11-01T23:36:44Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-01T23:25:30Z"
+      "checkpointed_at": "2026-11-01T23:37:50Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104908,8 +104908,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T21:12:11Z"
+      "run_id": "41353985174",
+      "checkpointed_at": "2026-11-01T23:41:41Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -115048,7 +115048,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41338085758",
+      "run_id": "41353985174",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -116397,7 +116397,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41338085758",
+      "run_id": "41353985174",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
