@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1397,
+    "assets_selected": 1398,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "36ec2d1cc980e6810b5a1e89",
-      "293aa2158666ee1b7bf1ef43"
+      "b6a3823bfded3159f70dec7f",
+      "4bc3627c75aa51173c7811a6"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1393,
-    "assets_remaining": 898,
-    "assets_completion_percent": 60.8,
+    "assets_analyzed": 1395,
+    "assets_remaining": 896,
+    "assets_completion_percent": 60.9,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1392,
+    "assets_skipped_from_checkpoint": 1393,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:22:38Z"
+      "checkpointed_at": "2026-11-01T17:32:48Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:23:34Z"
+      "checkpointed_at": "2026-11-01T17:33:42Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:24:42Z"
+      "checkpointed_at": "2026-11-01T17:34:48Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -46501,6 +46501,73 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
       "checkpointed_at": "2026-11-01T17:31:21Z"
+    },
+    {
+      "asset_id": "b6a3823bfded3159f70dec7f",
+      "asset_sha256": "a73b7c3700f05706abbfb7402a16a49f2e414146e7ba198708eefdcf5ed80c38",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 121,
+      "asset_path": "assets/a73b7c3700f05706abbfb7402a16a49f2e414146e7ba198708eefdcf5ed80c38.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76446f44fca13a85b60a76142df04ba10ba5cabaacdd39a0ac83b0e309c6aafc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person with braided hair, wearing an orange shirt and a red choker, with one hand on their chin and the other hand on their hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the particulate nature of matter, specifically discussing the separation of sugar particles in water.",
+        "limitations": [
+          "The image does not provide specific details about the educational content, but it visually represents the concept of particles being so small that they cannot be seen even through an ordinary microscope."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:36:32Z"
+    },
+    {
+      "asset_id": "4bc3627c75aa51173c7811a6",
+      "asset_sha256": "0b6d52ad7447167ab56b0d08290556848b7aa9b9ae05054122051ab59986829b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 121,
+      "asset_path": "assets/0b6d52ad7447167ab56b0d08290556848b7aa9b9ae05054122051ab59986829b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76446f44fca13a85b60a76142df04ba10ba5cabaacdd39a0ac83b0e309c6aafc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character is standing on a ladder, reaching for a book on a tall bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "bookshelf",
+          "ladder",
+          "character",
+          "book",
+          "tall",
+          "tall bookshelf",
+          "standing",
+          "reaching",
+          "tall ladder"
+        ],
+        "context_relation": "The image is related to the educational content about the particulate nature of matter.",
+        "limitations": [
+          "The visible text is incomplete and does not provide specific information about the educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:38:19Z"
     }
   ]
 }

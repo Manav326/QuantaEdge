@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5f8e3a56114cded5c5a83d9c4de31d1fd51f1ff63904b6c5dc2402c543f611fc",
+  "raw_analysis_sha256": "558ad27436bf0c51dbe41dfc3118e52898d8fdc123189724e5efa511c732e339",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:22:38Z",
+      "checkpointed_at": "2026-11-01T17:32:48Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:23:34Z",
+      "checkpointed_at": "2026-11-01T17:33:42Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:24:42Z",
+      "checkpointed_at": "2026-11-01T17:34:48Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -70352,6 +70352,108 @@
         "limitations": [
           "The image does not provide any specific information about the text content.",
           "The image is a cartoon illustration and not a diagram or chart."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b6a3823bfded3159f70dec7f",
+      "asset_sha256": "a73b7c3700f05706abbfb7402a16a49f2e414146e7ba198708eefdcf5ed80c38",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 121,
+      "asset_path": "assets/a73b7c3700f05706abbfb7402a16a49f2e414146e7ba198708eefdcf5ed80c38.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76446f44fca13a85b60a76142df04ba10ba5cabaacdd39a0ac83b0e309c6aafc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person with braided hair, wearing an orange shirt and a red choker, with one hand on their chin and the other hand on their hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the particulate nature of matter, specifically discussing the separation of sugar particles in water.",
+        "limitations": [
+          "The image does not provide specific details about the educational content, but it visually represents the concept of particles being so small that they cannot be seen even through an ordinary microscope."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:36:32Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person with braided hair, wearing an orange shirt and a red choker, with one hand on their chin and the other hand on their hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the particulate nature of matter, specifically discussing the separation of sugar particles in water.",
+        "limitations": [
+          "The image does not provide specific details about the educational content, but it visually represents the concept of particles being so small that they cannot be seen even through an ordinary microscope."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4bc3627c75aa51173c7811a6",
+      "asset_sha256": "0b6d52ad7447167ab56b0d08290556848b7aa9b9ae05054122051ab59986829b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 121,
+      "asset_path": "assets/0b6d52ad7447167ab56b0d08290556848b7aa9b9ae05054122051ab59986829b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76446f44fca13a85b60a76142df04ba10ba5cabaacdd39a0ac83b0e309c6aafc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character is standing on a ladder, reaching for a book on a tall bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "bookshelf",
+          "ladder",
+          "character",
+          "book",
+          "tall",
+          "tall bookshelf",
+          "standing",
+          "reaching",
+          "tall ladder"
+        ],
+        "context_relation": "The image is related to the educational content about the particulate nature of matter.",
+        "limitations": [
+          "The visible text is incomplete and does not provide specific information about the educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:38:19Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is standing on a ladder, reaching for a book on a tall bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "bookshelf",
+          "ladder",
+          "character",
+          "book",
+          "tall",
+          "tall bookshelf",
+          "standing",
+          "reaching",
+          "tall ladder"
+        ],
+        "context_relation": "The image is related to the educational content about the particulate nature of matter.",
+        "limitations": [
+          "The visible text is incomplete and does not provide specific information about the educational content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
