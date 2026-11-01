@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "13ef5ef4d8d9787555e8e7ba9017d86dafa4aa5bc4854d75e5b15b4227886857",
+  "raw_analysis_sha256": "25b05801b86e411b82f0f73519d25399577db6c526fc008b0806638ba253938c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41276460075",
-      "checkpointed_at": "2026-11-01T07:30:47Z",
+      "checkpointed_at": "2026-11-01T07:33:59Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -180795,6 +180795,170 @@
         "limitations": [
           "The image does not provide any specific information or context related to the text about human stages of life."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eb872199dfc2e74855e4c41d",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about human stages of life.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about human stages of life."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:34:07Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about human stages of life.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about human stages of life."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fb80bb121a91370279b71da1",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about human stages of life.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about human stages of life."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:34:15Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about human stages of life.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about human stages of life."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "74e56f881aaa76cd04b1bbad",
+      "asset_sha256": "725566c498e0791ed4f0c4e82ffcd49b79c486174b808c1c8557e48929223b01",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/725566c498e0791ed4f0c4e82ffcd49b79c486174b808c1c8557e48929223b01.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two people standing and talking to each other.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "communication",
+          "interaction",
+          "social interaction"
+        ],
+        "context_relation": "The image depicts a social interaction between two individuals.",
+        "limitations": [
+          "The image does not provide specific details about the conversation or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:35:49Z",
+      "effective_analysis": {
+        "visual_summary": "Two people standing and talking to each other.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "communication",
+          "interaction",
+          "social interaction"
+        ],
+        "context_relation": "The image depicts a social interaction between two individuals.",
+        "limitations": [
+          "The image does not provide specific details about the conversation or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a76627cd4d272b64b0ebe665",
+      "asset_sha256": "0c08fed61b12f00ff870007a52ff6aa30e211d508592f9684095c7ced015c46c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/0c08fed61b12f00ff870007a52ff6aa30e211d508592f9684095c7ced015c46c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad2c3fc1f53d8318f32a664d47c67ca145095ed96373827ef0dcd69b1bd43d58",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue outlined rectangle with a tail-like shape on the left side.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a diagram or illustration.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:37:20Z",
+      "effective_analysis": {
+        "visual_summary": "A blue outlined rectangle with a tail-like shape on the left side.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a diagram or illustration.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
