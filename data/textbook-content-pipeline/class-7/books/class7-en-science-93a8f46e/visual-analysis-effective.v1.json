@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "75eea1ef5bff6457f0a73306b6e28e0e101d05f6e4e599ae5e504f004872320c",
+  "raw_analysis_sha256": "dc91dc94050e7b1ae90f80ccf5b78767608af97c55e6127506f7cc0070f632aa",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164536,11 +164536,11 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
-        "visual_type": "uncertain",
+        "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt ",
+          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
           "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
@@ -164548,32 +164548,32 @@
           "combustion",
           "oxygen",
           "carbon dioxide",
-          "fire",
+          "fireflies",
           "bioluminescence",
           "combustible substances",
           "paper",
-          "fireflies",
-          "carbon",
-          "oxygen",
+          "combustible",
+          "chemical change",
+          "air",
+          "fire",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the role of oxygen in combustion and provides examples of how it affects the burning of candles and fireflies.",
         "limitations": [
-          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not provide specific instructions on how to test for carbon dioxide gas."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41276460075",
-      "checkpointed_at": "2026-11-01T06:52:59Z",
+      "checkpointed_at": "2026-11-01T07:02:41Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
-        "visual_type": "uncertain",
+        "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt ",
+          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
           "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
@@ -164581,19 +164581,19 @@
           "combustion",
           "oxygen",
           "carbon dioxide",
-          "fire",
+          "fireflies",
           "bioluminescence",
           "combustible substances",
           "paper",
-          "fireflies",
-          "carbon",
-          "oxygen",
+          "combustible",
+          "chemical change",
+          "air",
+          "fire",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the role of oxygen in combustion and provides examples of how it affects the burning of candles and fireflies.",
         "limitations": [
-          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not provide specific instructions on how to test for carbon dioxide gas."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -179963,6 +179963,248 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ffea76bd64a52e55130ee696",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ddd6f0ea35e2763ec2a507e595fcf8ccaa58b531929960f2347386ba22dad548",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A small bottle with a balloon attached to it, containing a sugar solution and yeast.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Yeast is added while baking bread to make it fluffly and soft.",
+          "How does yeast work? Try and find out!",
+          "  Take a small bottle, some sugar, fresh yeast, water, and a balloon.",
+          "Make a sugar solution in the bottle by mixing two teaspoons of sugar and a small amount of water.",
+          "Now add a spoonful of yeast and cover the mouth of the bottle with a balloon.",
+          "Leave it undisturbed for about an hour."
+        ],
+        "concepts": [
+          "Yeast",
+          "Baking",
+          "Sugar",
+          "Bottle",
+          "Yeast",
+          "Sugar solution",
+          "Balloon",
+          "Baking bread",
+          "Fluffiness",
+          "Softness",
+          "Experiment",
+          "Yeast work"
+        ],
+        "context_relation": "The image is a visual representation of an experiment to demonstrate how yeast works in baking bread.",
+        "limitations": [
+          "The image does not show the actual reaction between yeast and sugar, only the setup of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:03:24Z",
+      "effective_analysis": {
+        "visual_summary": "A small bottle with a balloon attached to it, containing a sugar solution and yeast.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Yeast is added while baking bread to make it fluffly and soft.",
+          "How does yeast work? Try and find out!",
+          "  Take a small bottle, some sugar, fresh yeast, water, and a balloon.",
+          "Make a sugar solution in the bottle by mixing two teaspoons of sugar and a small amount of water.",
+          "Now add a spoonful of yeast and cover the mouth of the bottle with a balloon.",
+          "Leave it undisturbed for about an hour."
+        ],
+        "concepts": [
+          "Yeast",
+          "Baking",
+          "Sugar",
+          "Bottle",
+          "Yeast",
+          "Sugar solution",
+          "Balloon",
+          "Baking bread",
+          "Fluffiness",
+          "Softness",
+          "Experiment",
+          "Yeast work"
+        ],
+        "context_relation": "The image is a visual representation of an experiment to demonstrate how yeast works in baking bread.",
+        "limitations": [
+          "The image does not show the actual reaction between yeast and sugar, only the setup of the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d5a5e5a51d92fa713d09f23d",
+      "asset_sha256": "d5c8704ae5eed599c9bb52eef4e12388f5794e5e5f78f1cd5d30ab4da3249a32",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 92,
+      "asset_path": "page-0092.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ddd6f0ea35e2763ec2a507e595fcf8ccaa58b531929960f2347386ba22dad548",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for an experiment involving yeast and a balloon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Yeast is added while baking bread to make it fluffy and soft.",
+          "How does yeast work? Try and find out!",
+          "  Take a small bottle, some sugar, fresh yeast, water, and a balloon. Make a sugar solution in the bottle by mixing two teaspoons of sugar and a small amount of water. Now add a spoonful of yeast and cover the mouth of the bottle with a balloon. Leave it undisturbed for about an hour.",
+          "  What do you observe?",
+          "  Carefully take off the balloon, holding its mouth tightly closed and attach it to another small bottle containing freshly prepared lime water. Shake the bottle so that the contents of the balloon get mixed with lime water.",
+          "  What do you observe?",
+          "  What can you conclude from this experiment?",
+          "  Identify all the changes occurring in the experiment and state which of them are physical and chemical changes.",
+          "Chameleons (Girgits) change colour to blend in with their surroundings and also when they are angry or sense danger (Fig. 5.12). Is this a change that can be reversed? Explore from the internet or from your school library."
+        ],
+        "concepts": [
+          "yeast",
+          "baking bread",
+          "sugar",
+          "water",
+          "balloon",
+          "sugar solution",
+          "yeast",
+          "lime water",
+          "physical changes",
+          "chemical changes",
+          "chameleons",
+          "Girgits",
+          "colour",
+          "surroundings",
+          "anger",
+          "danger",
+          "internet",
+          "school library"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:07:43Z",
+      "effective_analysis": {
+        "visual_summary": "Instructions for an experiment involving yeast and a balloon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Yeast is added while baking bread to make it fluffy and soft.",
+          "How does yeast work? Try and find out!",
+          "  Take a small bottle, some sugar, fresh yeast, water, and a balloon. Make a sugar solution in the bottle by mixing two teaspoons of sugar and a small amount of water. Now add a spoonful of yeast and cover the mouth of the bottle with a balloon. Leave it undisturbed for about an hour.",
+          "  What do you observe?",
+          "  Carefully take off the balloon, holding its mouth tightly closed and attach it to another small bottle containing freshly prepared lime water. Shake the bottle so that the contents of the balloon get mixed with lime water.",
+          "  What do you observe?",
+          "  What can you conclude from this experiment?",
+          "  Identify all the changes occurring in the experiment and state which of them are physical and chemical changes.",
+          "Chameleons (Girgits) change colour to blend in with their surroundings and also when they are angry or sense danger (Fig. 5.12). Is this a change that can be reversed? Explore from the internet or from your school library."
+        ],
+        "concepts": [
+          "yeast",
+          "baking bread",
+          "sugar",
+          "water",
+          "balloon",
+          "sugar solution",
+          "yeast",
+          "lime water",
+          "physical changes",
+          "chemical changes",
+          "chameleons",
+          "Girgits",
+          "colour",
+          "surroundings",
+          "anger",
+          "danger",
+          "internet",
+          "school library"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5c16577a15e78e04e26b60ff",
+      "asset_sha256": "a0563647f42711d7c9cc70a4c870105cbac43e177998426707a03948c3fd6a76",
+      "page_text_context_sha256": "24180151b14ae0ffbe85fd44abf5059f926784f91672d056f857265f152ab987",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 93,
+      "asset_path": "assets/a0563647f42711d7c9cc70a4c870105cbac43e177998426707a03948c3fd6a76.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "858486e9d0e04f697bef7cb6",
+      "asset_sha256": "24e2924aa0c82fc2475a61f7b8cf41e3d26f3b79efb9a08906191008480eb3f4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 93,
+      "asset_path": "assets/24e2924aa0c82fc2475a61f7b8cf41e3d26f3b79efb9a08906191008480eb3f4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "24180151b14ae0ffbe85fd44abf5059f926784f91672d056f857265f152ab987",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0777CH06' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0777CH06"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly a page or section number.",
+        "limitations": [
+          "The image does not provide any visual content or information beyond the QR code and the text '0777CH06'."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:12:53Z",
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0777CH06' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0777CH06"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly a page or section number.",
+        "limitations": [
+          "The image does not provide any visual content or information beyond the QR code and the text '0777CH06'."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
