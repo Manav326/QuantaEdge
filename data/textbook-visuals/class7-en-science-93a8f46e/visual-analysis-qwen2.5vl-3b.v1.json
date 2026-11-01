@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3080,
+    "assets_selected": 3081,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "73e020d863f275c3b4143676"
+      "7e6438455750a38649c87848"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3076,
-    "assets_remaining": 4412,
+    "assets_analyzed": 3077,
+    "assets_remaining": 4411,
     "assets_completion_percent": 41.1,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 3075,
+    "assets_skipped_from_checkpoint": 3076,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41266564659",
-      "checkpointed_at": "2026-11-01T03:45:51Z"
+      "checkpointed_at": "2026-11-01T03:50:53Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41266564659",
-      "checkpointed_at": "2026-11-01T03:46:19Z"
+      "checkpointed_at": "2026-11-01T03:51:24Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41266564659",
-      "checkpointed_at": "2026-11-01T03:46:55Z"
+      "checkpointed_at": "2026-11-01T03:52:03Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41266564659",
-      "checkpointed_at": "2026-11-01T03:47:32Z"
+      "checkpointed_at": "2026-11-01T03:52:45Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -114678,6 +114678,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41258627943",
       "checkpointed_at": "2026-11-01T02:43:36Z"
+    },
+    {
+      "asset_id": "7e6438455750a38649c87848",
+      "asset_sha256": "27852bf4199ca938d2d30d681c62570f1a92fd8a0ec72b13637687b3def0d8ef",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/27852bf4199ca938d2d30d681c62570f1a92fd8a0ec72b13637687b3def0d8ef.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a yellowish object with a dark shadow in the center.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41266564659",
+      "checkpointed_at": "2026-11-01T03:53:22Z"
     }
   ]
 }
