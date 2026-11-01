@@ -14,13 +14,13 @@
       "8d35dc673109641624e2223c",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "a5c1484ab6df1a2776c3833a",
-      "b426b0c9c180b50e30bcd253"
+      "e77649898f47f4a50fc41885",
+      "89d401a07549df733979e646"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1546,
-    "assets_remaining": 532,
-    "assets_completion_percent": 74.4,
+    "assets_analyzed": 1548,
+    "assets_remaining": 530,
+    "assets_completion_percent": 74.5,
     "assets_failed": 22,
     "assets_skipped_from_checkpoint": 1546,
     "batch_limit": 5,
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T15:22:10Z"
+      "checkpointed_at": "2026-11-01T15:32:39Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -37948,7 +37948,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T15:23:08Z"
+      "checkpointed_at": "2026-11-01T15:33:38Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44108,7 +44108,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T15:23:56Z"
+      "checkpointed_at": "2026-11-01T15:34:26Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -52738,6 +52738,91 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "e77649898f47f4a50fc41885",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 178,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "17fe177c536ba29ba3191f4e37949dd809193b676164c9360ce3b88630ca95fa",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An empty page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41310160876",
+      "checkpointed_at": "2026-11-01T15:34:38Z"
+    },
+    {
+      "asset_id": "89d401a07549df733979e646",
+      "asset_sha256": "eda20eab2c05beb18abb90330bfa21ccdb1e81c3aeeeafa91a72d4176d06e524",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 178,
+      "asset_path": "page-0178.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "17fe177c536ba29ba3191f4e37949dd809193b676164c9360ce3b88630ca95fa",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Keywords and summary of water cycle.",
+        "visual_type": "table",
+        "visible_text": [
+          "Keywords",
+          "Condensation",
+          "Experiment",
+          "Evaporation",
+          "Investigate",
+          "Freezing",
+          "Observe",
+          "Gas",
+          "Predict",
+          "Humidity",
+          "Question",
+          "Liquid",
+          "Reason",
+          "Melting",
+          "Record",
+          "Solid",
+          "Water cycle",
+          "Water vapour",
+          "Summary"
+        ],
+        "concepts": [
+          "Condensation",
+          "Evaporation",
+          "Freezing",
+          "Gas",
+          "Humidity",
+          "Liquid",
+          "Melting",
+          "Solid",
+          "Water cycle",
+          "Water vapour"
+        ],
+        "context_relation": "The image is a table summarizing the keywords and summary of the water cycle.",
+        "limitations": [
+          "The image does not provide specific details about the water cycle."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41310160876",
+      "checkpointed_at": "2026-11-01T15:38:37Z"
     }
   ]
 }
