@@ -13,14 +13,14 @@
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "8e056534d5a845bf27f6cb6e",
-      "a5c1484ab6df1a2776c3833a",
-      "b426b0c9c180b50e30bcd253"
+      "a26724af5aa94a0e29736149",
+      "da84c0daeeb2f3aa4c095d02",
+      "06a5019491310edc76117097"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1552,
-    "assets_remaining": 526,
-    "assets_completion_percent": 74.7,
+    "assets_analyzed": 1555,
+    "assets_remaining": 523,
+    "assets_completion_percent": 74.8,
     "assets_failed": 23,
     "assets_skipped_from_checkpoint": 1552,
     "batch_limit": 5,
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41351477202",
-      "checkpointed_at": "2026-11-01T23:16:02Z"
+      "checkpointed_at": "2026-11-01T23:30:04Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41351477202",
-      "checkpointed_at": "2026-11-01T23:16:52Z"
+      "checkpointed_at": "2026-11-01T23:30:55Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -52955,6 +52955,91 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
       "checkpointed_at": "2026-11-01T15:51:50Z"
+    },
+    {
+      "asset_id": "a26724af5aa94a0e29736149",
+      "asset_sha256": "a18d5a1c33ba6caa88d713c1ce4b37de2465c1c28f2eef8a2c520ec3045b5240",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 180,
+      "asset_path": "assets/a18d5a1c33ba6caa88d713c1ce4b37de2465c1c28f2eef8a2c520ec3045b5240.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b1f065ee38dccb576f858245a1092cc36fc59c082efc7b14812c17dd109358f2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane flying over a blue background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear context",
+          "No visible text"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "checkpointed_at": "2026-11-01T23:32:25Z"
+    },
+    {
+      "asset_id": "da84c0daeeb2f3aa4c095d02",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 180,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b1f065ee38dccb576f858245a1092cc36fc59c082efc7b14812c17dd109358f2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or information"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "checkpointed_at": "2026-11-01T23:32:39Z"
+    },
+    {
+      "asset_id": "06a5019491310edc76117097",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 180,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b1f065ee38dccb576f858245a1092cc36fc59c082efc7b14812c17dd109358f2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "checkpointed_at": "2026-11-01T23:32:52Z"
     }
   ]
 }
