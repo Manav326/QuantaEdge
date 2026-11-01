@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3139,
-    "successful_visual_analyses": 3118,
-    "missing_visual_analyses": 4349,
+    "raw_analysis_result_rows": 3140,
+    "successful_visual_analyses": 3119,
+    "missing_visual_analyses": 4348,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4370,
+    "unresolved_count": 4369,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -124774,9 +124774,31 @@
       "asset_path": "assets/8a19392f5c7bd3d86020a41169ce6947fe34f59afcd535ef60f8a823a5b82447.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person is performing push-ups on a green mat.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and",
+          "unfold the collected slips one by one. Based on the information",
+          "on the slips, discuss the changes with the students in the class.",
+          "Change",
+          "What were the most commonly observable changes among"
+        ],
+        "concepts": [
+          "Observing changes",
+          "Class discussion",
+          "Collecting slips",
+          "Performing push-ups"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not show the text's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
