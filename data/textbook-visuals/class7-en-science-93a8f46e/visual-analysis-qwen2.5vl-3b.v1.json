@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3132,
+    "assets_selected": 3134,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "242cc60fa78526b603f7d7d1",
-      "a923a727df10322209e88a2c"
+      "d502858c96e471f42566025a",
+      "812ae0332851334f7d2ab707"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3129,
-    "assets_remaining": 4359,
+    "assets_analyzed": 3131,
+    "assets_remaining": 4357,
     "assets_completion_percent": 41.8,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 3127,
+    "assets_skipped_from_checkpoint": 3129,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:56:09Z"
+      "checkpointed_at": "2026-11-01T21:02:39Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:57:16Z"
+      "checkpointed_at": "2026-11-01T21:03:46Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:58:48Z"
+      "checkpointed_at": "2026-11-01T21:05:17Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -116516,6 +116516,78 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
       "checkpointed_at": "2026-11-01T21:00:57Z"
+    },
+    {
+      "asset_id": "d502858c96e471f42566025a",
+      "asset_sha256": "f80b5c3a6e087b91b8d0b1d8ecc97f82f8996b93f77a3768cd37b0f22279d16d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/f80b5c3a6e087b91b8d0b1d8ecc97f82f8996b93f77a3768cd37b0f22279d16d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person looking at their reflection in a mirror, showing a noticeable bump in the throat region.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "adolescent boys",
+          "growth of the voice box",
+          "hoarse voice",
+          "throat region"
+        ],
+        "context_relation": "The image illustrates the concept of the growth of the voice box in adolescent boys, which is visible as a bump in the throat region.",
+        "limitations": [
+          "The image does not provide specific details about the size or appearance of the bump."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T21:06:34Z"
+    },
+    {
+      "asset_id": "812ae0332851334f7d2ab707",
+      "asset_sha256": "1ec4d20030a475f17d4d4d826627d57c345ac78c26bcd3af3b0a47828f2bc67b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/1ec4d20030a475f17d4d4d826627d57c345ac78c26bcd3af3b0a47828f2bc67b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white page with a black border, possibly a full page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "growth",
+          "adolescent boys",
+          "hoarse voice",
+          "throat region",
+          "structure in our throat",
+          "helps us to speak"
+        ],
+        "context_relation": "The text discusses the growth of the voice box in adolescent boys and its effect on the voice.",
+        "limitations": [
+          "The visible text is incomplete and does not provide a full summary of the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T21:07:52Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3154,
-    "successful_visual_analyses": 3132,
-    "missing_visual_analyses": 4334,
+    "raw_analysis_result_rows": 3156,
+    "successful_visual_analyses": 3134,
+    "missing_visual_analyses": 4332,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4356,
+    "unresolved_count": 4354,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -125288,9 +125288,25 @@
       "asset_path": "assets/f80b5c3a6e087b91b8d0b1d8ecc97f82f8996b93f77a3768cd37b0f22279d16d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person looking at their reflection in a mirror, showing a noticeable bump in the throat region.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "adolescent boys",
+          "growth of the voice box",
+          "hoarse voice",
+          "throat region"
+        ],
+        "context_relation": "The image illustrates the concept of the growth of the voice box in adolescent boys, which is visible as a bump in the throat region.",
+        "limitations": [
+          "The image does not provide specific details about the size or appearance of the bump."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -125306,9 +125322,27 @@
       "asset_path": "assets/1ec4d20030a475f17d4d4d826627d57c345ac78c26bcd3af3b0a47828f2bc67b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white page with a black border, possibly a full page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "growth",
+          "adolescent boys",
+          "hoarse voice",
+          "throat region",
+          "structure in our throat",
+          "helps us to speak"
+        ],
+        "context_relation": "The text discusses the growth of the voice box in adolescent boys and its effect on the voice.",
+        "limitations": [
+          "The visible text is incomplete and does not provide a full summary of the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
