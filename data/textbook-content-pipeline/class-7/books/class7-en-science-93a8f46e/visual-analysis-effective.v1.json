@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1cdecfd7f410251f76fbaa5780ad36f78b1ac941ee1806911a5734e3f3f76d73",
+  "raw_analysis_sha256": "81ec8696ff86af4817901dd15f1dfe712804ec9b7152f1d0b4850a418c0215f2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41258627943",
-      "checkpointed_at": "2026-11-01T02:31:01Z",
+      "checkpointed_at": "2026-11-01T02:35:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41258627943",
-      "checkpointed_at": "2026-11-01T02:31:41Z",
+      "checkpointed_at": "2026-11-01T02:36:14Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41258627943",
-      "checkpointed_at": "2026-11-01T02:32:35Z",
+      "checkpointed_at": "2026-11-01T02:37:05Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41258627943",
-      "checkpointed_at": "2026-11-01T02:33:30Z",
+      "checkpointed_at": "2026-11-01T02:38:00Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -179661,6 +179661,48 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5ab907d2b55d9db07d1c72c0",
+      "asset_sha256": "e885bc1ab2071d184a5578e1a7884143088051f7d7cca084f892db350957f7d2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/e885bc1ab2071d184a5578e1a7884143088051f7d7cca084f892db350957f7d2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a yellowish object, possibly a piece of cloth or fabric, with a dark background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "possible image corruption"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41258627943",
+      "checkpointed_at": "2026-11-01T02:39:06Z",
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a yellowish object, possibly a piece of cloth or fabric, with a dark background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "possible image corruption"
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
