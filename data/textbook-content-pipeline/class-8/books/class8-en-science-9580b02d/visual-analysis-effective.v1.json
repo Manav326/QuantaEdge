@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4c9891fc3959863cfc2290025a22cf12871a936eeda9b35c3f316fa6c735b8d3",
+  "raw_analysis_sha256": "b0216fd855fb5104b826dc065f5ee1e430bd51f8c0cce207791cfcd7ed9d3016",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:39:47Z",
+      "checkpointed_at": "2026-11-01T17:44:54Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:40:43Z",
+      "checkpointed_at": "2026-11-01T17:45:51Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:41:48Z",
+      "checkpointed_at": "2026-11-01T17:47:01Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -70606,6 +70606,174 @@
         "context_relation": "The image is related to the concepts of particulate nature of matter and the separation of sugar particles in water.",
         "limitations": [
           "The image does not provide specific details about the separation process or the properties of sugar and water."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e32a92ffd20f8e19550c29dd",
+      "asset_sha256": "9463feb46c23d537415435ddd5bb8954597381e7c5850ab87755b70b1832a08b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 121,
+      "asset_path": "page-0121.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "76446f44fca13a85b60a76142df04ba10ba5cabaacdd39a0ac83b0e309c6aafc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Question about the composition of matter and its particles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "101",
+          "Activities 7.1 and 7.2 support the idea that matter is composed",
+          "of a large number of extremely small particles. These particles",
+          "are so small that they cannot be seen even through an ordinary",
+          "microscope.",
+          "But, where  did",
+          "the sugar go?",
+          "The tiny sugar particles separate and occupy the available",
+          "spaces between the water particles. These spaces between the",
+          "particles are known as interparticle spaces.",
+          "Chalk and sugar can both",
+          "be broken down into their",
+          "constituent particles. But how",
+          "are the constituent particles",
+          "held together to form the solid",
+          "pieces we see?"
+        ],
+        "concepts": [
+          "particulate nature of matter",
+          "extremely small particles",
+          "ordinary microscope",
+          "interparticle spaces",
+          "constituent particles",
+          "solid pieces"
+        ],
+        "context_relation": "explaining the composition of matter",
+        "limitations": [
+          "the image does not provide specific details about the particles or their composition"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:51:33Z",
+      "effective_analysis": {
+        "visual_summary": "Question about the composition of matter and its particles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "101",
+          "Activities 7.1 and 7.2 support the idea that matter is composed",
+          "of a large number of extremely small particles. These particles",
+          "are so small that they cannot be seen even through an ordinary",
+          "microscope.",
+          "But, where  did",
+          "the sugar go?",
+          "The tiny sugar particles separate and occupy the available",
+          "spaces between the water particles. These spaces between the",
+          "particles are known as interparticle spaces.",
+          "Chalk and sugar can both",
+          "be broken down into their",
+          "constituent particles. But how",
+          "are the constituent particles",
+          "held together to form the solid",
+          "pieces we see?"
+        ],
+        "concepts": [
+          "particulate nature of matter",
+          "extremely small particles",
+          "ordinary microscope",
+          "interparticle spaces",
+          "constituent particles",
+          "solid pieces"
+        ],
+        "context_relation": "explaining the composition of matter",
+        "limitations": [
+          "the image does not provide specific details about the particles or their composition"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1ef3c4ca487bc143c5c7b817",
+      "asset_sha256": "1c5741c95f616d8a2cc5d38227ceff2adb0c0866ca20e6e6c2638b92545e2056",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/1c5741c95f616d8a2cc5d38227ceff2adb0c0866ca20e6e6c2638b92545e2056.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0a01c457136551c3799e1dbbdc84e0bc8b68ae8c0c1695b22cf6783516fd48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A collection of solid objects including an iron nail, rock salt, a stone, a piece of wood, a key, and a piece of aluminium.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Let us explore how these attractions vary in different states.",
+          "7.2.1 Solid state",
+          "How are constituent particles held together in solids?",
+          "Activity 7.3 : Let us find out",
+          "z Collect a few solid objects, such as a piece",
+          "of iron or an iron nail, a piece of rock salt,",
+          "a stone, a piece of wood, a key, and a piece",
+          "of aluminium (Fig. 7.3).",
+          "Iron nail",
+          "Rock salt",
+          "Stone",
+          "Piece of wood",
+          "Key",
+          "Piece of aluminium"
+        ],
+        "concepts": [
+          "Solid state",
+          "Constituent particles",
+          "Holding together"
+        ],
+        "context_relation": "The image is related to the educational content about the solid state and the properties of different solid objects.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:53:31Z",
+      "effective_analysis": {
+        "visual_summary": "A collection of solid objects including an iron nail, rock salt, a stone, a piece of wood, a key, and a piece of aluminium.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Let us explore how these attractions vary in different states.",
+          "7.2.1 Solid state",
+          "How are constituent particles held together in solids?",
+          "Activity 7.3 : Let us find out",
+          "z Collect a few solid objects, such as a piece",
+          "of iron or an iron nail, a piece of rock salt,",
+          "a stone, a piece of wood, a key, and a piece",
+          "of aluminium (Fig. 7.3).",
+          "Iron nail",
+          "Rock salt",
+          "Stone",
+          "Piece of wood",
+          "Key",
+          "Piece of aluminium"
+        ],
+        "concepts": [
+          "Solid state",
+          "Constituent particles",
+          "Holding together"
+        ],
+        "context_relation": "The image is related to the educational content about the solid state and the properties of different solid objects.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

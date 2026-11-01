@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1400,
+    "assets_selected": 1402,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "5d16cd0e8f5ea9f35392f47d",
-      "659e7f19dbc0bec8b8f277df"
+      "e32a92ffd20f8e19550c29dd",
+      "1ef3c4ca487bc143c5c7b817"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1397,
-    "assets_remaining": 894,
-    "assets_completion_percent": 61.0,
+    "assets_analyzed": 1399,
+    "assets_remaining": 892,
+    "assets_completion_percent": 61.1,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1395,
+    "assets_skipped_from_checkpoint": 1397,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:39:47Z"
+      "checkpointed_at": "2026-11-01T17:44:54Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:40:43Z"
+      "checkpointed_at": "2026-11-01T17:45:51Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:41:48Z"
+      "checkpointed_at": "2026-11-01T17:47:01Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -46660,6 +46660,106 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
       "checkpointed_at": "2026-11-01T17:43:24Z"
+    },
+    {
+      "asset_id": "e32a92ffd20f8e19550c29dd",
+      "asset_sha256": "9463feb46c23d537415435ddd5bb8954597381e7c5850ab87755b70b1832a08b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 121,
+      "asset_path": "page-0121.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "76446f44fca13a85b60a76142df04ba10ba5cabaacdd39a0ac83b0e309c6aafc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Question about the composition of matter and its particles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "101",
+          "Activities 7.1 and 7.2 support the idea that matter is composed",
+          "of a large number of extremely small particles. These particles",
+          "are so small that they cannot be seen even through an ordinary",
+          "microscope.",
+          "But, where  did",
+          "the sugar go?",
+          "The tiny sugar particles separate and occupy the available",
+          "spaces between the water particles. These spaces between the",
+          "particles are known as interparticle spaces.",
+          "Chalk and sugar can both",
+          "be broken down into their",
+          "constituent particles. But how",
+          "are the constituent particles",
+          "held together to form the solid",
+          "pieces we see?"
+        ],
+        "concepts": [
+          "particulate nature of matter",
+          "extremely small particles",
+          "ordinary microscope",
+          "interparticle spaces",
+          "constituent particles",
+          "solid pieces"
+        ],
+        "context_relation": "explaining the composition of matter",
+        "limitations": [
+          "the image does not provide specific details about the particles or their composition"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:51:33Z"
+    },
+    {
+      "asset_id": "1ef3c4ca487bc143c5c7b817",
+      "asset_sha256": "1c5741c95f616d8a2cc5d38227ceff2adb0c0866ca20e6e6c2638b92545e2056",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/1c5741c95f616d8a2cc5d38227ceff2adb0c0866ca20e6e6c2638b92545e2056.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0a01c457136551c3799e1dbbdc84e0bc8b68ae8c0c1695b22cf6783516fd48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A collection of solid objects including an iron nail, rock salt, a stone, a piece of wood, a key, and a piece of aluminium.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Let us explore how these attractions vary in different states.",
+          "7.2.1 Solid state",
+          "How are constituent particles held together in solids?",
+          "Activity 7.3 : Let us find out",
+          "z Collect a few solid objects, such as a piece",
+          "of iron or an iron nail, a piece of rock salt,",
+          "a stone, a piece of wood, a key, and a piece",
+          "of aluminium (Fig. 7.3).",
+          "Iron nail",
+          "Rock salt",
+          "Stone",
+          "Piece of wood",
+          "Key",
+          "Piece of aluminium"
+        ],
+        "concepts": [
+          "Solid state",
+          "Constituent particles",
+          "Holding together"
+        ],
+        "context_relation": "The image is related to the educational content about the solid state and the properties of different solid objects.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:53:31Z"
     }
   ]
 }
