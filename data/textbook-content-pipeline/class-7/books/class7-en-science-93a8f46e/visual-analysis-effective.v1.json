@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f47fc4dcbb8012424cfc7c89733910f3df0504a6906837ca0e666d3b5d67b5b8",
+  "raw_analysis_sha256": "4b03a3bf50e3a2fa8b876fd7ecb5f40c667f543edc0904ee244093a2d6c2dc83",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:34:15Z",
+      "checkpointed_at": "2026-11-01T09:40:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:34:54Z",
+      "checkpointed_at": "2026-11-01T09:40:55Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:35:45Z",
+      "checkpointed_at": "2026-11-01T09:41:46Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:36:39Z",
+      "checkpointed_at": "2026-11-01T09:42:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -181580,6 +181580,66 @@
         "context_relation": "The image is related to the text about discussing changes among students in the class.",
         "limitations": [
           "The image does not provide specific details about the changes observed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9881cadd5da962db16a97485",
+      "asset_sha256": "d619cc23dc5fa6c62a352954ae6e8ba934740ae5a8bf2d3f15976ef4ce099569",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/d619cc23dc5fa6c62a352954ae6e8ba934740ae5a8bf2d3f15976ef4ce099569.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "612e38325539f777ef55cda4e71365e1d181ad3b876602ba4be9a750207e3359",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with instructions on folding and mixing slips, followed by a question about observable changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and unfold the collected slips one by one. Based on the information on the slips, discuss the changes with the students in the class.",
+          "Change",
+          "What were the most commonly observable changes among"
+        ],
+        "concepts": [
+          "Observing changes",
+          "Collecting slips",
+          "Discussing changes"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41286739812",
+      "checkpointed_at": "2026-11-01T09:43:54Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions on folding and mixing slips, followed by a question about observable changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and unfold the collected slips one by one. Based on the information on the slips, discuss the changes with the students in the class.",
+          "Change",
+          "What were the most commonly observable changes among"
+        ],
+        "concepts": [
+          "Observing changes",
+          "Collecting slips",
+          "Discussing changes"
+        ],
+        "context_relation": "Instructional content",
+        "limitations": [
+          "No specific visual elements are described."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
