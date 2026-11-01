@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bfc9cd3d116da100bc2cbd87b0a40c116ba910f582c3499c26c14d8c5fd566c1",
+  "raw_analysis_sha256": "4ccb7ad7961813f7f50258b3cc03f0d862ad5f3329cdb7cd286192bb0bb9aefc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:22:17Z",
+      "checkpointed_at": "2026-11-01T20:35:31Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:23:24Z",
+      "checkpointed_at": "2026-11-01T20:36:40Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -164660,10 +164660,8 @@
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY",
-          "If a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt and stick to the sk",
-          "FASCINATING FACTS",
-          "Nature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescence.",
+          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
+          "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
@@ -164676,7 +164674,7 @@
           "air",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of carbon dioxide gas in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -164685,17 +164683,15 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41328329136",
-      "checkpointed_at": "2026-11-01T18:38:45Z",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T20:40:46Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY",
-          "If a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt and stick to the sk",
-          "FASCINATING FACTS",
-          "Nature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescence.",
+          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
+          "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
@@ -164708,7 +164704,7 @@
           "air",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of carbon dioxide gas in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -180324,7 +180320,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41328329136",
+      "run_id": "41338085758",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -182328,6 +182324,46 @@
         "context_relation": "The image provides information about the growth of the voice box in adolescent boys, specifically mentioning the Adam's apple.",
         "limitations": [
           "The image does not show the actual physical structure of the voice box or the Adam's apple."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c3f6e984708eb33d87dd413f",
+      "asset_sha256": "285913e87df918cd70b09528b6fbc27d6524362a70f7ac88a6aea1b6e2bad034",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/285913e87df918cd70b09528b6fbc27d6524362a70f7ac88a6aea1b6e2bad034.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or document.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T20:45:38Z",
+      "effective_analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or document.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
