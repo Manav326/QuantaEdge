@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3130,
+    "assets_selected": 3131,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c16577a15e78e04e26b60ff",
-      "c3f6e984708eb33d87dd413f"
+      "cc961779a46739fc9b3b3a08",
+      "f21dcb388b2512b3b298bcb7"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3126,
-    "assets_remaining": 4362,
-    "assets_completion_percent": 41.7,
-    "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 3125,
+    "assets_analyzed": 3127,
+    "assets_remaining": 4361,
+    "assets_completion_percent": 41.8,
+    "assets_failed": 22,
+    "assets_skipped_from_checkpoint": 3126,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:35:31Z"
+      "checkpointed_at": "2026-11-01T20:47:19Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:36:40Z"
+      "checkpointed_at": "2026-11-01T20:48:26Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:40:46Z"
+      "checkpointed_at": "2026-11-01T20:49:57Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -116385,6 +116385,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
       "checkpointed_at": "2026-11-01T20:45:38Z"
+    },
+    {
+      "asset_id": "cc961779a46739fc9b3b3a08",
+      "asset_sha256": "c0f861a5b3e9ef0297472e68c877bdf317b944c9ea35dfc9d3597d2c60fed991",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/c0f861a5b3e9ef0297472e68c877bdf317b944c9ea35dfc9d3597d2c60fed991.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "f21dcb388b2512b3b298bcb7",
+      "asset_sha256": "80d7b75bd9bec567b1718139b319a9bb3c62c771016f954a616bf2c4aa1dfa83",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/80d7b75bd9bec567b1718139b319a9bb3c62c771016f954a616bf2c4aa1dfa83.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or document.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T20:54:26Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4ccb7ad7961813f7f50258b3cc03f0d862ad5f3329cdb7cd286192bb0bb9aefc",
+  "raw_analysis_sha256": "4c7caabbfd60c543dbdcccdc1a80b251a824cde2d8795f9abc6fc8b53badf2f8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:35:31Z",
+      "checkpointed_at": "2026-11-01T20:47:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:36:40Z",
+      "checkpointed_at": "2026-11-01T20:48:26Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -164684,7 +164684,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:40:46Z",
+      "checkpointed_at": "2026-11-01T20:49:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -182358,6 +182358,66 @@
       "checkpointed_at": "2026-11-01T20:45:38Z",
       "effective_analysis": {
         "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or document.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cc961779a46739fc9b3b3a08",
+      "asset_sha256": "c0f861a5b3e9ef0297472e68c877bdf317b944c9ea35dfc9d3597d2c60fed991",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/c0f861a5b3e9ef0297472e68c877bdf317b944c9ea35dfc9d3597d2c60fed991.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f21dcb388b2512b3b298bcb7",
+      "asset_sha256": "80d7b75bd9bec567b1718139b319a9bb3c62c771016f954a616bf2c4aa1dfa83",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/80d7b75bd9bec567b1718139b319a9bb3c62c771016f954a616bf2c4aa1dfa83.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or document.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T20:54:26Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a black border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
