@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "679d627dc14d4c0213118f7d3ca1f1d359745df66d4329d62b82bcba2c3cdbe5",
+  "raw_analysis_sha256": "c5d500b6d36a3ac1c82e4b3343607a8b8d1bec2fb6ebb003eb87df0f59708f37",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41312317588",
-      "checkpointed_at": "2026-11-01T15:20:59Z",
+      "checkpointed_at": "2026-11-01T15:25:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41312317588",
-      "checkpointed_at": "2026-11-01T15:21:36Z",
+      "checkpointed_at": "2026-11-01T15:26:03Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41312317588",
-      "checkpointed_at": "2026-11-01T15:22:25Z",
+      "checkpointed_at": "2026-11-01T15:26:52Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41312317588",
-      "checkpointed_at": "2026-11-01T15:23:17Z",
+      "checkpointed_at": "2026-11-01T15:27:44Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -181940,6 +181940,64 @@
         "limitations": [
           "The image does not provide specific measurements or numerical data.",
           "The image does not show a full page or multiple visual elements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a494de65bfe460eb9e332356",
+      "asset_sha256": "40f27222902f4743f453322f0326a32eea5af56c599cd40222d5ac90b2bbdb2e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/40f27222902f4743f453322f0326a32eea5af56c599cd40222d5ac90b2bbdb2e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "612e38325539f777ef55cda4e71365e1d181ad3b876602ba4be9a750207e3359",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two women are standing next to each other, with one pointing at the other's shoulder.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and unfold the collected slips one by one. Based on the information on the slips, discuss the changes with the students in the class."
+        ],
+        "concepts": [
+          "Observing changes",
+          "Class discussion",
+          "Collecting slips",
+          "Analyzing information"
+        ],
+        "context_relation": "The image is related to the educational content about observing and discussing changes in a class setting.",
+        "limitations": [
+          "The image does not provide specific details about the changes being observed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41312317588",
+      "checkpointed_at": "2026-11-01T15:28:57Z",
+      "effective_analysis": {
+        "visual_summary": "Two women are standing next to each other, with one pointing at the other's shoulder.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and unfold the collected slips one by one. Based on the information on the slips, discuss the changes with the students in the class."
+        ],
+        "concepts": [
+          "Observing changes",
+          "Class discussion",
+          "Collecting slips",
+          "Analyzing information"
+        ],
+        "context_relation": "The image is related to the educational content about observing and discussing changes in a class setting.",
+        "limitations": [
+          "The image does not provide specific details about the changes being observed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

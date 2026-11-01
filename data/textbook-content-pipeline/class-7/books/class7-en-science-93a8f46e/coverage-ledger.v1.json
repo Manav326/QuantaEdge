@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3143,
-    "successful_visual_analyses": 3122,
-    "missing_visual_analyses": 4345,
+    "raw_analysis_result_rows": 3144,
+    "successful_visual_analyses": 3123,
+    "missing_visual_analyses": 4344,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4366,
+    "unresolved_count": 4365,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -124898,9 +124898,27 @@
       "asset_path": "assets/40f27222902f4743f453322f0326a32eea5af56c599cd40222d5ac90b2bbdb2e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two women are standing next to each other, with one pointing at the other's shoulder.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and unfold the collected slips one by one. Based on the information on the slips, discuss the changes with the students in the class."
+        ],
+        "concepts": [
+          "Observing changes",
+          "Class discussion",
+          "Collecting slips",
+          "Analyzing information"
+        ],
+        "context_relation": "The image is related to the educational content about observing and discussing changes in a class setting.",
+        "limitations": [
+          "The image does not provide specific details about the changes being observed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
