@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3084,
+    "assets_selected": 3085,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "0d0002688b8e18f3329b423e"
+      "4e8dd0d2449279ded4b8f2b3"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3080,
-    "assets_remaining": 4408,
+    "assets_analyzed": 3081,
+    "assets_remaining": 4407,
     "assets_completion_percent": 41.1,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 3079,
+    "assets_skipped_from_checkpoint": 3080,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:02:40Z"
+      "checkpointed_at": "2026-11-01T05:06:58Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:03:09Z"
+      "checkpointed_at": "2026-11-01T05:07:27Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:03:47Z"
+      "checkpointed_at": "2026-11-01T05:08:05Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:04:27Z"
+      "checkpointed_at": "2026-11-01T05:08:46Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -114820,6 +114820,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
       "checkpointed_at": "2026-11-01T05:06:10Z"
+    },
+    {
+      "asset_id": "4e8dd0d2449279ded4b8f2b3",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ddd6f0ea35e2763ec2a507e595fcf8ccaa58b531929960f2347386ba22dad548",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a person floating in the air with a dotted line above them.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about yeast and its effect on bread making.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41271484658",
+      "checkpointed_at": "2026-11-01T05:09:22Z"
     }
   ]
 }

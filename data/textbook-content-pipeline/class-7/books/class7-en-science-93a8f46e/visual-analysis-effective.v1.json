@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fe8f441b66747de525ea0790536147cd1bde762cd7fdb98dc2849525db79bae2",
+  "raw_analysis_sha256": "4901a4f3560ae07236366d4a4205167c391c51923bff171bce29685128b7260e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:02:40Z",
+      "checkpointed_at": "2026-11-01T05:06:58Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:03:09Z",
+      "checkpointed_at": "2026-11-01T05:07:27Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:03:47Z",
+      "checkpointed_at": "2026-11-01T05:08:05Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:04:27Z",
+      "checkpointed_at": "2026-11-01T05:08:46Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -179983,6 +179983,42 @@
         "limitations": [
           "No specific limitations mentioned."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4e8dd0d2449279ded4b8f2b3",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ddd6f0ea35e2763ec2a507e595fcf8ccaa58b531929960f2347386ba22dad548",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a person floating in the air with a dotted line above them.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about yeast and its effect on bread making.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41271484658",
+      "checkpointed_at": "2026-11-01T05:09:22Z",
+      "effective_analysis": {
+        "visual_summary": "A green illustration of a person floating in the air with a dotted line above them.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about yeast and its effect on bread making.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
