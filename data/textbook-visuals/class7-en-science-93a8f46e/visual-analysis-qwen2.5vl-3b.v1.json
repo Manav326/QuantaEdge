@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3078,
+    "assets_selected": 3079,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5ab907d2b55d9db07d1c72c0"
+      "600819f47bb2f535fcef047d"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3074,
-    "assets_remaining": 4414,
+    "assets_analyzed": 3075,
+    "assets_remaining": 4413,
     "assets_completion_percent": 41.1,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3073,
+    "assets_skipped_from_checkpoint": 3074,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41258627943",
-      "checkpointed_at": "2026-11-01T02:35:35Z"
+      "checkpointed_at": "2026-11-01T02:40:08Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41258627943",
-      "checkpointed_at": "2026-11-01T02:36:14Z"
+      "checkpointed_at": "2026-11-01T02:40:46Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41258627943",
-      "checkpointed_at": "2026-11-01T02:37:05Z"
+      "checkpointed_at": "2026-11-01T02:41:37Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41258627943",
-      "checkpointed_at": "2026-11-01T02:38:00Z"
+      "checkpointed_at": "2026-11-01T02:42:30Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -114639,6 +114639,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41258627943",
       "checkpointed_at": "2026-11-01T02:39:06Z"
+    },
+    {
+      "asset_id": "600819f47bb2f535fcef047d",
+      "asset_sha256": "a9bc8bc17ae67a27b45c9cdc51523fb03b16ea18fcebcec46e97a991f39ea91b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/a9bc8bc17ae67a27b45c9cdc51523fb03b16ea18fcebcec46e97a991f39ea91b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of birds flying in the sky.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear details of the birds and their surroundings"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41258627943",
+      "checkpointed_at": "2026-11-01T02:43:36Z"
     }
   ]
 }
