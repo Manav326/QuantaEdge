@@ -8228,22 +8228,20 @@
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
           "pañchakośhas",
-          "Foundational and Preparatory Stages",
           "Middle Stage",
-          "Secondary Stages",
-          "holistic development",
-          "transformative learning culture",
-          "appropriate textbooks",
-          "curricular areas",
-          "content and pedagogy",
-          "classroom arrangement",
-          "teacher preparation",
-          "conceptual connections",
-          "National Council of Educational Research and Training"
+          "Foundational and Preparatory Stages",
+          "Analytical, descriptive, and narrative capabilities",
+          "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
+          "Classroom arrangement",
+          "Teacher preparation",
+          "Conceptual connections",
+          "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic development.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving the policy's goals.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
       },
       "chapter_id": null,
@@ -27252,17 +27250,14 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
-          "Educator",
           "Development Sector Professional",
-          "Chief Consultant",
           "Freelance Editor",
           "Proofreader",
-          "Publication Division",
-          "Contractual"
+          "Publication Division"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "The image may be a full page, not a cropped figure.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -30779,7 +30774,7 @@
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
         "visible_text": [
-          "Presence/ absence of flowers",
+          "Presence/absence of flowers",
           "Hard/soft stem",
           "Eating habits",
           "Place they live",
@@ -30818,9 +30813,9 @@
           "features of plants",
           "nature walk"
         ],
-        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
+        "context_relation": "The text is a part of a larger educational content, specifically a textbook discussing the criteria for grouping plants and animals.",
         "limitations": [
-          "The image does not provide specific details about the criteria for grouping plants and animals."
+          "The text does not provide specific examples or instructions for the activities mentioned."
         ]
       },
       "chapter_id": null,
