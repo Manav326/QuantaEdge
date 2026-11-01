@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1561,
+    "assets_selected": 1564,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "fadb43eee99e694f460b7aac",
-      "7bb896c866006e122be05813",
-      "2a184c2c5c3e9e2c7056305f"
+      "bd045570318a6f7468fcd22e",
+      "f9d841855ace12312684b25d",
+      "688fb3502b78b54aba9843ef"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1559,
-    "assets_remaining": 519,
-    "assets_completion_percent": 75.0,
+    "assets_analyzed": 1562,
+    "assets_remaining": 516,
+    "assets_completion_percent": 75.2,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1556,
+    "assets_skipped_from_checkpoint": 1559,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41351477202",
-      "checkpointed_at": "2026-11-01T23:45:31Z"
+      "checkpointed_at": "2026-11-01T23:51:20Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41351477202",
-      "checkpointed_at": "2026-11-01T23:46:27Z"
+      "checkpointed_at": "2026-11-01T23:52:15Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -53191,6 +53191,130 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41351477202",
       "checkpointed_at": "2026-11-01T23:50:06Z"
+    },
+    {
+      "asset_id": "bd045570318a6f7468fcd22e",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 181,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d93593f8f0d06587366e719ec60d9ed4cc18b0741f9bb56ca32a66e598d60ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "checkpointed_at": "2026-11-01T23:52:32Z"
+    },
+    {
+      "asset_id": "f9d841855ace12312684b25d",
+      "asset_sha256": "dbf771b3d72b4752e9dba3fb67c813d09e8a965eb7cc85d02c93f628762d77f8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 181,
+      "asset_path": "page-0181.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d93593f8f0d06587366e719ec60d9ed4cc18b0741f9bb56ca32a66e598d60ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing methods of separation in everyday life, featuring a quote from Kabir and an illustration of people sorting grains.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Methods of Separation",
+          "Chapter 9",
+          "in Everyday Life",
+          "9",
+          "साधु ऐसा चाहिए जैसा सूप सुभाय ।",
+          "सार सार को गहि रहै थोथा दई उडाय ।।",
+          "Just like winnowing makes the husk blow away",
+          "while retaining the grains, similarly, sages let",
+          "the virtues stay while discarding the vices.",
+          "Malli and his sister Valli are excited for their summer",
+          "vacations. Their parents have planned a trip to visit their",
+          "relatives and friends living across India. They always stay",
+          "in touch with their relatives and friends. Do you also keep",
+          "in touch with your loved ones?",
+          "Their first halt is at their Nani's (maternal grandmother's)",
+          "house in Haryana. It is surrounded by large fields. Malli",
+          "and Valli are fascinated by the variety of grains piled up",
+          "in the courtyard. Their Mami (maternal aunt) and Mama",
+          "(maternal uncle), along with other community members,",
+          "are busy separating small stones and husk from the grains",
+          "with their hands.",
+          "Malli and Valli are curious to know why this is being",
+          "done. Their Nani notices their curiosity and explains, \"We are",
+          "removing these stones so that the grains are fit for cooking.\""
+        ],
+        "concepts": [
+          "Methods of Separation",
+          "Everyday Life",
+          "Kabir's Quote",
+          "Winnowing",
+          "Virtues",
+          "Discarding",
+          "Summer Vacations",
+          "Relatives",
+          "Friends",
+          "Maternal Grandmother",
+          "Haryana",
+          "Community Members",
+          "Grains",
+          "Husk",
+          "Stones",
+          "Cooking"
+        ],
+        "context_relation": "The image is a page from a textbook discussing methods of separation in everyday life, with a quote from Kabir and an illustration of people sorting grains.",
+        "limitations": [
+          "The image does not provide specific details about the methods of separation discussed in the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "checkpointed_at": "2026-11-01T23:57:31Z"
+    },
+    {
+      "asset_id": "688fb3502b78b54aba9843ef",
+      "asset_sha256": "6a940cdbdab2e511011a76936a5d87be1ffa1d1b69607b7fb974d1e6454cea59",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 182,
+      "asset_path": "assets/6a940cdbdab2e511011a76936a5d87be1ffa1d1b69607b7fb974d1e6454cea59.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4034021aeb8eb108302196943c0c7a10755d289d808e600f7dbe92fe665cbf20",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two children sitting at a table, eating food.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The children are eating food.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "checkpointed_at": "2026-11-01T23:59:03Z"
     }
   ]
 }
