@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3085,
+    "assets_selected": 3086,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "4e8dd0d2449279ded4b8f2b3"
+      "8dc8ef2cc75dfbb85bf9f7ff"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3081,
-    "assets_remaining": 4407,
-    "assets_completion_percent": 41.1,
+    "assets_analyzed": 3082,
+    "assets_remaining": 4406,
+    "assets_completion_percent": 41.2,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 3080,
+    "assets_skipped_from_checkpoint": 3081,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:06:58Z"
+      "checkpointed_at": "2026-11-01T05:10:09Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:07:27Z"
+      "checkpointed_at": "2026-11-01T05:10:39Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:08:05Z"
+      "checkpointed_at": "2026-11-01T05:11:19Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
-      "checkpointed_at": "2026-11-01T05:08:46Z"
+      "checkpointed_at": "2026-11-01T05:12:01Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -114846,6 +114846,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41271484658",
       "checkpointed_at": "2026-11-01T05:09:22Z"
+    },
+    {
+      "asset_id": "8dc8ef2cc75dfbb85bf9f7ff",
+      "asset_sha256": "1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ddd6f0ea35e2763ec2a507e595fcf8ccaa58b531929960f2347386ba22dad548",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about yeast and baking bread.",
+        "limitations": [
+          "The image is a simple illustration and does not provide any information about yeast or baking bread."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41271484658",
+      "checkpointed_at": "2026-11-01T05:12:37Z"
     }
   ]
 }
