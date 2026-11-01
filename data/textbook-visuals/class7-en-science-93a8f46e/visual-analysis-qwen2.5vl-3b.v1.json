@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3089,
+    "assets_selected": 3092,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "ffea76bd64a52e55130ee696",
-      "d5a5e5a51d92fa713d09f23d",
-      "5c16577a15e78e04e26b60ff",
-      "858486e9d0e04f697bef7cb6"
+      "4637a2cded6a0f0641422a47",
+      "ac788df6ab8422c5b41d2ff3",
+      "29170d3a9411518385e9b791",
+      "264e5aaf6ff9f48c70f1299a"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3087,
-    "assets_remaining": 4401,
-    "assets_completion_percent": 41.2,
+    "assets_analyzed": 3091,
+    "assets_remaining": 4397,
+    "assets_completion_percent": 41.3,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 3084,
+    "assets_skipped_from_checkpoint": 3087,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41276460075",
-      "checkpointed_at": "2026-11-01T07:02:41Z"
+      "checkpointed_at": "2026-11-01T07:14:11Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -114997,6 +114997,146 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41276460075",
       "checkpointed_at": "2026-11-01T07:12:53Z"
+    },
+    {
+      "asset_id": "4637a2cded6a0f0641422a47",
+      "asset_sha256": "263666190e3f9b42522aab73a995e0f2b56c333edddebb9d4e360ff1bc977937",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 93,
+      "asset_path": "assets/263666190e3f9b42522aab73a995e0f2b56c333edddebb9d4e360ff1bc977937.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "24180151b14ae0ffbe85fd44abf5059f926784f91672d056f857265f152ab987",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cloud with a few small clouds or particles floating around it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cloud",
+          "particles"
+        ],
+        "context_relation": "The image represents a cloud with particles or small clouds floating around it.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:15:43Z"
+    },
+    {
+      "asset_id": "ac788df6ab8422c5b41d2ff3",
+      "asset_sha256": "333b3414cc6154ba8129e2c2e4f5e23f7db3398d1505fa0675153d361e32b6a4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 93,
+      "asset_path": "assets/333b3414cc6154ba8129e2c2e4f5e23f7db3398d1505fa0675153d361e32b6a4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "24180151b14ae0ffbe85fd44abf5059f926784f91672d056f857265f152ab987",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A plant growing from a seed, with visible stages of germination, sapling, and mature plant.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The journey of a plant generally begins with the germination of a seed.",
+          "With proper nourishment, the seed becomes a sapling and matures into a young plant.",
+          "This journey is marked by some specific changes.",
+          "Some of the visible changes are an increase in its height, the appearance of more leaves, and the development of flowers, fruits, and new seeds.",
+          "From these seeds, new plants emerge.",
+          "It is quite unlikely that a seedling will develop the capabilities to produce its own seeds immediately after germination. It needs to grow and"
+        ],
+        "concepts": [
+          "Germination",
+          "Sapling",
+          "Mature plant",
+          "Plant growth",
+          "Visible changes",
+          "Development of flowers, fruits, and new seeds"
+        ],
+        "context_relation": "The image represents the stages of plant growth from seed to mature plant.",
+        "limitations": [
+          "The image does not show the germination process in detail."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:17:32Z"
+    },
+    {
+      "asset_id": "29170d3a9411518385e9b791",
+      "asset_sha256": "08a177b733dee00cddc05b8841ff74e7a33e6d3387907425cd3bee169ff934a6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 93,
+      "asset_path": "assets/08a177b733dee00cddc05b8841ff74e7a33e6d3387907425cd3bee169ff934a6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "24180151b14ae0ffbe85fd44abf5059f926784f91672d056f857265f152ab987",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cloud with a sun shining through it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text about plant growth.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:19:05Z"
+    },
+    {
+      "asset_id": "264e5aaf6ff9f48c70f1299a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 93,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "24180151b14ae0ffbe85fd44abf5059f926784f91672d056f857265f152ab987",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about the growth and changes of a plant from seed to seedling.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Adolescence:\nA Stage of Growth 6\nand Change",
+          "The journey of a plant generally begins with the germination of a seed. With proper nourishment, the seed becomes a sapling and matures into a young plant. This journey is marked by some specific changes. Some of the visible changes are an increase in its height, the appearance of more leaves, and t",
+          "It is quite unlikely that a seedling will develop the capabilities to produce its own seeds immediately after germination. It needs to grow and",
+          "The journey of a plant generally begins with the germination of a seed. With proper nourishment, the seed becomes a sapling and matures into a young plant. This journey is marked by some specific changes. Some of the visible changes are an increase in its height, the appearance of more leaves, and t"
+        ],
+        "concepts": [
+          "germination",
+          "sapling",
+          "plant growth",
+          "seedling",
+          "seed development",
+          "flowering",
+          "fruiting",
+          "seed production"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The visible text is a continuous paragraph without any diagrams or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41276460075",
+      "checkpointed_at": "2026-11-01T07:19:58Z"
     }
   ]
 }
