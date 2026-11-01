@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1557,
+    "assets_selected": 1560,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "a26724af5aa94a0e29736149",
-      "da84c0daeeb2f3aa4c095d02",
-      "06a5019491310edc76117097"
+      "a49d7787a94b67e1b38d30d0",
+      "5abf5b43650d77843396badb",
+      "713db4ff420b42a12769cabf"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1555,
-    "assets_remaining": 523,
-    "assets_completion_percent": 74.8,
-    "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1552,
+    "assets_analyzed": 1556,
+    "assets_remaining": 522,
+    "assets_completion_percent": 74.9,
+    "assets_failed": 25,
+    "assets_skipped_from_checkpoint": 1555,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41351477202",
-      "checkpointed_at": "2026-11-01T23:30:04Z"
+      "checkpointed_at": "2026-11-01T23:33:58Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41351477202",
-      "checkpointed_at": "2026-11-01T23:30:55Z"
+      "checkpointed_at": "2026-11-01T23:34:50Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -53040,6 +53040,70 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41351477202",
       "checkpointed_at": "2026-11-01T23:32:52Z"
+    },
+    {
+      "asset_id": "a49d7787a94b67e1b38d30d0",
+      "asset_sha256": "d5db805edf257d1c424c2519b891ad3f8589698e585c62f8ad4623532fa15498",
+      "page_text_context_sha256": "b1f065ee38dccb576f858245a1092cc36fc59c082efc7b14812c17dd109358f2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 180,
+      "asset_path": "page-0180.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "5abf5b43650d77843396badb",
+      "asset_sha256": "f4b4c1e364f897bd2815ee1100cae40f835ccd4fe1dce0a86d7df4b4e1a291dd",
+      "page_text_context_sha256": "d93593f8f0d06587366e719ec60d9ed4cc18b0741f9bb56ca32a66e598d60ccf",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 181,
+      "asset_path": "assets/f4b4c1e364f897bd2815ee1100cae40f835ccd4fe1dce0a86d7df4b4e1a291dd.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "713db4ff420b42a12769cabf",
+      "asset_sha256": "b743f93f6d5a14b8e65fca0ebdcf3d51debc053ce274ecef014e87f6fc8c47ee",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 181,
+      "asset_path": "assets/b743f93f6d5a14b8e65fca0ebdcf3d51debc053ce274ecef014e87f6fc8c47ee.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d93593f8f0d06587366e719ec60d9ed4cc18b0741f9bb56ca32a66e598d60ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A purple textured surface with a torn edge, possibly a piece of paper or fabric.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image does not provide any specific information or context related to the textbook content.",
+          "The visible text is incomplete and does not contribute to the understanding of the image.",
+          "The image does not show any educational content or educational material."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41351477202",
+      "checkpointed_at": "2026-11-01T23:44:17Z"
     }
   ]
 }
