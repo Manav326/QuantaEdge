@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1398,
+    "assets_selected": 1400,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "b6a3823bfded3159f70dec7f",
-      "4bc3627c75aa51173c7811a6"
+      "5d16cd0e8f5ea9f35392f47d",
+      "659e7f19dbc0bec8b8f277df"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1395,
-    "assets_remaining": 896,
-    "assets_completion_percent": 60.9,
+    "assets_analyzed": 1397,
+    "assets_remaining": 894,
+    "assets_completion_percent": 61.0,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1393,
+    "assets_skipped_from_checkpoint": 1395,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:32:48Z"
+      "checkpointed_at": "2026-11-01T17:39:47Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:33:42Z"
+      "checkpointed_at": "2026-11-01T17:40:43Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
-      "checkpointed_at": "2026-11-01T17:34:48Z"
+      "checkpointed_at": "2026-11-01T17:41:48Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -46568,6 +46568,98 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
       "checkpointed_at": "2026-11-01T17:38:19Z"
+    },
+    {
+      "asset_id": "5d16cd0e8f5ea9f35392f47d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 121,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76446f44fca13a85b60a76142df04ba10ba5cabaacdd39a0ac83b0e309c6aafc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with a question asking where the sugar went.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "101",
+          "Activities 7.1 and 7.2 support the idea that matter is composed",
+          "of a large number of extremely small particles. These particles",
+          "are so small that they cannot be seen even through an ordinary",
+          "microscope.",
+          "But, where did",
+          "the sugar go?",
+          "The tiny sugar particles separate and occupy the available",
+          "spaces between the water particles. These spaces between the",
+          "particles are known as interparticle spaces.",
+          "Chalk and s"
+        ],
+        "concepts": [
+          "Particulate Nature of Matter",
+          "Microscopy",
+          "Interparticle Spaces"
+        ],
+        "context_relation": "The image is a continuation of the text from the previous page, discussing the concept of particulate nature of matter and the separation of sugar particles in water.",
+        "limitations": [
+          "The image does not provide any visual representation of the concept discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:42:35Z"
+    },
+    {
+      "asset_id": "659e7f19dbc0bec8b8f277df",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 121,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76446f44fca13a85b60a76142df04ba10ba5cabaacdd39a0ac83b0e309c6aafc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An image of a black page with a question asking where the sugar went.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "101",
+          "Activities 7.1 and 7.2 support the idea that matter is composed",
+          "of a large number of extremely small particles. These particles",
+          "are so small that they cannot be seen even through an ordinary",
+          "microscope.",
+          "But, where did",
+          "the sugar go?",
+          "The tiny sugar particles separate and occupy the available",
+          "spaces between the water particles. These spaces between the",
+          "particles are known as interparticle spaces.",
+          "Chalk and s"
+        ],
+        "concepts": [
+          "Particulate Nature of Matter",
+          "Microscopy",
+          "Interparticle Spaces",
+          "Sugar",
+          "Water"
+        ],
+        "context_relation": "The image is related to the concepts of particulate nature of matter and the separation of sugar particles in water.",
+        "limitations": [
+          "The image does not provide specific details about the separation process or the properties of sugar and water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41320380183",
+      "checkpointed_at": "2026-11-01T17:43:24Z"
     }
   ]
 }
