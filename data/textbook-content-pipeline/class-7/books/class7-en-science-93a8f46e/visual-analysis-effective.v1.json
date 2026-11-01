@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4b03a3bf50e3a2fa8b876fd7ecb5f40c667f543edc0904ee244093a2d6c2dc83",
+  "raw_analysis_sha256": "f6d0bae1d178808a46809d34dece811b1e9ae889a0b9aa88cd418d1c95dd560b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:40:16Z",
+      "checkpointed_at": "2026-11-01T09:44:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:40:55Z",
+      "checkpointed_at": "2026-11-01T09:45:36Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:41:46Z",
+      "checkpointed_at": "2026-11-01T09:46:28Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:42:41Z",
+      "checkpointed_at": "2026-11-01T09:47:22Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -181640,6 +181640,46 @@
         "context_relation": "Instructional content",
         "limitations": [
           "No specific visual elements are described."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aceeeed34266e87dc57a4626",
+      "asset_sha256": "3cd6481a3a0952243fca5e0cd9f688c7f31a5432ebdaf8b5bdcd130027d8c6b5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/3cd6481a3a0952243fca5e0cd9f688c7f31a5432ebdaf8b5bdcd130027d8c6b5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "612e38325539f777ef55cda4e71365e1d181ad3b876602ba4be9a750207e3359",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41286739812",
+      "checkpointed_at": "2026-11-01T09:48:29Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

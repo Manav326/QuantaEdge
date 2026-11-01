@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3116,
+    "assets_selected": 3117,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "9881cadd5da962db16a97485"
+      "aceeeed34266e87dc57a4626"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3112,
-    "assets_remaining": 4376,
+    "assets_analyzed": 3113,
+    "assets_remaining": 4375,
     "assets_completion_percent": 41.6,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 3111,
+    "assets_skipped_from_checkpoint": 3112,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:40:16Z"
+      "checkpointed_at": "2026-11-01T09:44:57Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:40:55Z"
+      "checkpointed_at": "2026-11-01T09:45:36Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:41:46Z"
+      "checkpointed_at": "2026-11-01T09:46:28Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
-      "checkpointed_at": "2026-11-01T09:42:41Z"
+      "checkpointed_at": "2026-11-01T09:47:22Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -115919,6 +115919,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41286739812",
       "checkpointed_at": "2026-11-01T09:43:54Z"
+    },
+    {
+      "asset_id": "aceeeed34266e87dc57a4626",
+      "asset_sha256": "3cd6481a3a0952243fca5e0cd9f688c7f31a5432ebdaf8b5bdcd130027d8c6b5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/3cd6481a3a0952243fca5e0cd9f688c7f31a5432ebdaf8b5bdcd130027d8c6b5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "612e38325539f777ef55cda4e71365e1d181ad3b876602ba4be9a750207e3359",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41286739812",
+      "checkpointed_at": "2026-11-01T09:48:29Z"
     }
   ]
 }
