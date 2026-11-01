@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b38bd6f0b6540ef175a2bf8cb3ff14693da239c43f2e9327a40daa7e2ae03761",
+  "raw_analysis_sha256": "4e7f9a6abd68edf2c92ddee3191fa26e15f04e1c3dd42c79b3ee21b3f430c8b3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41333997325",
-      "checkpointed_at": "2026-11-01T18:59:37Z",
+      "checkpointed_at": "2026-11-01T19:09:03Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41333997325",
-      "checkpointed_at": "2026-11-01T19:00:12Z",
+      "checkpointed_at": "2026-11-01T19:09:37Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41333997325",
-      "checkpointed_at": "2026-11-01T19:00:53Z",
+      "checkpointed_at": "2026-11-01T19:10:18Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65666,9 +65666,11 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
+        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
         "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -65685,25 +65687,35 @@
           "atmospheric pressure",
           "rubber sucker",
           "air pressure",
-          "force of gravity",
+          "SI unit of pressure",
           "millibar",
           "hectopascal",
-          "wind formation"
+          "wind formation",
+          "pressure difference",
+          "atmospheric force",
+          "air movement",
+          "fluids and gases in tissues and organs",
+          "atmospheric pressure balance",
+          "wind strength",
+          "wind damage"
         ],
-        "context_relation": "The image is a diagram illustrating the concept of atmospheric pressure using a rubber sucker.",
+        "context_relation": "educational",
         "limitations": [
-          "The image does not provide a visual representation of the atmospheric pressure."
+          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41333997325",
-      "checkpointed_at": "2026-11-01T19:08:05Z",
+      "checkpointed_at": "2026-11-01T19:11:17Z",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
+        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
         "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -65720,14 +65732,22 @@
           "atmospheric pressure",
           "rubber sucker",
           "air pressure",
-          "force of gravity",
+          "SI unit of pressure",
           "millibar",
           "hectopascal",
-          "wind formation"
+          "wind formation",
+          "pressure difference",
+          "atmospheric force",
+          "air movement",
+          "fluids and gases in tissues and organs",
+          "atmospheric pressure balance",
+          "wind strength",
+          "wind damage"
         ],
-        "context_relation": "The image is a diagram illustrating the concept of atmospheric pressure using a rubber sucker.",
+        "context_relation": "educational",
         "limitations": [
-          "The image does not provide a visual representation of the atmospheric pressure."
+          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -66746,7 +66766,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41320380183",
+      "run_id": "41333997325",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
