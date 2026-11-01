@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6ffa9d7112aa7f6d6b0a5c20b93229fbe53e8a2eeaf868a7532486b8fbea516c",
+  "raw_analysis_sha256": "439089ff3a1d9a2e1896348d2fe5b1bcb4ebdd90b6ed4583a3f263649ca5ddb7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T15:32:39Z",
+      "checkpointed_at": "2026-11-01T15:39:56Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -57245,7 +57245,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T15:33:38Z",
+      "checkpointed_at": "2026-11-01T15:40:53Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66896,7 +66896,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T15:34:26Z",
+      "checkpointed_at": "2026-11-01T15:41:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -80474,6 +80474,118 @@
         "context_relation": "The image is a table summarizing the keywords and summary of the water cycle.",
         "limitations": [
           "The image does not provide specific details about the water cycle."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ce982e798fc83f1138a05030",
+      "asset_sha256": "91815a3d0c7a64e2373c0b4563b2223865f6fd8f0e1dfe8df2bf69aa1e57ef3a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 179,
+      "asset_path": "assets/91815a3d0c7a64e2373c0b4563b2223865f6fd8f0e1dfe8df2bf69aa1e57ef3a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eaa7b4c5ac26360b84855d5a27f6bfcd7abaaca8feaf5f07adea1d2a321f212d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A purple rectangular banner with a light bulb icon on the right side.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The water vapour in the air condenses to form tiny droplets of water, which appear as clouds. Many tiny water droplets come together and fall down as rain, hail or snow.",
+          "The circulation of water between the Earth surface and atmosphere is known as the water cycle.",
+          "We have used the process of observation, questioning, possible reason and experimenting to find out the concepts of evaporation and condensation.",
+          "Let us enhance our learning",
+          "1. Which of the following best describes condensation?",
+          "(i) The conversion of water into its vapour state."
+        ],
+        "concepts": [
+          "Water cycle",
+          "Condensation",
+          "Evaporation",
+          "Observation",
+          "Questioning",
+          "Possible reason",
+          "Experimenting"
+        ],
+        "context_relation": "The image is a visual representation of the concepts discussed in the text, specifically condensation.",
+        "limitations": [
+          "The image does not provide specific details about the water cycle or the concepts of evaporation and condensation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41310160876",
+      "checkpointed_at": "2026-11-01T15:43:34Z",
+      "effective_analysis": {
+        "visual_summary": "A purple rectangular banner with a light bulb icon on the right side.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The water vapour in the air condenses to form tiny droplets of water, which appear as clouds. Many tiny water droplets come together and fall down as rain, hail or snow.",
+          "The circulation of water between the Earth surface and atmosphere is known as the water cycle.",
+          "We have used the process of observation, questioning, possible reason and experimenting to find out the concepts of evaporation and condensation.",
+          "Let us enhance our learning",
+          "1. Which of the following best describes condensation?",
+          "(i) The conversion of water into its vapour state."
+        ],
+        "concepts": [
+          "Water cycle",
+          "Condensation",
+          "Evaporation",
+          "Observation",
+          "Questioning",
+          "Possible reason",
+          "Experimenting"
+        ],
+        "context_relation": "The image is a visual representation of the concepts discussed in the text, specifically condensation.",
+        "limitations": [
+          "The image does not provide specific details about the water cycle or the concepts of evaporation and condensation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8385eebf5b50ac165657a424",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 179,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eaa7b4c5ac26360b84855d5a27f6bfcd7abaaca8feaf5f07adea1d2a321f212d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41310160876",
+      "checkpointed_at": "2026-11-01T15:43:50Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

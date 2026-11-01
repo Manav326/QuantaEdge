@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1551,
+    "assets_selected": 1553,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "e77649898f47f4a50fc41885",
-      "89d401a07549df733979e646"
+      "ce982e798fc83f1138a05030",
+      "8385eebf5b50ac165657a424"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1548,
-    "assets_remaining": 530,
-    "assets_completion_percent": 74.5,
+    "assets_analyzed": 1550,
+    "assets_remaining": 528,
+    "assets_completion_percent": 74.6,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1546,
+    "assets_skipped_from_checkpoint": 1548,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T15:32:39Z"
+      "checkpointed_at": "2026-11-01T15:39:56Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -37948,7 +37948,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T15:33:38Z"
+      "checkpointed_at": "2026-11-01T15:40:53Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44108,7 +44108,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
-      "checkpointed_at": "2026-11-01T15:34:26Z"
+      "checkpointed_at": "2026-11-01T15:41:41Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -52823,6 +52823,78 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41310160876",
       "checkpointed_at": "2026-11-01T15:38:37Z"
+    },
+    {
+      "asset_id": "ce982e798fc83f1138a05030",
+      "asset_sha256": "91815a3d0c7a64e2373c0b4563b2223865f6fd8f0e1dfe8df2bf69aa1e57ef3a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 179,
+      "asset_path": "assets/91815a3d0c7a64e2373c0b4563b2223865f6fd8f0e1dfe8df2bf69aa1e57ef3a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eaa7b4c5ac26360b84855d5a27f6bfcd7abaaca8feaf5f07adea1d2a321f212d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A purple rectangular banner with a light bulb icon on the right side.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The water vapour in the air condenses to form tiny droplets of water, which appear as clouds. Many tiny water droplets come together and fall down as rain, hail or snow.",
+          "The circulation of water between the Earth surface and atmosphere is known as the water cycle.",
+          "We have used the process of observation, questioning, possible reason and experimenting to find out the concepts of evaporation and condensation.",
+          "Let us enhance our learning",
+          "1. Which of the following best describes condensation?",
+          "(i) The conversion of water into its vapour state."
+        ],
+        "concepts": [
+          "Water cycle",
+          "Condensation",
+          "Evaporation",
+          "Observation",
+          "Questioning",
+          "Possible reason",
+          "Experimenting"
+        ],
+        "context_relation": "The image is a visual representation of the concepts discussed in the text, specifically condensation.",
+        "limitations": [
+          "The image does not provide specific details about the water cycle or the concepts of evaporation and condensation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41310160876",
+      "checkpointed_at": "2026-11-01T15:43:34Z"
+    },
+    {
+      "asset_id": "8385eebf5b50ac165657a424",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 179,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eaa7b4c5ac26360b84855d5a27f6bfcd7abaaca8feaf5f07adea1d2a321f212d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41310160876",
+      "checkpointed_at": "2026-11-01T15:43:50Z"
     }
   ]
 }
