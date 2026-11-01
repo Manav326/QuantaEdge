@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3069,
+    "assets_selected": 3073,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "f3615978a2d1dd76453c6ea8",
-      "0104042d84269289fb4531ca",
-      "6032c25d90f1650daf3e23a6",
-      "2e784246bbafcc7ce758630a"
+      "042f6c1e53cf55081de00d77",
+      "94026672613e6dec02a4efd6",
+      "c0fda6dbcf88e380b46e96ac",
+      "73a429b8b53934668b36c75a"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3068,
-    "assets_remaining": 4420,
+    "assets_analyzed": 3072,
+    "assets_remaining": 4416,
     "assets_completion_percent": 41.0,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 3064,
+    "assets_skipped_from_checkpoint": 3068,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41247523567",
-      "checkpointed_at": "2026-11-01T00:41:06Z"
+      "checkpointed_at": "2026-11-01T00:44:29Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -114372,6 +114372,110 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41247523567",
       "checkpointed_at": "2026-11-01T00:43:19Z"
+    },
+    {
+      "asset_id": "042f6c1e53cf55081de00d77",
+      "asset_sha256": "2e6fc0a595325b434849132586febb00abed99f8c685c35efd1d36b3fd144377",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/2e6fc0a595325b434849132586febb00abed99f8c685c35efd1d36b3fd144377.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes with a red filter paper hanging above them, placed on a test tube rack.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a setup for a chemical experiment involving lime water and a red filter paper.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:44:36Z"
+    },
+    {
+      "asset_id": "94026672613e6dec02a4efd6",
+      "asset_sha256": "cd491321f497e80672e52e734e66803c83ff5901d1642d8c49f35be34cead420",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/cd491321f497e80672e52e734e66803c83ff5901d1642d8c49f35be34cead420.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:46:12Z"
+    },
+    {
+      "asset_id": "c0fda6dbcf88e380b46e96ac",
+      "asset_sha256": "b6b7186970278fe367a41a2ca3ce23e5a747a42c9f05dda37f6dd2683b325bae",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/b6b7186970278fe367a41a2ca3ce23e5a747a42c9f05dda37f6dd2683b325bae.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:47:47Z"
+    },
+    {
+      "asset_id": "73a429b8b53934668b36c75a",
+      "asset_sha256": "e75a9dc3cacead1de548a9b16cdaa27fa44b808c6251f396eddc2204a469ce61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/e75a9dc3cacead1de548a9b16cdaa27fa44b808c6251f396eddc2204a469ce61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like object with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:49:23Z"
     }
   ]
 }
