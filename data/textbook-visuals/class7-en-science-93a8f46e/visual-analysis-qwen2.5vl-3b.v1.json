@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3131,
+    "assets_selected": 3132,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "cc961779a46739fc9b3b3a08",
-      "f21dcb388b2512b3b298bcb7"
+      "242cc60fa78526b603f7d7d1",
+      "a923a727df10322209e88a2c"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3127,
-    "assets_remaining": 4361,
+    "assets_analyzed": 3129,
+    "assets_remaining": 4359,
     "assets_completion_percent": 41.8,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 3126,
+    "assets_skipped_from_checkpoint": 3127,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:47:19Z"
+      "checkpointed_at": "2026-11-01T20:56:09Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:48:26Z"
+      "checkpointed_at": "2026-11-01T20:57:16Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
-      "checkpointed_at": "2026-11-01T20:49:57Z"
+      "checkpointed_at": "2026-11-01T20:58:48Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -116430,6 +116430,92 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41338085758",
       "checkpointed_at": "2026-11-01T20:54:26Z"
+    },
+    {
+      "asset_id": "242cc60fa78526b603f7d7d1",
+      "asset_sha256": "fbbfea03544065650701dec26d62e102e06c2278a93bf05a0530022a5b5ed1e2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/fbbfea03544065650701dec26d62e102e06c2278a93bf05a0530022a5b5ed1e2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the growth of the voice box in adolescent boys, with a focus on the Adam's apple.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Changes in voice",
+          "In adolescent boys, the growth of the voice box leads",
+          "to a voice that sounds hoarse. The voice box is a",
+          "structure in our throat that helps us to speak. The",
+          "growth may be seen as a bump in the throat region",
+          "and is called the Adam's apple. However, it is not",
+          "noticeable in every individual. The voice box also",
+          "helps us to speak."
+        ],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "growth",
+          "voice",
+          "adolescent boys"
+        ],
+        "context_relation": "The image provides information about the growth of the voice box in adolescent boys, specifically mentioning the Adam's apple.",
+        "limitations": [
+          "The image does not show the physical appearance of the voice box or the Adam's apple."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T21:00:21Z"
+    },
+    {
+      "asset_id": "a923a727df10322209e88a2c",
+      "asset_sha256": "fbbfea03544065650701dec26d62e102e06c2278a93bf05a0530022a5b5ed1e2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/fbbfea03544065650701dec26d62e102e06c2278a93bf05a0530022a5b5ed1e2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the growth of the voice box in adolescent boys, leading to a hoarse voice and the formation of the Adam's apple.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Changes in voice",
+          "In adolescent boys, the growth of the voice box leads",
+          "to a voice that sounds hoarse. The voice box is a",
+          "structure in our throat that helps us to speak. The",
+          "growth may be seen as a bump in the throat region",
+          "and is called the Adam's apple. However, it is not",
+          "noticeable in every individual. The voice box also"
+        ],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "voice changes",
+          "adolescent boys"
+        ],
+        "context_relation": "The image provides information about the physical changes in adolescent boys' voices, specifically the growth of the voice box and the formation of the Adam's apple.",
+        "limitations": [
+          "The image does not show the actual physical changes in the voice box or the Adam's apple.",
+          "The image does not provide information about the timing or frequency of these changes.",
+          "The image does not include any visual representation of the voice box or the Adam's apple."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41338085758",
+      "checkpointed_at": "2026-11-01T21:00:57Z"
     }
   ]
 }
