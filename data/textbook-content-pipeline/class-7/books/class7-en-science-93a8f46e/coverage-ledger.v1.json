@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3145,
-    "successful_visual_analyses": 3125,
-    "missing_visual_analyses": 4343,
+    "raw_analysis_result_rows": 3146,
+    "successful_visual_analyses": 3126,
+    "missing_visual_analyses": 4342,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4363,
+    "unresolved_count": 4362,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -124999,9 +124999,31 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions on folding and mixing slips, followed by a question about observable changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and unfold the collected slips one by one. Based on the information on the slips, discuss the changes with the students in the class.",
+          "Change",
+          "What were the most commonly observable changes among"
+        ],
+        "concepts": [
+          "slips",
+          "jar",
+          "class",
+          "information",
+          "changes",
+          "observable changes"
+        ],
+        "context_relation": "instructions",
+        "limitations": [
+          "The image does not show any visual representation of the slips or the jar."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

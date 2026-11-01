@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3125,
+    "assets_selected": 3126,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "38099f9a19db63092fd0e317"
+      "070e7378b6fd9b780938c843"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3121,
-    "assets_remaining": 4367,
+    "assets_analyzed": 3122,
+    "assets_remaining": 4366,
     "assets_completion_percent": 41.7,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3120,
+    "assets_skipped_from_checkpoint": 3121,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41321735411",
-      "checkpointed_at": "2026-11-01T16:42:06Z"
+      "checkpointed_at": "2026-11-01T16:45:07Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41321735411",
-      "checkpointed_at": "2026-11-01T16:42:32Z"
+      "checkpointed_at": "2026-11-01T16:45:34Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41321735411",
-      "checkpointed_at": "2026-11-01T16:43:07Z"
+      "checkpointed_at": "2026-11-01T16:46:09Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41321735411",
-      "checkpointed_at": "2026-11-01T16:43:44Z"
+      "checkpointed_at": "2026-11-01T16:46:46Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -116222,6 +116222,47 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41321735411",
       "checkpointed_at": "2026-11-01T16:44:24Z"
+    },
+    {
+      "asset_id": "070e7378b6fd9b780938c843",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "612e38325539f777ef55cda4e71365e1d181ad3b876602ba4be9a750207e3359",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with instructions on folding and mixing slips, followed by a question about observable changes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "75",
+          "Fold the slips and place them in the jar.",
+          "Mix all the slips received from the students in the class and unfold the collected slips one by one. Based on the information on the slips, discuss the changes with the students in the class.",
+          "Change",
+          "What were the most commonly observable changes among"
+        ],
+        "concepts": [
+          "slips",
+          "jar",
+          "class",
+          "information",
+          "changes",
+          "observable changes"
+        ],
+        "context_relation": "instructions",
+        "limitations": [
+          "The image does not show any visual representation of the slips or the jar."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41321735411",
+      "checkpointed_at": "2026-11-01T16:47:01Z"
     }
   ]
 }
