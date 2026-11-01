@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "27117754d3aa7fe22c3bb4b013e923a5022a5b595e1539605192b5abc509497c",
+  "raw_analysis_sha256": "c6b3251a548b8c37b0fba61f3705411b375c527221fba7bb0e7f088f22fe7df8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41247523567",
-      "checkpointed_at": "2026-11-01T00:17:19Z",
+      "checkpointed_at": "2026-11-01T00:24:54Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -178651,6 +178651,228 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "981ae37bb9321bfbe1a9ee47",
+      "asset_sha256": "f909f247d37ad04e9aa5822c8aa96d2e3fb3b99ac59056efcb6b26534472a9f1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/f909f247d37ad04e9aa5822c8aa96d2e3fb3b99ac59056efcb6b26534472a9f1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with blue rings at both ends.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:26:29Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with blue rings at both ends.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d9afbda677dafe014d6f9bf8",
+      "asset_sha256": "b4ab5094c868fd7ac66342d3e60b9248449b0f2463a568d51fd0e0d15b9772e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/b4ab5094c868fd7ac66342d3e60b9248449b0f2463a568d51fd0e0d15b9772e8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A list of various chemical and physical processes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "71",
+          "Process of burning a candle; Tearing of paper; Rusting;",
+          "Curdling of milk; Ripening of fruits; Melting of ice; Folding",
+          "of clothes; Burning of magnesium and Mixing baking soda",
+          "10. The experiments shown in Fig. 5.11a, b, c, and d were",
+          "performed. Find out in which case(s) did lime water turn",
+          "chemical",
+          "and",
+          "milky and why?"
+        ],
+        "concepts": [
+          "chemical reactions",
+          "physical changes",
+          "chemical properties",
+          "physical properties",
+          "chemical reactions in everyday life",
+          "physical changes in everyday life"
+        ],
+        "context_relation": "The image is a continuation of a list of examples from a textbook.",
+        "limitations": [
+          "The image does not show any visual representation of the experiments.",
+          "The image does not provide any specific information about the experiments.",
+          "The image does not show any visual representation of the results of the experiments."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:28:24Z",
+      "effective_analysis": {
+        "visual_summary": "A list of various chemical and physical processes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "71",
+          "Process of burning a candle; Tearing of paper; Rusting;",
+          "Curdling of milk; Ripening of fruits; Melting of ice; Folding",
+          "of clothes; Burning of magnesium and Mixing baking soda",
+          "10. The experiments shown in Fig. 5.11a, b, c, and d were",
+          "performed. Find out in which case(s) did lime water turn",
+          "chemical",
+          "and",
+          "milky and why?"
+        ],
+        "concepts": [
+          "chemical reactions",
+          "physical changes",
+          "chemical properties",
+          "physical properties",
+          "chemical reactions in everyday life",
+          "physical changes in everyday life"
+        ],
+        "context_relation": "The image is a continuation of a list of examples from a textbook.",
+        "limitations": [
+          "The image does not show any visual representation of the experiments.",
+          "The image does not provide any specific information about the experiments.",
+          "The image does not show any visual representation of the results of the experiments."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ac77797f3e3f52669a4d4f7d",
+      "asset_sha256": "d0056bc941ed6298b4e102c7a0f7f6a3a84a19380a48bd6900d28589e5b5c114",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/d0056bc941ed6298b4e102c7a0f7f6a3a84a19380a48bd6900d28589e5b5c114.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a green background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:30:01Z",
+      "effective_analysis": {
+        "visual_summary": "A full page with a green background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e211cd6932faa9f87c64c6b3",
+      "asset_sha256": "d7bc824aa0667c3be3502f77ffb39c6cc7fa47f324bd779fc7404e936280abfb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/d7bc824aa0667c3be3502f77ffb39c6cc7fa47f324bd779fc7404e936280abfb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A list of various chemical reactions or processes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "71",
+          "Process of burning a candle; Tearing of paper; Rusting;",
+          "Curdling of milk; Ripening of fruits; Melting of ice; Folding",
+          "of clothes; Burning of magnesium and Mixing baking soda",
+          "10. The experiments shown in Fig. 5.11a, b, c, and d were",
+          "performed. Find out in which case(s) did lime water turn",
+          "chemical",
+          "and",
+          "milky and why?"
+        ],
+        "concepts": [
+          "chemical reactions",
+          "lime water",
+          "chemical properties",
+          "physical changes"
+        ],
+        "context_relation": "The image is a continuation of a list of chemical and physical processes.",
+        "limitations": [
+          "The image does not show any visual representation of the chemical reactions.",
+          "The image does not provide information about the results of the experiments."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:31:52Z",
+      "effective_analysis": {
+        "visual_summary": "A list of various chemical reactions or processes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "71",
+          "Process of burning a candle; Tearing of paper; Rusting;",
+          "Curdling of milk; Ripening of fruits; Melting of ice; Folding",
+          "of clothes; Burning of magnesium and Mixing baking soda",
+          "10. The experiments shown in Fig. 5.11a, b, c, and d were",
+          "performed. Find out in which case(s) did lime water turn",
+          "chemical",
+          "and",
+          "milky and why?"
+        ],
+        "concepts": [
+          "chemical reactions",
+          "lime water",
+          "chemical properties",
+          "physical changes"
+        ],
+        "context_relation": "The image is a continuation of a list of chemical and physical processes.",
+        "limitations": [
+          "The image does not show any visual representation of the chemical reactions.",
+          "The image does not provide information about the results of the experiments."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
