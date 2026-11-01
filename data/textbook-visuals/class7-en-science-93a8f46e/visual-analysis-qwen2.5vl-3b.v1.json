@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3053,
+    "assets_selected": 3057,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "019b5000cb2ae7b1ab4aed3c",
-      "813c9b4581643ea93822317c",
-      "7a62252d3d800122383671ed",
-      "9e593e37c8ba4e8104a0d928"
+      "5042745c9a7107957416fd55",
+      "b605c7a2c7b82ae617b21717",
+      "f0e821782be833820acdd9c9",
+      "43b8aadd453e684bae000c42"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3052,
-    "assets_remaining": 4436,
+    "assets_analyzed": 3056,
+    "assets_remaining": 4432,
     "assets_completion_percent": 40.8,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 3048,
+    "assets_skipped_from_checkpoint": 3052,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41247523567",
-      "checkpointed_at": "2026-11-01T00:09:22Z"
+      "checkpointed_at": "2026-11-01T00:17:19Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -113862,6 +113862,110 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41247523567",
       "checkpointed_at": "2026-11-01T00:16:07Z"
+    },
+    {
+      "asset_id": "5042745c9a7107957416fd55",
+      "asset_sha256": "3a49d7635c453c7f98971d8c581deeebfc1536086bef8322d7eb49d06318eef4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/3a49d7635c453c7f98971d8c581deeebfc1536086bef8322d7eb49d06318eef4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke or vapor behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is an illustration of a paper airplane, possibly used to represent the concept of 'paper' or 'paper airplanes' in the context of the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:18:55Z"
+    },
+    {
+      "asset_id": "b605c7a2c7b82ae617b21717",
+      "asset_sha256": "8ab18b5fcb3ace9dd257e8d1b5e77adf97aa563a4ed485eb5b6830e1b8aa1d5d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/8ab18b5fcb3ace9dd257e8d1b5e77adf97aa563a4ed485eb5b6830e1b8aa1d5d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a chemical reaction or a process.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:20:29Z"
+    },
+    {
+      "asset_id": "f0e821782be833820acdd9c9",
+      "asset_sha256": "9c891c098c1fd0acd7ed8c4ca4d2c43524b041fd234c7b80780d4075645b63e6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/9c891c098c1fd0acd7ed8c4ca4d2c43524b041fd234c7b80780d4075645b63e6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a knot in the middle.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:22:06Z"
+    },
+    {
+      "asset_id": "43b8aadd453e684bae000c42",
+      "asset_sha256": "0f78d603b3f04f62636676630a860d79ddb33377823fcd799793bb271c459dd3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/0f78d603b3f04f62636676630a860d79ddb33377823fcd799793bb271c459dd3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf8f571c5a36b1cf707b1734eaef6aa41c5b2f7d496b5d5c7458fae246b2c41a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with blue rings attached to it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41247523567",
+      "checkpointed_at": "2026-11-01T00:23:43Z"
     }
   ]
 }
