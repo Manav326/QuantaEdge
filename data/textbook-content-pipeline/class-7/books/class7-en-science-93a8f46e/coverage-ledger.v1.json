@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 3166,
-    "successful_visual_analyses": 3145,
+    "successful_visual_analyses": 3146,
     "missing_visual_analyses": 4322,
-    "failed_visual_analyses": 21,
+    "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4343,
+    "unresolved_count": 4342,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -125560,9 +125560,34 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page image with text about changes in voice in adolescent boys, specifically mentioning the growth of the voice box and the Adam's apple.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Changes in voice",
+          "In adolescent boys, the growth of the voice box leads",
+          "to a voice that sounds hoarse. The voice box is a",
+          "structure in our throat that helps us to speak. The",
+          "growth may be seen as a bump in the throat region",
+          "and is called the Adam's apple. However, it is not",
+          "noticeable in every individual. The voice box also",
+          "helps us to speak."
+        ],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "growth",
+          "hoarse voice",
+          "structure in the throat",
+          "helps to speak"
+        ],
+        "context_relation": "The image provides information about the changes in voice in adolescent boys, specifically focusing on the growth of the voice box and the Adam's apple.",
+        "limitations": [
+          "The image does not contain any diagrams, charts, graphs, tables, maps, cartoons, photos, illustrations, equations, or other visual elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
