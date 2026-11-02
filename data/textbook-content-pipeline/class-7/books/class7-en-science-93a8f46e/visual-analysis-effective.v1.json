@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f7539d6251b165bddcce2b6c5de17b04c86e0fef9ee70df4cca4507e5e4bebf7",
+  "raw_analysis_sha256": "eef9ceb04bc4b296bc893c0b4abd978059e010256488505422d4b5b5ede8354f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164536,11 +164536,11 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
-        "visual_type": "uncertain",
+        "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt ",
+          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
           "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
@@ -164548,32 +164548,32 @@
           "combustion",
           "oxygen",
           "carbon dioxide",
-          "fire",
+          "fireflies",
           "bioluminescence",
           "combustible substances",
           "paper",
-          "fireflies",
-          "carbon",
-          "oxygen",
+          "combustible",
+          "chemical change",
+          "air",
+          "fire",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the role of oxygen in combustion and provides examples of how it affects the burning of candles and fireflies.",
         "limitations": [
-          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not provide specific instructions on how to test for carbon dioxide gas."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41426089748",
-      "checkpointed_at": "2026-11-02T11:41:09Z",
+      "checkpointed_at": "2026-11-02T11:52:45Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
-        "visual_type": "uncertain",
+        "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt ",
+          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt",
           "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
@@ -164581,19 +164581,19 @@
           "combustion",
           "oxygen",
           "carbon dioxide",
-          "fire",
+          "fireflies",
           "bioluminescence",
           "combustible substances",
           "paper",
-          "fireflies",
-          "carbon",
-          "oxygen",
+          "combustible",
+          "chemical change",
+          "air",
+          "fire",
           "combustion"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the role of oxygen in combustion and provides examples of how it affects the burning of candles and fireflies.",
         "limitations": [
-          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not provide specific instructions on how to test for carbon dioxide gas."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -184077,6 +184077,200 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "973ff491dfce19c587df36e1",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf8336a93584f506c654636a15454ef44d990424c09331aaf6b567b9f4e42ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T11:52:58Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e7e9d31ad2d2448b9342489a",
+      "asset_sha256": "22a6c42291d16c256a8f791996ab95b486da1c2fa990acd039529b79da59b248",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 98,
+      "asset_path": "page-0098.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "bf8336a93584f506c654636a15454ef44d990424c09331aaf6b567b9f4e42ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing emotional changes and their effects on behavior and development.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.2: Emotional changes, their probable effects on behaviour, and ways for positive growth and development",
+          "Key emotional changes",
+          "Probable effects on behaviour",
+          "Ways for positive growth and development",
+          "Mood swings",
+          "Engage in varied activities like music, dance, or sports",
+          "Strong emotions",
+          "Increased sensitivity",
+          "Any other",
+          "Self-exploration and involvement in activities that may lead to creativity and innovation",
+          "Compassion, involvement in social work"
+        ],
+        "concepts": [
+          "Emotional changes",
+          "Behavioral effects",
+          "Positive growth",
+          "Social involvement"
+        ],
+        "context_relation": "exploration of emotional and behavioral changes in adolescence",
+        "limitations": [
+          "Limited to specific examples and effects"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T11:56:51Z",
+      "effective_analysis": {
+        "visual_summary": "Table listing emotional changes and their effects on behavior and development.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.2: Emotional changes, their probable effects on behaviour, and ways for positive growth and development",
+          "Key emotional changes",
+          "Probable effects on behaviour",
+          "Ways for positive growth and development",
+          "Mood swings",
+          "Engage in varied activities like music, dance, or sports",
+          "Strong emotions",
+          "Increased sensitivity",
+          "Any other",
+          "Self-exploration and involvement in activities that may lead to creativity and innovation",
+          "Compassion, involvement in social work"
+        ],
+        "concepts": [
+          "Emotional changes",
+          "Behavioral effects",
+          "Positive growth",
+          "Social involvement"
+        ],
+        "context_relation": "exploration of emotional and behavioral changes in adolescence",
+        "limitations": [
+          "Limited to specific examples and effects"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5b618954199330e141d1088b",
+      "asset_sha256": "80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748f03f8ec5a1c6e866d8992977114576defed2e40792f1b7d8bc6e58203e7b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about the journey of adolescence and its impact on curiosity and excitement.",
+        "limitations": [
+          "The image does not provide specific details about the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T11:58:25Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about the journey of adolescence and its impact on curiosity and excitement.",
+        "limitations": [
+          "The image does not provide specific details about the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3f57a4705af178c6c86fe6c1",
+      "asset_sha256": "f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748f03f8ec5a1c6e866d8992977114576defed2e40792f1b7d8bc6e58203e7b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about adolescence.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about adolescence."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T11:59:58Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about adolescence.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about adolescence."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
