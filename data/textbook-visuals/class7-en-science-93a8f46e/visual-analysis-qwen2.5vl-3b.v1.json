@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3233,
+    "assets_selected": 3234,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "90a5c607e3f68467f74e9024"
+      "0f2733ac1dfe231d15f0af1d"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3229,
-    "assets_remaining": 4259,
+    "assets_analyzed": 3230,
+    "assets_remaining": 4258,
     "assets_completion_percent": 43.1,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3228,
+    "assets_skipped_from_checkpoint": 3229,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:55:40Z"
+      "checkpointed_at": "2026-11-02T20:58:39Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:56:07Z"
+      "checkpointed_at": "2026-11-02T20:59:06Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:56:42Z"
+      "checkpointed_at": "2026-11-02T20:59:41Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:57:19Z"
+      "checkpointed_at": "2026-11-02T21:00:18Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -119759,6 +119759,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
       "checkpointed_at": "2026-11-02T20:57:55Z"
+    },
+    {
+      "asset_id": "0f2733ac1dfe231d15f0af1d",
+      "asset_sha256": "d904c12ccb9dafce636738080dd8fabe2eb7f9f0efc475d3ae7239b3dfeafae1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/d904c12ccb9dafce636738080dd8fabe2eb7f9f0efc475d3ae7239b3dfeafae1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue speech bubble with a pointed tail, indicating a message or statement.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a message or statement, possibly related to health and substance use.",
+        "limitations": [
+          "The image does not provide specific details about the message or statement."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41497391096",
+      "checkpointed_at": "2026-11-02T21:00:52Z"
     }
   ]
 }
