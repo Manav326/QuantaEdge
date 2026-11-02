@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1411,
+    "assets_selected": 1414,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "d9e7a84e129b678a74c53602",
-      "247118d56ffd9f09afd7a65a",
-      "feb0f065827e4d252ca97b5d"
+      "b653604f8babfb042cc21c4d",
+      "27b4e4a892f3a1637dbe2672",
+      "a817264d4a6b577befd1615d"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1409,
-    "assets_remaining": 882,
-    "assets_completion_percent": 61.5,
-    "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1406,
+    "assets_analyzed": 1411,
+    "assets_remaining": 880,
+    "assets_completion_percent": 61.6,
+    "assets_failed": 21,
+    "assets_skipped_from_checkpoint": 1409,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -20133,7 +20133,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
-      "checkpointed_at": "2026-11-02T11:15:37Z"
+      "checkpointed_at": "2026-11-02T11:23:52Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38412,7 +38412,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
-      "checkpointed_at": "2026-11-02T11:16:34Z"
+      "checkpointed_at": "2026-11-02T11:24:49Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -47091,6 +47091,100 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
       "checkpointed_at": "2026-11-02T11:23:00Z"
+    },
+    {
+      "asset_id": "b653604f8babfb042cc21c4d",
+      "asset_sha256": "4c9c45cb3c7289e4d863eb98d4cd544cece8f02901809e62087d911c773e51f4",
+      "page_text_context_sha256": "1fe34a402c3475fe64b6721195f812c402af68d2665f03fde842cd1c29cbacf6",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 123,
+      "asset_path": "assets/4c9c45cb3c7289e4d863eb98d4cd544cece8f02901809e62087d911c773e51f4.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41418058542",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "27b4e4a892f3a1637dbe2672",
+      "asset_sha256": "b715f4c9ec6f764b441d957776f4df9610e878bbc6301d8b8c55397ed1a0a744",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 123,
+      "asset_path": "assets/b715f4c9ec6f764b441d957776f4df9610e878bbc6301d8b8c55397ed1a0a744.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1fe34a402c3475fe64b6721195f812c402af68d2665f03fde842cd1c29cbacf6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pile of nails.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "solid",
+          "liquid",
+          "melting point",
+          "interparticle forces",
+          "melting",
+          "particles",
+          "atmospheric pressure",
+          "exception",
+          "water",
+          "force",
+          "attraction",
+          "high melting points",
+          "low melting points"
+        ],
+        "context_relation": "The image is not directly related to the text about melting points and particle distances in solids and liquids.",
+        "limitations": [
+          "The image does not provide specific details about the particles or forces mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41418058542",
+      "checkpointed_at": "2026-11-02T11:29:47Z"
+    },
+    {
+      "asset_id": "a817264d4a6b577befd1615d",
+      "asset_sha256": "3540474d378207f7981be4620e36b2e72e924ddc5d76eeb585c92af825244f2b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 123,
+      "asset_path": "assets/3540474d378207f7981be4620e36b2e72e924ddc5d76eeb585c92af825244f2b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1fe34a402c3475fe64b6721195f812c402af68d2665f03fde842cd1c29cbacf6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person with a braid and a red bracelet, wearing a light orange shirt.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Melting point",
+          "Solid",
+          "Liquid",
+          "Interparticle forces",
+          "High melting points",
+          "Low melting points"
+        ],
+        "context_relation": "The image does not directly relate to the text provided.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41418058542",
+      "checkpointed_at": "2026-11-02T11:31:24Z"
     }
   ]
 }
