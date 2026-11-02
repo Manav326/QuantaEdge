@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3147,
+    "assets_selected": 3148,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c16577a15e78e04e26b60ff",
-      "0a4a03e2ba7ac8cacfb0f381"
+      "b61973c63de2beec312aeff5",
+      "393a5c762f21e2ee0cffb0e8"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3143,
-    "assets_remaining": 4345,
+    "assets_analyzed": 3145,
+    "assets_remaining": 4343,
     "assets_completion_percent": 42.0,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 3142,
+    "assets_skipped_from_checkpoint": 3143,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
-      "checkpointed_at": "2026-11-02T03:23:45Z"
+      "checkpointed_at": "2026-11-02T03:33:59Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
-      "checkpointed_at": "2026-11-02T03:24:46Z"
+      "checkpointed_at": "2026-11-02T03:35:00Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
-      "checkpointed_at": "2026-11-02T03:28:14Z"
+      "checkpointed_at": "2026-11-02T03:36:24Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -117003,6 +117003,62 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
       "checkpointed_at": "2026-11-02T03:32:25Z"
+    },
+    {
+      "asset_id": "b61973c63de2beec312aeff5",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41373988400",
+      "checkpointed_at": "2026-11-02T03:36:34Z"
+    },
+    {
+      "asset_id": "393a5c762f21e2ee0cffb0e8",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41373988400",
+      "checkpointed_at": "2026-11-02T03:36:44Z"
     }
   ]
 }
