@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1596,
-    "successful_visual_analyses": 1570,
-    "missing_visual_analyses": 482,
+    "raw_analysis_result_rows": 1599,
+    "successful_visual_analyses": 1573,
+    "missing_visual_analyses": 479,
     "failed_visual_analyses": 26,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 508,
+    "unresolved_count": 505,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -59799,9 +59799,35 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the separation of mixed grains.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The separated grains get mixed with",
+          "piles of husk.",
+          "Valli whispers to Malli, \"Will the farmers",
+          "handpick the grains to remove them from",
+          "separating the mixtureso much husk?\"",
+          "She wonders, \"How much",
+          "time will the farmers take to separate",
+          "these?\"",
+          "Can you think of",
+          "by any method other than handpicking?",
+          "puffed rice is mixed",
+          "with chana dal."
+        ],
+        "concepts": [
+          "separation of mixed grains",
+          "time estimation for separation",
+          "methods other than handpicking"
+        ],
+        "context_relation": "The text discusses the separation of mixed grains, specifically puffed rice and chana dal, and asks the reader to consider alternative methods for separation.",
+        "limitations": [
+          "The text does not provide specific methods for separation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59817,9 +59843,42 @@
       "asset_path": "page-0183.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a question about separating grains from husks.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The separated grains get mixed with piles of husk.",
+          "Valli whispers to Malli, \"Will the farmers handpick the grains to remove them from so much husk?\" She wonders, \"How much time will the farmers take to separate these?\"",
+          "A small amount of puffed rice is mixed with chana dal. Can you think of separating the mixture by any method other than handpicking?",
+          "Let us perform an activity to find out the answer to the questions raised by Valli.",
+          "Activity 9.1: Let us explore",
+          "Take a handful of roasted peanuts and rub them between your palms. What happens?",
+          "Is it possible to separate the removed skin and the peanuts?",
+          "Now, try blowing it. What do you observe?",
+          "Which of these components—removed peanut skins or peanuts are blown away?",
+          "You observe that blowing air separates the heavier and the lighter components.",
+          "How do you think farmers separate so many grains from husk?",
+          "Traditionally, a soop (bamboo tray) is used for separating heavier and lighter components of a mixture (Fig. 9.3).",
+          "Next day, their Nana takes them to the fields to show this process at work.",
+          "Malli and Valli observe a farmer standing on a raised platform. The farmer is moving the bamboo tray which contains threshed wheat grains in the direction of air or wind (Fig. 9.4).",
+          "What do you infer from Fig. 9.4? Do both the components, wheat grains and husk, fall at the same place? Which of the two components get blown away? Can the wind separate the two components?"
+        ],
+        "concepts": [
+          "separating grains from husks",
+          "bamboo tray",
+          "blowing air",
+          "separating components",
+          "wheat grains",
+          "husk",
+          "wind"
+        ],
+        "context_relation": "exploring methods of separation",
+        "limitations": [
+          "The image does not provide specific instructions or steps for the activity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59835,9 +59894,31 @@
       "asset_path": "assets/9f36b530dda9450c988a21d599db53902cf6448694e4032dabded7e3d795b855.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person winnowing rice using a bamboo tray.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Fig. 9.4: Winnowing",
+          "Valli is unable to",
+          "separate husk",
+          "from rice in a",
+          "bamboo tray",
+          "This method of separating heavier and lighter",
+          "components of a mixture by wind or by blowing",
+          "air is called winnowing"
+        ],
+        "concepts": [
+          "Winnowing",
+          "Separation of components",
+          "Wind separation"
+        ],
+        "context_relation": "The image illustrates the process of winnowing rice, which is a method used to separate the husk from the grains using wind.",
+        "limitations": [
+          "The image does not provide specific details about the winnowing process, such as the type of wind or the method used to blow the air."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
