@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1437,
-    "successful_visual_analyses": 1415,
-    "missing_visual_analyses": 854,
+    "raw_analysis_result_rows": 1440,
+    "successful_visual_analyses": 1418,
+    "missing_visual_analyses": 851,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 876,
+    "unresolved_count": 873,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -53413,9 +53413,21 @@
       "asset_path": "assets/64eb466f93dcdc77cc1581480d21978cb6abb8875c0ca3438423551c53c00f52.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A bottle with a blue liquid inside.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "bottle",
+          "liquid",
+          "blue",
+          "container"
+        ],
+        "context_relation": "The image is related to the educational content about liquid state.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53431,9 +53443,23 @@
       "asset_path": "assets/0cce39c4d6e4ac1b6184dcc3260fe8df1ab7342b7f5e44da1d7950c245a410d0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a pitcher with a handle and a filled section, labeled with a measurement of 100 mL.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "100 mL"
+        ],
+        "concepts": [
+          "liquid state",
+          "container shapes"
+        ],
+        "context_relation": "The image is related to the educational content about liquid state and container shapes in the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the liquid state or container shapes beyond the measurement of 100 mL."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53449,9 +53475,23 @@
       "asset_path": "assets/85339651a45adc94597856614933ff60d8f6a309b4a5abe93f991ef1ff40b9fc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass filled with a light blue liquid, likely water, placed on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "liquid state",
+          "container shapes",
+          "water",
+          "glass"
+        ],
+        "context_relation": "The image is related to the educational content about the liquid state and the shapes of containers.",
+        "limitations": [
+          "The image does not provide specific measurements or details about the liquid's properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
