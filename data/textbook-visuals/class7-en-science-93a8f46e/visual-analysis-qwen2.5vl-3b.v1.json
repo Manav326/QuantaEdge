@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3188,
+    "assets_selected": 3192,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "1ee2908d5bc5089a76b571ae",
-      "df7ad25d54d6f1c88237b126",
-      "104087157b422201f04148f0",
-      "ac9cda6cb2d877f966d1c95c"
+      "db086047fc1b409a9e35826c",
+      "7d72edef7b701c32b9e4580e",
+      "a2caf6b83c59e9ae75347091",
+      "aa6b17539baed46c780d6f26"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3187,
-    "assets_remaining": 4301,
+    "assets_analyzed": 3191,
+    "assets_remaining": 4297,
     "assets_completion_percent": 42.6,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 3183,
+    "assets_skipped_from_checkpoint": 3187,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41426089748",
-      "checkpointed_at": "2026-11-02T12:24:59Z"
+      "checkpointed_at": "2026-11-02T12:32:46Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -118296,6 +118296,139 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41426089748",
       "checkpointed_at": "2026-11-02T12:31:28Z"
+    },
+    {
+      "asset_id": "db086047fc1b409a9e35826c",
+      "asset_sha256": "f71724b5016efbe59387dae4634768d54762ae588dc8bded1e17b271a5cee4c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/f71724b5016efbe59387dae4634768d54762ae588dc8bded1e17b271a5cee4c7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bbf3a0f4be26f545743fa40a6b1854f2ec0fa75bf0e6069859acddca6a088c94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a kidney-shaped object with a central oval indentation.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:34:18Z"
+    },
+    {
+      "asset_id": "7d72edef7b701c32b9e4580e",
+      "asset_sha256": "21efe8a7e901e43a260c0f426ab5cedbd426c345523e92f8b2b62b1a10918ed1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/21efe8a7e901e43a260c0f426ab5cedbd426c345523e92f8b2b62b1a10918ed1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bbf3a0f4be26f545743fa40a6b1854f2ec0fa75bf0e6069859acddca6a088c94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing health issues related to iron deficiency in adolescents, particularly girls, and how to manage it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Science and Society",
+          "Adolescents, especially girls, may sometimes suffer from blood-related health problem(s) because of a deficiency of iron or vitamin B12 in the body.",
+          "Find out about such health problem(s).",
+          "How can we manage iron deficiency in our body?",
+          "Find out about government schemes aimed to prevent such deficiencies.",
+          "Know a Scientist",
+          "Dorothy Ho"
+        ],
+        "concepts": [
+          "iron deficiency",
+          "vitamin B12",
+          "blood-related health problems",
+          "adolescents",
+          "girls",
+          "government schemes",
+          "health management"
+        ],
+        "context_relation": "The page discusses health issues related to iron deficiency in adolescents, particularly girls, and how to manage it.",
+        "limitations": [
+          "The page does not provide specific solutions or details on how to manage iron deficiency.",
+          "The page does not mention any specific government schemes aimed to prevent iron deficiency."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:36:10Z"
+    },
+    {
+      "asset_id": "a2caf6b83c59e9ae75347091",
+      "asset_sha256": "8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bbf3a0f4be26f545743fa40a6b1854f2ec0fa75bf0e6069859acddca6a088c94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a mosquito and a fish, possibly representing a comparison or contrast.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Mosquito",
+          "Fish",
+          "Comparison",
+          "Contrast"
+        ],
+        "context_relation": "The image may be used to illustrate a comparison between mosquito bites and fish consumption as sources of iron or vitamin B12.",
+        "limitations": [
+          "The image does not provide specific information about iron or vitamin B12 deficiencies.",
+          "The image does not show the actual health effects of mosquito bites or fish consumption."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:37:48Z"
+    },
+    {
+      "asset_id": "aa6b17539baed46c780d6f26",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bbf3a0f4be26f545743fa40a6b1854f2ec0fa75bf0e6069859acddca6a088c94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:38:01Z"
     }
   ]
 }
