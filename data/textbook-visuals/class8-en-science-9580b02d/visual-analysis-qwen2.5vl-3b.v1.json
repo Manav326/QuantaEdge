@@ -13,13 +13,13 @@
     "assets_processed_ids": [
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "7b6098b3decff487d945867d",
-      "d6a3b284f120b97594630433",
-      "cc14e6ada5d4c7a1a403f0d8"
+      "36ec2d1cc980e6810b5a1e89",
+      "7f9eee3e53419277752d2a03",
+      "95169d40c782c4846f71dda6"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1401,
-    "assets_remaining": 890,
+    "assets_analyzed": 1403,
+    "assets_remaining": 888,
     "assets_completion_percent": 61.2,
     "assets_failed": 20,
     "assets_skipped_from_checkpoint": 1401,
@@ -20133,7 +20133,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
-      "checkpointed_at": "2026-11-02T10:44:54Z"
+      "checkpointed_at": "2026-11-02T10:59:56Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38412,7 +38412,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
-      "checkpointed_at": "2026-11-02T10:45:50Z"
+      "checkpointed_at": "2026-11-02T11:00:53Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -46433,7 +46433,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41400575377",
+      "run_id": "41418058542",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -46799,6 +46799,79 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
       "checkpointed_at": "2026-11-02T09:03:43Z"
+    },
+    {
+      "asset_id": "7f9eee3e53419277752d2a03",
+      "asset_sha256": "5e8e76205cb13f8ca531ec43f95ee3f55a99fd044b73090e94ac0189a7ef3cbc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/5e8e76205cb13f8ca531ec43f95ee3f55a99fd044b73090e94ac0189a7ef3cbc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0a01c457136551c3799e1dbbdc84e0bc8b68ae8c0c1695b22cf6783516fd48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A key is shown in the image.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "7.2.1 Solid state",
+          "How are constituent particles held together in solids?",
+          "Activity 7.3 : Let us find out",
+          "z Collect a few solid objects, such as a piece",
+          "of iron or an iron nail, a piece of rock salt",
+          "a stone, a piece of wood, a key, and a piece",
+          "of aluminium (Fig. 7.3)."
+        ],
+        "concepts": [
+          "Solid state",
+          "Constituent particles",
+          "Holding together"
+        ],
+        "context_relation": "The image is related to the activity where students are asked to collect solid objects to understand the concept of solid state.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the objects collected."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41418058542",
+      "checkpointed_at": "2026-11-02T11:07:42Z"
+    },
+    {
+      "asset_id": "95169d40c782c4846f71dda6",
+      "asset_sha256": "0970b95cc615d693872962334f099f5ab7e6bcc7ee9e7c2fc56595b6dbbc6935",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/0970b95cc615d693872962334f099f5ab7e6bcc7ee9e7c2fc56595b6dbbc6935.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0a01c457136551c3799e1dbbdc84e0bc8b68ae8c0c1695b22cf6783516fd48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a metal nail with a shiny, metallic surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "metal",
+          "nail",
+          "shiny",
+          "metallic surface"
+        ],
+        "context_relation": "The image is related to the activity where students are collecting solid objects to explore how constituent particles are held together in solids.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the nail or the objects being collected."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41418058542",
+      "checkpointed_at": "2026-11-02T11:09:18Z"
     }
   ]
 }

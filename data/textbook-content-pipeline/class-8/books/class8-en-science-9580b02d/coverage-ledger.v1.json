@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1423,
-    "successful_visual_analyses": 1403,
-    "missing_visual_analyses": 868,
+    "raw_analysis_result_rows": 1425,
+    "successful_visual_analyses": 1405,
+    "missing_visual_analyses": 866,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 888,
+    "unresolved_count": 886,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -52941,9 +52941,30 @@
       "asset_path": "assets/5e8e76205cb13f8ca531ec43f95ee3f55a99fd044b73090e94ac0189a7ef3cbc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A key is shown in the image.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "7.2.1 Solid state",
+          "How are constituent particles held together in solids?",
+          "Activity 7.3 : Let us find out",
+          "z Collect a few solid objects, such as a piece",
+          "of iron or an iron nail, a piece of rock salt",
+          "a stone, a piece of wood, a key, and a piece",
+          "of aluminium (Fig. 7.3)."
+        ],
+        "concepts": [
+          "Solid state",
+          "Constituent particles",
+          "Holding together"
+        ],
+        "context_relation": "The image is related to the activity where students are asked to collect solid objects to understand the concept of solid state.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the objects collected."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52959,9 +52980,23 @@
       "asset_path": "assets/0970b95cc615d693872962334f099f5ab7e6bcc7ee9e7c2fc56595b6dbbc6935.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a metal nail with a shiny, metallic surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "metal",
+          "nail",
+          "shiny",
+          "metallic surface"
+        ],
+        "context_relation": "The image is related to the activity where students are collecting solid objects to explore how constituent particles are held together in solids.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the nail or the objects being collected."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
