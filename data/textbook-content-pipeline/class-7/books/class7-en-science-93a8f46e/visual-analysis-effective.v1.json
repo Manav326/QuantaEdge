@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ad2943b2906a890c7918694af8c6b1a47fbddab29c4b3b2a48509c64267e0784",
+  "raw_analysis_sha256": "c465aac5da60d1fad091294c0a265ed0bbc9507060f58798df35e5ec55258ed7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-01T23:58:17Z",
+      "checkpointed_at": "2026-11-02T00:08:14Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-01T23:59:21Z",
+      "checkpointed_at": "2026-11-02T00:09:19Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -164684,7 +164684,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-02T00:00:49Z",
+      "checkpointed_at": "2026-11-02T00:10:49Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -182916,6 +182916,140 @@
         "context_relation": "The text provides information about the changes in voice in adolescent boys, specifically focusing on the growth of the voice box and the Adam's apple.",
         "limitations": [
           "The text does not provide visual aids or diagrams to support the information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f39513c4fa41ad3bb72b1ffe",
+      "asset_sha256": "925bc9b17390e6e67f04b1835d4e406f7ccf5dc1055d2b15828753ba5f8b7c29",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 96,
+      "asset_path": "page-0096.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a boy with a growth in his throat, labeled 'Adam's apple', and text explaining changes in voice.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Changes in voice",
+          "In adolescent boys, the growth of the voice box leads to a voice that sounds hoarse. The voice box is a structure in our throat that helps us to speak. The growth may be seen as a bump in the throat region and is called the Adam's apple. However, it is not noticeable in every individual. The voice b",
+          "Appearance of hair in different parts of body",
+          "Both boys and girls experience the growth of hair in different parts of their bodies, such as the armpits and pubic region.",
+          "Boys often develop facial hair, which later grows into a moustache and a beard as they move towards adulthood. Some boys may also develop chest hair and back hair, though few boys may have no significant hair growth. Variations in and timing of appearance of hair growth is completely normal.",
+          "Changes in facial skin: emergence of pimples",
+          "Another common occurrence during the adolescent years is a skin condition called acne, in which small, reddish pimples appear. These are commonly visible on the face. Acne occurs due to an increase in oily secretions from the skin during adolescence that can clog the skin pores and lead to infection"
+        ],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "voice changes",
+          "hair growth",
+          "pubic region",
+          "facial hair",
+          "moustache",
+          "beard",
+          "chest hair",
+          "back hair",
+          "acne",
+          "pimples",
+          "skin condition",
+          "adolescence",
+          "hair growth timing",
+          "skin pores",
+          "oily secretions"
+        ],
+        "context_relation": "The image is a page from a textbook discussing changes in voice, hair growth, and facial skin during adolescence.",
+        "limitations": [
+          "The image does not provide specific details about the timing or nature of these changes for each individual."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41353985174",
+      "checkpointed_at": "2026-11-02T00:14:22Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a boy with a growth in his throat, labeled 'Adam's apple', and text explaining changes in voice.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Changes in voice",
+          "In adolescent boys, the growth of the voice box leads to a voice that sounds hoarse. The voice box is a structure in our throat that helps us to speak. The growth may be seen as a bump in the throat region and is called the Adam's apple. However, it is not noticeable in every individual. The voice b",
+          "Appearance of hair in different parts of body",
+          "Both boys and girls experience the growth of hair in different parts of their bodies, such as the armpits and pubic region.",
+          "Boys often develop facial hair, which later grows into a moustache and a beard as they move towards adulthood. Some boys may also develop chest hair and back hair, though few boys may have no significant hair growth. Variations in and timing of appearance of hair growth is completely normal.",
+          "Changes in facial skin: emergence of pimples",
+          "Another common occurrence during the adolescent years is a skin condition called acne, in which small, reddish pimples appear. These are commonly visible on the face. Acne occurs due to an increase in oily secretions from the skin during adolescence that can clog the skin pores and lead to infection"
+        ],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "voice changes",
+          "hair growth",
+          "pubic region",
+          "facial hair",
+          "moustache",
+          "beard",
+          "chest hair",
+          "back hair",
+          "acne",
+          "pimples",
+          "skin condition",
+          "adolescence",
+          "hair growth timing",
+          "skin pores",
+          "oily secretions"
+        ],
+        "context_relation": "The image is a page from a textbook discussing changes in voice, hair growth, and facial skin during adolescence.",
+        "limitations": [
+          "The image does not provide specific details about the timing or nature of these changes for each individual."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0e2e73cae276e9ba24ef4a07",
+      "asset_sha256": "80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not contribute to the educational content of the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41353985174",
+      "checkpointed_at": "2026-11-02T00:15:27Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not contribute to the educational content of the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
