@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "36630d29c98b7936795553166c44b287e540efa48559971c174b16aa4712996f",
+  "raw_analysis_sha256": "7a27772849e4be1f6d6ece8fef24a8a9a841f81ec63c470631dd5f41b97ee6ba",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41457938843",
-      "checkpointed_at": "2026-11-02T16:23:31Z",
+      "checkpointed_at": "2026-11-02T16:29:46Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -186619,6 +186619,202 @@
         "concepts": [],
         "context_relation": "Educational content related to social media awareness and responsible behavior.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ba827136cf78bfd754e0a27b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "86b37187cab689dc8fcc4329117e58038194dce0a5d342d17329776270dd2387",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to social media awareness and responsible behavior.",
+        "limitations": [
+          "No visible text or images present on the page.",
+          "No specific content or instructions visible for analysis."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:30:02Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to social media awareness and responsible behavior.",
+        "limitations": [
+          "No visible text or images present on the page.",
+          "No specific content or instructions visible for analysis."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3b65b75e4132f0ef45c1c6db",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "86b37187cab689dc8fcc4329117e58038194dce0a5d342d17329776270dd2387",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and lacks any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:30:18Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and lacks any visible content or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a21ccd0e0abc64421ead5288",
+      "asset_sha256": "459b4a88677cf09bf728ec2d34e1a8e2ed78cc4419db16db09574e1c6c7eb693",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 103,
+      "asset_path": "page-0103.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "86b37187cab689dc8fcc4329117e58038194dce0a5d342d17329776270dd2387",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table with dos and don'ts for social media usage.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.4: Dos and don'ts to be followed on social media",
+          "Dos",
+          "Be respectful and kind.",
+          "Think before posting.",
+          "Protect privacy.",
+          "Don'ts",
+          "Do not share personal photos with strangers/virtual friends."
+        ],
+        "concepts": [
+          "Responsible social media behavior",
+          "Collective observations",
+          "Dos and don'ts",
+          "Social media usage",
+          "Respectful and kind behavior",
+          "Thinking before posting",
+          "Protecting privacy"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific limitations mentioned in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:34:11Z",
+      "effective_analysis": {
+        "visual_summary": "Table with dos and don'ts for social media usage.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.4: Dos and don'ts to be followed on social media",
+          "Dos",
+          "Be respectful and kind.",
+          "Think before posting.",
+          "Protect privacy.",
+          "Don'ts",
+          "Do not share personal photos with strangers/virtual friends."
+        ],
+        "concepts": [
+          "Responsible social media behavior",
+          "Collective observations",
+          "Dos and don'ts",
+          "Social media usage",
+          "Respectful and kind behavior",
+          "Thinking before posting",
+          "Protecting privacy"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific limitations mentioned in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "20d19c37a5f3c9b696b58aad",
+      "asset_sha256": "0745038e71641b8ce553db898ed03ad3f9e896a91704d5b92f9235da2c6e353b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/0745038e71641b8ce553db898ed03ad3f9e896a91704d5b92f9235da2c6e353b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a simple rectangular outline.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible text or content.",
+        "limitations": [
+          "The image does not contain any specific content or information.",
+          "The image is a simple rectangular outline with no additional elements or details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:35:44Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a simple rectangular outline.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible text or content.",
+        "limitations": [
+          "The image does not contain any specific content or information.",
+          "The image is a simple rectangular outline with no additional elements or details."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

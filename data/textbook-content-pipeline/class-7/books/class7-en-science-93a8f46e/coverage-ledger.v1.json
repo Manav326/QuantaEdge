@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3239,
-    "successful_visual_analyses": 3215,
-    "missing_visual_analyses": 4249,
+    "raw_analysis_result_rows": 3243,
+    "successful_visual_analyses": 3219,
+    "missing_visual_analyses": 4245,
     "failed_visual_analyses": 24,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4273,
+    "unresolved_count": 4269,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -127912,9 +127912,19 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to social media awareness and responsible behavior.",
+        "limitations": [
+          "No visible text or images present on the page.",
+          "No specific content or instructions visible for analysis."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -127930,9 +127940,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and lacks any visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -127948,9 +127967,34 @@
       "asset_path": "page-0103.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table with dos and don'ts for social media usage.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 6.4: Dos and don'ts to be followed on social media",
+          "Dos",
+          "Be respectful and kind.",
+          "Think before posting.",
+          "Protect privacy.",
+          "Don'ts",
+          "Do not share personal photos with strangers/virtual friends."
+        ],
+        "concepts": [
+          "Responsible social media behavior",
+          "Collective observations",
+          "Dos and don'ts",
+          "Social media usage",
+          "Respectful and kind behavior",
+          "Thinking before posting",
+          "Protecting privacy"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific limitations mentioned in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -127966,9 +128010,19 @@
       "asset_path": "assets/0745038e71641b8ce553db898ed03ad3f9e896a91704d5b92f9235da2c6e353b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a simple rectangular outline.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible text or content.",
+        "limitations": [
+          "The image does not contain any specific content or information.",
+          "The image is a simple rectangular outline with no additional elements or details."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
