@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9c7ab2ca5b5faaa2a56f93e66502bd320e45b04a8cb8e250f1018e2694058b03",
+  "raw_analysis_sha256": "eef3f5e1b58ce04b8176098b819b68f1346a2ad7a55dd296c7f11223a1937273",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
-      "checkpointed_at": "2026-11-02T03:38:16Z",
+      "checkpointed_at": "2026-11-02T03:42:33Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
-      "checkpointed_at": "2026-11-02T03:39:17Z",
+      "checkpointed_at": "2026-11-02T03:43:35Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -164684,7 +164684,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
-      "checkpointed_at": "2026-11-02T03:40:41Z",
+      "checkpointed_at": "2026-11-02T03:44:58Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -183489,6 +183489,86 @@
         "limitations": [
           "The image does not provide any specific information or context related to the text content."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0c25b277ab2f94715874aad8",
+      "asset_sha256": "b11d4842764861cf0a0da955ad706b5bec20be87ec4c1a0ce8d7a8aea07ca3a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/b11d4842764861cf0a0da955ad706b5bec20be87ec4c1a0ce8d7a8aea07ca3a1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a white background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is blank and does not contain any text or images.",
+          "The page does not provide any information or context.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, or equation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41373988400",
+      "checkpointed_at": "2026-11-02T03:46:22Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a white background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is blank and does not contain any text or images.",
+          "The page does not provide any information or context.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, or equation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e69b707affef3295a2bcda55",
+      "asset_sha256": "101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue paper airplane flying through the air with a dotted trail behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41373988400",
+      "checkpointed_at": "2026-11-02T03:47:20Z",
+      "effective_analysis": {
+        "visual_summary": "A blue paper airplane flying through the air with a dotted trail behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
