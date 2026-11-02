@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3176,
+    "assets_selected": 3180,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "b117f08dac076af948685e97",
-      "c2fed570f963e3fc402b9c0f",
-      "b83a725959d31a7ee09ed420",
-      "1e49f12a7c16ffb4258c55b5"
+      "352757fbeb93673d60bb9f47",
+      "acfab26b463f2dfc585029a4",
+      "79a6c27b3f8cf9dc1eb12b7a",
+      "3da9580efb4135620035cd9d"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3175,
-    "assets_remaining": 4313,
-    "assets_completion_percent": 42.4,
+    "assets_analyzed": 3179,
+    "assets_remaining": 4309,
+    "assets_completion_percent": 42.5,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 3171,
+    "assets_skipped_from_checkpoint": 3175,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41426089748",
-      "checkpointed_at": "2026-11-02T12:04:25Z"
+      "checkpointed_at": "2026-11-02T12:10:43Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -117893,6 +117893,113 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41426089748",
       "checkpointed_at": "2026-11-02T12:09:19Z"
+    },
+    {
+      "asset_id": "352757fbeb93673d60bb9f47",
+      "asset_sha256": "cc2cb3e0cdc7ecde5a1e3e89a831d30aed022518ee924fae694c93581630148f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/cc2cb3e0cdc7ecde5a1e3e89a831d30aed022518ee924fae694c93581630148f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748f03f8ec5a1c6e866d8992977114576defed2e40792f1b7d8bc6e58203e7b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue speech bubble with a pointed tail.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:10:49Z"
+    },
+    {
+      "asset_id": "acfab26b463f2dfc585029a4",
+      "asset_sha256": "68a9f8fadda7cf4ec9f4ebc17c7a79491cd8de2a5c68c03a2f3794dcb33c3acf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/68a9f8fadda7cf4ec9f4ebc17c7a79491cd8de2a5c68c03a2f3794dcb33c3acf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748f03f8ec5a1c6e866d8992977114576defed2e40792f1b7d8bc6e58203e7b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a blank white page, possibly representing a blank canvas for writing or reading.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a blank page or scroll, possibly for educational content.",
+        "limitations": [
+          "The image does not provide specific content or information.",
+          "The image is a simple illustration without additional context or details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:12:24Z"
+    },
+    {
+      "asset_id": "79a6c27b3f8cf9dc1eb12b7a",
+      "asset_sha256": "d536aaa5d2c730aff02a215460cb02f64bdccdb81076be969c787d66ca1d0ffc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/d536aaa5d2c730aff02a215460cb02f64bdccdb81076be969c787d66ca1d0ffc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748f03f8ec5a1c6e866d8992977114576defed2e40792f1b7d8bc6e58203e7b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen or marker.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:13:58Z"
+    },
+    {
+      "asset_id": "3da9580efb4135620035cd9d",
+      "asset_sha256": "101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748f03f8ec5a1c6e866d8992977114576defed2e40792f1b7d8bc6e58203e7b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue paper airplane in mid-flight with a dotted trail behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane in motion, possibly symbolizing the journey of adolescence.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:15:33Z"
     }
   ]
 }
