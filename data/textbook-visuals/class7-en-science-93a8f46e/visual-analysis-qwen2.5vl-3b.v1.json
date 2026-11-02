@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3160,
+    "assets_selected": 3161,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "3f6dc2d4b02b71bf890812c9"
+      "827b5c3610d65adf5bde637e"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3156,
-    "assets_remaining": 4332,
-    "assets_completion_percent": 42.1,
+    "assets_analyzed": 3157,
+    "assets_remaining": 4331,
+    "assets_completion_percent": 42.2,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3155,
+    "assets_skipped_from_checkpoint": 3156,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41396302142",
-      "checkpointed_at": "2026-11-02T06:55:58Z"
+      "checkpointed_at": "2026-11-02T06:58:37Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41396302142",
-      "checkpointed_at": "2026-11-02T06:56:27Z"
+      "checkpointed_at": "2026-11-02T06:59:06Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41396302142",
-      "checkpointed_at": "2026-11-02T06:57:05Z"
+      "checkpointed_at": "2026-11-02T06:59:44Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41396302142",
-      "checkpointed_at": "2026-11-02T06:57:46Z"
+      "checkpointed_at": "2026-11-02T07:00:24Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -117446,6 +117446,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41396302142",
       "checkpointed_at": "2026-11-02T06:57:49Z"
+    },
+    {
+      "asset_id": "827b5c3610d65adf5bde637e",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf8336a93584f506c654636a15454ef44d990424c09331aaf6b567b9f4e42ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a black spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41396302142",
+      "checkpointed_at": "2026-11-02T07:00:27Z"
     }
   ]
 }
