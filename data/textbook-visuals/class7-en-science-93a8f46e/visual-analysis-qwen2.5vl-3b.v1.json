@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3152,
+    "assets_selected": 3154,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "0c25b277ab2f94715874aad8",
-      "e69b707affef3295a2bcda55"
+      "a3869362134754ef56fc74a0",
+      "5bb2b635d5267c69e8fd6fe3"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3149,
-    "assets_remaining": 4339,
+    "assets_analyzed": 3151,
+    "assets_remaining": 4337,
     "assets_completion_percent": 42.1,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 3147,
+    "assets_skipped_from_checkpoint": 3149,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
-      "checkpointed_at": "2026-11-02T03:42:33Z"
+      "checkpointed_at": "2026-11-02T03:48:52Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
-      "checkpointed_at": "2026-11-02T03:43:35Z"
+      "checkpointed_at": "2026-11-02T03:49:53Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
-      "checkpointed_at": "2026-11-02T03:44:58Z"
+      "checkpointed_at": "2026-11-02T03:51:16Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -117171,6 +117171,62 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
       "checkpointed_at": "2026-11-02T03:47:20Z"
+    },
+    {
+      "asset_id": "a3869362134754ef56fc74a0",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41373988400",
+      "checkpointed_at": "2026-11-02T03:55:37Z"
+    },
+    {
+      "asset_id": "5bb2b635d5267c69e8fd6fe3",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41373988400",
+      "checkpointed_at": "2026-11-02T03:55:52Z"
     }
   ]
 }
