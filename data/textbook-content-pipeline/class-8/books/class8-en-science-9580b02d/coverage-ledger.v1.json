@@ -26955,15 +26955,13 @@
           "Staff",
           "Textbook",
           "Editing",
+          "Support",
           "Publication",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Commitment"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and staff.",
+        "context_relation": "The text is a page from a book or document that lists acknowledgments and thanks to various contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described.",
+          "The text does not provide specific details about the book's content or the subjects it covers.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },

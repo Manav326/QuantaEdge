@@ -11,11 +11,11 @@
     "assets_selected": 1406,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "2b71f040b18c02e306e02930",
-      "a2890b3458baf46be1b64d1a",
       "35f32b476dc5977bc161e8e8",
-      "fc310253031bd2210d27a7e7",
-      "414a0224c90f14c01c7da9e7"
+      "0037fd56b1a6a076dd9cad41",
+      "aa8a149fa698d13f05cfdb3e",
+      "9c98ea470aafbf3dbbeffd67",
+      "7bceb11bef609f2404522955"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1401,
@@ -20119,15 +20119,13 @@
           "Staff",
           "Textbook",
           "Editing",
+          "Support",
           "Publication",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Commitment"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and staff.",
+        "context_relation": "The text is a page from a book or document that lists acknowledgments and thanks to various contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described.",
+          "The text does not provide specific details about the book's content or the subjects it covers.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20135,7 +20133,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
-      "checkpointed_at": "2026-11-02T09:26:12Z"
+      "checkpointed_at": "2026-11-02T09:37:06Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25975,7 +25973,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41400575377",
+      "run_id": "41418058542",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -30162,7 +30160,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41400575377",
+      "run_id": "41418058542",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -30606,7 +30604,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41400575377",
+      "run_id": "41418058542",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -38081,7 +38079,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41400575377",
+      "run_id": "41418058542",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
