@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "938a09277e09c12f36dd57514732e04e077b81d6dd62497ed8bad89e0f88fe3b",
+  "raw_analysis_sha256": "36630d29c98b7936795553166c44b287e540efa48559971c174b16aa4712996f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41457938843",
-      "checkpointed_at": "2026-11-02T16:15:27Z",
+      "checkpointed_at": "2026-11-02T16:23:31Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -186457,6 +186457,168 @@
         "limitations": [
           "The page does not provide specific examples or scenarios for the concepts discussed."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1afb783a456f69cd0f2ff2ab",
+      "asset_sha256": "b805930ddcb17f1971913cf5aea013ebf9b78436522e96d3a81a7a7dce176529",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/b805930ddcb17f1971913cf5aea013ebf9b78436522e96d3a81a7a7dce176529.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "86b37187cab689dc8fcc4329117e58038194dce0a5d342d17329776270dd2387",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a blank white surface, possibly for writing or displaying text.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to social media awareness and responsible behavior.",
+        "limitations": [
+          "The scroll is blank and requires content to be added.",
+          "The image does not provide specific details about the content or context of the scroll."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:25:04Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with a blank white surface, possibly for writing or displaying text.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to social media awareness and responsible behavior.",
+        "limitations": [
+          "The scroll is blank and requires content to be added.",
+          "The image does not provide specific details about the content or context of the scroll."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a35f810577afa3337942a5ad",
+      "asset_sha256": "17caab9fc51abb2ad16609b749f7f63eb5eee8c61122f443deb8a033b50208f8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/17caab9fc51abb2ad16609b749f7f63eb5eee8c61122f443deb8a033b50208f8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "86b37187cab689dc8fcc4329117e58038194dce0a5d342d17329776270dd2387",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen or marker.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to writing or drawing tools.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:26:37Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen or marker.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to writing or drawing tools.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7db1d24d7598fc78e51c8919",
+      "asset_sha256": "6ddfe6df1c0fe44c37d6d4f1c7f6360b2dcce43078a6351edc113c1ac724ff55",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/6ddfe6df1c0fe44c37d6d4f1c7f6360b2dcce43078a6351edc113c1ac724ff55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "86b37187cab689dc8fcc4329117e58038194dce0a5d342d17329776270dd2387",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person's respiratory system showing inhalation and exhalation.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "respiratory system",
+          "inhalation",
+          "exhalation"
+        ],
+        "context_relation": "The image illustrates the respiratory system's function in inhalation and exhalation.",
+        "limitations": [
+          "The image does not provide specific details about the anatomical structures or processes involved in inhalation and exhalation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:28:12Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person's respiratory system showing inhalation and exhalation.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "respiratory system",
+          "inhalation",
+          "exhalation"
+        ],
+        "context_relation": "The image illustrates the respiratory system's function in inhalation and exhalation.",
+        "limitations": [
+          "The image does not provide specific details about the anatomical structures or processes involved in inhalation and exhalation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "76d876f31203f9cabbd5216d",
+      "asset_sha256": "101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "86b37187cab689dc8fcc4329117e58038194dce0a5d342d17329776270dd2387",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue paper airplane flying in the air with a dotted trail behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to social media awareness and responsible behavior.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:28:22Z",
+      "effective_analysis": {
+        "visual_summary": "A blue paper airplane flying in the air with a dotted trail behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to social media awareness and responsible behavior.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
