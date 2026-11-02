@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "df026337a438b29d069c140e07636ce0ab3ce15d4a3073d66fd52f4368b9ab23",
+  "raw_analysis_sha256": "4aae8fda347a275ab53f8dabce99d22ee81dd2f55f52586b4eae49d98398a411",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41426089748",
-      "checkpointed_at": "2026-11-02T12:16:54Z",
+      "checkpointed_at": "2026-11-02T12:24:59Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -185000,6 +185000,206 @@
         "context_relation": "The page is likely a blank page in a textbook.",
         "limitations": [
           "The page is blank and does not contain any visual or textual information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1ee2908d5bc5089a76b571ae",
+      "asset_sha256": "70129de3c7744d8f6b6f918a43526a53670cd4b38fe3ef827fcf25cafb332a32",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/70129de3c7744d8f6b6f918a43526a53670cd4b38fe3ef827fcf25cafb332a32.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bbf3a0f4be26f545743fa40a6b1854f2ec0fa75bf0e6069859acddca6a088c94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist writing in a lab setting.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Dorothy Ho",
+          "Science and Society",
+          "Adolescents, especially girls, may sometimes suffer from blood-related health problem(s) because of a deficiency of iron or vitamin B12 in the body.",
+          "Find out about such health problem(s).",
+          "How can we manage iron deficiency in our body?",
+          "Find out about government schemes aimed to prevent such deficiencies."
+        ],
+        "concepts": [
+          "blood-related health problems",
+          "iron deficiency",
+          "vitamin B12 deficiency",
+          "government schemes",
+          "adolescents",
+          "girls"
+        ],
+        "context_relation": "The image is related to the text about health problems and solutions for iron deficiency.",
+        "limitations": [
+          "The image does not provide specific details about the health problems or solutions.",
+          "The image does not show a scientist in a laboratory setting."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:26:45Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist writing in a lab setting.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Dorothy Ho",
+          "Science and Society",
+          "Adolescents, especially girls, may sometimes suffer from blood-related health problem(s) because of a deficiency of iron or vitamin B12 in the body.",
+          "Find out about such health problem(s).",
+          "How can we manage iron deficiency in our body?",
+          "Find out about government schemes aimed to prevent such deficiencies."
+        ],
+        "concepts": [
+          "blood-related health problems",
+          "iron deficiency",
+          "vitamin B12 deficiency",
+          "government schemes",
+          "adolescents",
+          "girls"
+        ],
+        "context_relation": "The image is related to the text about health problems and solutions for iron deficiency.",
+        "limitations": [
+          "The image does not provide specific details about the health problems or solutions.",
+          "The image does not show a scientist in a laboratory setting."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "df7ad25d54d6f1c88237b126",
+      "asset_sha256": "e34c2b2ea40184c6ff9943f92f372eecba94ae3463c501dc694e765d543cc55d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/e34c2b2ea40184c6ff9943f92f372eecba94ae3463c501dc694e765d543cc55d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bbf3a0f4be26f545743fa40a6b1854f2ec0fa75bf0e6069859acddca6a088c94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is related to the topic of health and nutrition, specifically focusing on iron deficiency and vitamin B12.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:28:20Z",
+      "effective_analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is related to the topic of health and nutrition, specifically focusing on iron deficiency and vitamin B12.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "104087157b422201f04148f0",
+      "asset_sha256": "bd792075b7713b83796d184583a79716564d39aef5926be117c205995f5546fe",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/bd792075b7713b83796d184583a79716564d39aef5926be117c205995f5546fe.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bbf3a0f4be26f545743fa40a6b1854f2ec0fa75bf0e6069859acddca6a088c94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist holding a test tube, smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "test tube",
+          "iron deficiency",
+          "vitamin B12",
+          "government schemes",
+          "health problem"
+        ],
+        "context_relation": "The image is related to the educational content about health problems and solutions.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:29:55Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist holding a test tube, smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "test tube",
+          "iron deficiency",
+          "vitamin B12",
+          "government schemes",
+          "health problem"
+        ],
+        "context_relation": "The image is related to the educational content about health problems and solutions.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ac9cda6cb2d877f966d1c95c",
+      "asset_sha256": "d49adb6c4ac3e5fd60e7dc689f090f123115aa316f6984e28f462ca454fa0ae2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/d49adb6c4ac3e5fd60e7dc689f090f123115aa316f6984e28f462ca454fa0ae2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bbf3a0f4be26f545743fa40a6b1854f2ec0fa75bf0e6069859acddca6a088c94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black and white photograph of a woman wearing a hat and a coat.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content or the scientist Dorothy Ho."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:31:28Z",
+      "effective_analysis": {
+        "visual_summary": "A black and white photograph of a woman wearing a hat and a coat.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content or the scientist Dorothy Ho."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
