@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a14f9390813aba4f2c7088103d36816925cf32e383a236cf06c04698890ad889",
+  "raw_analysis_sha256": "65e3519e897d901a6e6924a230eaa21bd18ddb0aa7587faee027e4b0da975087",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:52:26Z",
+      "checkpointed_at": "2026-11-02T08:58:28Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:53:15Z",
+      "checkpointed_at": "2026-11-02T08:59:21Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:54:14Z",
+      "checkpointed_at": "2026-11-02T09:00:26Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -67147,7 +67147,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:55:34Z",
+      "checkpointed_at": "2026-11-02T09:01:45Z",
       "effective_analysis": {
         "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds, with a caption indicating that the positively charged particles move upwards and the negatively charged particles move downwards.",
         "visual_type": "diagram",
@@ -70883,6 +70883,84 @@
         "concepts": [],
         "context_relation": "activity",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c0ba4e6575b10fdffadc500f",
+      "asset_sha256": "5477cc7fbc0822cc1f79c5941173d56322321b76b1825b5575e7bec376b915ff",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/5477cc7fbc0822cc1f79c5941173d56322321b76b1825b5575e7bec376b915ff.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0a01c457136551c3799e1dbbdc84e0bc8b68ae8c0c1695b22cf6783516fd48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A collection of solid objects including an iron nail, rock salt, a stone, a piece of wood, a key, and a piece of aluminium.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Let us explore how these attractions vary in different states.",
+          "7.2.1 Solid state",
+          "How are constituent particles held together in solids?",
+          "Activity 7.3 : Let us find out",
+          "z Collect a few solid objects, such as a piece",
+          "of iron or an iron nail, a piece of rock salt,",
+          "a stone, a piece of wood, a key, and a piece",
+          "of aluminium (Fig. 7.3).",
+          "Iron nail",
+          "Rock salt",
+          "Stone",
+          "Piece of wood",
+          "Key",
+          "Piece of aluminium"
+        ],
+        "concepts": [
+          "Solid state",
+          "Constituent particles",
+          "Holding together"
+        ],
+        "context_relation": "The image is related to the educational content about the solid state of matter.",
+        "limitations": [
+          "The image does not show the actual objects but their names."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41400575377",
+      "checkpointed_at": "2026-11-02T09:03:43Z",
+      "effective_analysis": {
+        "visual_summary": "A collection of solid objects including an iron nail, rock salt, a stone, a piece of wood, a key, and a piece of aluminium.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Let us explore how these attractions vary in different states.",
+          "7.2.1 Solid state",
+          "How are constituent particles held together in solids?",
+          "Activity 7.3 : Let us find out",
+          "z Collect a few solid objects, such as a piece",
+          "of iron or an iron nail, a piece of rock salt,",
+          "a stone, a piece of wood, a key, and a piece",
+          "of aluminium (Fig. 7.3).",
+          "Iron nail",
+          "Rock salt",
+          "Stone",
+          "Piece of wood",
+          "Key",
+          "Piece of aluminium"
+        ],
+        "concepts": [
+          "Solid state",
+          "Constituent particles",
+          "Holding together"
+        ],
+        "context_relation": "The image is related to the educational content about the solid state of matter.",
+        "limitations": [
+          "The image does not show the actual objects but their names."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
