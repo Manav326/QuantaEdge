@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "30021b899a6354178d65144a60407f6968f35ceebd16f7ff78da75c1cbb47095",
+  "raw_analysis_sha256": "d9195973e107d6498288546861d7d430da27a683e2d7c70ebc80325def4b585b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41426089748",
-      "checkpointed_at": "2026-11-02T12:01:18Z",
+      "checkpointed_at": "2026-11-02T12:04:25Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -184417,6 +184417,176 @@
         "concepts": [],
         "context_relation": "The image is not directly related to the text content.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b117f08dac076af948685e97",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748f03f8ec5a1c6e866d8992977114576defed2e40792f1b7d8bc6e58203e7b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:04:31Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c2fed570f963e3fc402b9c0f",
+      "asset_sha256": "c6881905c08cf60d9c0b8684edf68cbcd34643c531aaaca0535b01d622ce6afc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/c6881905c08cf60d9c0b8684edf68cbcd34643c531aaaca0535b01d622ce6afc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748f03f8ec5a1c6e866d8992977114576defed2e40792f1b7d8bc6e58203e7b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person in a yellow shirt, smiling and gesturing with their hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about adolescence and its experiences.",
+        "limitations": [
+          "The image does not provide specific details about the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:06:04Z",
+      "effective_analysis": {
+        "visual_summary": "A person in a yellow shirt, smiling and gesturing with their hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about adolescence and its experiences.",
+        "limitations": [
+          "The image does not provide specific details about the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b83a725959d31a7ee09ed420",
+      "asset_sha256": "a29dcc311cbd43d6f6bd4591563376155e4a64609ccab7f72947c8c6bc46ce3b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/a29dcc311cbd43d6f6bd4591563376155e4a64609ccab7f72947c8c6bc46ce3b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748f03f8ec5a1c6e866d8992977114576defed2e40792f1b7d8bc6e58203e7b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a young girl with a braid, wearing a pink dress, standing with her hands on her hips.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "adolescence",
+          "positive impact",
+          "habits",
+          "decisions",
+          "actions"
+        ],
+        "context_relation": "The image represents the concept of adolescence and the positive impact of good habits, thoughtful decisions, and small actions during this stage of life.",
+        "limitations": [
+          "The image does not provide specific details about the girl or her actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:07:44Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a young girl with a braid, wearing a pink dress, standing with her hands on her hips.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "adolescence",
+          "positive impact",
+          "habits",
+          "decisions",
+          "actions"
+        ],
+        "context_relation": "The image represents the concept of adolescence and the positive impact of good habits, thoughtful decisions, and small actions during this stage of life.",
+        "limitations": [
+          "The image does not provide specific details about the girl or her actions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1e49f12a7c16ffb4258c55b5",
+      "asset_sha256": "cc2cb3e0cdc7ecde5a1e3e89a831d30aed022518ee924fae694c93581630148f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/cc2cb3e0cdc7ecde5a1e3e89a831d30aed022518ee924fae694c93581630148f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748f03f8ec5a1c6e866d8992977114576defed2e40792f1b7d8bc6e58203e7b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue speech bubble with a pointed tail, possibly representing a thought or message.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple, abstract representation and does not convey any specific message or concept."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T12:09:19Z",
+      "effective_analysis": {
+        "visual_summary": "A blue speech bubble with a pointed tail, possibly representing a thought or message.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple, abstract representation and does not convey any specific message or concept."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
