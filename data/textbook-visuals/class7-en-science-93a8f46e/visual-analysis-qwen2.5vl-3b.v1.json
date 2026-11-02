@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3165,
+    "assets_selected": 3166,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "6c36e906f20ce5c2b67777ab"
+      "71c726b61e267e8476594ce6"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3161,
-    "assets_remaining": 4327,
+    "assets_analyzed": 3162,
+    "assets_remaining": 4326,
     "assets_completion_percent": 42.2,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3160,
+    "assets_skipped_from_checkpoint": 3161,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:50:32Z"
+      "checkpointed_at": "2026-11-02T09:55:01Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:51:10Z"
+      "checkpointed_at": "2026-11-02T09:55:40Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:52:01Z"
+      "checkpointed_at": "2026-11-02T09:56:30Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:52:53Z"
+      "checkpointed_at": "2026-11-02T09:57:24Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -117576,6 +117576,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
       "checkpointed_at": "2026-11-02T09:54:00Z"
+    },
+    {
+      "asset_id": "71c726b61e267e8476594ce6",
+      "asset_sha256": "46e3e06ad959055e88949090f6cb29e964ca5a351a0ac8b79509473b587b916d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/46e3e06ad959055e88949090f6cb29e964ca5a351a0ac8b79509473b587b916d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf8336a93584f506c654636a15454ef44d990424c09331aaf6b567b9f4e42ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41411796807",
+      "checkpointed_at": "2026-11-02T09:58:26Z"
     }
   ]
 }
