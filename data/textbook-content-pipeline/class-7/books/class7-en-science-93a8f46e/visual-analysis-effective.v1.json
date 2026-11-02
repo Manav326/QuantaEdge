@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "821d02d1074a26144f25162f8a8529320fab065a67115ad837415977a7132913",
+  "raw_analysis_sha256": "e5a0502bb18a21b5dba5bff72181f96ee95bdbc951b1953121361f2f9c2afad6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:44:33Z",
+      "checkpointed_at": "2026-11-02T09:50:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:45:11Z",
+      "checkpointed_at": "2026-11-02T09:51:10Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:46:01Z",
+      "checkpointed_at": "2026-11-02T09:52:01Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:46:55Z",
+      "checkpointed_at": "2026-11-02T09:52:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -184148,6 +184148,42 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "None",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6c36e906f20ce5c2b67777ab",
+      "asset_sha256": "dc162bcb052513ff2be111c8ff8a29c49d9371ef4d2bf530ad4cf1efbf9369ae",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/dc162bcb052513ff2be111c8ff8a29c49d9371ef4d2bf530ad4cf1efbf9369ae.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf8336a93584f506c654636a15454ef44d990424c09331aaf6b567b9f4e42ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, narrow scroll with a white background and a black border, resembling a scroll or banner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text discussing emotional and behavioral changes in adolescents.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41411796807",
+      "checkpointed_at": "2026-11-02T09:54:00Z",
+      "effective_analysis": {
+        "visual_summary": "A long, narrow scroll with a white background and a black border, resembling a scroll or banner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text discussing emotional and behavioral changes in adolescents.",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",

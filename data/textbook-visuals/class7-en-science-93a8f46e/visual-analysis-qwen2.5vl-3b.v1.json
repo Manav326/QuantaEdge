@@ -15,11 +15,11 @@
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c16577a15e78e04e26b60ff"
+      "6c36e906f20ce5c2b67777ab"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3160,
-    "assets_remaining": 4328,
+    "assets_analyzed": 3161,
+    "assets_remaining": 4327,
     "assets_completion_percent": 42.2,
     "assets_failed": 20,
     "assets_skipped_from_checkpoint": 3160,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:44:33Z"
+      "checkpointed_at": "2026-11-02T09:50:32Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:45:11Z"
+      "checkpointed_at": "2026-11-02T09:51:10Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:46:01Z"
+      "checkpointed_at": "2026-11-02T09:52:01Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:46:55Z"
+      "checkpointed_at": "2026-11-02T09:52:53Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -117550,6 +117550,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41403885574",
       "checkpointed_at": "2026-11-02T08:12:44Z"
+    },
+    {
+      "asset_id": "6c36e906f20ce5c2b67777ab",
+      "asset_sha256": "dc162bcb052513ff2be111c8ff8a29c49d9371ef4d2bf530ad4cf1efbf9369ae",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/dc162bcb052513ff2be111c8ff8a29c49d9371ef4d2bf530ad4cf1efbf9369ae.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf8336a93584f506c654636a15454ef44d990424c09331aaf6b567b9f4e42ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, narrow scroll with a white background and a black border, resembling a scroll or banner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text discussing emotional and behavioral changes in adolescents.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41411796807",
+      "checkpointed_at": "2026-11-02T09:54:00Z"
     }
   ]
 }
