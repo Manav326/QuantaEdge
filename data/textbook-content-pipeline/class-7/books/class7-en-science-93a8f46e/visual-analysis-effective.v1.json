@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "be1208042497159a017df27fa9a3e13b5a2c82bf7f2fe8207c282f1653f75346",
+  "raw_analysis_sha256": "3ec7206b8020e807812f0f22efc2cc40e85d4206afc6cd5620551f2f85db86be",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:58:39Z",
+      "checkpointed_at": "2026-11-02T21:01:37Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:59:06Z",
+      "checkpointed_at": "2026-11-02T21:02:04Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:59:41Z",
+      "checkpointed_at": "2026-11-02T21:02:39Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T21:00:18Z",
+      "checkpointed_at": "2026-11-02T21:03:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -187503,6 +187503,42 @@
         "limitations": [
           "The image does not provide specific details about the message or statement."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fae17426f20950f76bde98ee",
+      "asset_sha256": "e847d74de75296fa109f96e2ddabb1019694c09c688495075131e463a38f56d4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/e847d74de75296fa109f96e2ddabb1019694c09c688495075131e463a38f56d4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue speech bubble with a pointed tail.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41497391096",
+      "checkpointed_at": "2026-11-02T21:03:47Z",
+      "effective_analysis": {
+        "visual_summary": "A blue speech bubble with a pointed tail.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
