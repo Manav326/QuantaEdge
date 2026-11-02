@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1582,
+    "assets_selected": 1585,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "fa83484b4841f7ab5e67b31c",
-      "5b0ce4e68532cd4ab5833014",
-      "faf03509cce71bc3244b9dd0"
+      "27f53a7eba428a74fd7350ad",
+      "f5b3b01b823befe8d635cc4e",
+      "160e9dceaa3768c422972317"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1580,
-    "assets_remaining": 498,
-    "assets_completion_percent": 76.0,
+    "assets_analyzed": 1583,
+    "assets_remaining": 495,
+    "assets_completion_percent": 76.2,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 1577,
+    "assets_skipped_from_checkpoint": 1580,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
-      "checkpointed_at": "2026-11-02T20:35:50Z"
+      "checkpointed_at": "2026-11-02T20:42:46Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
-      "checkpointed_at": "2026-11-02T20:36:41Z"
+      "checkpointed_at": "2026-11-02T20:43:38Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -54027,6 +54027,147 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
       "checkpointed_at": "2026-11-02T20:41:37Z"
+    },
+    {
+      "asset_id": "27f53a7eba428a74fd7350ad",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 185,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "21beb201ff493ab4b7a89cc71642d19ff1ad1a38d7fc00e68ea50d7be88909b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A textbook page discussing sieving, showing a diagram of a sieve with particles of different sizes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Mami: We use a sieve for this purpose.",
+          "Sieving allows the fine flour particles to pass through the holes of the sieve as shown in Fig. 9.5. The bigger particles such as bran and small stones remain on the sieve.",
+          "Carefully observe a sieve. Are all the holes of the sieve the same size?",
+          "Will sieving work if the holes of the sieve are larger than the substances?",
+          "Is there any difference in the size between the particles that pass through the sieve and the particles that remain on the sieve?",
+          "Sieving is used when components of a solid–solid mixture have different sizes."
+        ],
+        "concepts": [
+          "Sieving",
+          "Particles",
+          "Holes",
+          "Bran",
+          "Small stones",
+          "Sieve",
+          "Fine flour particles",
+          "Bigger particles",
+          "Solid–solid mixture",
+          "Different sizes"
+        ],
+        "context_relation": "The page discusses the process of sieving and its application in separating different particles of a solid–solid mixture.",
+        "limitations": [
+          "The page does not provide a diagram or illustration of the sieve or the particles."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:44:25Z"
+    },
+    {
+      "asset_id": "f5b3b01b823befe8d635cc4e",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 185,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "21beb201ff493ab4b7a89cc71642d19ff1ad1a38d7fc00e68ea50d7be88909b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:44:40Z"
+    },
+    {
+      "asset_id": "160e9dceaa3768c422972317",
+      "asset_sha256": "e70d9ad7e04b96031b74d24fc40e0476ae3d84602b05c8aa7e77786fa9ecb9d9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 185,
+      "asset_path": "page-0185.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "21beb201ff493ab4b7a89cc71642d19ff1ad1a38d7fc00e68ea50d7be88909b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing sieving and its applications, including a diagram of a sieve and a question about its use in construction sites.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Mami: We use a sieve for this purpose.",
+          "Sieving allows the fine flour particles to",
+          "pass through the holes of the sieve as shown",
+          "in Fig. 9.5. The bigger particles such as bran",
+          "and small stones remain on the sieve.",
+          "Carefully observe a sieve. Are  all",
+          "the holes of the sieve the same size?",
+          "Will sieving work if the holes of the",
+          "sieve are larger than the substances?",
+          "Is there any difference in the size between",
+          "the particles that pass through the sieve",
+          "and the particles that remain on the sieve?",
+          "Sieving  is used when components of a",
+          "solid–solid mixture have different sizes.",
+          "Upon reaching Ahmedabad, they visit",
+          "Sabarmati Ashram along with Ghanshyam",
+          "bhai where they learn about the Namak",
+          "Satyagrah (Dandi March).",
+          "What is Sabarmati Ashram famous for?",
+          "Draw a poster showing Dandi March and",
+          "discuss why it was organised.",
+          "Malli asks, \"Where is namak (common salt) obtained",
+          "from?\"",
+          "“From seawater”, replies",
+          "Ghanshyam bhai.",
+          "Seawater is a mixture",
+          "of salts and some other",
+          "substances dissolved in",
+          "water. To obtain salt,",
+          "the seawater is kept in"
+        ],
+        "concepts": [
+          "Sieving",
+          "Construction sites",
+          "Solid–solid mixture",
+          "Dandi March",
+          "Namak Satyagrah",
+          "Seawater",
+          "Salt",
+          "Ghanshyam bhai",
+          "Sabarmati Ashram"
+        ],
+        "context_relation": "The image is a page from a textbook discussing sieving and its applications, including a diagram of a sieve and a question about its use in construction sites.",
+        "limitations": [
+          "The image does not provide specific details about the construction sites or the use of sieves in those sites."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:49:24Z"
     }
   ]
 }
