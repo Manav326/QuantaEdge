@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1588,
+    "assets_selected": 1591,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "6a3146e6efc6cd2db72d8048",
-      "04bed337311205d4d8c446d2",
-      "5228fb4046c1e65ad3aeb59a"
+      "3b2fb65be757d0ac58d7c0b2",
+      "2fc87c18e4cf999168b1046b",
+      "25d74a5356bb58fdef65ea54"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1586,
-    "assets_remaining": 492,
-    "assets_completion_percent": 76.3,
+    "assets_analyzed": 1589,
+    "assets_remaining": 489,
+    "assets_completion_percent": 76.5,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 1583,
+    "assets_skipped_from_checkpoint": 1586,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
-      "checkpointed_at": "2026-11-02T20:50:33Z"
+      "checkpointed_at": "2026-11-02T20:57:15Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
-      "checkpointed_at": "2026-11-02T20:51:24Z"
+      "checkpointed_at": "2026-11-02T20:58:07Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -54259,6 +54259,87 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
       "checkpointed_at": "2026-11-02T20:56:07Z"
+    },
+    {
+      "asset_id": "3b2fb65be757d0ac58d7c0b2",
+      "asset_sha256": "314a504a429762e1600b9d8f76a6d70545df32ab1869b47f707e8400e4f096b7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 186,
+      "asset_path": "assets/314a504a429762e1600b9d8f76a6d70545df32ab1869b47f707e8400e4f096b7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2505b91a2620bb3cbde06e91491d847920d34e5b62b96c292dd43d5ea0d88c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, horizontal strip of yellow paper or fabric.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:59:40Z"
+    },
+    {
+      "asset_id": "2fc87c18e4cf999168b1046b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 186,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2505b91a2620bb3cbde06e91491d847920d34e5b62b96c292dd43d5ea0d88c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:59:55Z"
+    },
+    {
+      "asset_id": "25d74a5356bb58fdef65ea54",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 186,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2505b91a2620bb3cbde06e91491d847920d34e5b62b96c292dd43d5ea0d88c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T21:00:07Z"
     }
   ]
 }
