@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c39e7ba8b91e9dc808b1a4d0403ef6ea3e25b2d71d17fce3d4bd38cf19757691",
+  "raw_analysis_sha256": "5ace2c5b372a020a25850e84d3f7036a2a10a35def17ea0832cbe926c0352f57",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485023847",
-      "checkpointed_at": "2026-11-02T19:45:41Z",
+      "checkpointed_at": "2026-11-02T19:49:12Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485023847",
-      "checkpointed_at": "2026-11-02T19:46:20Z",
+      "checkpointed_at": "2026-11-02T19:49:51Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485023847",
-      "checkpointed_at": "2026-11-02T19:47:10Z",
+      "checkpointed_at": "2026-11-02T19:50:41Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485023847",
-      "checkpointed_at": "2026-11-02T19:48:03Z",
+      "checkpointed_at": "2026-11-02T19:51:34Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -187378,6 +187378,46 @@
         "limitations": [
           "The image does not provide any specific information about the health risks mentioned in the text.",
           "The image is a close-up of a rope or cord, not a diagram or chart related to the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bf049636133a10ad17a11efc",
+      "asset_sha256": "d9bac11e04acea85a45f24fdaa566761266af484c07aa51660369d8f2f9621fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/d9bac11e04acea85a45f24fdaa566761266af484c07aa51660369d8f2f9621fd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character in a yellow outfit with arms outstretched.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485023847",
+      "checkpointed_at": "2026-11-02T19:52:40Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character in a yellow outfit with arms outstretched.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

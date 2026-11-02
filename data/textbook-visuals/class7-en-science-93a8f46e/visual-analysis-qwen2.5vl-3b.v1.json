@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3231,
+    "assets_selected": 3232,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "bf04721600349bdd109f5b2a"
+      "bf049636133a10ad17a11efc"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3227,
-    "assets_remaining": 4261,
+    "assets_analyzed": 3228,
+    "assets_remaining": 4260,
     "assets_completion_percent": 43.1,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3226,
+    "assets_skipped_from_checkpoint": 3227,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485023847",
-      "checkpointed_at": "2026-11-02T19:45:41Z"
+      "checkpointed_at": "2026-11-02T19:49:12Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485023847",
-      "checkpointed_at": "2026-11-02T19:46:20Z"
+      "checkpointed_at": "2026-11-02T19:49:51Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485023847",
-      "checkpointed_at": "2026-11-02T19:47:10Z"
+      "checkpointed_at": "2026-11-02T19:50:41Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485023847",
-      "checkpointed_at": "2026-11-02T19:48:03Z"
+      "checkpointed_at": "2026-11-02T19:51:34Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -119701,6 +119701,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485023847",
       "checkpointed_at": "2026-11-02T19:48:11Z"
+    },
+    {
+      "asset_id": "bf049636133a10ad17a11efc",
+      "asset_sha256": "d9bac11e04acea85a45f24fdaa566761266af484c07aa51660369d8f2f9621fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/d9bac11e04acea85a45f24fdaa566761266af484c07aa51660369d8f2f9621fd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character in a yellow outfit with arms outstretched.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485023847",
+      "checkpointed_at": "2026-11-02T19:52:40Z"
     }
   ]
 }
