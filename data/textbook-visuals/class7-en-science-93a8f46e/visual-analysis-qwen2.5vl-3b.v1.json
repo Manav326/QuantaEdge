@@ -15,11 +15,11 @@
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c16577a15e78e04e26b60ff"
+      "65ef9f635927cea77b8db7b4"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3151,
-    "assets_remaining": 4337,
+    "assets_analyzed": 3152,
+    "assets_remaining": 4336,
     "assets_completion_percent": 42.1,
     "assets_failed": 20,
     "assets_skipped_from_checkpoint": 3151,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41385942807",
-      "checkpointed_at": "2026-11-02T05:26:57Z"
+      "checkpointed_at": "2026-11-02T05:32:48Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41385942807",
-      "checkpointed_at": "2026-11-02T05:27:34Z"
+      "checkpointed_at": "2026-11-02T05:33:25Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41385942807",
-      "checkpointed_at": "2026-11-02T05:28:23Z"
+      "checkpointed_at": "2026-11-02T05:34:14Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41385942807",
-      "checkpointed_at": "2026-11-02T05:29:15Z"
+      "checkpointed_at": "2026-11-02T05:35:06Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -117276,6 +117276,72 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41373988400",
       "checkpointed_at": "2026-11-02T03:55:52Z"
+    },
+    {
+      "asset_id": "65ef9f635927cea77b8db7b4",
+      "asset_sha256": "541cbed343c365fdb067eea8e3863e7c6e7d77e806f7a47a84e02953b76a99cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "page-0097.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook discussing changes in adolescence, particularly secondary sexual characteristics and the menstrual cycle.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "77",
+          "Now, we have understood some of the changes that take place",
+          "during adolescence, particularly those that are easily observable.",
+          "Some of these characteristic changes, like change in voice, the growth",
+          "of facial and chest hair in boys, and the development of breasts",
+          "in girls are not directly involved in the process of reproduction.",
+          "However, these characteristic changes help distinguish males",
+          "from females. For this reason, they are called secondary sexual",
+          "characteristics.",
+          "Secondary sexual characteristics are natural signs that the",
+          "body is preparing for adulthood. They mark the onset of puberty.",
+          "Puberty is the stage in which the body of an adolescent undergoes",
+          "external and internal changes to develop into an adult capable of",
+          "reproduction.",
+          "Adolescence is marked not only by observable changes but also",
+          "by internal changes that are not visible from the outside. One such",
+          "change is the maturation of various parts involved in the process",
+          "of reproduction.",
+          "Both boys and girls experience such changes gradually, and",
+          "these changes are a natural part of the process of growing up.",
+          "An important internal change associated with adolescent girls is",
+          "the onset of the menstrual cycle. It recurs generally every 28–30",
+          "days and is more commonly known as 'the period'. Many healthy",
+          "girls may have longer or shorter menstrual cycles ranging from",
+          "21–35 days. The menstrual cycle is an important natural process",
+          "and is one of the signs of good reproductive health. The phase of",
+          "the cycle when blood discharge occurs from the body is referred",
+          "to as menstruation. It may last for three to seven days. Some girls",
+          "may feel pain or discomfort in the lower abdomen during these",
+          "days. Usually, by the age of 45–55, menstruation stops naturally,"
+        ],
+        "concepts": [
+          "adolescence",
+          "secondary sexual characteristics",
+          "puberty",
+          "menstrual cycle",
+          "reproductive capability",
+          "myths about menstruation"
+        ],
+        "context_relation": "describes",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41385942807",
+      "checkpointed_at": "2026-11-02T05:38:38Z"
     }
   ]
 }
