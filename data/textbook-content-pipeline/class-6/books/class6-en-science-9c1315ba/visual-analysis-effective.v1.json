@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "13ddb7ca6ef9909c962eb398f6dc381b5cc73e791627f7ffe3e3d9a613f8abda",
+  "raw_analysis_sha256": "b0b22629489d553a7462d117f9e79d9cb764bb4727afaf85ded3be3389810f0a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
-      "checkpointed_at": "2026-11-02T20:21:11Z",
+      "checkpointed_at": "2026-11-02T20:35:50Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
-      "checkpointed_at": "2026-11-02T20:22:03Z",
+      "checkpointed_at": "2026-11-02T20:36:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -82198,6 +82198,138 @@
         "limitations": [
           "The image does not show the sieve in use, only a hand holding it.",
           "The image does not show the particles being sieved, only the sieve and the plate with flour particles."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fa83484b4841f7ab5e67b31c",
+      "asset_sha256": "86fa20c1483729e99f59a9d42368b6f1460e38afa602ef5ae855cbb9065734bf",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 185,
+      "asset_path": "assets/86fa20c1483729e99f59a9d42368b6f1460e38afa602ef5ae855cbb9065734bf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "21beb201ff493ab4b7a89cc71642d19ff1ad1a38d7fc00e68ea50d7be88909b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person using a stick to dig through a pile of snow or ice.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A person using a stick to dig through a pile of snow or ice."
+        ],
+        "concepts": [
+          "snow",
+          "ice",
+          "digging",
+          "person",
+          "stick"
+        ],
+        "context_relation": "The image is related to the text about sieving, where the person is digging through a pile of snow or ice, possibly to separate different particles.",
+        "limitations": [
+          "The image does not provide specific details about the context or the purpose of the digging."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:38:22Z",
+      "effective_analysis": {
+        "visual_summary": "A person using a stick to dig through a pile of snow or ice.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A person using a stick to dig through a pile of snow or ice."
+        ],
+        "concepts": [
+          "snow",
+          "ice",
+          "digging",
+          "person",
+          "stick"
+        ],
+        "context_relation": "The image is related to the text about sieving, where the person is digging through a pile of snow or ice, possibly to separate different particles.",
+        "limitations": [
+          "The image does not provide specific details about the context or the purpose of the digging."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5b0ce4e68532cd4ab5833014",
+      "asset_sha256": "9bde164fe36fe066c2cfad57955aee3c3e949e694de5f97b837755ab3ec5202e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 185,
+      "asset_path": "assets/9bde164fe36fe066c2cfad57955aee3c3e949e694de5f97b837755ab3ec5202e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "21beb201ff493ab4b7a89cc71642d19ff1ad1a38d7fc00e68ea50d7be88909b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, horizontal strip of yellow paper or fabric.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a long, yellow strip, possibly representing a piece of fabric or paper.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:39:57Z",
+      "effective_analysis": {
+        "visual_summary": "A long, horizontal strip of yellow paper or fabric.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a long, yellow strip, possibly representing a piece of fabric or paper.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "faf03509cce71bc3244b9dd0",
+      "asset_sha256": "cae53391a8c16e76e662b2c8124213daf6df53b02d14a8a7c9aa8056f63658be",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 185,
+      "asset_path": "assets/cae53391a8c16e76e662b2c8124213daf6df53b02d14a8a7c9aa8056f63658be.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "21beb201ff493ab4b7a89cc71642d19ff1ad1a38d7fc00e68ea50d7be88909b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black and white illustration of a group of people, including a prominent figure holding a staff, walking in a line.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to determine the exact context or relation to the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:41:37Z",
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a group of people, including a prominent figure holding a staff, walking in a line.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to determine the exact context or relation to the visible text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1605,
-    "successful_visual_analyses": 1579,
-    "missing_visual_analyses": 473,
+    "raw_analysis_result_rows": 1608,
+    "successful_visual_analyses": 1582,
+    "missing_visual_analyses": 470,
     "failed_visual_analyses": 26,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 499,
+    "unresolved_count": 496,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -60200,9 +60200,26 @@
       "asset_path": "assets/86fa20c1483729e99f59a9d42368b6f1460e38afa602ef5ae855cbb9065734bf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person using a stick to dig through a pile of snow or ice.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A person using a stick to dig through a pile of snow or ice."
+        ],
+        "concepts": [
+          "snow",
+          "ice",
+          "digging",
+          "person",
+          "stick"
+        ],
+        "context_relation": "The image is related to the text about sieving, where the person is digging through a pile of snow or ice, possibly to separate different particles.",
+        "limitations": [
+          "The image does not provide specific details about the context or the purpose of the digging."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60218,9 +60235,16 @@
       "asset_path": "assets/9bde164fe36fe066c2cfad57955aee3c3e949e694de5f97b837755ab3ec5202e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long, horizontal strip of yellow paper or fabric.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a long, yellow strip, possibly representing a piece of fabric or paper.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60236,9 +60260,18 @@
       "asset_path": "assets/cae53391a8c16e76e662b2c8124213daf6df53b02d14a8a7c9aa8056f63658be.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a group of people, including a prominent figure holding a staff, walking in a line.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to determine the exact context or relation to the visible text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
