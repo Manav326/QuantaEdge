@@ -15,11 +15,11 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "52885281ae21238e9ccc031f",
-      "36ec2d1cc980e6810b5a1e89"
+      "e06a794238546a3d038eca22"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1399,
-    "assets_remaining": 892,
+    "assets_analyzed": 1400,
+    "assets_remaining": 891,
     "assets_completion_percent": 61.1,
     "assets_failed": 18,
     "assets_skipped_from_checkpoint": 1399,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:43:11Z"
+      "checkpointed_at": "2026-11-02T08:52:26Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:44:00Z"
+      "checkpointed_at": "2026-11-02T08:53:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:44:58Z"
+      "checkpointed_at": "2026-11-02T08:54:14Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -44424,7 +44424,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:46:11Z"
+      "checkpointed_at": "2026-11-02T08:55:34Z"
     },
     {
       "asset_id": "02cdb1f955dd51e569c06039",
@@ -46797,6 +46797,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41320380183",
       "checkpointed_at": "2026-11-01T17:53:31Z"
+    },
+    {
+      "asset_id": "e06a794238546a3d038eca22",
+      "asset_sha256": "559a9aabc22052ef0dba281dd7f3b6b2da3cbdbc319a332212f8eb5aae2f349b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/559a9aabc22052ef0dba281dd7f3b6b2da3cbdbc319a332212f8eb5aae2f349b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0a01c457136551c3799e1dbbdc84e0bc8b68ae8c0c1695b22cf6783516fd48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a folded piece of paper or cloth.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "activity",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41400575377",
+      "checkpointed_at": "2026-11-02T08:57:06Z"
     }
   ]
 }

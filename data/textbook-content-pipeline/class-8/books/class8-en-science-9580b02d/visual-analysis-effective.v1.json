@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c8972d16dd0cabbb9ebf56826fe574ac95d56fdbd5c6950571613c555e1d5904",
+  "raw_analysis_sha256": "a14f9390813aba4f2c7088103d36816925cf32e383a236cf06c04698890ad889",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:43:11Z",
+      "checkpointed_at": "2026-11-02T08:52:26Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:44:00Z",
+      "checkpointed_at": "2026-11-02T08:53:15Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:44:58Z",
+      "checkpointed_at": "2026-11-02T08:54:14Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -67147,7 +67147,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41400575377",
-      "checkpointed_at": "2026-11-02T08:46:11Z",
+      "checkpointed_at": "2026-11-02T08:55:34Z",
       "effective_analysis": {
         "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds, with a caption indicating that the positively charged particles move upwards and the negatively charged particles move downwards.",
         "visual_type": "diagram",
@@ -70847,6 +70847,42 @@
         "limitations": [
           "The image does not provide specific details about the properties of the objects."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e06a794238546a3d038eca22",
+      "asset_sha256": "559a9aabc22052ef0dba281dd7f3b6b2da3cbdbc319a332212f8eb5aae2f349b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/559a9aabc22052ef0dba281dd7f3b6b2da3cbdbc319a332212f8eb5aae2f349b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0a01c457136551c3799e1dbbdc84e0bc8b68ae8c0c1695b22cf6783516fd48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a folded piece of paper or cloth.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "activity",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41400575377",
+      "checkpointed_at": "2026-11-02T08:57:06Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a folded piece of paper or cloth.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "activity",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
