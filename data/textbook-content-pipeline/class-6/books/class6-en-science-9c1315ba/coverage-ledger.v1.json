@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1593,
-    "successful_visual_analyses": 1568,
-    "missing_visual_analyses": 485,
-    "failed_visual_analyses": 25,
+    "raw_analysis_result_rows": 1596,
+    "successful_visual_analyses": 1570,
+    "missing_visual_analyses": 482,
+    "failed_visual_analyses": 26,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 510,
+    "unresolved_count": 508,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -59702,7 +59702,7 @@
       "asset_path": "page-0182.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -59720,9 +59720,36 @@
       "asset_path": "assets/1182253f53748c90472580decd41e6eb121d25360c1256c42fe74b681524a30f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two illustrations: one of a hand holding a basket of grains and the other of a basket with separated grains.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A small amount of",
+          "piles of husk.",
+          "Valli whispers to Malli, \"Will the farmers",
+          "handpick the grains to remove them from",
+          "separating the mixtureso much husk?\"",
+          "She wonders, \"How much",
+          "time will the farmers take to separate",
+          "these?\"",
+          "Can you think of",
+          "by any method other than handpicking?\"",
+          "A small amount of",
+          "puffed rice is mixed",
+          "with chana dal."
+        ],
+        "concepts": [
+          "Separation of grains",
+          "Handpicking",
+          "Time estimation"
+        ],
+        "context_relation": "The image illustrates the process of separating grains from husks and chana dal, which is a part of the educational content about agriculture and food processing.",
+        "limitations": [
+          "The image does not provide specific details about the time estimation or the method of separation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -59738,9 +59765,25 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A small amount of puffed rice mixed with chana dal.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A small amount of",
+          "puffed rice is mixed",
+          "with chana dal."
+        ],
+        "concepts": [
+          "mixtures",
+          "separation"
+        ],
+        "context_relation": "The image shows a mixture of puffed rice and chana dal, which is being separated.",
+        "limitations": [
+          "The image does not provide specific details about the method used for separation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
