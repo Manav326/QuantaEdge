@@ -15,11 +15,11 @@
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c16577a15e78e04e26b60ff"
+      "90a5c607e3f68467f74e9024"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3228,
-    "assets_remaining": 4260,
+    "assets_analyzed": 3229,
+    "assets_remaining": 4259,
     "assets_completion_percent": 43.1,
     "assets_failed": 20,
     "assets_skipped_from_checkpoint": 3228,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:51:46Z"
+      "checkpointed_at": "2026-11-02T20:55:40Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:52:13Z"
+      "checkpointed_at": "2026-11-02T20:56:07Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:52:47Z"
+      "checkpointed_at": "2026-11-02T20:56:42Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41497391096",
-      "checkpointed_at": "2026-11-02T20:53:24Z"
+      "checkpointed_at": "2026-11-02T20:57:19Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -119729,6 +119729,36 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485023847",
       "checkpointed_at": "2026-11-02T19:52:40Z"
+    },
+    {
+      "asset_id": "90a5c607e3f68467f74e9024",
+      "asset_sha256": "479943439b54726e33f3a782316cbd4a1a91c7e3910778f420c22e8d42122c3c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/479943439b54726e33f3a782316cbd4a1a91c7e3910778f420c22e8d42122c3c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character in a pink dress with a braid, holding their finger to their lips in a thinking pose.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a general cartoon character and does not represent any specific individual or situation.",
+          "The image does not show any direct connection to the text about seeking help and support for addiction."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41497391096",
+      "checkpointed_at": "2026-11-02T20:57:55Z"
     }
   ]
 }
