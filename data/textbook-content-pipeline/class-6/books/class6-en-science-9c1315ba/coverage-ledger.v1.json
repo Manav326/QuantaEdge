@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1611,
-    "successful_visual_analyses": 1585,
-    "missing_visual_analyses": 467,
+    "raw_analysis_result_rows": 1614,
+    "successful_visual_analyses": 1588,
+    "missing_visual_analyses": 464,
     "failed_visual_analyses": 26,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 493,
+    "unresolved_count": 490,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -60425,9 +60425,25 @@
       "asset_path": "assets/50bf38fbbd0ee28495c246c0a39e09f3d08282a1516f24c31fb777ba5802931b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram of a salt crystal formation.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "salt crystal formation",
+          "evaporation process",
+          "common salt",
+          "Sambhar Lake",
+          "purification of salt"
+        ],
+        "context_relation": "salt separation from solution",
+        "limitations": [
+          "No specific measurements or formulas are provided.",
+          "The image does not show the actual process of evaporation or purification."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60443,9 +60459,18 @@
       "asset_path": "assets/b3b273fe55c81609b9c8f98abe9041cc7a017cf23d062d99fec8decb2bc51e6a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black, irregularly shaped object floating in a dark liquid, possibly a solution.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be an illustration related to a scientific or educational topic, possibly involving a solution and a solid object.",
+        "limitations": [
+          "The image does not provide specific details about the context or the topic it represents. The visible text is incomplete and does not provide any additional information about the image's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60461,9 +60486,18 @@
       "asset_path": "assets/74e9e2b98c41335458b145a35a16c9e385e6e56c3032c520161095f34ce1571c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A transparent, crystalline substance with a complex structure, possibly a salt crystal.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of separating salt from a solution.",
+        "limitations": [
+          "The image does not provide specific details about the salt crystal's properties or the process of separation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1585,
+    "assets_selected": 1588,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "27f53a7eba428a74fd7350ad",
-      "f5b3b01b823befe8d635cc4e",
-      "160e9dceaa3768c422972317"
+      "6a3146e6efc6cd2db72d8048",
+      "04bed337311205d4d8c446d2",
+      "5228fb4046c1e65ad3aeb59a"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1583,
-    "assets_remaining": 495,
-    "assets_completion_percent": 76.2,
+    "assets_analyzed": 1586,
+    "assets_remaining": 492,
+    "assets_completion_percent": 76.3,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 1580,
+    "assets_skipped_from_checkpoint": 1583,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
-      "checkpointed_at": "2026-11-02T20:42:46Z"
+      "checkpointed_at": "2026-11-02T20:50:33Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
-      "checkpointed_at": "2026-11-02T20:43:38Z"
+      "checkpointed_at": "2026-11-02T20:51:24Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -54168,6 +54168,97 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
       "checkpointed_at": "2026-11-02T20:49:24Z"
+    },
+    {
+      "asset_id": "6a3146e6efc6cd2db72d8048",
+      "asset_sha256": "50bf38fbbd0ee28495c246c0a39e09f3d08282a1516f24c31fb777ba5802931b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 186,
+      "asset_path": "assets/50bf38fbbd0ee28495c246c0a39e09f3d08282a1516f24c31fb777ba5802931b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2505b91a2620bb3cbde06e91491d847920d34e5b62b96c292dd43d5ea0d88c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a salt crystal formation.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "salt crystal formation",
+          "evaporation process",
+          "common salt",
+          "Sambhar Lake",
+          "purification of salt"
+        ],
+        "context_relation": "salt separation from solution",
+        "limitations": [
+          "No specific measurements or formulas are provided.",
+          "The image does not show the actual process of evaporation or purification."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:52:59Z"
+    },
+    {
+      "asset_id": "04bed337311205d4d8c446d2",
+      "asset_sha256": "b3b273fe55c81609b9c8f98abe9041cc7a017cf23d062d99fec8decb2bc51e6a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 186,
+      "asset_path": "assets/b3b273fe55c81609b9c8f98abe9041cc7a017cf23d062d99fec8decb2bc51e6a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2505b91a2620bb3cbde06e91491d847920d34e5b62b96c292dd43d5ea0d88c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black, irregularly shaped object floating in a dark liquid, possibly a solution.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be an illustration related to a scientific or educational topic, possibly involving a solution and a solid object.",
+        "limitations": [
+          "The image does not provide specific details about the context or the topic it represents. The visible text is incomplete and does not provide any additional information about the image's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:54:34Z"
+    },
+    {
+      "asset_id": "5228fb4046c1e65ad3aeb59a",
+      "asset_sha256": "74e9e2b98c41335458b145a35a16c9e385e6e56c3032c520161095f34ce1571c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 186,
+      "asset_path": "assets/74e9e2b98c41335458b145a35a16c9e385e6e56c3032c520161095f34ce1571c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2505b91a2620bb3cbde06e91491d847920d34e5b62b96c292dd43d5ea0d88c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A transparent, crystalline substance with a complex structure, possibly a salt crystal.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of separating salt from a solution.",
+        "limitations": [
+          "The image does not provide specific details about the salt crystal's properties or the process of separation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41485020539",
+      "checkpointed_at": "2026-11-02T20:56:07Z"
     }
   ]
 }
