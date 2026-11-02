@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3237,
+    "assets_selected": 3238,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "afc10d3cf1bd4a9d31b298a1",
-      "84efbe1aa3aec80f0d7d377e"
+      "b7ef684ed2d2761a91bfe2cc",
+      "06e79de1e7d960a860ae3104"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3233,
-    "assets_remaining": 4255,
+    "assets_analyzed": 3235,
+    "assets_remaining": 4253,
     "assets_completion_percent": 43.2,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 3232,
+    "assets_skipped_from_checkpoint": 3233,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
-      "checkpointed_at": "2026-11-02T23:11:44Z"
+      "checkpointed_at": "2026-11-02T23:22:21Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
-      "checkpointed_at": "2026-11-02T23:12:51Z"
+      "checkpointed_at": "2026-11-02T23:23:28Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
-      "checkpointed_at": "2026-11-02T23:14:23Z"
+      "checkpointed_at": "2026-11-02T23:25:01Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -119842,6 +119842,96 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "b7ef684ed2d2761a91bfe2cc",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41514569977",
+      "checkpointed_at": "2026-11-02T23:25:18Z"
+    },
+    {
+      "asset_id": "06e79de1e7d960a860ae3104",
+      "asset_sha256": "92cc549cbde8f243a4d2e1f5d48bd9427f62d675a3b51c8bdfd199271eb95f5f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "page-0104.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of substances on health and the importance of making healthy choices.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Using these substances can cause serious health problems, such as breathing difficulties, memory loss, and damage to the lungs (Fig. 6.5), depending on the substance. To stay healthy, it is important to completely avoid these substances and make healthy choices instead. It is important to remain fir",
+          "The first step to overcoming addiction is seeking help and support from family and friends, and talking to trusted people, such as parents or teachers. Counselling and medical advice can also be helpful in handling such situations. Remember, your health and your future are in your hands—choose wisel",
+          "Nasha Mukt Bharat Abhiyaan",
+          "The Nasha Mukt Bharat Abhiyaan was launched by the Ministry of Social Justice and Empowerment, Government of India. It intends to reach out to the masses and spread awareness on the issue of avoiding substance abuse through active participation of the youth, women, and the community. The special foc",
+          "The Government has launched a National De-addiction Helpline—14446, to deal with drug addiction and to help drug addicts.",
+          "6.5 The 'Why' Question for Adolescence",
+          "We now understand the different changes in adolescence and also know some ways to handle it with a sense of responsibility.",
+          "But I wonder why these changes occur at this stage of life!",
+          "Many changes in adolescence, including menstruation and other signs of puberty, are mainly due to hormones—certain chemicals produced in our bodies. Hormones play a crucial role in regulating various aspects of growth and development, contributing to the proper functioning of the body. They are prod"
+        ],
+        "concepts": [
+          "substances",
+          "health problems",
+          "breathing difficulties",
+          "memory loss",
+          "damage to the lungs",
+          "substance abuse",
+          "Nasha Mukt Bharat Abhiyaan",
+          "National De-addiction Helpline",
+          "adolescence",
+          "puberty",
+          "hormones",
+          "puberty signs",
+          "puberty changes",
+          "puberty hormones",
+          "puberty chemicals",
+          "puberty signals",
+          "puberty body parts",
+          "puberty release",
+          "puberty response",
+          "puberty mood"
+        ],
+        "context_relation": "The page discusses the effects of substances on health, the importance of making healthy choices, and the role of hormones in puberty.",
+        "limitations": [
+          "The page does not provide specific examples or details about the substances or their effects.",
+          "The page does not provide specific examples or details about the National De-addiction Helpline or its impact.",
+          "The page does not provide specific examples or details about the hormones or their role in puberty.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41514569977",
+      "checkpointed_at": "2026-11-02T23:29:43Z"
     }
   ]
 }
