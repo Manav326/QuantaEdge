@@ -147,10 +147,14 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertTrue(INDEX_PATH.is_file())
 
     def test_layer4_5_artifact_contract_uses_relative_paths_and_expanded_package(self):
-        workflow = (ROOT / ".github/workflows/textbook-visual-candidates-v3.yml").read_text(encoding="utf-8")
+        # The old worker workflow was deliberately removed. All work is now dispatched
+        # through the single manual content-pipeline entrypoint.
+        workflow = (ROOT / ".github/workflows/textbook-content-pipeline.yml").read_text(encoding="utf-8")
         pipeline = (ROOT / "scripts/quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
         self.assertIn('--package "ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"', workflow)
         self.assertNotIn("ghcr.io/" + chr(92) + "${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals", workflow)
+        self.assertIn("repair_layers_4_5", workflow)
+        self.assertIn("default: progress_report", workflow)
         self.assertIn('f"{bundle.name}:application/gzip"', pipeline)
         self.assertIn("push_oci_artifact_with_retry(", pipeline)
         self.assertIn('cwd=sroot,description=', pipeline)

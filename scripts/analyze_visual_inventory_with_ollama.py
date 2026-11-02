@@ -6,6 +6,7 @@ analysis sidecar and never edits the source inventory, PDF, page JSONL, or lesso
 """
 from __future__ import annotations
 
+from datetime import datetime, timezone
 import argparse
 import base64
 import hashlib
@@ -365,6 +366,9 @@ def run_analysis(
         current_asset_hashes[asset_id] = asset_hash
         current_asset_context_hashes[asset_id] = hashlib.sha256(str(asset.get("page_text_context") or "")[:1600].encode("utf-8")).hexdigest()
 
+    saved: dict[str, Any] | None = None
+    layer_started_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    layer_started_clock = time.monotonic()
     previous: dict[str, dict[str, Any]] = {}
     if resume and output_path and output_path.is_file():
         saved = json.loads(output_path.read_text(encoding="utf-8"))
@@ -458,14 +462,45 @@ def run_analysis(
                 and _saved_analysis_is_valid(item.get("analysis"))
             ):
                 analyzed_count += 1
+        remaining_count = max(0, len(seen) - analyzed_count)
+        duration_samples = [
+            float(item["duration_seconds"]) for item in ordered_results
+            if isinstance(item, dict) and item.get("model") == model
+            and item.get("prompt_version") == PROMPT_VERSION
+            and item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
+            and _saved_analysis_is_valid(item.get("analysis"))
+            and isinstance(item.get("duration_seconds"), (int, float))
+            and not isinstance(item.get("duration_seconds"), bool) and item["duration_seconds"] > 0
+        ]
+        model_runtime_samples = [
+            float(item["duration_seconds"]) for item in ordered_results
+            if isinstance(item, dict) and item.get("model") == model
+            and item.get("prompt_version") == PROMPT_VERSION
+            and item.get("analysis_status") in {"DRAFT_REQUIRES_REVIEW", "ANALYSIS_ERROR"}
+            and isinstance(item.get("duration_seconds"), (int, float))
+            and not isinstance(item.get("duration_seconds"), bool) and item["duration_seconds"] > 0
+        ]
+        sorted_durations = sorted(duration_samples)
+        middle = len(sorted_durations) // 2
+        median_duration = (
+            sorted_durations[middle] if len(sorted_durations) % 2
+            else (sorted_durations[middle - 1] + sorted_durations[middle]) / 2
+        ) if sorted_durations else None
+        now_utc = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        results_changed = saved is None or saved.get("results") != ordered_results
         summary = {
+            "duration_sample_count": len(duration_samples),
+            "total_model_seconds_recorded": round(sum(model_runtime_samples), 1),
+            "median_asset_duration_seconds": round(median_duration, 1) if median_duration is not None else None,
+            "estimated_model_seconds_remaining": round(remaining_count * median_duration, 1) if median_duration is not None and len(duration_samples) >= 5 else None,
+            "elapsed_seconds_this_attempt": round(time.monotonic() - layer_started_clock, 1),
             "assets_selected": len(selected) + skipped_from_checkpoint,
             "assets_processed_this_run": processed_this_run,
             "assets_processed_ids": list(processed_asset_ids),
             "assets_eligible": len(seen),
             "assets_analyzed": analyzed_count,
-            "assets_remaining": max(0, len(seen) - analyzed_count),
-            "assets_completion_percent": round(100 * analyzed_count / len(seen), 1) if seen else 100.0,
+            "assets_remaining": remaining_count,
+            "assets_completion_percent": round(100 * analyzed_count / len(seen), 1) if seen else 0.0,
             "assets_failed": failed_count,
             "assets_skipped_from_checkpoint": skipped_from_checkpoint,
             "batch_limit": max_assets,
@@ -473,6 +508,14 @@ def run_analysis(
         }
         result = {
             "schema_version": "quantaedge.visual-analysis.v1",
+            "created_at": (saved or {}).get("created_at") or layer_started_at,
+            "started_at": (saved or {}).get("started_at") or layer_started_at,
+            "attempt_started_at": layer_started_at,
+            "updated_at": now_utc,
+            "last_progress_at": now_utc if results_changed else ((saved or {}).get("last_progress_at") or (saved or {}).get("created_at") or layer_started_at),
+            "completed_at": ((saved or {}).get("completed_at") or now_utc) if seen and remaining_count == 0 and failed_count == 0 else None,
+            "layer_status": "COMPLETE" if seen and remaining_count == 0 and failed_count == 0 else ("CHECKPOINTED" if processed_this_run or skipped_from_checkpoint else "IN_PROGRESS"),
+            "estimated_model_seconds_remaining": summary["estimated_model_seconds_remaining"],
             "analysis_status": "DRAFT_VISION_ANALYSIS_ONLY",
             "source_inventory": inventory_path.name,
             "source_book_id": source.get("book_id"),
@@ -527,7 +570,8 @@ def run_analysis(
     for asset_index, asset in enumerate(selected, start=1):
         asset_id = str(asset["asset_id"])
         existing = results_by_id.get(asset_id, {})
-        started_at = time.monotonic()
+        asset_started_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        asset_started_clock = time.monotonic()
         print(
             f"[visual-analysis] START {asset_index}/{len(selected)} asset_id={asset_id} "
             f"page={asset.get('source_pdf_page_number')} kind={asset.get('kind')} "
@@ -570,11 +614,14 @@ def run_analysis(
             item["page_text_context_sha256"] = current_asset_context_hashes[asset_id]
             if run_id:
                 item["run_id"] = run_id
-            item["checkpointed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            item["started_at"] = asset_started_at
+            item["completed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+            item["duration_seconds"] = round(time.monotonic() - asset_started_clock, 3)
+            item["checkpointed_at"] = item["completed_at"]
             results_by_id[asset_id] = item
             print(
                 f"[visual-analysis] RESULT asset_id={asset_id} status={item.get('analysis_status')} "
-                f"duration_seconds={time.monotonic() - started_at:.1f}",
+                f"duration_seconds={item['duration_seconds']:.1f}",
                 flush=True,
             )
         except Exception as exc:
@@ -591,6 +638,9 @@ def run_analysis(
                 "model": model,
                 "prompt_version": PROMPT_VERSION,
                 "run_id": run_id,
+                "started_at": asset_started_at,
+                "completed_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+                "duration_seconds": round(time.monotonic() - asset_started_clock, 3),
                 "analysis_status": "ANALYSIS_ERROR",
                 "error": str(exc)[:500],
                 "human_review_required": True,
@@ -598,7 +648,7 @@ def run_analysis(
             }
             print(
                 f"[visual-analysis] RESULT asset_id={asset_id} status=ANALYSIS_ERROR "
-                f"duration_seconds={time.monotonic() - started_at:.1f} error={error_text}",
+                f"duration_seconds={results_by_id[asset_id]["duration_seconds"]:.1f} error={error_text}",
                 flush=True,
             )
         processed_this_run += 1

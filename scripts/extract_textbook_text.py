@@ -12,6 +12,7 @@ import hashlib
 import json
 import re
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
@@ -117,6 +118,8 @@ def write_record(handle: Any, record: dict[str, Any]) -> None:
 
 
 def process_bundle(bundle_path: Path, pdf_dir: Path, output_dir: Path, force: bool = False) -> dict[str, Any]:
+    layer_started_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    layer_started_clock = time.monotonic()
     bundle = read_json(bundle_path)
     source = bundle.get("source")
     if not isinstance(source, dict):
@@ -156,6 +159,12 @@ def process_bundle(bundle_path: Path, pdf_dir: Path, output_dir: Path, force: bo
         pages_dir.mkdir(parents=True, exist_ok=True)
         output_path = pages_dir / (actual_sha.lower() + ".jsonl")
         manifest_path = pages_dir / (actual_sha.lower() + ".manifest.json")
+        previous_timing: dict[str, Any] = {}
+        if manifest_path.is_file():
+            try:
+                previous_timing = (json.loads(manifest_path.read_text(encoding="utf-8")).get("timing") or {})
+            except (OSError, UnicodeError, json.JSONDecodeError, AttributeError):
+                previous_timing = {}
         if force:
             output_path.unlink(missing_ok=True)
             manifest_path.unlink(missing_ok=True)
@@ -210,9 +219,20 @@ def process_bundle(bundle_path: Path, pdf_dir: Path, output_dir: Path, force: bo
     for record in checkpoints.values():
         status = str(record.get("review_status", "UNKNOWN"))
         status_counts[status] = status_counts.get(status, 0) + 1
+    layer_completed_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    layer_elapsed = round(time.monotonic() - layer_started_clock, 3)
     manifest = {
         "schema_version": 1,
         "extractor_version": EXTRACTOR_VERSION,
+        "timing": {
+            "layer": 0, "status": "COMPLETE",
+            "created_at": previous_timing.get("created_at") or layer_started_at,
+            "started_at": layer_started_at, "completed_at": layer_completed_at,
+            "last_progress_at": layer_completed_at if (page_count - completed_before) > 0 else (previous_timing.get("last_progress_at") or layer_completed_at),
+            "attempt_elapsed_seconds": layer_elapsed,
+            "total_elapsed_seconds": round(float(previous_timing.get("total_elapsed_seconds", 0) or 0) + layer_elapsed, 3),
+            "timing_basis": "Monotonic time around source verification and incremental whole-book text extraction",
+        },
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "bundle_file": bundle_path.name,
         "asset_pdf_filename": filename,

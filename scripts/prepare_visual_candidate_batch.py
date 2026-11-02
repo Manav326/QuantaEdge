@@ -8,6 +8,8 @@ import json
 import shutil
 import subprocess
 import sys
+import time
+from datetime import datetime, timezone
 import tarfile
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -527,7 +529,11 @@ def prepare_batch(selection_path: Path, source_root: Path, output_root: Path, re
         elif prior_index and prior_index.get("source_book_id") != source["book_id"]:
             prior_index = {}
 
+        layer1_started_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        layer1_started_clock = time.monotonic()
         layer1_checkpoint = ensure_layer1_checkpoint(selection["class"], source, work, output_root, repo, package)
+        layer1_completed_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        layer1_elapsed = round(time.monotonic() - layer1_started_clock, 3)
         inventory_dir = work / "inventory"
         inventory_path = inventory_dir / "visual-inventory.v1.json"
         fingerprint = preparation_fingerprint(source, work, inventory_path, repo)
@@ -536,6 +542,9 @@ def prepare_batch(selection_path: Path, source_root: Path, output_root: Path, re
         archive = output_root / f"{slug}-candidates-v3.tar.gz"
 
         restored = False
+        layer2_started_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        layer2_started_clock = time.monotonic()
+        layer2_built = False
         pulled, detail = pull_archive(package, tag, output_root / f".pull-{slug}-fingerprint")
         if pulled is not None:
             expected_tar_sha = prior_index.get("bundle_tar_sha256") if prior_index.get("version_tag") == tag else None
@@ -570,6 +579,7 @@ def prepare_batch(selection_path: Path, source_root: Path, output_root: Path, re
                 print(json.dumps({"slug": slug, "checkpoint": "LEGACY_NOT_REUSED", "reason": "No source-matched immutable bundle with an identical committed Layer 1 inventory and candidate pack."}))
 
         if not restored:
+            layer2_built = True
             shutil.rmtree(out, ignore_errors=True)
             subprocess.run([
                 sys.executable, "scripts/prepare_visual_candidates_v3.py",
@@ -585,6 +595,8 @@ def prepare_batch(selection_path: Path, source_root: Path, output_root: Path, re
             print(json.dumps({"slug": slug, "checkpoint": "BUILT_AND_PUBLISHED", "tag": tag, "tar_sha256": archive_sha, "candidate_count": pack["summary"]["selected_candidate_count"], "fingerprint": fingerprint}))
 
         pack = validate_pack(out, source)
+        layer2_completed_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        layer2_elapsed = round(time.monotonic() - layer2_started_clock, 3)
         bundle_manifest_path = out / "candidate-bundle-manifest.v1.json"
         is_fingerprinted = bundle_manifest_path.is_file()
         if is_fingerprinted:
@@ -592,6 +604,8 @@ def prepare_batch(selection_path: Path, source_root: Path, output_root: Path, re
         else:
             bundle_manifest = None
 
+        layer3_started_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        layer3_started_clock = time.monotonic()
         destination = repo / "data" / "textbook-visual-candidates-v3" / slug
         destination.mkdir(parents=True, exist_ok=True)
         for name in ("candidates.v3.json", "summary.v3.json", "contact-sheet.jpg"):
@@ -645,6 +659,32 @@ def prepare_batch(selection_path: Path, source_root: Path, output_root: Path, re
             "preparation_fingerprint": layer1_checkpoint["preparation_fingerprint"],
             "inventory_json_sha256": layer1_checkpoint["inventory_json_sha256"],
         }
+        layer3_completed_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        layer3_elapsed = round(time.monotonic() - layer3_started_clock, 3)
+        previous_timings = prior_index.get("layer_timings") or {}
+        layer1_timing = {
+            "layer": 1, "status": "COMPLETE",
+            "started_at": layer1_started_at, "completed_at": layer1_completed_at,
+            "last_progress_at": layer1_completed_at, "attempt_elapsed_seconds": layer1_elapsed,
+            "cumulative_elapsed_seconds": round(float((previous_timings.get("1") or {}).get("cumulative_elapsed_seconds", 0) or 0) + layer1_elapsed, 3),
+            "timing_basis": "Per-book Layer 1 inventory restore/build and source/hash validation",
+        }
+        layer2_timing = {
+            "layer": 2, "status": "COMPLETE", "started_at": layer2_started_at,
+            "completed_at": layer2_completed_at, "last_progress_at": layer2_completed_at,
+            "attempt_elapsed_seconds": layer2_elapsed,
+            "cumulative_elapsed_seconds": round(float((previous_timings.get("2") or {}).get("cumulative_elapsed_seconds", 0) or 0) + layer2_elapsed, 3),
+            "reuse_status": "BUILT" if layer2_built else "RESTORED_FROM_IMMUTABLE_CHECKPOINT",
+            "timing_basis": "Per-book candidate bundle pull/validation or candidate generation; no extra inference",
+        }
+        layer3_timing = {
+            "layer": 3, "status": "COMPLETE", "started_at": layer3_started_at,
+            "completed_at": layer3_completed_at, "last_progress_at": layer3_completed_at,
+            "attempt_elapsed_seconds": layer3_elapsed,
+            "cumulative_elapsed_seconds": round(float((previous_timings.get("3") or {}).get("cumulative_elapsed_seconds", 0) or 0) + layer3_elapsed, 3),
+            "timing_basis": "Per-book catalogue and bundle-index handoff creation",
+        }
+        bundle_index["layer_timings"] = {"1": layer1_timing, "2": layer2_timing, "3": layer3_timing}
         write_json(destination / "bundle-index.v3.json", bundle_index)
         write_json(destination / "preparation-checkpoint.v1.json", {
             "schema_version": "quantaedge.visual-candidate-preparation-checkpoint.v1",

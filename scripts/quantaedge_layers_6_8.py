@@ -2,6 +2,7 @@
 """Bounded and resumable Layers 6–8 for QuantaEdge, using native local Ollama."""
 from __future__ import annotations
 import argparse, hashlib, json, re, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -1131,21 +1132,22 @@ def checkpoint_git(repo:Path,paths:list[Path],message:str)->None:
     for p in paths:
         try: items.append(p.resolve().relative_to(repo.resolve()).as_posix())
         except ValueError as exc: raise ValueError(f"Checkpoint outside repository: {p}") from exc
-    if not items: return
+    if not items:return
     outside_data=[item for item in items if item!="data" and not item.startswith("data/")]
     if outside_data: raise ValueError(f"Generated Layers 6-8 checkpoints may only be committed under data/: {outside_data}")
     subprocess.run(["git","add","--",*items],cwd=repo,check=True)
     rc=subprocess.run(["git","diff","--cached","--quiet","--",*items],cwd=repo).returncode
-    if rc==0: return
+    if rc==0:return
     if rc!=1: raise RuntimeError("Cannot inspect staged checkpoint.")
     subprocess.run(["git","config","user.name","github-actions[bot]"],cwd=repo,check=True)
     subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"],cwd=repo,check=True)
     subprocess.run(["git","commit","-m",message,"--",*items],cwd=repo,check=True)
-    subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-    try: subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
-    except subprocess.CalledProcessError:
-        subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-        subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
+    target=os.environ.get("QUANTAEDGE_CHECKPOINT_BRANCH") or os.environ.get("GITHUB_REF_NAME")
+    if not target:
+        target=subprocess.run(["git","branch","--show-current"],cwd=repo,check=True,capture_output=True,text=True).stdout.strip()
+    if not target or target.startswith("refs/"): raise RuntimeError("No valid caller branch is available for Layers 6-8 checkpointing.")
+    subprocess.run(["git","push","origin",f"HEAD:{target}"],cwd=repo,check=True)
+
 
 def benchmark_report(repo:Path,path:Path|None,model:str)->dict[str,Any]:
     path=path or repo/"data"/"textbook-content-pipeline"/"model-benchmarks"/"class-6-ncert-curiosity.v1.json"
@@ -1182,6 +1184,8 @@ def benchmark_report(repo:Path,path:Path|None,model:str)->dict[str,Any]:
     return report
 
 def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
+    run_started_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
+    run_started_clock=time.monotonic()
     repo=args.repo_root.resolve(); source=load_source(repo,args.class_no,args.source_book_id)
     ledger_path,ledger,layer5_by_page=load_layer5_evidence(repo,source)
     layer5_sha=sha_file(ledger_path)
@@ -1201,7 +1205,37 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     source["pipeline_input_fingerprint"]=fingerprint
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
     outdir=ledger_path.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}-v5"
+    prior_manifest_path=outdir/"layers-6-8-run-manifest.v1.json"
+    try: prior_manifest_timing=(read_json(prior_manifest_path).get("timing") or {}) if prior_manifest_path.is_file() else {}
+    except ValueError: prior_manifest_timing={}
     cpfile=outdir/"generation-checkpoints.v1.json"; rag=ledger_path.parent/"layer-8-rag-corpus.v1.jsonl"
+
+    def stamp_layer_timings(report:dict[str,Any], *, final:bool=False)->dict[str,Any]:
+        finished=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
+        elapsed=round(time.monotonic()-run_started_clock,3)
+        cumulative=round(float(prior_manifest_timing.get("cumulative_elapsed_seconds",0) or 0)+elapsed,3)
+        segment_values=checkpoints.values() if isinstance(checkpoints,dict) else []
+        model_seconds=round(sum(float(item.get("duration_seconds",item.get("elapsed_seconds",0)) or 0) for item in segment_values
+                                if isinstance(item,dict) and isinstance(item.get("duration_seconds",item.get("elapsed_seconds",0)),(int,float))),3)
+        timings={}
+        for layer in (6,7,8):
+            raw_status=str((report.get("layers") or {}).get(str(layer)) or report.get("overall_status") or "IN_PROGRESS")
+            if raw_status in {"DRAFT_MAPPED_REQUIRES_REVIEW","DRAFT_REQUIRES_HUMAN_REVIEW"}: status="NEEDS_REVIEW"
+            elif raw_status=="IN_PROGRESS": status="CHECKPOINTED" if final else "RUNNING"
+            elif raw_status=="INCOMPLETE": status="CHECKPOINTED"
+            else: status=raw_status
+            timings[str(layer)]={"layer":layer,"status":status,"started_at":run_started_at,
+                "completed_at":finished if status in {"COMPLETE","NEEDS_REVIEW"} else None,"last_progress_at":finished,
+                "attempt_elapsed_seconds":elapsed,"cumulative_elapsed_seconds":cumulative,
+                "model_runtime_seconds":model_seconds,"shared_runtime_across_layers_6_8":True,
+                "timing_basis":"Shared source-segment generation invocation; same wall time is shown for each output and must not be summed three times"}
+        report["timing"]={"started_at":prior_manifest_timing.get("started_at") or run_started_at,
+            "attempt_started_at":run_started_at,"completed_at":finished if final else None,
+            "last_progress_at":finished,"attempt_elapsed_seconds":elapsed,"cumulative_elapsed_seconds":cumulative,
+            "model_runtime_seconds":model_seconds,"timing_basis":"Monotonic wall-clock duration for the explicitly requested source-book/model invocation"}
+        report["layer_timings"]=timings
+        write_json(outdir/"layers-6-8-run-manifest.v1.json",report)
+        return report
     if getattr(args, "preflight_only", False):
         if cpfile.exists():
             prior_doc=read_json(cpfile)
@@ -1253,6 +1287,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
             if prior.get("segment_sha256")!=seg["segment_sha256"]:
                 raise ValueError(f"Output-only resume segment hash mismatch {seg['segment_id']}.")
         current=write_outputs(source,segments,checkpoints,outdir,rag,args.model,sha(json.dumps(report,sort_keys=True)),layer5_by_page)
+        stamp_layer_timings(current, final=False)
         if args.commit_checkpoints:
             checkpoint_git(repo,[outdir,rag],f"reconcile(content): L6-8 outputs {source['book_id']}")
         return {"status":"OUTPUTS_REBUILT_WITHOUT_MODEL_CALLS","source_book_id":source["book_id"],
@@ -1275,13 +1310,16 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
         calls+=1
         segment_layer5=layer5_evidence_for_segment(layer5_by_page,seg)
         segment_layer5_ids=[row["asset_id"] for row in segment_layer5]
+        segment_started_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
+        segment_started_clock=time.monotonic()
         try:
             value,elapsed=ollama_chat(args.endpoint,args.model,prompt_for(source,seg,visuals_by_segment.get(seg["segment_id"],[]),segment_layer5),args.request_timeout,opener)
+            segment_completed_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
             errors=validate_output(value,set(seg["source_pages"]),visuals_by_segment.get(seg["segment_id"],[]))
             if errors:
                 checkpoints[seg["segment_id"]]={"status":"ERROR","segment_sha256":seg["segment_sha256"],
                   "attempts":int((prior or {}).get("attempts",0))+1,"layer5_ledger_sha256":layer5_sha,
-                  "layer5_visual_evidence_asset_ids":segment_layer5_ids,"error":"; ".join(errors[:12]),"elapsed_seconds":round(elapsed,2)}
+                  "layer5_visual_evidence_asset_ids":segment_layer5_ids,"error":"; ".join(errors[:12]),"elapsed_seconds":round(elapsed,2),"started_at":segment_started_at,"completed_at":segment_completed_at,"duration_seconds":round(elapsed,3)}
             else:
                 lesson=lesson_from(source,seg,value,visuals_by_segment.get(seg["segment_id"],[]),segment_layer5)
                 if lesson:
@@ -1291,22 +1329,26 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
                 records=sft_records(source,seg,value,args.model,segment_layer5)
                 checkpoints[seg["segment_id"]]={"status":"COMPLETE","segment_sha256":seg["segment_sha256"],
                   "generated":value,"lesson":lesson,"sft_rows":records,"layer5_ledger_sha256":layer5_sha,
-                  "layer5_visual_evidence_asset_ids":segment_layer5_ids,"elapsed_seconds":round(elapsed,2),
+                  "layer5_visual_evidence_asset_ids":segment_layer5_ids,"elapsed_seconds":round(elapsed,2),"started_at":segment_started_at,"completed_at":segment_completed_at,"duration_seconds":round(elapsed,3),
                   "mapping_status":"MAPPED" if value.get("chapter_number") is not None else "UNRESOLVED_CHAPTER"}
         except (OSError,ValueError,RuntimeError,urllib.error.URLError) as exc:
+            segment_completed_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
             checkpoints[seg["segment_id"]]={"status":"ERROR","segment_sha256":seg["segment_sha256"],
               "attempts":int((prior or {}).get("attempts",0))+1,"layer5_ledger_sha256":layer5_sha,
-              "layer5_visual_evidence_asset_ids":segment_layer5_ids,"error":str(exc)[:1200]}
+              "layer5_visual_evidence_asset_ids":segment_layer5_ids,"started_at":segment_started_at,
+              "completed_at":segment_completed_at,"duration_seconds":round(time.monotonic()-segment_started_clock,3),
+              "error":str(exc)[:1200]}
         doc["segments"]=checkpoints; write_json(cpfile,doc)
         if calls%args.checkpoint_every==0 or calls==args.max_model_calls:
             current=write_outputs(source,segments,checkpoints,outdir,rag,args.model,sha(json.dumps(report,sort_keys=True)),layer5_by_page)
+            stamp_layer_timings(current)
             if args.commit_checkpoints: checkpoint_git(repo,[outdir,rag],f"checkpoint(content): L6-8 {source['book_id']} ({calls} calls)")
             print(json.dumps({"book_id":source["book_id"],"model":args.model,"calls_this_run":calls,
               "segments_completed":current["segments_completed"],"segments_total":current["segments_total"],"status":current["overall_status"]}))
     doc["segments"]=checkpoints; write_json(cpfile,doc)
     result=write_outputs(source,segments,checkpoints,outdir,rag,args.model,sha(json.dumps(report,sort_keys=True)),layer5_by_page)
     result["model_calls_this_run"]=calls; result["model_calls_budgeted_per_invocation"]=args.max_model_calls
-    write_json(outdir/"layers-6-8-run-manifest.v1.json",result)
+    stamp_layer_timings(result, final=True)
     if args.commit_checkpoints: checkpoint_git(repo,[outdir,rag],f"status(content): L6-8 {source['book_id']} ({result['overall_status']})")
     return result
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """QuantaEdge resumable visual pipeline orchestration and Layer 5 evidence ledger."""
 from __future__ import annotations
+from datetime import datetime, timezone
 import argparse, copy, hashlib, json, re, shutil, subprocess, sys, tarfile, time
 from pathlib import Path
 
@@ -66,6 +67,36 @@ def page_no(row):
     return None
 
 def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effective_path,ledger_path,*,corrections_path=None,repo_root=None):
+    layer5_started_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
+    layer5_started_clock=time.monotonic()
+    prior_layer5_elapsed=0.0
+    prior_path=Path(ledger_path)
+    if prior_path.is_file():
+        # The old ledger may contain very large page/visual arrays. Read only its prefix
+        # and tail, where the versioned timing envelope is written; never decode the full file.
+        windows=[]
+        try:
+            size=prior_path.stat().st_size
+            with prior_path.open("rb") as stream:
+                windows.append(stream.read(64*1024).decode("utf-8",errors="replace"))
+                if size>64*1024:
+                    stream.seek(max(0,size-64*1024))
+                    windows.append(stream.read(64*1024).decode("utf-8",errors="replace"))
+            for window in windows:
+                for match in re.finditer(r'"timing"\s*:\s*',window):
+                    try:
+                        value,_=json.JSONDecoder().raw_decode(window,match.end())
+                    except json.JSONDecodeError:
+                        continue
+                    if isinstance(value,dict) and value.get("layer")==5:
+                        candidate=value.get("cumulative_elapsed_seconds",value.get("total_elapsed_seconds",value.get("attempt_elapsed_seconds",0)))
+                        if isinstance(candidate,(int,float)) and not isinstance(candidate,bool) and candidate>=0:
+                            prior_layer5_elapsed=max(prior_layer5_elapsed,float(candidate))
+                            break
+                if prior_layer5_elapsed:
+                    break
+        except (OSError,ValueError,UnicodeError):
+            prior_layer5_elapsed=0.0
     root=Path(repo_root or Path.cwd()).resolve()
     inv,raw,man=read_json(inventory_path),read_json(raw_path),read_json(manifest_path)
     if inv.get("schema_version")!="quantaedge.visual-inventory.v1" or raw.get("schema_version")!="quantaedge.visual-analysis.v1":
@@ -178,30 +209,59 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
     orphans=sorted(set(rawby)-{a.get("asset_id") for a in assets if isinstance(a.get("asset_id"),str) and a.get("kind") in KINDS})
     visual_bad+=len(orphans);unresolved=page_bad+visual_bad
     paths={"inventory":rel(inventory_path,root),"raw_analysis":rel(raw_path,root),"manifest":rel(manifest_path,root),"text_jsonl":rel(text_path,root),"corrections":rel(corrections_path,root) if corrections_path else None,"effective_analysis_output":rel(effective_path,root),"coverage_ledger_output":rel(ledger_path,root)}
-    write_json(effective_path,{"schema_version":"quantaedge.visual-analysis-effective.v1","source_book_id":bid,"source_pdf_sha256":sha,"raw_analysis_path":paths["raw_analysis"],"raw_analysis_sha256":hashlib.sha256(Path(raw_path).read_bytes()).hexdigest(),"model":raw.get("model"),"prompt_version":raw.get("prompt_version"),"corrections_path":paths["corrections"],"corrections_applied_count":len(accepted),"results":eff,"human_review_required":True,"publication_allowed":False})
-    out={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,"ledger_status":"COMPLETE" if unresolved==0 else "INCOMPLETE","source":{"class":src.get("class"),"language":src.get("language"),"subject":src.get("subject"),"source_book_id":bid,"source_pdf_sha256":sha,"edition":src.get("edition"),"pdf_page_count":count},"source_paths":paths,"summary":{"source_pdf_page_count":count,"inventory_page_records":len(pages),"page_text_records":sum(map(len,texts.values())),"pages_with_unresolved_text":page_bad,"inventory_asset_rows":len(assets),"eligible_visual_asset_rows":eligible,"raw_analysis_result_rows":len(results),"successful_visual_analyses":sum(x["analysis_status"]=="ANALYZED_REQUIRES_HUMAN_REVIEW" for x in visual_rows),"missing_visual_analyses":sum(x["analysis_status"]=="ANALYSIS_MISSING" for x in visual_rows),"failed_visual_analyses":sum(x["analysis_status"] in {"ANALYSIS_ERROR","ASSET_HASH_MISMATCH","ANALYSIS_STATUS_UNKNOWN","ANALYSIS_STALE_CONTEXT","ANALYSIS_STALE_CHECKPOINT"} for x in visual_rows),"orphan_analysis_results":len(orphans),"corrections_applied":len(accepted),"unresolved_count":unresolved,"mapping_status":"NOT_STARTED","analysis_model":raw.get("model"),"analysis_prompt_version":raw.get("prompt_version"),"publication_allowed":False},"pages":page_rows,"visuals":visual_rows,"orphan_analysis_asset_ids":orphans,"human_review_required":True,"publication_allowed":False}
+    write_json(effective_path,{"schema_version":"quantaedge.visual-analysis-effective.v1","created_at":raw.get("created_at"),"generated_at":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),"last_progress_at":raw.get("last_progress_at"),"source_book_id":bid,"source_pdf_sha256":sha,"raw_analysis_path":paths["raw_analysis"],"raw_analysis_sha256":hashlib.sha256(Path(raw_path).read_bytes()).hexdigest(),"model":raw.get("model"),"prompt_version":raw.get("prompt_version"),"corrections_path":paths["corrections"],"corrections_applied_count":len(accepted),"results":eff,"human_review_required":True,"publication_allowed":False})
+    out={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,"generated_at":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),"last_progress_at":raw.get("last_progress_at"),"ledger_status":"COMPLETE" if unresolved==0 else "INCOMPLETE","source":{"class":src.get("class"),"language":src.get("language"),"subject":src.get("subject"),"source_book_id":bid,"source_pdf_sha256":sha,"edition":src.get("edition"),"pdf_page_count":count},"source_paths":paths,"summary":{"source_pdf_page_count":count,"inventory_page_records":len(pages),"page_text_records":sum(map(len,texts.values())),"pages_with_unresolved_text":page_bad,"inventory_asset_rows":len(assets),"eligible_visual_asset_rows":eligible,"raw_analysis_result_rows":len(results),"successful_visual_analyses":sum(x["analysis_status"]=="ANALYZED_REQUIRES_HUMAN_REVIEW" for x in visual_rows),"missing_visual_analyses":sum(x["analysis_status"]=="ANALYSIS_MISSING" for x in visual_rows),"failed_visual_analyses":sum(x["analysis_status"] in {"ANALYSIS_ERROR","ASSET_HASH_MISMATCH","ANALYSIS_STATUS_UNKNOWN","ANALYSIS_STALE_CONTEXT","ANALYSIS_STALE_CHECKPOINT"} for x in visual_rows),"orphan_analysis_results":len(orphans),"corrections_applied":len(accepted),"unresolved_count":unresolved,"mapping_status":"NOT_STARTED","analysis_model":raw.get("model"),"analysis_prompt_version":raw.get("prompt_version"),"publication_allowed":False},"pages":page_rows,"visuals":visual_rows,"orphan_analysis_asset_ids":orphans,"human_review_required":True,"publication_allowed":False}
+    layer5_completed_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
+    layer5_elapsed=round(time.monotonic()-layer5_started_clock,3)
+    layer5_cumulative_elapsed=round(prior_layer5_elapsed+layer5_elapsed,3)
+    out["timing"]={"layer":5,"status":"COMPLETE" if out.get("ledger_status")=="COMPLETE" else "INCOMPLETE",
+        "started_at":layer5_started_at,"completed_at":layer5_completed_at,"last_progress_at":layer5_completed_at,
+        "attempt_elapsed_seconds":layer5_elapsed,"total_elapsed_seconds":layer5_cumulative_elapsed,
+        "cumulative_elapsed_seconds":layer5_cumulative_elapsed,
+        "timing_basis":"Monotonic time for effective-analysis and page/visual coverage reconciliation"}
+    # Keep this small root envelope at the front so all future checkpoints can read it
+    # with a bounded prefix instead of loading the large page/visual evidence arrays.
+    out={"schema_version":out["schema_version"],"architecture_version":out["architecture_version"],
+         "layer":out["layer"],"timing":out["timing"],
+         **{key:value for key,value in out.items() if key not in {"schema_version","architecture_version","layer","timing"}}}
     write_json(ledger_path,out);return out
 
 def git_checkpoint(repo,paths,message):
-    # Pipeline-generated data is versioned only under data/, never in application/code folders.
+    # Generated content remains on the branch that explicitly requested this task.
     repo_root=Path(repo).resolve()
     data_root=(repo_root/"data").resolve()
     staged_paths=[]
+    index_paths=[]
     for raw_path in paths:
         candidate=Path(raw_path)
         if not candidate.is_absolute(): candidate=repo_root/candidate
         try: relative=candidate.resolve().relative_to(data_root)
         except ValueError as exc: raise ValueError(f"Pipeline checkpoints may only be committed under data/: {raw_path}") from exc
         staged_paths.append((Path("data")/relative).as_posix())
-    subprocess.run(["git","add","--",*staged_paths],cwd=repo_root,check=True)
-    if subprocess.run(["git","diff","--cached","--quiet"],cwd=repo).returncode==0:return
-    subprocess.run(["git","config","user.name","github-actions[bot]"],cwd=repo,check=True);subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"],cwd=repo,check=True)
-    subprocess.run(["git","commit","-m",message],cwd=repo,check=True)
-    subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-    try:subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
-    except subprocess.CalledProcessError:
-        subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-        subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
+        if candidate.name=="visual-pipeline-index.v1.json": index_paths.append(candidate)
+    try:
+        from scripts.textbook_pipeline_handoff import record_book_checkpoint
+    except ModuleNotFoundError:
+        from textbook_pipeline_handoff import record_book_checkpoint
+    for index_path in index_paths:
+        staged_paths.extend(record_book_checkpoint(repo_root,index_path.parent.name))
+    subprocess.run(["git","add","--",*sorted(set(staged_paths))],cwd=repo_root,check=True)
+    rc=subprocess.run(["git","diff","--cached","--quiet"],cwd=repo_root).returncode
+    if rc==0:return
+    subprocess.run(["git","config","user.name","github-actions[bot]"],cwd=repo_root,check=True)
+    subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"],cwd=repo_root,check=True)
+    subprocess.run(["git","commit","-m",message],cwd=repo_root,check=True)
+    target=os.environ.get("QUANTAEDGE_CHECKPOINT_BRANCH") or os.environ.get("GITHUB_REF_NAME")
+    if not target:
+        target=subprocess.run(["git","branch","--show-current"],cwd=repo_root,check=True,capture_output=True,text=True).stdout.strip()
+    if not target or target.startswith("refs/"):
+        raise RuntimeError("No valid caller branch is available for content checkpointing.")
+    try:
+        from scripts.git_checkpoint import push_checkpoint
+    except ModuleNotFoundError:
+        from git_checkpoint import push_checkpoint
+    push_checkpoint(repo_root, target)
+
 
 def backfill_legacy_context_hashes(previous_inventory, raw_path, *, book_id, source_sha, model):
     """Recover legacy per-asset text-context fingerprints from the exact committed prior inventory.
@@ -338,15 +398,30 @@ def layer1_inventory_bundle_from_marker(marker_path, inventory_path, source, pac
     return {"package": package, "tag": tag, "tar_sha256": archive_sha}
 
 
+def book_batch_limit(max_batches_per_run: int, source_count: int) -> int:
+    """Share each runner's batch budget across its selected whole-book sources."""
+    if max_batches_per_run < 1:
+        raise ValueError("max-batches-per-run must be positive.")
+    if source_count < 1:
+        raise ValueError("At least one selected whole-book source is required.")
+    return max(1, (max_batches_per_run + source_count - 1) // source_count)
+
+
 def run_layers(args):
-    repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[];registry_writes_enabled=True;total_batches=0
+    repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[];registry_writes_enabled=True;total_batches=0;yielded_for_resume=False
     if args.batch_size<1:raise ValueError("batch-size must be positive; it is not a total cap.")
     if args.max_batches_per_run < 1:raise ValueError("max-batches-per-run must be positive.")
     if not 10 <= args.request_timeout <= 900:raise ValueError("request-timeout must be between 10 and 900 seconds so a stalled model request cannot hang a runner indefinitely.")
-    for s in selection["sources"]:
+    sources=selection.get("sources")
+    if not isinstance(sources,list) or not sources:
+        raise ValueError("Source selection must contain at least one whole-book source.")
+    per_book_batch_limit=book_batch_limit(args.max_batches_per_run,len(sources))
+    print(f"[pipeline] SOURCE_SCHEDULE class={selection['class']} books={len(sources)} max_batches_per_run={args.max_batches_per_run} per_book_batch_limit={per_book_batch_limit}",flush=True)
+    for s in sources:
         if total_batches >= args.max_batches_per_run:
-            print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; all current-book outputs remain checkpointed.",flush=True)
-            return 10
+            print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; remaining books keep their durable checkpoints.",flush=True)
+            yielded_for_resume=True
+            break
         slug=s["book_slug"];work=sroot/slug;invdir=work/"inventory";inv=invdir/"visual-inventory.v1.json"
         if not inv.is_file():raise ValueError(f"{slug}: inventory missing; refusing omission.")
         inventory=read_json(inv)
@@ -408,15 +483,20 @@ def run_layers(args):
         layers={"1":"COMPLETE","2":previous_layers.get("2","COMPLETE"),"3":previous_layers.get("3","COMPLETE"),
                 "4":"RUNNING","5":"RUNNING","6":previous_layers.get("6","NOT_STARTED"),
                 "7":previous_layers.get("7","NOT_STARTED"),"8":previous_layers.get("8","NOT_STARTED")}
-        write_json(index,{"schema_version":"quantaedge.textbook-content-pipeline-index.v1","architecture_version":"8-layer-resumable-v1","class":selection["class"],"book_slug":slug,"source_book_id":s["book_id"],"source_pdf_sha256":s["sha256"],"layers":layers,"inventory_bundle":inventory_bundle,"analysis_path":rel(raw,repo),"effective_analysis_path":rel(eff,repo),"coverage_ledger_path":rel(ledger,repo),"publication_allowed":False,"human_review_required":True})
+        write_json(index,{"schema_version":"quantaedge.textbook-content-pipeline-index.v1","architecture_version":"8-layer-resumable-v1","timestamps":{"updated_at":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),"last_progress_at":raw.get("last_progress_at"),"checkpoint_at":datetime.now(timezone.utc).isoformat().replace("+00:00","Z")},"class":selection["class"],"book_slug":slug,"source_book_id":s["book_id"],"source_pdf_sha256":s["sha256"],"layers":layers,"inventory_bundle":inventory_bundle,"analysis_path":rel(raw,repo),"effective_analysis_path":rel(eff,repo),"coverage_ledger_path":rel(ledger,repo),"publication_allowed":False,"human_review_required":True})
         checkpoint=f"layer4-class{selection['class']}-{slug}-{model}-checkpoint"
         batch_number=0
+        book_batches=0
         book_yielded=False
-        print(f"[pipeline] BOOK_START class={selection['class']} book={slug} eligible_inventory_assets={len(inventory.get('assets',[]))} batch_size={args.batch_size} checkpoint_tag={checkpoint}",flush=True)
+        print(f"[pipeline] BOOK_START class={selection['class']} book={slug} eligible_inventory_assets={len(inventory.get('assets',[]))} batch_size={args.batch_size} per_book_batch_limit={per_book_batch_limit} checkpoint_tag={checkpoint}",flush=True)
         while True:
             if total_batches >= args.max_batches_per_run:
                 book_yielded=True
                 print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; yielding after durable checkpoint.",flush=True)
+                break
+            if book_batches >= per_book_batch_limit:
+                book_yielded=True
+                print(f"[pipeline] BOOK_BATCH_BUDGET_REACHED class={selection['class']} book={slug} completed_book_batches={book_batches} per_book_batch_limit={per_book_batch_limit}; continuing to the next selected book before resume.",flush=True)
                 break
             batch_number+=1
             print(f"[pipeline] BATCH_START class={selection['class']} book={slug} batch={batch_number} batch_limit={args.batch_size} run_id={args.run_id}",flush=True)
@@ -437,7 +517,9 @@ def run_layers(args):
             subprocess.run(cmd,cwd=repo,check=True)
             subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",str(s["text_jsonl_repo_path"]),"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
             data=read_json(raw);summary=data.get("summary",{});processed=int(summary.get("assets_processed_this_run",0))
-            if processed > 0: total_batches += 1
+            if processed > 0:
+                total_batches += 1
+                book_batches += 1
             after_results=data.get("results",[]) if isinstance(data,dict) else []
             processed_ids=summary.get("assets_processed_ids",[])
             overwrote_successes=bool(processed_ids) and all(
@@ -468,9 +550,11 @@ def run_layers(args):
         result=read_json(ledger);idx=read_json(index);idx["layers"]["4"]="CHECKPOINTED";idx["layers"]["5"]=result["ledger_status"];write_json(index,idx);git_checkpoint(repo,[rel(index,repo)],f"status(content): Layer 5 {slug}")
         print(json.dumps({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]}))
         if book_yielded:
-            print(json.dumps({"pipeline_run_status":"YIELDED_FOR_RESUME","class":selection["class"],"book":slug,"completed_batches":total_batches,"max_batches_per_run":args.max_batches_per_run,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"],"publication_allowed":False}),flush=True)
-            return 10
+            yielded_for_resume=True
         if result["ledger_status"]!="COMPLETE":bad.append({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]})
+    if yielded_for_resume:
+        print(json.dumps({"pipeline_run_status":"YIELDED_FOR_RESUME","class":selection["class"],"completed_batches":total_batches,"max_batches_per_run":args.max_batches_per_run,"per_book_batch_limit":per_book_batch_limit,"publication_allowed":False}),flush=True)
+        return 10
     print(json.dumps({"class":selection["class"],"incomplete_books":bad,"layers_6_to_8":"NOT_STARTED","publication_allowed":False},indent=2))
     return 3 if bad else 0
 

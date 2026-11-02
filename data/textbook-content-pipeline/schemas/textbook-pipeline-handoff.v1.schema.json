@@ -1,0 +1,375 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:quantaedge:textbook-pipeline-handoff:v1",
+  "title": "QuantaEdge Textbook Pipeline Handoff v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "pipeline_run_id",
+    "run_attempt",
+    "handoff_id",
+    "book_pair_id",
+    "class_no",
+    "subject_book_label",
+    "sources",
+    "stage",
+    "lineage",
+    "timestamps",
+    "work",
+    "validation",
+    "decision",
+    "layer_statuses"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "quantaedge.textbook-pipeline-handoff.v1"
+    },
+    "pipeline_run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_attempt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handoff_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "book_pair_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "class_no": {
+      "type": "integer",
+      "enum": [
+        6,
+        7,
+        8
+      ]
+    },
+    "subject_book_label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_book_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "source_book_id",
+          "book_slug",
+          "language",
+          "source_pdf_sha256"
+        ],
+        "properties": {
+          "source_book_id": {
+            "type": "string"
+          },
+          "book_slug": {
+            "type": "string"
+          },
+          "language": {
+            "enum": [
+              "english",
+              "hindi"
+            ]
+          },
+          "source_pdf_sha256": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "required": [
+        "layer",
+        "name",
+        "input_schema_versions",
+        "output_schema_version",
+        "consumer_contract_version"
+      ],
+      "properties": {
+        "layer": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        },
+        "name": {
+          "type": "string"
+        },
+        "input_schema_versions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "output_schema_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "consumer_contract_version": {
+          "type": "string"
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "required": [
+        "workflow_run_id",
+        "workflow_run_attempt",
+        "workflow_run_url",
+        "input_artifacts",
+        "output_artifacts",
+        "append_only_event_log"
+      ],
+      "properties": {
+        "producer_git_sha": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "workflow_run_id": {
+          "type": "string"
+        },
+        "workflow_run_attempt": {
+          "type": "string"
+        },
+        "workflow_run_url": {
+          "type": "string"
+        },
+        "branch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parent_handoff_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "input_artifacts": {
+          "type": "array"
+        },
+        "output_artifacts": {
+          "type": "array"
+        },
+        "append_only_event_log": {
+          "type": "string"
+        }
+      }
+    },
+    "timestamps": {
+      "type": "object",
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_progress_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "checkpoint_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_error_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "retry_after": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "work": {
+      "type": "object",
+      "required": [
+        "attempts",
+        "completed_batches",
+        "expected_count",
+        "processed_count",
+        "failed_count",
+        "unresolved_count",
+        "publication_allowed"
+      ],
+      "properties": {
+        "attempts": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "completed_batches": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expected_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "processed_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unresolved_count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "budget": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "prompt_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "model_startup_seconds": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "model_run_seconds": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "publication_allowed": {
+          "const": false
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "schema_valid",
+        "identity_valid",
+        "hashes_valid",
+        "references_valid",
+        "blockers"
+      ],
+      "properties": {
+        "schema_valid": {
+          "type": "boolean"
+        },
+        "identity_valid": {
+          "type": "boolean"
+        },
+        "hashes_valid": {
+          "type": "boolean"
+        },
+        "references_valid": {
+          "type": "boolean"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "status",
+        "reason_code",
+        "reason",
+        "retryable",
+        "next_action",
+        "publication_allowed",
+        "human_review_required"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "QUEUED",
+            "RUNNING",
+            "CHECKPOINTED",
+            "COMPLETE",
+            "RETRYABLE_FAILED",
+            "BLOCKED",
+            "NEEDS_REVIEW"
+          ]
+        },
+        "reason_code": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "next_action": {
+          "type": "string"
+        },
+        "publication_allowed": {
+          "const": false
+        },
+        "human_review_required": {
+          "const": true
+        }
+      }
+    },
+    "layer_statuses": {
+      "type": "object"
+    }
+  }
+}
