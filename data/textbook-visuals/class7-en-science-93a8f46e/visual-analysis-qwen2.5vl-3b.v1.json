@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3197,
+    "assets_selected": 3198,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "2b66a7fe35ea490269497a03"
+      "016029fb9eefa13304222ef8"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3193,
-    "assets_remaining": 4295,
-    "assets_completion_percent": 42.6,
+    "assets_analyzed": 3194,
+    "assets_remaining": 4294,
+    "assets_completion_percent": 42.7,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 3192,
+    "assets_skipped_from_checkpoint": 3193,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41446838665",
-      "checkpointed_at": "2026-11-02T13:50:03Z"
+      "checkpointed_at": "2026-11-02T13:52:49Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41446838665",
-      "checkpointed_at": "2026-11-02T13:50:33Z"
+      "checkpointed_at": "2026-11-02T13:53:17Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41446838665",
-      "checkpointed_at": "2026-11-02T13:51:12Z"
+      "checkpointed_at": "2026-11-02T13:53:55Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41446838665",
-      "checkpointed_at": "2026-11-02T13:51:52Z"
+      "checkpointed_at": "2026-11-02T13:54:34Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -118577,6 +118577,72 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41446838665",
       "checkpointed_at": "2026-11-02T13:52:01Z"
+    },
+    {
+      "asset_id": "016029fb9eefa13304222ef8",
+      "asset_sha256": "7a14e0a56473cac942caa9e20cfd7833f2b21c9a6bd1b6401a336c385bc4e86e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 100,
+      "asset_path": "page-0100.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "bbf3a0f4be26f545743fa40a6b1854f2ec0fa75bf0e6069859acddca6a088c94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing personal hygiene and the importance of maintaining it, particularly for girls during menstruation. It includes a diagram of a sanitary pad and a brief biography of Dorothy Hodgkin.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "SCIENCE AND SOCIETY",
+          "Adolescents, especially girls, may sometimes suffer from",
+          "blood-related health problem(s) because of a deficiency of",
+          "iron or vitamin B12 in the body.",
+          "Find out about such health problem(s).",
+          "How can we manage iron deficiency in our body?",
+          "Find out about government schemes aimed to prevent",
+          "such deficiencies.",
+          "Know a Scientist",
+          "Dorothy Hodgkin was a brilliant scientist who studied",
+          "the structure of vitamin B12. In 1964, she became the third",
+          "woman to win the Nobel Prize in the field of chemistry. Did you know that",
+          "vitamin B12 is required for the proper functioning of the human body? Like",
+          "most vitamins, it cannot be made in the human body and has to be obtained",
+          "from the food we eat. Discuss the sources of vitamin B12 with your teacher.",
+          "6.4.2 Personal hygiene",
+          "Besides nutrition, personal hygiene is also crucially important during",
+          "adolescence. Maintaining body hygiene, particularly in the armpits",
+          "and the pubic region, may protect us from potential infections.",
+          "For girls, maintaining proper hygiene during menstruation",
+          "is essential for both comfort and health. Menstrual hygiene can",
+          "be maintained using items such as sanitary pads (Fig. 6.1) and",
+          "reusable cloth pads designed for this purpose.",
+          "The government also attempts to provide these products free",
+          "of charge or at a low price to improve the menstrual hygiene of",
+          "girls and women. As a society, we should all make efforts to ensure",
+          "the availability of necessary facilities in schools and public places",
+          "to promote menstrual hygiene. Collectively, we should move",
+          "forward, reducing any stigma around sanitary pads and helping",
+          "in menstrual hygiene."
+        ],
+        "concepts": [
+          "personal hygiene",
+          "menstrual hygiene",
+          "sanitary pads",
+          "government schemes",
+          "vitamin B12",
+          "Dorothy Hodgkin"
+        ],
+        "context_relation": "The page discusses the importance of personal hygiene, particularly for girls during menstruation, and provides information about sanitary pads and government schemes to prevent deficiencies.",
+        "limitations": [
+          "The page does not provide specific solutions or actions for maintaining personal hygiene."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41446838665",
+      "checkpointed_at": "2026-11-02T13:56:31Z"
     }
   ]
 }
