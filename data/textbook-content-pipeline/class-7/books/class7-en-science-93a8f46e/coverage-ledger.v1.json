@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3243,
-    "successful_visual_analyses": 3219,
-    "missing_visual_analyses": 4245,
+    "raw_analysis_result_rows": 3247,
+    "successful_visual_analyses": 3223,
+    "missing_visual_analyses": 4241,
     "failed_visual_analyses": 24,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4269,
+    "unresolved_count": 4265,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -128038,9 +128038,19 @@
       "asset_path": "assets/80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide specific information about the health risks mentioned in the text.",
+          "The image is a simple illustration and does not convey the complexity of the health risks discussed in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -128056,9 +128066,19 @@
       "asset_path": "assets/f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a simple illustration and does not convey complex information about addiction or substance use."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -128074,9 +128094,20 @@
       "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or synthetic material, with a golden or yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a close-up of a rope or cord, not a full page or diagram.",
+          "The image does not show any substances or health risks as described in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -128092,9 +128123,19 @@
       "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a close-up of a rope, not a diagram or chart related to the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7a27772849e4be1f6d6ece8fef24a8a9a841f81ec63c470631dd5f41b97ee6ba",
+  "raw_analysis_sha256": "e05bd0d34c296d38cf45c1d01785fd136cfe30fa49695f0aaf5c3e6f6865d529",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41457938843",
-      "checkpointed_at": "2026-11-02T16:29:46Z",
+      "checkpointed_at": "2026-11-02T16:37:06Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -186814,6 +186814,176 @@
         "limitations": [
           "The image does not contain any specific content or information.",
           "The image is a simple rectangular outline with no additional elements or details."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "67fa551596e3ced6aa4adbdc",
+      "asset_sha256": "80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide specific information about the health risks mentioned in the text.",
+          "The image is a simple illustration and does not convey the complexity of the health risks discussed in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:38:43Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide specific information about the health risks mentioned in the text.",
+          "The image is a simple illustration and does not convey the complexity of the health risks discussed in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "524e9ff42f6a0e610436b2e5",
+      "asset_sha256": "f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a simple illustration and does not convey complex information about addiction or substance use."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:40:21Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a simple illustration and does not convey complex information about addiction or substance use."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "013b36e0a2b4c4e967c3d3a7",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or synthetic material, with a golden or yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a close-up of a rope or cord, not a full page or diagram.",
+          "The image does not show any substances or health risks as described in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:41:58Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or synthetic material, with a golden or yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a close-up of a rope or cord, not a full page or diagram.",
+          "The image does not show any substances or health risks as described in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "778d166bb1b5ac1db54f40c3",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a close-up of a rope, not a diagram or chart related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:42:09Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a close-up of a rope, not a diagram or chart related to the text content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

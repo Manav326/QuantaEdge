@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3219,
+    "assets_selected": 3223,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "ba827136cf78bfd754e0a27b",
-      "3b65b75e4132f0ef45c1c6db",
-      "a21ccd0e0abc64421ead5288",
-      "20d19c37a5f3c9b696b58aad"
+      "67fa551596e3ced6aa4adbdc",
+      "524e9ff42f6a0e610436b2e5",
+      "013b36e0a2b4c4e967c3d3a7",
+      "778d166bb1b5ac1db54f40c3"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3218,
-    "assets_remaining": 4270,
+    "assets_analyzed": 3222,
+    "assets_remaining": 4266,
     "assets_completion_percent": 43.0,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 3214,
+    "assets_skipped_from_checkpoint": 3218,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41457938843",
-      "checkpointed_at": "2026-11-02T16:29:46Z"
+      "checkpointed_at": "2026-11-02T16:37:06Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -119351,6 +119351,123 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41457938843",
       "checkpointed_at": "2026-11-02T16:35:44Z"
+    },
+    {
+      "asset_id": "67fa551596e3ced6aa4adbdc",
+      "asset_sha256": "80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide specific information about the health risks mentioned in the text.",
+          "The image is a simple illustration and does not convey the complexity of the health risks discussed in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:38:43Z"
+    },
+    {
+      "asset_id": "524e9ff42f6a0e610436b2e5",
+      "asset_sha256": "f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a simple illustration and does not convey complex information about addiction or substance use."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:40:21Z"
+    },
+    {
+      "asset_id": "013b36e0a2b4c4e967c3d3a7",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord, possibly made of metal or synthetic material, with a golden or yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a close-up of a rope or cord, not a full page or diagram.",
+          "The image does not show any substances or health risks as described in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:41:58Z"
+    },
+    {
+      "asset_id": "778d166bb1b5ac1db54f40c3",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about health risks and substance use.",
+        "limitations": [
+          "The image does not provide any specific information about the health risks mentioned in the text.",
+          "The image is a close-up of a rope, not a diagram or chart related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:42:09Z"
     }
   ]
 }
