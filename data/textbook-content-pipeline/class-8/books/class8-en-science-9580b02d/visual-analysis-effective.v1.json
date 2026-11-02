@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2770f3c12806210a9c3999361d2656acd06281c81d69ac5e6b2f026b03a6bce2",
+  "raw_analysis_sha256": "bf162be4a80d74fd43d5452f16b9b2ea1b077fd6def2dfcd0b45ca64cc24236e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -29272,7 +29272,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
-      "checkpointed_at": "2026-11-02T09:58:01Z",
+      "checkpointed_at": "2026-11-02T10:14:12Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57768,8 +57768,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
-        "visual_type": "uncertain",
+        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57783,22 +57783,22 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The page does not provide specific examples of contact forces or muscular force.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
-      "checkpointed_at": "2026-11-02T10:02:27Z",
+      "checkpointed_at": "2026-11-02T10:15:11Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
-        "visual_type": "uncertain",
+        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57812,12 +57812,12 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The page does not provide specific examples of contact forces or muscular force.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -63932,7 +63932,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41400575377",
+      "run_id": "41418058542",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
@@ -65310,7 +65310,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41400575377",
+      "run_id": "41418058542",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -65590,21 +65590,89 @@
     {
       "asset_id": "2e220d251d13a2e76c57e33b",
       "asset_sha256": "8365e4fa376ae0bf20050b6aad49cdd232cf9ca81ea7ca9a7d4fc7845600696e",
-      "page_text_context_sha256": "c837b29b08feb77ea963de909a5c33550b2e7ee7d30222c8fc6f62c5142c08d8",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 107,
       "asset_path": "page-0107.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c837b29b08feb77ea963de909a5c33550b2e7ee7d30222c8fc6f62c5142c08d8",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41400575377",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a rubber sucker being pressed against a surface, with instructions on how to perform an activity related to atmospheric pressure.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
+          "Activity 6.4: Let us perform",
+          "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
+          "Do you realise that it sticks to the surface?",
+          "Now, try to pull it off. Do you find it difficult to pull it off?",
+          "When we press the sucker, most of the air between its cup and the surface on which it is placed is pushed out and the air pressure inside it is reduced. The sucker sticks to the surface because the pressure of air surrounding the sucker is higher than the pressure exerted by the air inside the sucke",
+          "Do you know how large the atmospheric pressure is? The force exerted by the atmospheric air column over an area 15 cm × 15 cm is nearly equal to the force of gravity on an object of mass 225 kg (2250 N). The reason we are not crushed under this weight is that the pressure inside our bodies is also e",
+          "A step further",
+          "The SI unit of pressure is N/m², also known as pascal (Pa). However, the practical unit of air pressure is millibar (mb), which is equal to 100 Pa. Air pressure is also expressed in hectopascal (hPa), which is equal to 100 Pa.",
+          "6.3 Formation of Wind",
+          "You must have noticed that on some days, the wind blows strongly, whereas on other days, it is calm. Sometimes, wind becomes so strong that it causes damage to life and property.",
+          "You must have seen that when an inflated balloon is kept without closing its mouth, the air from the balloon escapes. Recall that when there is a puncture in the bicycle tube, the air escapes and the tube collapses. In both of these cases, does air move from a high pressure region to a low pressure "
+        ],
+        "concepts": [
+          "atmospheric pressure",
+          "rubber sucker",
+          "air pressure",
+          "SI unit of pressure",
+          "millibar",
+          "hectopascal",
+          "wind formation",
+          "inflated balloon",
+          "puncture in the bicycle tube"
+        ],
+        "context_relation": "The image is a diagram illustrating an activity related to atmospheric pressure using a rubber sucker.",
+        "limitations": [
+          "The image does not provide specific measurements or calculations related to atmospheric pressure."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41418058542",
+      "checkpointed_at": "2026-11-02T10:29:45Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram of a rubber sucker being pressed against a surface, with instructions on how to perform an activity related to atmospheric pressure.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
+          "Activity 6.4: Let us perform",
+          "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
+          "Do you realise that it sticks to the surface?",
+          "Now, try to pull it off. Do you find it difficult to pull it off?",
+          "When we press the sucker, most of the air between its cup and the surface on which it is placed is pushed out and the air pressure inside it is reduced. The sucker sticks to the surface because the pressure of air surrounding the sucker is higher than the pressure exerted by the air inside the sucke",
+          "Do you know how large the atmospheric pressure is? The force exerted by the atmospheric air column over an area 15 cm × 15 cm is nearly equal to the force of gravity on an object of mass 225 kg (2250 N). The reason we are not crushed under this weight is that the pressure inside our bodies is also e",
+          "A step further",
+          "The SI unit of pressure is N/m², also known as pascal (Pa). However, the practical unit of air pressure is millibar (mb), which is equal to 100 Pa. Air pressure is also expressed in hectopascal (hPa), which is equal to 100 Pa.",
+          "6.3 Formation of Wind",
+          "You must have noticed that on some days, the wind blows strongly, whereas on other days, it is calm. Sometimes, wind becomes so strong that it causes damage to life and property.",
+          "You must have seen that when an inflated balloon is kept without closing its mouth, the air from the balloon escapes. Recall that when there is a puncture in the bicycle tube, the air escapes and the tube collapses. In both of these cases, does air move from a high pressure region to a low pressure "
+        ],
+        "concepts": [
+          "atmospheric pressure",
+          "rubber sucker",
+          "air pressure",
+          "SI unit of pressure",
+          "millibar",
+          "hectopascal",
+          "wind formation",
+          "inflated balloon",
+          "puncture in the bicycle tube"
+        ],
+        "context_relation": "The image is a diagram illustrating an activity related to atmospheric pressure using a rubber sucker.",
+        "limitations": [
+          "The image does not provide specific measurements or calculations related to atmospheric pressure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
