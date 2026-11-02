@@ -15,13 +15,13 @@
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c16577a15e78e04e26b60ff"
+      "cc961779a46739fc9b3b3a08"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3139,
-    "assets_remaining": 4349,
+    "assets_analyzed": 3140,
+    "assets_remaining": 4348,
     "assets_completion_percent": 41.9,
-    "assets_failed": 23,
+    "assets_failed": 22,
     "assets_skipped_from_checkpoint": 3139,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41367012926",
-      "checkpointed_at": "2026-11-02T01:24:34Z"
+      "checkpointed_at": "2026-11-02T01:28:42Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41367012926",
-      "checkpointed_at": "2026-11-02T01:25:02Z"
+      "checkpointed_at": "2026-11-02T01:29:10Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41367012926",
-      "checkpointed_at": "2026-11-02T01:25:38Z"
+      "checkpointed_at": "2026-11-02T01:29:47Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41367012926",
-      "checkpointed_at": "2026-11-02T01:26:17Z"
+      "checkpointed_at": "2026-11-02T01:30:25Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -116438,19 +116438,49 @@
     {
       "asset_id": "cc961779a46739fc9b3b3a08",
       "asset_sha256": "c0f861a5b3e9ef0297472e68c877bdf317b944c9ea35dfc9d3597d2c60fed991",
-      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 96,
       "asset_path": "assets/c0f861a5b3e9ef0297472e68c877bdf317b944c9ea35dfc9d3597d2c60fed991.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0d939910acd291300e95d4d6a870a5d35c57117f539a8b754bc84b517cd7a1d4",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41353985174",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person's neck with a highlighted Adam's apple.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Changes in voice",
+          "In adolescent boys, the growth of the voice box leads",
+          "to a voice that sounds hoarse. The voice box is a",
+          "structure in our throat that helps us to speak. The",
+          "growth may be seen as a bump in the throat region",
+          "and is called the Adam's apple. However, it is not",
+          "noticeable in every individual. The voice box also",
+          "helps us to speak."
+        ],
+        "concepts": [
+          "voice box",
+          "Adam's apple",
+          "adolescent boys",
+          "voice",
+          "speech",
+          "growth",
+          "bump",
+          "structure",
+          "throat"
+        ],
+        "context_relation": "The image illustrates the concept of the voice box and Adam's apple, which is relevant to the text discussing changes in voice in adolescent boys.",
+        "limitations": [
+          "The image does not show the entire neck or the vocal cords."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41367012926",
+      "checkpointed_at": "2026-11-02T01:31:09Z"
     },
     {
       "asset_id": "f21dcb388b2512b3b298bcb7",
