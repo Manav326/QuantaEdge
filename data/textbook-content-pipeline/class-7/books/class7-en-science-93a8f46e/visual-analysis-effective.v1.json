@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2bd4aa81d3256cca08efdd896bfa837da3b37c39b9d513f9e3bf785b28acae5c",
+  "raw_analysis_sha256": "ea544db170fba997c8df1d32db01e3d29f24481524f4f33c88f5979f47a88893",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:55:01Z",
+      "checkpointed_at": "2026-11-02T09:59:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:55:40Z",
+      "checkpointed_at": "2026-11-02T10:00:08Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:56:30Z",
+      "checkpointed_at": "2026-11-02T10:01:00Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T09:57:24Z",
+      "checkpointed_at": "2026-11-02T10:01:54Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -184220,6 +184220,50 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "None",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a28cd7b73f6400b98acda4cd",
+      "asset_sha256": "8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf8336a93584f506c654636a15454ef44d990424c09331aaf6b567b9f4e42ae2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue illustration of a person and a butterfly, possibly representing a transformation or change.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "emotional changes",
+          "behavioural changes",
+          "adolescence"
+        ],
+        "context_relation": "The image is related to the discussion of emotional and behavioral changes in adolescents.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41411796807",
+      "checkpointed_at": "2026-11-02T10:03:03Z",
+      "effective_analysis": {
+        "visual_summary": "A blue illustration of a person and a butterfly, possibly representing a transformation or change.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "emotional changes",
+          "behavioural changes",
+          "adolescence"
+        ],
+        "context_relation": "The image is related to the discussion of emotional and behavioral changes in adolescents.",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
