@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1406,
+    "assets_selected": 1408,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "36ec2d1cc980e6810b5a1e89",
-      "7f9eee3e53419277752d2a03",
-      "95169d40c782c4846f71dda6"
+      "5e5ba036d15028c8264be4f4",
+      "10ab1ef9b9df0541a0d58fea",
+      "ec14353471cbaebd15ceb649"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1403,
-    "assets_remaining": 888,
-    "assets_completion_percent": 61.2,
+    "assets_analyzed": 1406,
+    "assets_remaining": 885,
+    "assets_completion_percent": 61.4,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1401,
+    "assets_skipped_from_checkpoint": 1403,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -20133,7 +20133,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
-      "checkpointed_at": "2026-11-02T10:59:56Z"
+      "checkpointed_at": "2026-11-02T11:10:13Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38412,7 +38412,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
-      "checkpointed_at": "2026-11-02T11:00:53Z"
+      "checkpointed_at": "2026-11-02T11:11:11Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -46872,6 +46872,100 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
       "checkpointed_at": "2026-11-02T11:09:18Z"
+    },
+    {
+      "asset_id": "5e5ba036d15028c8264be4f4",
+      "asset_sha256": "3b2d9d7fc8b2a7d708ca2f43750522e317c52bab31ad3cb66fa8b23c321de7ac",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/3b2d9d7fc8b2a7d708ca2f43750522e317c52bab31ad3cb66fa8b23c321de7ac.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0a01c457136551c3799e1dbbdc84e0bc8b68ae8c0c1695b22cf6783516fd48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube with a textured surface, possibly representing a solid object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "solid state",
+          "constituent particles",
+          "holding together",
+          "activity",
+          "solid objects",
+          "iron nail",
+          "rock salt",
+          "stone",
+          "wood",
+          "key",
+          "aluminium"
+        ],
+        "context_relation": "The image is related to the educational content about the solid state and its components.",
+        "limitations": [
+          "The image does not provide specific details about the properties or characteristics of the solid objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41418058542",
+      "checkpointed_at": "2026-11-02T11:12:55Z"
+    },
+    {
+      "asset_id": "10ab1ef9b9df0541a0d58fea",
+      "asset_sha256": "bcb7031ac04eaeff0a58b0a7c401182f564b9cafe7e20da9997d236f6fbc6313",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/bcb7031ac04eaeff0a58b0a7c401182f564b9cafe7e20da9997d236f6fbc6313.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0a01c457136551c3799e1dbbdc84e0bc8b68ae8c0c1695b22cf6783516fd48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person pointing at themselves.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "exploring the properties of solids",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41418058542",
+      "checkpointed_at": "2026-11-02T11:14:28Z"
+    },
+    {
+      "asset_id": "ec14353471cbaebd15ceb649",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 122,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0a01c457136551c3799e1dbbdc84e0bc8b68ae8c0c1695b22cf6783516fd48",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure, and the content is not visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41418058542",
+      "checkpointed_at": "2026-11-02T11:14:44Z"
     }
   ]
 }
