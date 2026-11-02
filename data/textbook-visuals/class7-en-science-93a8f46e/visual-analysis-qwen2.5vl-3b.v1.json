@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3236,
+    "assets_selected": 3237,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c16577a15e78e04e26b60ff",
-      "89c7752a706abb142ad1658b"
+      "afc10d3cf1bd4a9d31b298a1",
+      "84efbe1aa3aec80f0d7d377e"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3232,
-    "assets_remaining": 4256,
+    "assets_analyzed": 3233,
+    "assets_remaining": 4255,
     "assets_completion_percent": 43.2,
-    "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 3231,
+    "assets_failed": 22,
+    "assets_skipped_from_checkpoint": 3232,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
-      "checkpointed_at": "2026-11-02T22:59:45Z"
+      "checkpointed_at": "2026-11-02T23:11:44Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
-      "checkpointed_at": "2026-11-02T23:00:53Z"
+      "checkpointed_at": "2026-11-02T23:12:51Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
-      "checkpointed_at": "2026-11-02T23:04:59Z"
+      "checkpointed_at": "2026-11-02T23:14:23Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -119799,6 +119799,49 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
       "checkpointed_at": "2026-11-02T23:09:59Z"
+    },
+    {
+      "asset_id": "afc10d3cf1bd4a9d31b298a1",
+      "asset_sha256": "8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue line drawing of a fish and a butterfly.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41514569977",
+      "checkpointed_at": "2026-11-02T23:15:33Z"
+    },
+    {
+      "asset_id": "84efbe1aa3aec80f0d7d377e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "65fb27cfbf5eb333bec75cea16f85341bc44d02fdb412bbdfcbe8f9d815cc810",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41514569977",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
