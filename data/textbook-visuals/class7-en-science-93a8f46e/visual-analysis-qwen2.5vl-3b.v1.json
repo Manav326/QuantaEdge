@@ -11,17 +11,17 @@
     "assets_selected": 3168,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "4b1298747dc1ec978a226ae5",
-      "647c2218dab5482dd1c1758e",
-      "0e143e54e2f709b8a4e5968d",
-      "463542d4277119b7abc93e3a",
-      "8604e838b1f1e41398ca72dd"
+      "1554b4067d24673fc7b88fc2",
+      "0d1c88ea0154d314c4c70259",
+      "f5cfd5f0dfcebd60e3212f1b",
+      "5c16577a15e78e04e26b60ff",
+      "5954e1c141e9703c18af4d2f"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3163,
     "assets_remaining": 4325,
     "assets_completion_percent": 42.2,
-    "assets_failed": 23,
+    "assets_failed": 24,
     "assets_skipped_from_checkpoint": 3163,
     "batch_limit": 5,
     "publication_allowed": false
@@ -85693,7 +85693,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41411796807",
+      "run_id": "41426089748",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -90445,7 +90445,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41411796807",
+      "run_id": "41426089748",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -104823,20 +104823,21 @@
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\n\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame ",
-          "SCIENCE AND SOCIETY",
-          "If a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\n\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt and stick to the sk",
-          "FASCINATING FACTS",
-          "Nature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescence.",
+          "SCIENCE AND SOCIETY\nIf a person’s clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt ",
+          "FASCINATING FACTS\nNature’s wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
           "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
           "combustion",
           "oxygen",
           "carbon dioxide",
+          "fire",
           "bioluminescence",
-          "fireflies",
           "combustible substances",
-          "air",
+          "paper",
+          "fireflies",
+          "carbon",
+          "oxygen",
           "combustion"
         ],
         "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and how this relates to the presence of oxygen and carbon dioxide in the air.",
@@ -104848,8 +104849,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41411796807",
-      "checkpointed_at": "2026-11-02T10:01:54Z"
+      "run_id": "41426089748",
+      "checkpointed_at": "2026-11-02T11:41:09Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -114988,7 +114989,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41411796807",
+      "run_id": "41426089748",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -117523,6 +117524,23 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41411796807",
       "checkpointed_at": "2026-11-02T10:03:03Z"
+    },
+    {
+      "asset_id": "5954e1c141e9703c18af4d2f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "bf8336a93584f506c654636a15454ef44d990424c09331aaf6b567b9f4e42ae2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41426089748",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
