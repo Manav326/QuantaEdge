@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "8e056534d5a845bf27f6cb6e",
-      "a5c1484ab6df1a2776c3833a",
-      "b426b0c9c180b50e30bcd253"
+      "a49d7787a94b67e1b38d30d0",
+      "5abf5b43650d77843396badb",
+      "58c4cf310bee9a3cb17c81d3"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1577,
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
-      "checkpointed_at": "2026-11-02T20:06:54Z"
+      "checkpointed_at": "2026-11-02T20:21:11Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
-      "checkpointed_at": "2026-11-02T20:07:46Z"
+      "checkpointed_at": "2026-11-02T20:22:03Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -53052,7 +53052,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41435135848",
+      "run_id": "41485020539",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -53069,7 +53069,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41435135848",
+      "run_id": "41485020539",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -53441,7 +53441,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41435135848",
+      "run_id": "41485020539",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "limitations must be a list of strings.",
       "human_review_required": true,
