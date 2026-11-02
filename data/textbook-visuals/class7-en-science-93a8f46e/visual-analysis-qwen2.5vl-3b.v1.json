@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3140,
+    "assets_selected": 3142,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "f39513c4fa41ad3bb72b1ffe",
-      "0e2e73cae276e9ba24ef4a07"
+      "79ac3d07d90c6b0b4ceeb395",
+      "0aa3e924ecb3ae1cd79e8708"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3137,
-    "assets_remaining": 4351,
+    "assets_analyzed": 3139,
+    "assets_remaining": 4349,
     "assets_completion_percent": 41.9,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 3135,
+    "assets_skipped_from_checkpoint": 3137,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-02T00:08:14Z"
+      "checkpointed_at": "2026-11-02T00:17:06Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-02T00:09:19Z"
+      "checkpointed_at": "2026-11-02T00:18:12Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -104909,7 +104909,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-02T00:10:49Z"
+      "checkpointed_at": "2026-11-02T00:19:41Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -116837,6 +116837,62 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
       "checkpointed_at": "2026-11-02T00:15:27Z"
+    },
+    {
+      "asset_id": "79ac3d07d90c6b0b4ceeb395",
+      "asset_sha256": "f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about adolescent changes.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41353985174",
+      "checkpointed_at": "2026-11-02T00:20:50Z"
+    },
+    {
+      "asset_id": "0aa3e924ecb3ae1cd79e8708",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41353985174",
+      "checkpointed_at": "2026-11-02T00:21:58Z"
     }
   ]
 }

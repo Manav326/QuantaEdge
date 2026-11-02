@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c465aac5da60d1fad091294c0a265ed0bbc9507060f58798df35e5ec55258ed7",
+  "raw_analysis_sha256": "afc08c5db12192dba3663bdc9055d8e5b3bde2e47917e557daa6250e2e2c5d8d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-02T00:08:14Z",
+      "checkpointed_at": "2026-11-02T00:17:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-02T00:09:19Z",
+      "checkpointed_at": "2026-11-02T00:18:12Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -164684,7 +164684,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41353985174",
-      "checkpointed_at": "2026-11-02T00:10:49Z",
+      "checkpointed_at": "2026-11-02T00:19:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -183050,6 +183050,86 @@
         "limitations": [
           "The image does not provide any specific information or context related to the text.",
           "The image is a simple illustration and does not contribute to the educational content of the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "79ac3d07d90c6b0b4ceeb395",
+      "asset_sha256": "f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about adolescent changes.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41353985174",
+      "checkpointed_at": "2026-11-02T00:20:50Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about adolescent changes.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0aa3e924ecb3ae1cd79e8708",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4942b1b7e882412b4ea2c6c3c1f03d940f220dc9cabb01cbce778dc78940df50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41353985174",
+      "checkpointed_at": "2026-11-02T00:21:58Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
