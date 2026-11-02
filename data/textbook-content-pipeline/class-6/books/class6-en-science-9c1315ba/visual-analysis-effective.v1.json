@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5c1e970bd3ebce91c5dc3da99412b73bca4fbe1f47a614de85f6038816d4dafa",
+  "raw_analysis_sha256": "cf7df1e91ad96ef7c1b906b04e0e9b7f2b2ac7ec743737a28c70a22ffd82417e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -643,7 +643,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41377676132",
-      "checkpointed_at": "2026-11-02T03:01:34Z",
+      "checkpointed_at": "2026-11-02T03:11:25Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29453,7 +29453,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41377676132",
-      "checkpointed_at": "2026-11-02T03:02:42Z",
+      "checkpointed_at": "2026-11-02T03:12:33Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35067,7 +35067,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41377676132",
-      "checkpointed_at": "2026-11-02T03:03:39Z",
+      "checkpointed_at": "2026-11-02T03:13:30Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57412,7 +57412,7 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Units of Measurement"
+          "Length of the table"
         ],
         "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
@@ -57422,8 +57422,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41371580141",
-      "checkpointed_at": "2026-11-02T02:12:22Z",
+      "run_id": "41377676132",
+      "checkpointed_at": "2026-11-02T03:16:59Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57447,7 +57447,7 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Units of Measurement"
+          "Length of the table"
         ],
         "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
@@ -58636,7 +58636,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41371580141",
+      "run_id": "41377676132",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
