@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ea87ab8d05da35ffd9472f92d59f70b4efa65e1cb45cd17ac03d42b224ea6550",
+  "raw_analysis_sha256": "6321e38fdf8a187fbaf6953a8e0a684a9c30c0beb75b889487c93006ecafe886",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
-      "checkpointed_at": "2026-11-02T23:31:26Z",
+      "checkpointed_at": "2026-11-02T23:38:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
-      "checkpointed_at": "2026-11-02T23:32:33Z",
+      "checkpointed_at": "2026-11-02T23:39:18Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -164684,7 +164684,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
-      "checkpointed_at": "2026-11-02T23:34:06Z",
+      "checkpointed_at": "2026-11-02T23:40:50Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -187782,6 +187782,128 @@
         "limitations": [
           "The image does not provide any specific information or context related to the text.",
           "The image is a simple illustration and does not convey any specific concept or information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3e3e09b33afcd1da898788ce",
+      "asset_sha256": "74e5eaf055ddf938736ec267eccc8d3191395bef59ca2ee58d13d3f3bf180b14",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/74e5eaf055ddf938736ec267eccc8d3191395bef59ca2ee58d13d3f3bf180b14.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character standing inside a large nut, holding a piece of paper and gesturing with his other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "adolescence",
+          "change",
+          "foundation",
+          "healthy decisions",
+          "informed",
+          "support",
+          "guidance"
+        ],
+        "context_relation": "The image is a visual representation of the text about adolescence and the importance of making healthy decisions and staying informed.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41514569977",
+      "checkpointed_at": "2026-11-02T23:42:07Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character standing inside a large nut, holding a piece of paper and gesturing with his other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "adolescence",
+          "change",
+          "foundation",
+          "healthy decisions",
+          "informed",
+          "support",
+          "guidance"
+        ],
+        "context_relation": "The image is a visual representation of the text about adolescence and the importance of making healthy decisions and staying informed.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fe24bc37a7b9f2bab5e68f8b",
+      "asset_sha256": "d22bae5d5cad20b90082667c6b2f08c4e166fa267a8dd71cd3aeb3c9a4086d4c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/d22bae5d5cad20b90082667c6b2f08c4e166fa267a8dd71cd3aeb3c9a4086d4c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with yellow and black stripes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "85",
+          "By staying informed, seeking support and guidance when",
+          "needed, and making healthy decisions, you can build a strong foundation for your life ahead.",
+          "Change In a Nutshell",
+          "and",
+          "Adolescence is the period of change from childhood to adulthood. It generally begi"
+        ],
+        "concepts": [
+          "Adolescence",
+          "Healthy decisions",
+          "Informedness",
+          "Support and guidance"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image is not a part of the text content.",
+          "The image does not provide specific information about the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41514569977",
+      "checkpointed_at": "2026-11-02T23:43:31Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with yellow and black stripes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "85",
+          "By staying informed, seeking support and guidance when",
+          "needed, and making healthy decisions, you can build a strong foundation for your life ahead.",
+          "Change In a Nutshell",
+          "and",
+          "Adolescence is the period of change from childhood to adulthood. It generally begi"
+        ],
+        "concepts": [
+          "Adolescence",
+          "Healthy decisions",
+          "Informedness",
+          "Support and guidance"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image is not a part of the text content.",
+          "The image does not provide specific information about the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

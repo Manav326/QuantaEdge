@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3262,
-    "successful_visual_analyses": 3240,
-    "missing_visual_analyses": 4226,
+    "raw_analysis_result_rows": 3264,
+    "successful_visual_analyses": 3242,
+    "missing_visual_analyses": 4224,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4248,
+    "unresolved_count": 4246,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -128653,9 +128653,26 @@
       "asset_path": "assets/74e5eaf055ddf938736ec267eccc8d3191395bef59ca2ee58d13d3f3bf180b14.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character standing inside a large nut, holding a piece of paper and gesturing with his other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "adolescence",
+          "change",
+          "foundation",
+          "healthy decisions",
+          "informed",
+          "support",
+          "guidance"
+        ],
+        "context_relation": "The image is a visual representation of the text about adolescence and the importance of making healthy decisions and staying informed.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -128671,9 +128688,31 @@
       "asset_path": "assets/d22bae5d5cad20b90082667c6b2f08c4e166fa267a8dd71cd3aeb3c9a4086d4c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with yellow and black stripes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "85",
+          "By staying informed, seeking support and guidance when",
+          "needed, and making healthy decisions, you can build a strong foundation for your life ahead.",
+          "Change In a Nutshell",
+          "and",
+          "Adolescence is the period of change from childhood to adulthood. It generally begi"
+        ],
+        "concepts": [
+          "Adolescence",
+          "Healthy decisions",
+          "Informedness",
+          "Support and guidance"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image is not a part of the text content.",
+          "The image does not provide specific information about the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
