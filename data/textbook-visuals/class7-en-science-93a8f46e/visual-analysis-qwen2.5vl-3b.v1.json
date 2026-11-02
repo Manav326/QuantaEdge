@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3204,
+    "assets_selected": 3207,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "000d336d0e4e5d557d27944f",
-      "afbf3cc50eb3facd0d68b884",
-      "e125b08fed109d923c87200f",
-      "e87ef1367ff63b313460f193"
+      "a4fb006afb894834ee6196a6",
+      "9709e7c53620d98b2fdbc9d6",
+      "d2e9f17a3673f3d35854f4c3",
+      "0714134a5b32f852ad810e99"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3202,
-    "assets_remaining": 4286,
+    "assets_analyzed": 3206,
+    "assets_remaining": 4282,
     "assets_completion_percent": 42.8,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 3199,
+    "assets_skipped_from_checkpoint": 3202,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41457938843",
-      "checkpointed_at": "2026-11-02T15:52:50Z"
+      "checkpointed_at": "2026-11-02T16:07:27Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -118827,6 +118827,143 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41457938843",
       "checkpointed_at": "2026-11-02T16:06:03Z"
+    },
+    {
+      "asset_id": "a4fb006afb894834ee6196a6",
+      "asset_sha256": "db95cf4c628bd0119d76a5a8a62f0a3e3038324c9d14178e2c2121fef07a417a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/db95cf4c628bd0119d76a5a8a62f0a3e3038324c9d14178e2c2121fef07a417a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "158b6aa00be68637a3c2e1bdc948150661def0b7475d7aea7c2ccc824c52349c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of students are engaged in a collaborative activity, focusing on a task involving small objects and water in a beaker. They are leaning over a table, showing teamwork and concentration.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Respectful Communication",
+          "Trust",
+          "Mutual Respect",
+          "Mindful"
+        ],
+        "concepts": [
+          "Respectful Communication",
+          "Trust",
+          "Mutual Respect",
+          "Mindful"
+        ],
+        "context_relation": "The image illustrates the importance of respectful communication, trust, mutual respect, and mindfulness in social interactions.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the students' roles."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:09:11Z"
+    },
+    {
+      "asset_id": "9709e7c53620d98b2fdbc9d6",
+      "asset_sha256": "7e726f2a2882c7325607f1111b8190898888e18d4c46724f31c9138753c2f295",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/7e726f2a2882c7325607f1111b8190898888e18d4c46724f31c9138753c2f295.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "158b6aa00be68637a3c2e1bdc948150661def0b7475d7aea7c2ccc824c52349c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a simple black outline.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page, not a cropped figure.",
+        "limitations": [
+          "The image is a blank page, not a cropped figure.",
+          "No visible text or content is present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:10:43Z"
+    },
+    {
+      "asset_id": "d2e9f17a3673f3d35854f4c3",
+      "asset_sha256": "5391b0c55e4b8f34077f73cd4a3aa9a3407c10cc6d24d57acd1917741ff1400b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/5391b0c55e4b8f34077f73cd4a3aa9a3407c10cc6d24d57acd1917741ff1400b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "158b6aa00be68637a3c2e1bdc948150661def0b7475d7aea7c2ccc824c52349c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person in a lab coat sitting at a globe-shaped desk, writing in a notebook with a test tube and beaker in front of them.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "society",
+          "interaction",
+          "politeness",
+          "respect",
+          "adolescence",
+          "responsibility",
+          "communication",
+          "global perspective"
+        ],
+        "context_relation": "The image represents the concept of social life and interaction in a global context, emphasizing the importance of being polite, respectful, and thoughtful in different environments.",
+        "limitations": [
+          "The image does not provide specific details about the social life or interaction depicted."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:12:26Z"
+    },
+    {
+      "asset_id": "0714134a5b32f852ad810e99",
+      "asset_sha256": "2992a87bfea7198c6524d80d07153b47b7721ea32da71a8546cc2e85cd759633",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/2992a87bfea7198c6524d80d07153b47b7721ea32da71a8546cc2e85cd759633.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "158b6aa00be68637a3c2e1bdc948150661def0b7475d7aea7c2ccc824c52349c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red circle with a diagonal line through it, indicating prohibition or restriction. Inside the circle, there is a hand holding a smartphone and a laptop displaying a cityscape.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Prohibition",
+          "Smartphone",
+          "Laptop",
+          "Cityscape"
+        ],
+        "context_relation": "The image represents a restriction or prohibition on using electronic devices, possibly to emphasize the importance of face-to-face interactions.",
+        "limitations": [
+          "The image does not provide specific details about the prohibition or restriction."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41457938843",
+      "checkpointed_at": "2026-11-02T16:14:05Z"
     }
   ]
 }
