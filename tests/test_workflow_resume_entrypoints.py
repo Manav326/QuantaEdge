@@ -145,6 +145,16 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn('options: ["benchmark", "run", "resume", "refresh_benchmark"]', workflow)
         self.assertIn("require-existing-checkpoint", workflow)
 
+    def test_specialist_visual_workflow_uses_bounded_figure_only_inference(self):
+        workflow = read("textbook-visual-analysis.yml")
+        self.assertIn("batch_size=10", workflow)
+        self.assertIn("--max-assets", workflow)
+        self.assertIn("--timeout 360", workflow)
+        self.assertIn("--num-ctx 8192", workflow)
+        self.assertIn("--num-predict 512", workflow)
+        self.assertNotIn("--include-page-previews", workflow)
+        self.assertIn("group: qe-textbook-visual-candidates-v3-global", workflow)
+
     def test_ci_does_not_build_app_images_for_data_only_or_workflow_only_pushes(self):
         ci = read("ci.yml")
         self.assertIn("images: ${{ steps.detect.outputs.images }}", ci)
