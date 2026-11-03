@@ -264,28 +264,31 @@ def _import_late_main_data(repo: Path, branch: str) -> str:
 
 def _seed_state_from_latest_main(repo: Path, branch: str) -> str:
     """Seed an untouched state branch from main, then import later data-only checkpoints."""
-    _fetch_refs(repo, branch)
-    state_ref = f"refs/remotes/origin/{branch}"
-    main_ref = "refs/remotes/origin/main"
-    state_sha = _git(repo, "rev-parse", state_ref).stdout.strip()
-    main_sha = _git(repo, "rev-parse", main_ref).stdout.strip()
-
-    if _is_ancestor(repo, state_ref, main_ref) and state_sha != main_sha:
-        pushed = _git(repo, "push", "origin", f"{main_ref}:refs/heads/{branch}", check=False)
-        if pushed.returncode != 0:
-            detail = (pushed.stderr or pushed.stdout or "unknown Git push error").strip()
-            if not any(token in detail.lower() for token in (
-                "non-fast-forward", "fetch first", "failed to push some refs", "rejected",
-            )):
-                raise RuntimeError(f"Could not seed the textbook state branch from latest main: {detail}")
-            _fetch_refs(repo, branch)
-            state_ref = f"refs/remotes/origin/{branch}"
-            main_ref = "refs/remotes/origin/main"
-            if _is_ancestor(repo, state_ref, main_ref):
-                detail = (pushed.stderr or pushed.stdout or "unknown Git push error").strip()
-                raise RuntimeError(f"Could not fast-forward the textbook state branch from main: {detail}")
-        _git(repo, "fetch", "--no-tags", "origin", branch)
+    for attempt in range(1, 6):
+        _fetch_refs(repo, branch)
         state_ref = f"refs/remotes/origin/{branch}"
+        main_ref = "refs/remotes/origin/main"
+        state_sha = _git(repo, "rev-parse", state_ref).stdout.strip()
+        main_sha = _git(repo, "rev-parse", main_ref).stdout.strip()
+
+        if state_sha == main_sha:
+            break
+        if not _is_ancestor(repo, state_ref, main_ref):
+            # The state branch has its own commits; import only post-fork data paths below.
+            break
+
+        pushed = _git(repo, "push", "origin", f"{main_ref}:refs/heads/{branch}", check=False)
+        if pushed.returncode == 0:
+            _git(repo, "fetch", "--no-tags", "origin", branch)
+            break
+
+        detail = (pushed.stderr or pushed.stdout or "unknown Git push error").strip()
+        if not any(token in detail.lower() for token in (
+            "non-fast-forward", "fetch first", "failed to push some refs", "rejected",
+        )):
+            raise RuntimeError(f"Could not seed the textbook state branch from latest main: {detail}")
+        if attempt == 5:
+            raise RuntimeError(f"Could not fast-forward the textbook state branch after {attempt} attempts: {detail}")
 
     return _import_late_main_data(repo, branch)
 
