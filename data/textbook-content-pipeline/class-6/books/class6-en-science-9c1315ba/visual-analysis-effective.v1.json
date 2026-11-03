@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "43411c802684bccc8148d866dff87815fd4eef105bd1e22e47fec48a4e62fe28",
+  "raw_analysis_sha256": "7f220662ced176a9f319bcd00bca579290e91c4170b01e85c86e24f18a1ece27",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
-      "checkpointed_at": "2026-11-03T15:47:01Z",
+      "checkpointed_at": "2026-11-03T15:58:45Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
-      "checkpointed_at": "2026-11-03T15:48:03Z",
+      "checkpointed_at": "2026-11-03T15:59:47Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
-      "checkpointed_at": "2026-11-03T15:48:54Z",
+      "checkpointed_at": "2026-11-03T16:00:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -82986,6 +82986,84 @@
         "context_relation": "educational",
         "limitations": [
           "No specific limitations mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "86f064afdda5211895e29de2",
+      "asset_sha256": "b9a9cd1f02749d1d1832b8d1647ecc2184416abd921da6987c7c52b47805ee84",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 187,
+      "asset_path": "assets/b9a9cd1f02749d1d1832b8d1647ecc2184416abd921da6987c7c52b47805ee84.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "818a9d1d0c8d00ea9bf8381d8812a115573140fcaef59abd59ee414de2637c1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white dish placed on a metal mesh, with a flame from a Bunsen burner below it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Investigating the evaporation of water from a dish using a Bunsen burner",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41642480964",
+      "checkpointed_at": "2026-11-03T16:02:15Z",
+      "effective_analysis": {
+        "visual_summary": "A white dish placed on a metal mesh, with a flame from a Bunsen burner below it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Investigating the evaporation of water from a dish using a Bunsen burner",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b9e71888ebe5b4a9e3844ecc",
+      "asset_sha256": "409f954021336fc626bb5e1c95d0e49c916b9b722b5854a9da25b305eab844e4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 187,
+      "asset_path": "assets/409f954021336fc626bb5e1c95d0e49c916b9b722b5854a9da25b305eab844e4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "818a9d1d0c8d00ea9bf8381d8812a115573140fcaef59abd59ee414de2637c1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, yellow rectangular piece of paper with a textured edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a piece of paper.",
+        "limitations": [
+          "The image does not contain any text or information.",
+          "The image is a simple, unadorned piece of paper with a textured edge."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41642480964",
+      "checkpointed_at": "2026-11-03T16:03:48Z",
+      "effective_analysis": {
+        "visual_summary": "A long, yellow rectangular piece of paper with a textured edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a piece of paper.",
+        "limitations": [
+          "The image does not contain any text or information.",
+          "The image is a simple, unadorned piece of paper with a textured edge."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

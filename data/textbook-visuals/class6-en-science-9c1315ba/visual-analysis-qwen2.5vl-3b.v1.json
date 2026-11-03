@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1594,
+    "assets_selected": 1595,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "58c4cf310bee9a3cb17c81d3",
-      "e01dc0058b529c4b045d45cf"
+      "86f064afdda5211895e29de2",
+      "b9e71888ebe5b4a9e3844ecc"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1590,
-    "assets_remaining": 488,
-    "assets_completion_percent": 76.5,
+    "assets_analyzed": 1592,
+    "assets_remaining": 486,
+    "assets_completion_percent": 76.6,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1589,
+    "assets_skipped_from_checkpoint": 1590,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
-      "checkpointed_at": "2026-11-03T15:47:01Z"
+      "checkpointed_at": "2026-11-03T15:58:45Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
-      "checkpointed_at": "2026-11-03T15:48:03Z"
+      "checkpointed_at": "2026-11-03T15:59:47Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
-      "checkpointed_at": "2026-11-03T15:48:54Z"
+      "checkpointed_at": "2026-11-03T16:00:40Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -54436,6 +54436,61 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
       "checkpointed_at": "2026-11-03T15:57:27Z"
+    },
+    {
+      "asset_id": "86f064afdda5211895e29de2",
+      "asset_sha256": "b9a9cd1f02749d1d1832b8d1647ecc2184416abd921da6987c7c52b47805ee84",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 187,
+      "asset_path": "assets/b9a9cd1f02749d1d1832b8d1647ecc2184416abd921da6987c7c52b47805ee84.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "818a9d1d0c8d00ea9bf8381d8812a115573140fcaef59abd59ee414de2637c1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white dish placed on a metal mesh, with a flame from a Bunsen burner below it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Investigating the evaporation of water from a dish using a Bunsen burner",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41642480964",
+      "checkpointed_at": "2026-11-03T16:02:15Z"
+    },
+    {
+      "asset_id": "b9e71888ebe5b4a9e3844ecc",
+      "asset_sha256": "409f954021336fc626bb5e1c95d0e49c916b9b722b5854a9da25b305eab844e4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 187,
+      "asset_path": "assets/409f954021336fc626bb5e1c95d0e49c916b9b722b5854a9da25b305eab844e4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "818a9d1d0c8d00ea9bf8381d8812a115573140fcaef59abd59ee414de2637c1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, yellow rectangular piece of paper with a textured edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a piece of paper.",
+        "limitations": [
+          "The image does not contain any text or information.",
+          "The image is a simple, unadorned piece of paper with a textured edge."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41642480964",
+      "checkpointed_at": "2026-11-03T16:03:48Z"
     }
   ]
 }
