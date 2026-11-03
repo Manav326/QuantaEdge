@@ -11,7 +11,7 @@
 2. Re-check current \`main\` HEAD and relevant GitHub Actions status before implementation; another commit may have landed since this document was written.
 3. Read the linked current-state audit, existing analyzer workflow/script, Content Studio, learner renderer and Admin API before touching code.
 4. Continue from **Phase 1 below**, not from zero.
-5. Keep changes additive: do not replace existing extraction, chapter content, lesson blocks, Content Studio flows, current v2 checkpoint, or approved/published content. Add versioned outputs, new endpoints/tables and new UI. Commit directly to \`main\` as the project owner prefers, and check CI after each logical stage.
+5. Keep changes additive: do not replace existing extraction, chapter content, lesson blocks, Content Studio flows, current checkpoints, or approved/published content. Add versioned outputs, endpoints/tables and UI. Keep source code/workflows on the code branch; persist generated data only on `automation/textbook-pipeline-state`. Validate through PR CI before merge.
 
 ## Product outcome
 
