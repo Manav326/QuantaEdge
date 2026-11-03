@@ -433,6 +433,16 @@ def commit_state(
                     raise RuntimeError(f"Could not push textbook state to {branch}: {detail}")
 
                 _git(worktree, "fetch", "--no-tags", "origin", branch)
+                # Recheck the exact target paths after the push race and before rebase.
+                # Git may auto-merge disjoint JSON-line edits in the same file; that
+                # is still a shared checkpoint and must be resolved by the owner.
+                _reject_stale_path_writes(
+                    repo,
+                    branch,
+                    baseline_sha,
+                    f"refs/remotes/origin/{branch}",
+                    normalized_paths,
+                )
                 rebased = _git(
                     worktree,
                     "rebase",
