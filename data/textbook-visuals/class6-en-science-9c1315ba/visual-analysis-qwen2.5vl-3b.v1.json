@@ -14,12 +14,12 @@
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "a49d7787a94b67e1b38d30d0",
-      "5abf5b43650d77843396badb"
+      "58c4cf310bee9a3cb17c81d3",
+      "e01dc0058b529c4b045d45cf"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1589,
-    "assets_remaining": 489,
+    "assets_analyzed": 1590,
+    "assets_remaining": 488,
     "assets_completion_percent": 76.5,
     "assets_failed": 25,
     "assets_skipped_from_checkpoint": 1589,
@@ -23724,7 +23724,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
-      "checkpointed_at": "2026-11-03T15:35:52Z"
+      "checkpointed_at": "2026-11-03T15:47:01Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37969,7 +37969,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
-      "checkpointed_at": "2026-11-03T15:36:54Z"
+      "checkpointed_at": "2026-11-03T15:48:03Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44129,7 +44129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
-      "checkpointed_at": "2026-11-03T15:37:46Z"
+      "checkpointed_at": "2026-11-03T15:48:54Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -53490,7 +53490,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41485020539",
+      "run_id": "41642480964",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "limitations must be a list of strings.",
       "human_review_required": true,
@@ -54389,6 +54389,53 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41485020539",
       "checkpointed_at": "2026-11-02T21:00:07Z"
+    },
+    {
+      "asset_id": "e01dc0058b529c4b045d45cf",
+      "asset_sha256": "380970790fe2fcae01fd937af00ad79e3f5d8a8fc5da9b98b1ecb8beef5be2a7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 186,
+      "asset_path": "page-0186.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c2505b91a2620bb3cbde06e91491d847920d34e5b62b96c292dd43d5ea0d88c8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity 9.2: Let us observe and create",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Have you ever observed white patches on the dark coloured clothes you wear during hot summers? How are these patches formed?",
+          "Activity 9.2: Let us observe and create",
+          "Take a bowl or any container and fill it half with water.",
+          "Add 2-3 teaspoons of salt into it and stir till the salt dissolves to form a solution.",
+          "Take a small piece of black or dark coloured thick paper and spread a few drops of the salt solution on it (Fig. 9.7a).",
+          "You can also create any art of your choice with this salt solution.",
+          "Allow it to dry and then observe it (Fig. 9.7b and Fig. 9.7c).",
+          "Fig. 9.7: A few drops of salt solution spread on thick black paper",
+          "Do you observe some patches on the paper? What do you think is left on the paper? You can feel the presence of salt by touching the paper. Where has the water disappeared? Recall the chapter 'A Journey through States of Water'. Let us probe further to get the answer."
+        ],
+        "concepts": [
+          "salt",
+          "water",
+          "solution",
+          "black paper",
+          "salt solution",
+          "drying",
+          "art creation",
+          "states of water"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41642480964",
+      "checkpointed_at": "2026-11-03T15:57:27Z"
     }
   ]
 }
