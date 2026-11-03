@@ -336,14 +336,20 @@ def layer1_inventory_bundle_from_marker(marker_path, inventory_path, source, pac
 
 
 def run_layers(args):
-    repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[];registry_writes_enabled=True;total_batches=0
+    repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[];registry_writes_enabled=True;total_batches=0;run_yielded=False
+    sources=selection.get("sources")
+    if not isinstance(sources,list) or not sources:raise ValueError("The selected source set must contain at least one validated whole-book source.")
     if args.batch_size<1:raise ValueError("batch-size must be positive; it is not a total cap.")
     if args.max_batches_per_run < 1:raise ValueError("max-batches-per-run must be positive.")
     if not 10 <= args.request_timeout <= 900:raise ValueError("request-timeout must be between 10 and 900 seconds so a stalled model request cannot hang a runner indefinitely.")
-    for s in selection["sources"]:
+    for source_position,s in enumerate(sources):
         if total_batches >= args.max_batches_per_run:
-            print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; all current-book outputs remain checkpointed.",flush=True)
-            return 10
+            run_yielded=True
+            print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; remaining books retain their prior state.",flush=True)
+            break
+        remaining_sources=len(sources)-source_position
+        book_batch_budget=max(1,(args.max_batches_per_run-total_batches+remaining_sources-1)//remaining_sources)
+        book_batches=0
         slug=s["book_slug"];work=sroot/slug;invdir=work/"inventory";inv=invdir/"visual-inventory.v1.json"
         if not inv.is_file():raise ValueError(f"{slug}: inventory missing; refusing omission.")
         inventory=read_json(inv)
@@ -409,15 +415,21 @@ def run_layers(args):
         checkpoint=f"layer4-class{selection['class']}-{slug}-{model}-checkpoint"
         batch_number=0
         book_yielded=False
-        print(f"[pipeline] BOOK_START class={selection['class']} book={slug} eligible_inventory_assets={len(inventory.get('assets',[]))} batch_size={args.batch_size} checkpoint_tag={checkpoint}",flush=True)
+        print(f"[pipeline] BOOK_START class={selection['class']} book={slug} eligible_inventory_assets={sum(1 for row in inventory.get('assets',[]) if isinstance(row,dict) and row.get('kind')=='embedded_image')} context_only_page_previews={sum(1 for row in inventory.get('assets',[]) if isinstance(row,dict) and row.get('kind')=='page_preview')} batch_size={args.batch_size} batch_budget_this_book={book_batch_budget} checkpoint_tag={checkpoint}",flush=True)
         while True:
             if total_batches >= args.max_batches_per_run:
                 book_yielded=True
+                run_yielded=True
                 print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; yielding after durable checkpoint.",flush=True)
+                break
+            if book_batches >= book_batch_budget:
+                book_yielded=True
+                run_yielded=True
+                print(f"[pipeline] BOOK_BUDGET_REACHED class={selection['class']} book={slug} batches_this_book={book_batches} fair_share={book_batch_budget}; next bilingual source will receive its share.",flush=True)
                 break
             batch_number+=1
             print(f"[pipeline] BATCH_START class={selection['class']} book={slug} batch={batch_number} batch_limit={args.batch_size} run_id={args.run_id}",flush=True)
-            cmd=[sys.executable,"scripts/analyze_visual_inventory_with_ollama.py","--inventory",str(inv),"--model",args.model,"--max-assets",str(args.batch_size),"--include-page-previews","--run-id",args.run_id,"--timeout",str(args.request_timeout),"--output",str(raw)]
+            cmd=[sys.executable,"scripts/analyze_visual_inventory_with_ollama.py","--inventory",str(inv),"--model",args.model,"--max-assets",str(args.batch_size),"--run-id",args.run_id,"--timeout",str(args.request_timeout),"--num-predict","512","--output",str(raw)]
             if raw.is_file():cmd.append("--resume")
             else:
                 pull=vis/".checkpoint-recovery";pull.mkdir(exist_ok=True)
@@ -434,7 +446,9 @@ def run_layers(args):
             subprocess.run(cmd,cwd=repo,check=True)
             subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",str(s["text_jsonl_repo_path"]),"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
             data=read_json(raw);summary=data.get("summary",{});processed=int(summary.get("assets_processed_this_run",0))
-            if processed > 0: total_batches += 1
+            if processed > 0:
+                total_batches += 1
+                book_batches += 1
             after_results=data.get("results",[]) if isinstance(data,dict) else []
             processed_ids=summary.get("assets_processed_ids",[])
             overwrote_successes=bool(processed_ids) and all(
@@ -464,11 +478,11 @@ def run_layers(args):
             if processed==0:break
         result=read_json(ledger);idx=read_json(index);idx["layers"]["4"]="CHECKPOINTED";idx["layers"]["5"]=result["ledger_status"];write_json(index,idx);git_checkpoint(repo,[rel(index,repo)],f"status(content): Layer 5 {slug}")
         print(json.dumps({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]}))
-        if book_yielded:
-            print(json.dumps({"pipeline_run_status":"YIELDED_FOR_RESUME","class":selection["class"],"book":slug,"completed_batches":total_batches,"max_batches_per_run":args.max_batches_per_run,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"],"publication_allowed":False}),flush=True)
-            return 10
         if result["ledger_status"]!="COMPLETE":bad.append({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]})
-    print(json.dumps({"class":selection["class"],"incomplete_books":bad,"layers_6_to_8":"NOT_STARTED","publication_allowed":False},indent=2))
+        if book_yielded:
+            print(json.dumps({"pipeline_run_status":"YIELDED_FOR_RESUME","class":selection["class"],"book":slug,"batches_this_book":book_batches,"completed_batches_total":total_batches,"book_batch_budget":book_batch_budget,"max_batches_per_run":args.max_batches_per_run,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"],"publication_allowed":False}),flush=True)
+    print(json.dumps({"class":selection["class"],"incomplete_books":bad,"batches_this_run":total_batches,"budget_yielded":run_yielded,"layers_6_to_8":"NOT_STARTED","publication_allowed":False},indent=2))
+    if run_yielded:return 10
     return 3 if bad else 0
 
 def changed_correction_paths(event_path,root):
