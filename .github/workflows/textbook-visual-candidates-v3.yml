@@ -22,7 +22,7 @@ on:
         type: string
         default: "qwen2.5vl:3b"
       checkpoint_batch_size:
-        description: "Assets per durable Git/GHCR savepoint; 10 reduces per-batch rebuild overhead while preserving resumability"
+        description: "Assets per durable Git/GHCR savepoint; 10 amortizes commit/registry overhead while bounding work lost on interruption"
         required: true
         type: choice
         options: ["5", "10"]
@@ -99,11 +99,12 @@ jobs:
       - name: Install extraction dependency
         run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
       - name: Compile preparation and validation scripts
-        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/plan_textbook_layer45_matrix.py
+        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/select_textbook_visual_pair.py scripts/persist_textbook_pipeline_state.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/plan_textbook_layer45_matrix.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
       - name: Test source selection, extraction integrity and candidate preparation
         run: |
           python -m unittest discover -s tests -p "test_plan_textbook_layer45_matrix.py" -v
           python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
+          python -m unittest discover -s tests -p "test_select_textbook_visual_pair.py" -v
           python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
           python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
@@ -115,7 +116,6 @@ jobs:
           python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
           python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
           python -m unittest discover -s tests -p "test_textbook_pipeline_state.py" -v
-          python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
 
   prepare:
     needs: [plan, validate]
@@ -125,7 +125,7 @@ jobs:
       yielded: ${{ steps.layer45_run.outputs.yielded || 'false' }}
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: ${{ inputs.analysis_mode == 'resume_layers_4_5' && 4 || 1 }}
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     runs-on: ubuntu-latest
     timeout-minutes: 360
@@ -133,6 +133,7 @@ jobs:
       CLASS_NO: ${{ matrix.class_no || inputs.class_no }}
       BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}
       BOOK_SLUGS_CSV: ${{ matrix.source_slugs_csv || '' }}
+      BOOK_PAIR_ID: ${{ matrix.book_pair_id || '' }}
       ANALYSIS_MODE: ${{ inputs.analysis_mode || 'analyze_all' }}
       QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
       VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}
@@ -177,6 +178,7 @@ jobs:
           GHCR_OWNER: ${{ github.repository_owner }}
           BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}
           BOOK_SLUGS_CSV: ${{ matrix.source_slugs_csv || '' }}
+          BOOK_PAIR_ID: ${{ matrix.book_pair_id || '' }}
         run: |
           set -euo pipefail
           owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
@@ -267,6 +269,7 @@ jobs:
               --class-no "$CLASS_NO" \
               --book-ids-csv "$BOOK_IDS_CSV" \
               --source-slugs-csv "$BOOK_SLUGS_CSV" \
+              --book-pair-id "$BOOK_PAIR_ID" \
               --english-selection "$source_root/selected-english.json" \
               --hindi-selection "$source_root/selected-hindi.json" \
               --output "$source_root/selected-sources.json"
@@ -659,7 +662,7 @@ jobs:
             --model "$VISION_MODEL" \
             --batch-size "$CHECKPOINT_BATCH_SIZE" \
             --max-batches-per-run "$MAX_BATCHES_PER_RUN" \
-            --request-timeout 180; then
+            --request-timeout 240 --num-ctx 4096; then
             echo "yielded=false" >> "$GITHUB_OUTPUT"
           else
             result=$?
@@ -682,7 +685,7 @@ jobs:
           {
             echo "## QuantaEdge eight-layer textbook pipeline"
             echo "- Executed here: Layers 1–5. Layers 6–8 are implemented in the separate budgeted per-book workflow; benchmark the model first, then generate review-only drafts."
-            echo "- No visual/candidate total cap; checkpoint batch size was $CHECKPOINT_BATCH_SIZE assets. Smaller batches reduce uncheckpointed model work but increase Git/GHCR savepoint traffic."
+            echo "- No visual/candidate total cap; checkpoint batch size was $CHECKPOINT_BATCH_SIZE assets. The larger savepoint interval reduces Git/GHCR overhead while preserving resumable per-asset results."
             echo "- All generated data remains review-only; publication_allowed=false."
           } >> "$GITHUB_STEP_SUMMARY"
 
