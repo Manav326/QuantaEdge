@@ -113,14 +113,14 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         ai_script = (ROOT / "scripts" / "ai_training_dataset.py").read_text(encoding="utf-8")
 
         self.assertIn("workflow_dispatch:", specialist)
-        self.assertNotIn("\\n  push:\\n", specialist)
+        self.assertNotIn("\n  push:\n", specialist)
         self.assertIn("group: qe-textbook-visual-candidates-v3-global", specialist)
         self.assertIn("persist_textbook_pipeline_state.py restore", specialist)
         self.assertIn("persist_textbook_pipeline_state.py commit", specialist)
         self.assertNotIn("git push origin HEAD:main", specialist)
 
         self.assertIn("workflow_dispatch:", offline_dataset)
-        self.assertNotIn("\\n  push:\\n", offline_dataset)
+        self.assertNotIn("\n  push:\n", offline_dataset)
         self.assertIn("automation/textbook-pipeline-state", offline_dataset)
         self.assertIn("persist_textbook_pipeline_state.py commit", offline_dataset)
         self.assertNotIn("git push origin HEAD:main", offline_dataset)
@@ -129,7 +129,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("data/ai-training", ai_script)
 
         self.assertIn("workflow_dispatch:", cache)
-        self.assertNotIn("\\n  push:\\n", cache)
+        self.assertNotIn("\n  push:\n", cache)
         self.assertIn("repair_queue", cache)
         self.assertIn("INPUT_REPAIR_QUEUE", cache)
 
