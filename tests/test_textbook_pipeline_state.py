@@ -39,6 +39,7 @@ class TextbookPipelineStateTests(unittest.TestCase):
         write(self.seed / "data/textbook-visuals/index.json", "{}\n")
         write(self.seed / "data/textbook-visual-candidates-v3/index.json", "{}\n")
         write(self.seed / "data/structured-lessons/index.json", "{}\n")
+        write(self.seed / "data/ai-training/datasets/index.json", "{}\n")
         git(self.seed, "add", "-A")
         git(self.seed, "commit", "-m", "seed")
         git(self.seed, "remote", "add", "origin", str(self.remote))
@@ -70,9 +71,13 @@ class TextbookPipelineStateTests(unittest.TestCase):
         restore_state(self.clone, DEFAULT_STATE_BRANCH)
         main_before = git(self.clone, "rev-parse", "origin/main")
         write(self.clone / "data/textbook-content-pipeline/class-6/books/book/coverage-ledger.v1.json", '{"status":"COMPLETE"}\n')
+        write(self.clone / "data/ai-training/datasets/train.jsonl", '{"example_id":"draft-1"}\n')
         result = commit_state(
             self.clone,
-            ["data/textbook-content-pipeline/class-6/books/book/coverage-ledger.v1.json"],
+            [
+                "data/textbook-content-pipeline/class-6/books/book/coverage-ledger.v1.json",
+                "data/ai-training/datasets/train.jsonl",
+            ],
             "checkpoint(content): isolated Layer 5 test",
             DEFAULT_STATE_BRANCH,
         )
@@ -86,6 +91,12 @@ class TextbookPipelineStateTests(unittest.TestCase):
             f"origin/{DEFAULT_STATE_BRANCH}:data/textbook-content-pipeline/class-6/books/book/coverage-ledger.v1.json",
         )
         self.assertIn("COMPLETE", saved)
+        saved_dataset = git(
+            self.clone,
+            "show",
+            f"origin/{DEFAULT_STATE_BRANCH}:data/ai-training/datasets/train.jsonl",
+        )
+        self.assertIn("draft-1", saved_dataset)
 
     def test_rejects_application_code_and_parent_traversal(self):
         restore_state(self.clone, DEFAULT_STATE_BRANCH)
