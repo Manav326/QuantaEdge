@@ -137,28 +137,157 @@ def _reject_stale_path_writes(
         )
 
 
-def _seed_state_from_latest_main(repo: Path, branch: str) -> str:
-    """Fast-forward the untouched state branch to latest main exactly once.
+def _git_bytes(repo: Path, *args: str, check: bool = True) -> subprocess.CompletedProcess[bytes]:
+    result = subprocess.run(
+        ["git", *args],
+        cwd=repo,
+        capture_output=True,
+        check=False,
+    )
+    if check and result.returncode:
+        detail = result.stderr.decode("utf-8", errors="replace").strip()
+        raise RuntimeError(detail or f"git {' '.join(args)} failed ({result.returncode})")
+    return result
 
-    This captures any legacy checkpoints written by already-running workers before the
-    state-branch migration. Once state has its own commit, it is intentionally independent
-    from main and will never be overwritten by main.
+
+def _blob_at(repo: Path, ref: str, relative: str) -> str | None:
+    result = _git(repo, "rev-parse", f"{ref}:{relative}", check=False)
+    if result.returncode == 0:
+        return result.stdout.strip()
+    if "does not exist" in result.stderr.lower() or "not in the working tree" in result.stderr.lower() or "path" in result.stderr.lower():
+        return None
+    raise RuntimeError(f"Could not inspect {relative} at {ref}: {result.stderr.strip()}")
+
+
+def _import_late_main_data(repo: Path, branch: str) -> str:
+    """Import post-fork data-only commits from main without importing application code.
+
+    Older, already-running manual workflows may finish a final checkpoint on main
+    after the state branch is first seeded. Import disjoint data paths; if both main
+    and the isolated state changed the same path differently, stop and preserve both
+    branch tips for an explicit recovery rather than overwriting either checkpoint.
     """
+    data_roots = tuple(STATE_PATHS)
+    for attempt in range(1, 6):
+        _fetch_refs(repo, branch)
+        state_ref = f"refs/remotes/origin/{branch}"
+        main_ref = "refs/remotes/origin/main"
+        merge_base = _git(repo, "merge-base", state_ref, main_ref).stdout.strip()
+        if not merge_base:
+            raise RuntimeError("Could not find a common ancestor for the textbook state and main branches.")
+
+        changed_raw = _git(
+            repo,
+            "diff",
+            "--name-only",
+            "-z",
+            "--no-renames",
+            merge_base,
+            main_ref,
+            "--",
+            *data_roots,
+        ).stdout
+        changed_paths = [item for item in changed_raw.split("\0") if item]
+        if not changed_paths:
+            return state_ref
+
+        # Only paths explicitly owned by the isolated state branch may be imported.
+        changed_paths = _validate_paths(repo, changed_paths)
+        with tempfile.TemporaryDirectory(prefix="qe-legacy-main-state-") as temp:
+            worktree = Path(temp) / "worktree"
+            _git(repo, "worktree", "add", "--detach", str(worktree), state_ref)
+            try:
+                imported: list[str] = []
+                for relative in changed_paths:
+                    state_diff = _git(repo, "diff", "--quiet", merge_base, state_ref, "--", relative, check=False)
+                    if state_diff.returncode not in (0, 1):
+                        raise RuntimeError(f"Could not compare isolated state path {relative} with its merge base.")
+                    state_changed = state_diff.returncode == 1
+                    main_blob = _blob_at(repo, main_ref, relative)
+                    state_blob = _blob_at(repo, state_ref, relative)
+
+                    if state_changed:
+                        if main_blob == state_blob:
+                            # Both branches already contain identical bytes for this path.
+                            continue
+                        raise RuntimeError(
+                            "Legacy main and isolated textbook state both changed the same data path "
+                            f"after their fork: {relative}. No checkpoint was overwritten. "
+                            "Preserve both branch tips and resolve this file explicitly."
+                        )
+
+                    destination = worktree / relative
+                    if main_blob is None:
+                        destination.unlink(missing_ok=True)
+                    else:
+                        payload = _git_bytes(repo, "show", f"{main_ref}:{relative}").stdout
+                        destination.parent.mkdir(parents=True, exist_ok=True)
+                        destination.write_bytes(payload)
+                    imported.append(relative)
+
+                if not imported:
+                    return state_ref
+
+                _git(worktree, "add", "-A", "--", *imported)
+                diff = _git(worktree, "diff", "--cached", "--quiet", check=False)
+                if diff.returncode == 0:
+                    return state_ref
+                if diff.returncode != 1:
+                    raise RuntimeError("Could not inspect staged legacy textbook data imports.")
+                _git(worktree, "config", "user.name", "github-actions[bot]")
+                _git(worktree, "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
+                _git(worktree, "commit", "-m", "data(content): import late legacy main textbook checkpoints")
+
+                pushed = _git(
+                    worktree,
+                    "push",
+                    "origin",
+                    f"HEAD:refs/heads/{branch}",
+                    check=False,
+                )
+                if pushed.returncode == 0:
+                    _git(repo, "fetch", "--no-tags", "origin", branch)
+                    return f"refs/remotes/origin/{branch}"
+
+                detail = (pushed.stderr or pushed.stdout or "unknown Git push error").strip()
+                if not any(token in detail.lower() for token in (
+                    "non-fast-forward", "fetch first", "failed to push some refs", "rejected",
+                )):
+                    raise RuntimeError(f"Could not import legacy main checkpoints to {branch}: {detail}")
+                if attempt == 5:
+                    raise RuntimeError(f"Legacy main checkpoint import did not converge after {attempt} attempts: {detail}")
+            finally:
+                _git(repo, "worktree", "remove", "--force", str(worktree), check=False)
+
+    raise RuntimeError("Legacy main checkpoint import exhausted its retry budget.")
+
+
+def _seed_state_from_latest_main(repo: Path, branch: str) -> str:
+    """Seed an untouched state branch from main, then import later data-only checkpoints."""
     _fetch_refs(repo, branch)
     state_ref = f"refs/remotes/origin/{branch}"
     main_ref = "refs/remotes/origin/main"
-    if _is_ancestor(repo, state_ref, main_ref) and _git(repo, "rev-parse", state_ref).stdout.strip() != _git(repo, "rev-parse", main_ref).stdout.strip():
+    state_sha = _git(repo, "rev-parse", state_ref).stdout.strip()
+    main_sha = _git(repo, "rev-parse", main_ref).stdout.strip()
+
+    if _is_ancestor(repo, state_ref, main_ref) and state_sha != main_sha:
         pushed = _git(repo, "push", "origin", f"{main_ref}:refs/heads/{branch}", check=False)
         if pushed.returncode != 0:
-            _git(repo, "fetch", "--no-tags", "origin", branch)
+            detail = (pushed.stderr or pushed.stdout or "unknown Git push error").strip()
+            if not any(token in detail.lower() for token in (
+                "non-fast-forward", "fetch first", "failed to push some refs", "rejected",
+            )):
+                raise RuntimeError(f"Could not seed the textbook state branch from latest main: {detail}")
+            _fetch_refs(repo, branch)
             state_ref = f"refs/remotes/origin/{branch}"
             main_ref = "refs/remotes/origin/main"
             if _is_ancestor(repo, state_ref, main_ref):
                 detail = (pushed.stderr or pushed.stdout or "unknown Git push error").strip()
-                raise RuntimeError(f"Could not seed the textbook state branch from latest main: {detail}")
-    _git(repo, "fetch", "--no-tags", "origin", branch)
-    return f"refs/remotes/origin/{branch}"
+                raise RuntimeError(f"Could not fast-forward the textbook state branch from main: {detail}")
+        _git(repo, "fetch", "--no-tags", "origin", branch)
+        state_ref = f"refs/remotes/origin/{branch}"
 
+    return _import_late_main_data(repo, branch)
 
 def restore_state(repo_root: Path, branch: str = DEFAULT_STATE_BRANCH) -> dict[str, str]:
     repo = Path(repo_root).resolve()
