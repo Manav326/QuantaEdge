@@ -61,13 +61,15 @@ def _validate_paths(repo: Path, paths: Sequence[str]) -> list[str]:
 
 
 def _fetch_refs(repo: Path, branch: str) -> None:
+    main_refspec = "+refs/heads/main:refs/remotes/origin/main"
+    state_refspec = f"+refs/heads/{branch}:refs/remotes/origin/{branch}"
     shallow = _git(repo, "rev-parse", "--is-shallow-repository").stdout.strip() == "true"
     if shallow:
         # Workflow checkouts often default to fetch-depth: 1. Ancestry-based
         # state reconciliation needs the shared commit history, not only tip trees.
-        _git(repo, "fetch", "--unshallow", "--no-tags", "origin", "main")
-    _git(repo, "fetch", "--no-tags", "origin", "main")
-    _git(repo, "fetch", "--no-tags", "origin", branch)
+        _git(repo, "fetch", "--unshallow", "--no-tags", "origin", main_refspec)
+    _git(repo, "fetch", "--no-tags", "origin", main_refspec)
+    _git(repo, "fetch", "--no-tags", "origin", state_refspec)
 
 
 def _is_ancestor(repo: Path, older: str, newer: str) -> bool:
