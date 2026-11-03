@@ -1,13 +1,10 @@
-name: Mirror verified textbook extraction artifact to main
+name: Mirror verified textbook extraction artifact to isolated state
 
 on:
-  workflow_run:
-    workflows: ["QuantaEdge GHCR Textbook Extraction Pilot"]
-    types: [completed]
   workflow_dispatch:
     inputs:
       class_no:
-        description: "Class whose verified extraction artifact should be committed"
+        description: "Class whose verified extraction artifact should be persisted"
         type: choice
         options: ["7", "8"]
         default: "7"
@@ -28,15 +25,19 @@ concurrency:
 
 jobs:
   commit-extraction:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main
+      - name: Checkout application code from main
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
           persist-credentials: true
+      - name: Restore isolated textbook pipeline state
+        env:
+          QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
+        run: python scripts/persist_textbook_pipeline_state.py restore --repo-root "$GITHUB_WORKSPACE"
 
       - name: Confirm source run, resolve matching class artifacts, and download
         env:
@@ -44,22 +45,16 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           CLASS_NO_INPUT: ${{ inputs.class_no }}
           SOURCE_RUN_ID_INPUT: ${{ inputs.source_run_id }}
-          WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id }}
         shell: bash
         run: |
           set -euo pipefail
 
-          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
-            SOURCE_RUN_ID="$SOURCE_RUN_ID_INPUT"
-            case "$CLASS_NO_INPUT" in
-              7|8) ;;
-              *) echo "::error::Only Class 7 or Class 8 is supported."; exit 2 ;;
-            esac
-            requested_classes=("$CLASS_NO_INPUT")
-          else
-            SOURCE_RUN_ID="$WORKFLOW_RUN_ID"
-            requested_classes=()
-          fi
+          SOURCE_RUN_ID="$SOURCE_RUN_ID_INPUT"
+          case "$CLASS_NO_INPUT" in
+            7|8) ;;
+            *) echo "::error::Only Class 7 or Class 8 is supported."; exit 2 ;;
+          esac
+          requested_classes=("$CLASS_NO_INPUT")
 
           [[ "$SOURCE_RUN_ID" =~ ^[0-9]+$ ]] || {
             echo "::error::The source run ID must be numeric."
@@ -129,7 +124,7 @@ jobs:
 
       - name: Validate both languages and copy verified class artifacts
         env:
-          SOURCE_RUN_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.source_run_id || github.event.workflow_run.id }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
         shell: bash
         run: |
           set -euo pipefail
@@ -170,24 +165,18 @@ jobs:
           cat > data/textbook-extractions/README.md <<'EOF'
           # Textbook extraction artifacts
 
-          Verified class-wise whole-book extracted page text, manifests and reports are committed here so a normal git pull updates the local checkout. Original source PDFs remain in GHCR. These are draft extraction artifacts only, not approved or published lessons/questions. Source-bound chapter mapping and human review are required before generation/import/publication.
+          Verified class-wise whole-book extracted page text, manifests and reports are stored on the isolated automation/textbook-pipeline-state branch. Application main remains code and workflow definitions only. Original source PDFs remain in GHCR. These are draft extraction artifacts only, not approved or published lessons/questions. Source-bound chapter mapping and human review are required before generation/import/publication.
           EOF
 
-      - name: Commit extracted text to main
+      - name: Persist extracted text on isolated state branch
         env:
-          SOURCE_RUN_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.source_run_id || github.event.workflow_run.id }}
+          QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/textbook-extractions
-          if git diff --cached --quiet; then
-            echo "Extraction artifacts already match main; no commit required."
-            exit 0
-          fi
           classes_for_message="$(printf '%s' "$MIRROR_CLASSES" | tr ' ' '-')"
-          git commit -m "Mirror verified textbook extraction artifacts for classes ${classes_for_message}"
-          git pull --rebase origin main
-          git push origin HEAD:main
-          echo "Committed extraction artifacts for classes $MIRROR_CLASSES from run $SOURCE_RUN_ID."
+          python scripts/persist_textbook_pipeline_state.py commit \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --message "data(content): mirror verified extraction artifacts for classes ${classes_for_message}" \
+            --paths data/textbook-extractions
+          echo "Persisted extracted data for classes $MIRROR_CLASSES on $QUANTAEDGE_TEXTBOOK_STATE_BRANCH; main remains unchanged."
