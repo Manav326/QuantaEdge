@@ -662,7 +662,7 @@ jobs:
             --model "$VISION_MODEL" \
             --batch-size "$CHECKPOINT_BATCH_SIZE" \
             --max-batches-per-run "$MAX_BATCHES_PER_RUN" \
-            --request-timeout 240 --num-ctx 4096; then
+            --request-timeout 360 --num-ctx 8192 --num-predict 512; then
             echo "yielded=false" >> "$GITHUB_OUTPUT"
           else
             result=$?
