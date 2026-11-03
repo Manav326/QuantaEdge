@@ -143,6 +143,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("workflow_dispatch:", workflow)
         self.assertIn("workflow_call:", workflow)
         self.assertNotIn("\n  push:\n", workflow)
+        self.assertIn("group: qe-textbook-pipeline-state-global", workflow)
         self.assertIn("persist_textbook_pipeline_state.py restore", workflow)
         self.assertIn('helper=repo/"scripts"/"persist_textbook_pipeline_state.py"', script)
         self.assertIn('str(helper),"commit"', script)
