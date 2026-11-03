@@ -325,7 +325,7 @@ def _changed_state_paths(repo: Path, base: str, head: str) -> list[str]:
         "--",
         *STATE_PATHS,
     ).stdout
-    values = [item for item in raw.split("\\0") if item]
+    values = [item for item in raw.split("\0") if item]
     return _validate_paths(repo, values) if values else []
 
 
