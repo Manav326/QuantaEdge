@@ -41,7 +41,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn('"source_slugs_csv"', planner)
         self.assertIn("select_bilingual_pair", selector)
         self.assertIn("exactly one assigned book_id", selector)
-        self.assertIn("one English and one Hindi", selector)
+        self.assertIn('{"english", "hindi"}', selector)
 
     def test_only_resume_work_is_pair_sharded_and_each_pair_is_source_bound(self):
         planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
