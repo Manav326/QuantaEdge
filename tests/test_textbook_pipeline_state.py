@@ -2,7 +2,9 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+import scripts.persist_textbook_pipeline_state as state_helper
 from scripts.persist_textbook_pipeline_state import (
     DEFAULT_STATE_BRANCH,
     commit_state,
@@ -165,6 +167,59 @@ class TextbookPipelineStateTests(unittest.TestCase):
         self.assertNotIn("HINDI", saved)
         self.assertEqual(main_before, git(self.clone, "rev-parse", "origin/main"))
 
+
+
+    def test_push_race_rejects_auto_merge_of_different_json_lines_in_same_file(self):
+        second = self._make_second_clone()
+        shared_path = "data/textbook-content-pipeline/class-6/books/shared/coverage-ledger.v1.json"
+        baseline = '{\n  "english": "old",\n  "hindi": "old"\n}\n'
+        write(self.seed / shared_path, baseline)
+        git(self.seed, "add", "-A")
+        git(self.seed, "commit", "-m", "add shared bilingual ledger baseline")
+        git(self.seed, "push", "origin", "main")
+
+        restore_state(self.clone, DEFAULT_STATE_BRANCH)
+        restore_state(second, DEFAULT_STATE_BRANCH)
+        main_before = git(self.clone, "rev-parse", "origin/main")
+
+        write(self.clone / shared_path, '{\n  "english": "new",\n  "hindi": "old"\n}\n')
+        write(second / shared_path, '{\n  "english": "old",\n  "hindi": "new"\n}\n')
+
+        real_git = state_helper._git
+        raced = {"done": False}
+
+        def race_before_first_checkpoint_push(cwd, *args, check=True):
+            if not raced["done"] and args and args[0] == "push":
+                subprocess.run(["git", "add", "--", shared_path], cwd=second, check=True, capture_output=True)
+                subprocess.run(
+                    ["git", "commit", "-m", "concurrent Hindi checkpoint"],
+                    cwd=second,
+                    check=True,
+                    capture_output=True,
+                )
+                subprocess.run(
+                    ["git", "push", "origin", f"HEAD:refs/heads/{DEFAULT_STATE_BRANCH}"],
+                    cwd=second,
+                    check=True,
+                    capture_output=True,
+                )
+                raced["done"] = True
+            return real_git(cwd, *args, check=check)
+
+        with patch.object(state_helper, "_git", side_effect=race_before_first_checkpoint_push):
+            with self.assertRaisesRegex(RuntimeError, "same checkpoint path"):
+                commit_state(
+                    self.clone,
+                    [shared_path],
+                    "checkpoint(content): concurrent English checkpoint",
+                    DEFAULT_STATE_BRANCH,
+                )
+
+        git(self.clone, "fetch", "origin", DEFAULT_STATE_BRANCH, "main")
+        saved = git(self.clone, "show", f"origin/{DEFAULT_STATE_BRANCH}:{shared_path}")
+        self.assertIn('"english": "old"', saved)
+        self.assertIn('"hindi": "new"', saved)
+        self.assertEqual(main_before, git(self.clone, "rev-parse", "origin/main"))
 
     def test_restore_imports_late_legacy_main_checkpoint_after_state_branch_diverges(self):
         restore_state(self.clone, DEFAULT_STATE_BRANCH)
