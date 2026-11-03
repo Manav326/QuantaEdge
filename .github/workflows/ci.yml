@@ -537,3 +537,152 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=people
           cache-to: type=gha,mode=max,scope=people
+
+
+  production-release-evidence:
+    name: Record exact tested commit and verified image source
+    runs-on: ubuntu-latest
+    needs:
+      - changes
+      - build-android-apk
+      - validate-content-import
+      - validate-api
+      - build-api
+      - build-web
+      - build-admin
+      - build-people
+    if: >-
+      github.event_name == 'push' &&
+      always() &&
+      needs.changes.result == 'success' &&
+      needs.build-android-apk.result == 'success' || (
+        github.event_name == 'push' &&
+        always() &&
+        needs.changes.result == 'success' &&
+        needs.build-android-apk.result == 'skipped'
+      )
+    steps:
+      - name: Checkout exact tested main commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Resolve coherent image source commit
+        id: image-source
+        env:
+          IMAGES_BUILT: ${{ needs.changes.outputs.images }}
+          TESTED_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$IMAGES_BUILT" == "true" ]]; then
+            image_source_sha="$TESTED_SHA"
+          else
+            image_source_sha="$(git log -1 --format=%H "$TESTED_SHA" -- \
+              services/api \
+              apps/web \
+              apps/admin \
+              apps/people \
+              data/structured-lessons \
+              scripts/package_published_structured_lessons.py \
+              .dockerignore)"
+          fi
+          [[ "$image_source_sha" =~ ^[0-9a-f]{40}$ ]] || {
+            echo "::error::Could not resolve the source commit for the production image set."
+            exit 2
+          }
+          echo "sha=$image_source_sha" >> "$GITHUB_OUTPUT"
+          echo "image_tag=sha-$image_source_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Validate coherent image build set
+        env:
+          IMAGES_BUILT: ${{ needs.changes.outputs.images }}
+          API_RESULT: ${{ needs.build-api.result }}
+          WEB_RESULT: ${{ needs.build-web.result }}
+          ADMIN_RESULT: ${{ needs.build-admin.result }}
+          PEOPLE_RESULT: ${{ needs.build-people.result }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$IMAGES_BUILT" == "true" ]]; then
+            for result in "$API_RESULT" "$WEB_RESULT" "$ADMIN_RESULT" "$PEOPLE_RESULT"; do
+              [[ "$result" == "success" ]] || {
+                echo "::error::All four service images must succeed for a new production image source SHA."
+                exit 1
+              }
+            done
+          fi
+
+      - name: Write immutable production release evidence
+        env:
+          TESTED_SHA: ${{ github.sha }}
+          IMAGE_SOURCE_SHA: ${{ steps.image-source.outputs.sha }}
+          IMAGE_TAG: ${{ steps.image-source.outputs.image_tag }}
+          IMAGES_BUILT: ${{ needs.changes.outputs.images }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          API_BUILD: ${{ needs.build-api.result }}
+          WEB_BUILD: ${{ needs.build-web.result }}
+          ADMIN_BUILD: ${{ needs.build-admin.result }}
+          PEOPLE_BUILD: ${{ needs.build-people.result }}
+          API_TESTS: ${{ needs.validate-api.result }}
+          CONTENT_CHECKS: ${{ needs.validate-content-import.result }}
+          ANDROID_CHECKS: ${{ needs.build-android-apk.result }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/production-release-evidence"
+          python - "$RUNNER_TEMP/production-release-evidence/production-release-evidence.json" <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          repository=os.environ["REPOSITORY"]
+          owner,_=repository.split("/",1)
+          tag=os.environ["IMAGE_TAG"]
+          tested=os.environ["TESTED_SHA"]
+          image_source=os.environ["IMAGE_SOURCE_SHA"]
+          evidence={
+              "schema_version":"quantaedge.production-release-evidence.v1",
+              "tested_commit_sha":tested,
+              "image_source_commit_sha":image_source,
+              "image_tag":tag,
+              "images_built_this_run":os.environ["IMAGES_BUILT"]=="true",
+              "images":{
+                  "api":f"ghcr.io/{owner.lower()}/quantaedge-api:{tag}",
+                  "web":f"ghcr.io/{owner.lower()}/quantaedge-web:{tag}",
+                  "admin":f"ghcr.io/{owner.lower()}/quantaedge-admin:{tag}",
+                  "people":f"ghcr.io/{owner.lower()}/quantaedge-people:{tag}",
+              },
+              "workflow":{
+                  "repository":repository,
+                  "run_id":int(os.environ["RUN_ID"]),
+                  "run_attempt":int(os.environ["RUN_ATTEMPT"]),
+                  "run_url":f"https://github.com/{repository}/actions/runs/{os.environ['RUN_ID']}",
+                  "event":"push",
+              },
+              "checks":{
+                  "api":os.environ["API_TESTS"],
+                  "content":os.environ["CONTENT_CHECKS"],
+                  "android":os.environ["ANDROID_CHECKS"],
+                  "api_image":os.environ["API_BUILD"],
+                  "web_image":os.environ["WEB_BUILD"],
+                  "admin_image":os.environ["ADMIN_BUILD"],
+                  "people_image":os.environ["PEOPLE_BUILD"],
+              },
+              "status":"PASS",
+          }
+          if len(tested)!=40 or len(image_source)!=40:
+              raise SystemExit("Release evidence requires full 40-character Git object IDs.")
+          Path(sys.argv[1]).write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          print(json.dumps({"tested_commit_sha":tested,"image_source_commit_sha":image_source,
+                            "image_tag":tag,"images_built_this_run":evidence["images_built_this_run"]}))
+          PY
+
+      - name: Upload exact-commit production release evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-release-evidence
+          path: ${{ runner.temp }}/production-release-evidence/production-release-evidence.json
+          if-no-files-found: error
+          retention-days: 90
