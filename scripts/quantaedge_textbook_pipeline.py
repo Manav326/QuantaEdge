@@ -183,7 +183,7 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
     write_json(ledger_path,out);return out
 
 def git_checkpoint(repo,paths,message):
-    # Pipeline-generated data is versioned only under data/, never in application/code folders.
+    # Generated textbook data is committed to the isolated state branch, never main.
     repo_root=Path(repo).resolve()
     data_root=(repo_root/"data").resolve()
     staged_paths=[]
@@ -193,15 +193,12 @@ def git_checkpoint(repo,paths,message):
         try: relative=candidate.resolve().relative_to(data_root)
         except ValueError as exc: raise ValueError(f"Pipeline checkpoints may only be committed under data/: {raw_path}") from exc
         staged_paths.append((Path("data")/relative).as_posix())
-    subprocess.run(["git","add","--",*staged_paths],cwd=repo_root,check=True)
-    if subprocess.run(["git","diff","--cached","--quiet"],cwd=repo).returncode==0:return
-    subprocess.run(["git","config","user.name","github-actions[bot]"],cwd=repo,check=True);subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"],cwd=repo,check=True)
-    subprocess.run(["git","commit","-m",message],cwd=repo,check=True)
-    subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-    try:subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
-    except subprocess.CalledProcessError:
-        subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-        subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
+    if not staged_paths:return
+    helper=repo_root/"scripts"/"persist_textbook_pipeline_state.py"
+    subprocess.run(
+        [sys.executable,str(helper),"commit","--repo-root",str(repo_root),"--message",message,"--paths",*staged_paths],
+        cwd=repo_root,check=True,
+    )
 
 def backfill_legacy_context_hashes(previous_inventory, raw_path, *, book_id, source_sha, model):
     """Recover legacy per-asset text-context fingerprints from the exact committed prior inventory.
