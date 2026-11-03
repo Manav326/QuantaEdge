@@ -120,6 +120,37 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
             }, endpoint="http://127.0.0.1:11434", model="vision", opener=self._opener)
 
 
+    def test_failed_visual_asset_retries_at_most_three_runs_then_becomes_terminal(self):
+        output = self.root / "visual-analysis.v1.json"
+        def failing_opener(request, timeout=180):
+            raise TimeoutError("simulated Ollama request timeout")
+
+        for attempt in range(1, 4):
+            result = run_analysis(
+                self.inventory_path, endpoint="http://127.0.0.1:11434",
+                model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+                opener=failing_opener, output_path=output,
+                resume=attempt > 1, run_id=f"run-{attempt}",
+            )
+            row = result["results"][0]
+            self.assertEqual(attempt, row["attempt_count"])
+            self.assertEqual("ANALYSIS_ERROR_TERMINAL" if attempt == 3 else "ANALYSIS_ERROR", row["analysis_status"])
+            self.assertEqual(1, result["summary"]["assets_failed"])
+            self.assertEqual(1 if attempt == 3 else 0, result["summary"]["assets_terminal_failures"])
+            self.assertEqual(0 if attempt == 3 else 1, result["summary"]["assets_retryable_failures"])
+
+        def must_not_retry(*args, **kwargs):
+            raise AssertionError("terminal visual failures must not be retried automatically")
+
+        terminal = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=must_not_retry, output_path=output, resume=True, run_id="run-4",
+        )
+        self.assertEqual(0, terminal["summary"]["assets_processed_this_run"])
+        self.assertEqual(1, terminal["summary"]["assets_terminal_failures"])
+        self.assertEqual("ANALYSIS_ERROR_TERMINAL", terminal["results"][0]["analysis_status"])
+
     def test_resume_skips_successful_matching_asset_checkpoint(self):
         output = self.root / "visual-analysis.v1.json"
         first = run_analysis(
