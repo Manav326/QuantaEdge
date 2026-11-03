@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4132d128c40d55be58561e1f1c96ce6953758c3002521016fc55b5f9592fea67",
+  "raw_analysis_sha256": "c6c776d9e1c94146c8d844e920bd3e26851110372e94e0909c35e52de86c1ad3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41548040745",
-      "checkpointed_at": "2026-11-03T04:05:54Z",
+      "checkpointed_at": "2026-11-03T04:10:30Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -188310,6 +188310,166 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41548040745",
       "checkpointed_at": "2026-11-03T04:09:13Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8da22545d925030be7b80665",
+      "asset_sha256": "bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:10:38Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "37b9d1f060af03722f04e298",
+      "asset_sha256": "bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:10:45Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1ae3813ec11078cb41546a7e",
+      "asset_sha256": "bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:10:53Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1ca97a3cfcac34ac88fca286",
+      "asset_sha256": "bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:11:00Z",
       "effective_analysis": {
         "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
         "visual_type": "illustration",
