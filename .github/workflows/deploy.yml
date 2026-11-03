@@ -11,19 +11,186 @@ on:
 permissions:
   contents: read
   packages: read
+  actions: read
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: Deploy over SSH
+      - name: Checkout requested deployment revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+
+      - name: Require successful exact-commit production evidence
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          target_sha="$(git rev-parse HEAD)"
+          [[ "$target_sha" =~ ^[0-9a-f]{40}$ ]] || {
+            echo "::error::Requested deployment ref did not resolve to a full commit SHA."
+            exit 2
+          }
+          gh api --paginate \
+            "repos/$GH_REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$target_sha&status=completed&per_page=100" \
+            --jq '.workflow_runs[] | select(.conclusion == "success") | [.id,.run_number,.updated_at] | @tsv' \
+            > "$RUNNER_TEMP/ci-runs.tsv"
+          ci_run_id="$(sort -t 
         uses: appleboy/ssh-action@v1.2.2
         env:
           # Set these as secrets in the GitHub Actions "production" environment.
           # They are written only to the server's runtime .env, never baked into an image.
           APP_RAZORPAY_KEY_ID: ${{ secrets.APP_RAZORPAY_KEY_ID }}
           APP_RAZORPAY_KEY_SECRET: ${{ secrets.APP_RAZORPAY_KEY_SECRET }}
+        with:
+          host: ${{ secrets.QUANTAEDGE_DEPLOY_HOST }}
+          username: ${{ secrets.QUANTAEDGE_DEPLOY_USER }}
+          key: ${{ secrets.QUANTAEDGE_DEPLOY_SSH_KEY }}
+          envs: APP_RAZORPAY_KEY_ID,APP_RAZORPAY_KEY_SECRET,QUANTAEDGE_GHCR_TOKEN,QUANTAEDGE_GHCR_OWNER,DEPLOY_TARGET_SHA,IMAGE_SOURCE_SHA,CI_EVIDENCE_RUN_ID,RELEASE_EVIDENCE_BASE64
+          script_stop: true
+          script: |
+            set -eu
+            cd /opt/quantaedge
+            git fetch --prune origin
+            git checkout "${{ inputs.ref }}"
+            git reset --hard "origin/${{ inputs.ref }}"
+
+            # Configure payment secrets from the protected GitHub environment if supplied.
+            # If not supplied, retain an already-configured server .env; never print secret values.
+            python3 - <<'PY'
+            import os
+            import pathlib
+            import sys
+
+            env_path = pathlib.Path("/opt/quantaedge/.env")
+            source = env_path.read_text() if env_path.exists() else ""
+            values = {}
+            for line in source.splitlines():
+                stripped = line.strip()
+                if not stripped or stripped.startswith("#") or "=" not in stripped:
+                    continue
+                name, value = stripped.split("=", 1)
+                values[name.strip()] = value.strip().strip("'").strip('"')
+
+            incoming = {
+                "APP_RAZORPAY_KEY_ID": os.environ.get("APP_RAZORPAY_KEY_ID", "").strip(),
+                "APP_RAZORPAY_KEY_SECRET": os.environ.get("APP_RAZORPAY_KEY_SECRET", "").strip(),
+            }
+            has_incoming = any(incoming.values())
+            if has_incoming and not all(incoming.values()):
+                sys.exit("Razorpay configuration incomplete: provide both protected deployment secrets.")
+
+            if has_incoming:
+                def dotenv_quote(value):
+                    return "'" + value.replace("\\", "\\\\").replace("'", "\\'") + "'"
+
+                lines = source.splitlines()
+                for name, value in incoming.items():
+                    replacement = f"{name}={dotenv_quote(value)}"
+                    found = False
+                    for index, line in enumerate(lines):
+                        if line.strip().startswith(name + "="):
+                            lines[index] = replacement
+                            found = True
+                            break
+                    if not found:
+                        lines.append(replacement)
+                source = "\n".join(lines) + "\n"
+                env_path.write_text(source)
+                os.chmod(env_path, 0o600)
+                values.update(incoming)
+
+            if not values.get("APP_RAZORPAY_KEY_ID") or not values.get("APP_RAZORPAY_KEY_SECRET"):
+                sys.exit("Razorpay is not configured. Add APP_RAZORPAY_KEY_ID and APP_RAZORPAY_KEY_SECRET to the protected production environment secrets or server .env.")
+
+            os.chmod(env_path, 0o600)
+            print("Razorpay runtime configuration is present; secret values are not displayed.")
+            PY
+
+            export QUANTAEDGE_IMAGE_TAG="sha-$(git rev-parse HEAD)"
+            export QUANTAEDGE_GHCR_OWNER="${{ github.repository_owner }}"
+            echo "${{ secrets.QUANTAEDGE_GHCR_TOKEN }}" | docker login ghcr.io -u "${{ github.repository_owner }}" --password-stdin
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
+            docker image prune -f
+            docker compose -f docker-compose.prod.yml ps
+\\t' -k2,2n "$RUNNER_TEMP/ci-runs.tsv" | tail -n 1 | cut -f1)"
+          [[ "$ci_run_id" =~ ^[0-9]+$ ]] || {
+            echo "::error::No successful QuantaEdge CI run exists for exact commit $target_sha. Deploy is blocked."
+            exit 2
+          }
+          evidence_dir="$RUNNER_TEMP/production-release-evidence"
+          mkdir -p "$evidence_dir"
+          gh run download "$ci_run_id" --repo "$GH_REPOSITORY" --name production-release-evidence --dir "$evidence_dir"
+          evidence="$evidence_dir/production-release-evidence.json"
+          test -s "$evidence" || { echo "::error::Production release evidence artifact is missing."; exit 2; }
+          expected_image_source="$(git log -1 --format=%H "$target_sha" -- \
+            services/api apps/web apps/admin apps/people data/structured-lessons \
+            scripts/package_published_structured_lessons.py .dockerignore)"
+          [[ "$expected_image_source" =~ ^[0-9a-f]{40}$ ]] || {
+            echo "::error::Could not identify the latest image-input commit."
+            exit 2
+          }
+          python - "$evidence" "$target_sha" "$expected_image_source" "$ci_run_id" "$GH_REPOSITORY" "$GITHUB_OUTPUT" <<'PY'
+          import base64, json, re, sys
+          from pathlib import Path
+          evidence_path,target_sha,expected_image_sha,ci_run_id,repository,output=sys.argv[1:]
+          raw=Path(evidence_path).read_bytes()
+          evidence=json.loads(raw)
+          if evidence.get("schema_version")!="quantaedge.production-release-evidence.v1" or evidence.get("status")!="PASS":
+              raise SystemExit("Production release evidence schema/status is invalid.")
+          if evidence.get("tested_commit_sha")!=target_sha:
+              raise SystemExit("Release evidence does not match the exact deployment commit.")
+          image_sha=evidence.get("image_source_commit_sha")
+          if image_sha!=expected_image_sha or not re.fullmatch(r"[0-9a-f]{40}",str(image_sha or "")):
+              raise SystemExit("Release evidence image source is stale or does not match source history.")
+          if evidence.get("image_tag")!="sha-"+image_sha:
+              raise SystemExit("Release evidence image tag does not match its source SHA.")
+          workflow=evidence.get("workflow") or {}
+          if str(workflow.get("run_id"))!=ci_run_id or workflow.get("event")!="push":
+              raise SystemExit("Release evidence workflow identity does not match the successful CI run.")
+          owner=repository.split("/",1)[0].lower()
+          expected_images={
+              "api":f"ghcr.io/{owner}/quantaedge-api:sha-{image_sha}",
+              "web":f"ghcr.io/{owner}/quantaedge-web:sha-{image_sha}",
+              "admin":f"ghcr.io/{owner}/quantaedge-admin:sha-{image_sha}",
+              "people":f"ghcr.io/{owner}/quantaedge-people:sha-{image_sha}",
+          }
+          if evidence.get("images")!=expected_images:
+              raise SystemExit("Evidence does not list the four exact production service images.")
+          checks=evidence.get("checks") or {}
+          for key in ("api","content","android","api_image","web_image","admin_image","people_image"):
+              if checks.get(key) not in {"success","skipped"}:
+                  raise SystemExit(f"Required check {key} is not successful or legitimately skipped.")
+          if evidence.get("images_built_this_run") is True:
+              if any(checks.get(key)!="success" for key in ("api_image","web_image","admin_image","people_image")):
+                  raise SystemExit("The new image SHA does not have all four successful image builds.")
+          with Path(output).open("a",encoding="utf-8") as out:
+              out.write("target_sha="+target_sha+"\\n")
+              out.write("image_source_sha="+image_sha+"\\n")
+              out.write("ci_run_id="+ci_run_id+"\\n")
+              out.write("evidence_base64="+base64.b64encode(raw).decode("ascii")+"\\n")
+          print(json.dumps({"deployment_commit":target_sha,"image_source_commit":image_sha,
+                            "verified_ci_run_id":ci_run_id,"image_tag":"sha-"+image_sha}))
+          PY
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.2
+        env:
+          APP_RAZORPAY_KEY_ID: ${{ secrets.APP_RAZORPAY_KEY_ID }}
+          APP_RAZORPAY_KEY_SECRET: ${{ secrets.APP_RAZORPAY_KEY_SECRET }}
+          QUANTAEDGE_GHCR_TOKEN: ${{ secrets.QUANTAEDGE_GHCR_TOKEN }}
+          QUANTAEDGE_GHCR_OWNER: ${{ github.repository_owner }}
+          DEPLOY_TARGET_SHA: ${{ steps.release.outputs.target_sha }}
+          IMAGE_SOURCE_SHA: ${{ steps.release.outputs.image_source_sha }}
+          CI_EVIDENCE_RUN_ID: ${{ steps.release.outputs.ci_run_id }}
+          RELEASE_EVIDENCE_BASE64: ${{ steps.release.outputs.evidence_base64 }}
         with:
           host: ${{ secrets.QUANTAEDGE_DEPLOY_HOST }}
           username: ${{ secrets.QUANTAEDGE_DEPLOY_USER }}
