@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4244c992d34e9ea4fd303dc49778d51215d7a002e1825914f562014edc1efb77",
+  "raw_analysis_sha256": "bbde20915884b885fe9ca3ce9835327eb558dd0ab26c7d12677bc75faedb5f6d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T01:56:11Z",
+      "checkpointed_at": "2026-11-03T02:03:14Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T01:57:39Z",
+      "checkpointed_at": "2026-11-03T02:04:44Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164714,7 +164714,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T01:59:11Z",
+      "checkpointed_at": "2026-11-03T02:06:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -188074,6 +188074,88 @@
         "limitations": [
           "The image does not provide any specific information or context related to the text content.",
           "The image is a close-up of a rope, which is not directly related to the text content about adolescence and healthy decisions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6b5800884046bf7e6c8392a9",
+      "asset_sha256": "9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a rope, which is not directly related to the text about adolescence and healthy decisions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41525472908",
+      "checkpointed_at": "2026-11-03T02:06:33Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a rope, which is not directly related to the text about adolescence and healthy decisions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cd28278653fd3c352f9f4dda",
+      "asset_sha256": "0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41525472908",
+      "checkpointed_at": "2026-11-03T02:07:57Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
