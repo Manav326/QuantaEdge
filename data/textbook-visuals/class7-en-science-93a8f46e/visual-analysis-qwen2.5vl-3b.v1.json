@@ -14,14 +14,14 @@
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "5c16577a15e78e04e26b60ff",
-      "84efbe1aa3aec80f0d7d377e"
+      "05d14df036333618760304e3",
+      "4c4fabc801a42cdf8e542657"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3239,
-    "assets_remaining": 4249,
+    "assets_analyzed": 3240,
+    "assets_remaining": 4248,
     "assets_completion_percent": 43.3,
-    "assets_failed": 22,
+    "assets_failed": 23,
     "assets_skipped_from_checkpoint": 3239,
     "batch_limit": 5,
     "publication_allowed": false
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T01:34:41Z"
+      "checkpointed_at": "2026-11-03T01:48:42Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T01:36:08Z"
+      "checkpointed_at": "2026-11-03T01:50:09Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104925,7 +104925,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T01:37:41Z"
+      "checkpointed_at": "2026-11-03T01:51:42Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -120082,6 +120082,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41514569977",
       "checkpointed_at": "2026-11-02T23:43:31Z"
+    },
+    {
+      "asset_id": "05d14df036333618760304e3",
+      "asset_sha256": "3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41525472908",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "4c4fabc801a42cdf8e542657",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord, possibly used as a symbol or illustration in a textbook.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image may be used to illustrate a concept related to adolescence or change, possibly as a symbol or visual aid in an educational context.",
+        "limitations": [
+          "The image does not provide specific details about the concept it represents, making it difficult to determine its exact use in the educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41525472908",
+      "checkpointed_at": "2026-11-03T01:54:55Z"
     }
   ]
 }
