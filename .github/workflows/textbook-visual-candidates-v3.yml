@@ -174,7 +174,7 @@ jobs:
         shell: bash
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
-          BOOK_ID: ${{ matrix.book_id || '' }}
+          BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}
         run: |
           set -euo pipefail
           owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
