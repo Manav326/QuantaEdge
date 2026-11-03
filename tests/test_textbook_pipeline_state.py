@@ -153,7 +153,7 @@ class TextbookPipelineStateTests(unittest.TestCase):
             self.clone, [shared_path], "checkpoint(content): first shared path writer",
             DEFAULT_STATE_BRANCH,
         )
-        with self.assertRaisesRegex(RuntimeError, "overlapping write"):
+        with self.assertRaisesRegex(RuntimeError, "same checkpoint path"):
             commit_state(
                 second, [shared_path], "checkpoint(content): conflicting shared path writer",
                 DEFAULT_STATE_BRANCH,
