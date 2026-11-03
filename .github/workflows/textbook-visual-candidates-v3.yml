@@ -52,7 +52,7 @@ permissions:
   packages: write
 
 concurrency:
-  group: qe-textbook-visual-${{ inputs.class_no || 'shared' }}
+  group: qe-textbook-visual-candidates-v3-global
   cancel-in-progress: false
 
 jobs:
@@ -125,13 +125,14 @@ jobs:
       yielded: ${{ steps.layer45_run.outputs.yielded || 'false' }}
     strategy:
       fail-fast: false
-      max-parallel: 8
+      max-parallel: 4
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:
       CLASS_NO: ${{ matrix.class_no || inputs.class_no }}
       BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}
+      BOOK_SLUGS_CSV: ${{ matrix.source_slugs_csv || '' }}
       ANALYSIS_MODE: ${{ inputs.analysis_mode || 'analyze_all' }}
       QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
       VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}
@@ -175,6 +176,7 @@ jobs:
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
           BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}
+          BOOK_SLUGS_CSV: ${{ matrix.source_slugs_csv || '' }}
         run: |
           set -euo pipefail
           owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
@@ -259,7 +261,18 @@ jobs:
           PY
             echo "::endgroup::"
           done
-          python - "$source_root" "$CLASS_NO" <<'PY'
+          if [[ -n "$BOOK_IDS_CSV" ]]; then
+            [[ -n "$BOOK_SLUGS_CSV" ]] || { echo "A bilingual worker requires both book_ids_csv and source_slugs_csv."; exit 2; }
+            python scripts/select_textbook_visual_pair.py \
+              --class-no "$CLASS_NO" \
+              --book-ids-csv "$BOOK_IDS_CSV" \
+              --source-slugs-csv "$BOOK_SLUGS_CSV" \
+              --english-selection "$source_root/selected-english.json" \
+              --hindi-selection "$source_root/selected-hindi.json" \
+              --output "$source_root/selected-sources.json"
+          else
+            [[ "$ANALYSIS_MODE" != "resume_layers_4_5" ]] || { echo "Layer 4–5 resume worker must declare an exact bilingual book pair."; exit 2; }
+            python - "$source_root" "$CLASS_NO" <<'PY'
           import json, sys
           from pathlib import Path
           root = Path(sys.argv[1])
@@ -278,28 +291,10 @@ jobs:
               raise SystemExit(f"Expected {expected_total} unique Class {grade} source books across English and Hindi; found {len(all_sources)}.")
           full_selection = {"class": grade, "sources": all_sources, "publication_allowed": False, "review_required": True}
           (root / "selected-sources-all.json").write_text(json.dumps(full_selection, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          target_book_ids = {part.strip() for part in __import__("os").environ.get("BOOK_IDS_CSV", "").split(",") if part.strip()}
-          if target_book_ids:
-              if len(target_book_ids) != 2:
-                  raise SystemExit(f"A bilingual worker must declare exactly two book IDs; received {sorted(target_book_ids)}.")
-              selected_sources = [source for source in all_sources if source.get("book_id") in target_book_ids]
-              selected_ids = [source.get("book_id") for source in selected_sources]
-              if len(selected_sources) != 2 or set(selected_ids) != target_book_ids or len(set(selected_ids)) != 2:
-                  raise SystemExit(f"Worker source selection mismatch: requested={sorted(target_book_ids)} selected={selected_ids}.")
-              languages = {source.get("source_language") for source in selected_sources}
-              if languages != {"english", "hindi"}:
-                  raise SystemExit(f"Bilingual worker must select one English and one Hindi source; found {sorted(str(value) for value in languages)}.")
-              subjects = {str(source.get("subject", "")).strip().lower() for source in selected_sources}
-              if len(subjects) != 1 or not next(iter(subjects)):
-                  raise SystemExit(f"Bilingual worker sources must have the same subject; found {sorted(subjects)}.")
-          else:
-              if os.environ.get("ANALYSIS_MODE", "") == "resume_layers_4_5":
-                  raise SystemExit("Layer 4–5 resume workers must declare exactly one bilingual book pair.")
-              selected_sources = all_sources
-          worker_selection = dict(full_selection, sources=selected_sources)
-          (root / "selected-sources.json").write_text(json.dumps(worker_selection, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          print(json.dumps({"class": grade, "full_class_source_count": len(all_sources), "selected_worker_source_count": len(selected_sources), "target_book_ids": sorted(target_book_ids), "selected_book_ids": [source["book_id"] for source in selected_sources], "languages": ["english", "hindi"], "publication_allowed": False}, indent=2))
+          (root / "selected-sources.json").write_text(json.dumps(full_selection, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print(json.dumps({"class": grade, "full_class_source_count": len(all_sources), "selected_worker_source_count": len(all_sources), "selected_book_ids": [source["book_id"] for source in all_sources], "languages": ["english", "hindi"], "publication_allowed": False}, indent=2))
           PY
+          fi
           echo "VISUAL_SOURCE_ROOT=$source_root" >> "$GITHUB_ENV"
 
       - name: Install ORAS and authenticate before per-book checkpoint handling
