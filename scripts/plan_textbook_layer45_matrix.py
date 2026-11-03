@@ -39,17 +39,7 @@ BOOK_PAIRS: tuple[dict[str, str], ...] = (
     {"class_no": "8", "book_slug": "class8-maths-part2-bilingual", "book_label": "Maths Part II", "book_pair_id": "class8-maths-part2-bilingual", "book_ids_csv": "ncert-c8-english-hegp2,ncert-c8-hindi-hhgp2", "source_slugs_csv": "class8-en-maths-part2-24c8080e,class8-hi-maths-part2-aa91fabe"},
 )
 
-RESUME_SCOPES = {
-    "[resume-visual-layers-4-5-class-6]": ("6",),
-    "[resume-visual-layers-4-5-class-7]": ("7",),
-    "[resume-visual-layers-4-5-class-8]": ("8",),
-    "[resume-visual-layers-4-5-classes-7-8]": ("7", "8"),
-    "[resume-visual-layers-4-5-classes-6-8]": ("6", "7", "8"),
-}
-REBUILD_SCOPES = {
-    "[analyze-all-visual-layers-4-5-class-7]": ("7",),
-    "[analyze-all-visual-layers-4-5-class-8]": ("8",),
-}
+
 
 
 def pair_complete(repo_root: Path, pair: dict[str, str]) -> bool:
@@ -92,44 +82,37 @@ def plan_matrix(
     repo_root: Path | None = None,
     skip_completed: bool = False,
 ) -> list[dict[str, str]]:
-    """Return one runner per bilingual pair for resumes; catalog rebuilds remain class-wide."""
-    grades: tuple[str, ...] = ()
-    pair_sharded = False
+    """Return exact bilingual-pair workers for resumes; preparation remains class-wide.
 
-    if event_name == "push":
-        for marker, scoped_grades in RESUME_SCOPES.items():
-            if marker in head_message:
-                grades, pair_sharded = scoped_grades, True
-                break
-        if not grades:
-            for marker, scoped_grades in REBUILD_SCOPES.items():
-                if marker in head_message:
-                    grades = scoped_grades
-                    break
-        if not grades:
-            return []
-    elif event_name in {"workflow_dispatch", "workflow_call"}:
-        selected = str(class_no).strip().lower()
-        if selected == "all":
-            if analysis_mode != "resume_layers_4_5":
-                raise ValueError("class_no=all is supported only for synchronized Layer 4–5 resume.")
-            grades, pair_sharded = ("6", "7", "8"), True
-        elif selected in {"6", "7", "8"}:
-            grades = (selected,)
-            pair_sharded = analysis_mode == "resume_layers_4_5"
-        else:
-            return []
+    Processing is intentionally dispatch-only. Push messages and schedules never select
+    textbook work; ordinary application commits must not fire expensive inference.
+    """
+    if event_name not in {"workflow_dispatch", "workflow_call"}:
+        return []
+
+    selected = str(class_no).strip().lower()
+    if selected == "all":
+        if analysis_mode != "resume_layers_4_5":
+            raise ValueError("class_no=all is supported only for synchronized Layer 4–5 resume.")
+        grades = ("6", "7", "8")
+        pair_sharded = True
+    elif selected in {"6", "7", "8"}:
+        grades = (selected,)
+        pair_sharded = analysis_mode == "resume_layers_4_5"
     else:
         return []
 
+    if analysis_mode not in {"prepare_only", "analyze_all", "resume_preparation", "resume_layers_4_5"}:
+        raise ValueError(f"Unsupported textbook pipeline mode: {analysis_mode!r}")
+
     if pair_sharded:
         planned = [dict(pair) for pair in BOOK_PAIRS if pair["class_no"] in grades]
-        if skip_completed:
+        if skip_completed or analysis_mode == "resume_layers_4_5":
             root = Path(repo_root or Path.cwd())
             planned = [pair for pair in planned if not pair_complete(root, pair)]
         return planned
 
-    # Candidate catalog rebuilding writes a shared catalog index, so it stays one job per class.
+    # Preparation/catalog rebuild writes shared class indexes, so it stays one job per class.
     return [
         {
             "class_no": grade,
@@ -141,7 +124,6 @@ def plan_matrix(
         }
         for grade in grades
     ]
-
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
