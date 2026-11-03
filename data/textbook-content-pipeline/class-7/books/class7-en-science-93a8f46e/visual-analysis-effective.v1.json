@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bbde20915884b885fe9ca3ce9835327eb558dd0ab26c7d12677bc75faedb5f6d",
+  "raw_analysis_sha256": "8bd0ee390cd83d61a2c9d312fb45baae35109a3f7044926c401fd47d5fcb21df",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T02:03:14Z",
+      "checkpointed_at": "2026-11-03T02:09:13Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T02:04:44Z",
+      "checkpointed_at": "2026-11-03T02:10:42Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164714,7 +164714,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T02:06:19Z",
+      "checkpointed_at": "2026-11-03T02:12:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -188156,6 +188156,88 @@
         "context_relation": "Unclear",
         "limitations": [
           "Unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7129916c8fb76c4480ec6e1b",
+      "asset_sha256": "bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about adolescence or change in a nutshell.",
+        "limitations": [
+          "The image does not provide specific details about the rope or cable, such as its material or purpose."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41525472908",
+      "checkpointed_at": "2026-11-03T02:13:46Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about adolescence or change in a nutshell.",
+        "limitations": [
+          "The image does not provide specific details about the rope or cable, such as its material or purpose."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ecaaef2dc1cd701eb67a4f27",
+      "asset_sha256": "bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not convey any specific concept or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41525472908",
+      "checkpointed_at": "2026-11-03T02:13:58Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not convey any specific concept or information."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

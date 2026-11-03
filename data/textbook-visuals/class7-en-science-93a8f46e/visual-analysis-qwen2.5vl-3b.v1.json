@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3247,
+    "assets_selected": 3249,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "6b5800884046bf7e6c8392a9",
-      "cd28278653fd3c352f9f4dda"
+      "7129916c8fb76c4480ec6e1b",
+      "ecaaef2dc1cd701eb67a4f27"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3244,
-    "assets_remaining": 4244,
+    "assets_analyzed": 3246,
+    "assets_remaining": 4242,
     "assets_completion_percent": 43.3,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 3242,
+    "assets_skipped_from_checkpoint": 3244,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T02:03:14Z"
+      "checkpointed_at": "2026-11-03T02:09:13Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T02:04:44Z"
+      "checkpointed_at": "2026-11-03T02:10:42Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104925,7 +104925,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
-      "checkpointed_at": "2026-11-03T02:06:19Z"
+      "checkpointed_at": "2026-11-03T02:12:16Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -120239,6 +120239,63 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41525472908",
       "checkpointed_at": "2026-11-03T02:07:57Z"
+    },
+    {
+      "asset_id": "7129916c8fb76c4480ec6e1b",
+      "asset_sha256": "bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope or cable, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about adolescence or change in a nutshell.",
+        "limitations": [
+          "The image does not provide specific details about the rope or cable, such as its material or purpose."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41525472908",
+      "checkpointed_at": "2026-11-03T02:13:46Z"
+    },
+    {
+      "asset_id": "ecaaef2dc1cd701eb67a4f27",
+      "asset_sha256": "bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/bb8580c816fb3795318bdf746c09156b52ba740ab4d5a555055f8555c5a1305b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not convey any specific concept or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41525472908",
+      "checkpointed_at": "2026-11-03T02:13:58Z"
     }
   ]
 }
