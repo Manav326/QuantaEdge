@@ -24,6 +24,29 @@ from typing import Any
 
 SUPPORTED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
+ANALYSIS_RESPONSE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "visual_summary": {"type": "string", "minLength": 1},
+        "visual_type": {
+            "type": "string",
+            "enum": [
+                "diagram", "chart", "graph", "table", "map", "cartoon", "photo",
+                "illustration", "equation", "page_with_multiple_visuals", "other", "uncertain",
+            ],
+        },
+        "visible_text": {"type": "array", "items": {"type": "string"}, "maxItems": 30},
+        "concepts": {"type": "array", "items": {"type": "string"}, "maxItems": 20},
+        "context_relation": {"type": "string"},
+        "limitations": {"type": "array", "items": {"type": "string"}, "maxItems": 20},
+    },
+    "required": [
+        "visual_summary", "visual_type", "visible_text", "concepts",
+        "context_relation", "limitations",
+    ],
+    "additionalProperties": False,
+}
+
 
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
@@ -251,7 +274,9 @@ def analyze_one(
     payload = {
         "model": model,
         "stream": False,
-        "format": "json",
+        # Ollama supports JSON Schema structured output for vision models; this
+        # constrains generation instead of merely asking the model to emit JSON.
+        "format": ANALYSIS_RESPONSE_SCHEMA,
         "messages": [{
             "role": "user",
             "content": prompt,
