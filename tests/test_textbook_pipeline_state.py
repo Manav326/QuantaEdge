@@ -264,6 +264,43 @@ class TextbookPipelineStateTests(unittest.TestCase):
         self.assertEqual(state_before, git(self.clone, "rev-parse", f"origin/{DEFAULT_STATE_BRANCH}"))
         self.assertEqual(main_before, git(self.clone, "rev-parse", "origin/main"))
 
+
+    def test_restore_unshallows_github_style_checkout_before_state_reconciliation(self):
+        state_path = "data/textbook-visuals/class6-en-science/index.json"
+        legacy_path = "data/textbook-extractions/class-7/english/late.manifest.json"
+
+        git(self.seed, "checkout", DEFAULT_STATE_BRANCH)
+        write(self.seed / state_path, '{"source":"isolated-state"}\n')
+        git(self.seed, "add", "-A")
+        git(self.seed, "commit", "-m", "state branch checkpoint")
+        git(self.seed, "push", "origin", DEFAULT_STATE_BRANCH)
+
+        git(self.seed, "checkout", "main")
+        write(self.seed / legacy_path, '{"source":"late-legacy-main"}\n')
+        git(self.seed, "add", "-A")
+        git(self.seed, "commit", "-m", "late main checkpoint")
+        git(self.seed, "push", "origin", "main")
+
+        shallow = Path(self.temp.name) / "shallow"
+        subprocess.run(
+            ["git", "clone", "--depth", "1", "--branch", "main", f"file://{self.remote}", str(shallow)],
+            check=True,
+            capture_output=True,
+        )
+        self.assertEqual("true", git(shallow, "rev-parse", "--is-shallow-repository"))
+
+        result = restore_state(shallow, DEFAULT_STATE_BRANCH)
+        self.assertEqual(DEFAULT_STATE_BRANCH, result["branch"])
+        self.assertEqual("false", git(shallow, "rev-parse", "--is-shallow-repository"))
+        self.assertEqual(
+            '{"source":"late-legacy-main"}\n',
+            (shallow / legacy_path).read_text(encoding="utf-8"),
+        )
+        self.assertEqual(
+            '{"source":"isolated-state"}\n',
+            (shallow / state_path).read_text(encoding="utf-8"),
+        )
+
     def test_rejects_application_code_and_parent_traversal(self):
         restore_state(self.clone, DEFAULT_STATE_BRANCH)
         with self.assertRaisesRegex(ValueError, "approved textbook data"):
