@@ -339,6 +339,7 @@ def analyze_one(
 
 
 PROMPT_VERSION = "visual-analysis-prompt-v2"
+MAX_ASSET_ANALYSIS_ATTEMPTS = 3
 
 
 def run_analysis(
@@ -446,8 +447,18 @@ def run_analysis(
         ):
             skipped_from_checkpoint += 1
             continue
-        # Within a single GitHub run, don't retry a failed asset in every batch.
-        # A later workflow run has a different run_id and will retry it.
+        # A transient inference error is retried only in a later workflow run.
+        # After three recorded attempts, keep the asset terminal and require review;
+        # do not let the coordinator retry a permanently failing image forever.
+        if existing.get("analysis_status") == "ANALYSIS_ERROR_TERMINAL":
+            continue
+        if int(existing.get("attempt_count", 0) or 0) >= MAX_ASSET_ANALYSIS_ATTEMPTS:
+            existing["analysis_status"] = "ANALYSIS_ERROR_TERMINAL"
+            existing["human_review_required"] = True
+            existing["publication_allowed"] = False
+            results_by_terminal = existing
+            previous[str(asset_id)] = existing
+            continue
         if run_id and existing.get("analysis_status") == "ANALYSIS_ERROR" and existing.get("run_id") == run_id:
             continue
         if max_assets is None or len(selected) < max_assets:
@@ -461,6 +472,8 @@ def run_analysis(
         ordered_results = list(results_by_id.values())
         analyzed_count = 0
         failed_count = 0
+        retryable_failure_count = 0
+        terminal_failure_count = 0
         for asset_id, asset_hash in current_asset_hashes.items():
             item = results_by_id.get(asset_id)
             if not isinstance(item, dict):
@@ -474,8 +487,12 @@ def run_analysis(
                 or item.get("prompt_version") != PROMPT_VERSION
             ):
                 continue
-            if item.get("analysis_status") == "ANALYSIS_ERROR":
+            if item.get("analysis_status") in {"ANALYSIS_ERROR", "ANALYSIS_ERROR_TERMINAL"}:
                 failed_count += 1
+                if item.get("analysis_status") == "ANALYSIS_ERROR_TERMINAL":
+                    terminal_failure_count += 1
+                else:
+                    retryable_failure_count += 1
                 continue
             if (
                 item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
@@ -492,6 +509,8 @@ def run_analysis(
             "assets_remaining": max(0, len(seen) - analyzed_count),
             "assets_completion_percent": round(100 * analyzed_count / len(seen), 1) if seen else 100.0,
             "assets_failed": failed_count,
+            "assets_retryable_failures": retryable_failure_count,
+            "assets_terminal_failures": terminal_failure_count,
             "assets_skipped_from_checkpoint": skipped_from_checkpoint,
             "batch_limit": max_assets,
             "publication_allowed": False,
@@ -604,6 +623,8 @@ def run_analysis(
             )
         except Exception as exc:
             error_text = " ".join(str(exc).split())[:180]
+            attempt_count = int(existing.get("attempt_count", 0) or 0) + 1
+            terminal = attempt_count >= MAX_ASSET_ANALYSIS_ATTEMPTS
             results_by_id[asset_id] = {
                 "asset_id": asset.get("asset_id"),
                 "asset_sha256": asset.get("asset_sha256"),
@@ -616,14 +637,15 @@ def run_analysis(
                 "model": model,
                 "prompt_version": PROMPT_VERSION,
                 "run_id": run_id,
-                "analysis_status": "ANALYSIS_ERROR",
+                "attempt_count": attempt_count,
+                "analysis_status": "ANALYSIS_ERROR_TERMINAL" if terminal else "ANALYSIS_ERROR",
                 "error": str(exc)[:500],
                 "human_review_required": True,
                 "publication_allowed": False,
             }
             print(
-                f"[visual-analysis] RESULT asset_id={asset_id} status=ANALYSIS_ERROR "
-                f"duration_seconds={time.monotonic() - started_at:.1f} error={error_text}",
+                f"[visual-analysis] RESULT asset_id={asset_id} status={'ANALYSIS_ERROR_TERMINAL' if terminal else 'ANALYSIS_ERROR'} "
+                f"attempt={attempt_count}/{MAX_ASSET_ANALYSIS_ATTEMPTS} duration_seconds={time.monotonic() - started_at:.1f} error={error_text}",
                 flush=True,
             )
         processed_this_run += 1
