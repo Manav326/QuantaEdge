@@ -615,6 +615,27 @@ jobs:
             done
           fi
 
+      - name: Authenticate to GHCR before releasing evidence
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify all four production image manifests exist for the evidence SHA
+        env:
+          IMAGE_TAG: ${{ steps.image-source.outputs.image_tag }}
+          GHCR_OWNER: ${{ github.repository_owner }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          for service in api web admin people; do
+            image="ghcr.io/$owner/quantaedge-$service:$IMAGE_TAG"
+            echo "Verifying $image"
+            docker manifest inspect "$image" >/dev/null
+          done
+
       - name: Write immutable production release evidence
         env:
           TESTED_SHA: ${{ github.sha }}
