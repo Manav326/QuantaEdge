@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "05f8e314761ee55ab111337d91e9507c6320c72a21ab24efa01366f787cdb19c",
+  "raw_analysis_sha256": "495d81ec359fdc62a6c8b2a9c032c42a54e8c7585e6624415031905e4ffecb94",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41688676054",
-      "checkpointed_at": "2026-11-03T20:09:26Z",
+      "checkpointed_at": "2026-11-03T20:18:21Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34985,7 +34985,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41688676054",
-      "checkpointed_at": "2026-11-03T20:10:37Z",
+      "checkpointed_at": "2026-11-03T20:19:32Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57341,7 +57341,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41688676054",
-      "checkpointed_at": "2026-11-03T20:11:38Z",
+      "checkpointed_at": "2026-11-03T20:20:32Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66992,7 +66992,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41688676054",
-      "checkpointed_at": "2026-11-03T20:12:29Z",
+      "checkpointed_at": "2026-11-03T20:21:22Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -73142,7 +73142,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41642480964",
+      "run_id": "41688676054",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "limitations must be a list of strings.",
       "human_review_required": true,
