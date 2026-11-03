@@ -165,6 +165,67 @@ class TextbookPipelineStateTests(unittest.TestCase):
         self.assertNotIn("HINDI", saved)
         self.assertEqual(main_before, git(self.clone, "rev-parse", "origin/main"))
 
+
+    def test_restore_imports_late_legacy_main_checkpoint_after_state_branch_diverges(self):
+        restore_state(self.clone, DEFAULT_STATE_BRANCH)
+        state_path = "data/textbook-visuals/class6-en-science/index.json"
+        legacy_path = "data/textbook-extractions/class-7/english/late.manifest.json"
+
+        write(self.clone / state_path, '{"source":"isolated-state"}\n')
+        commit_state(
+            self.clone, [state_path], "checkpoint(content): state branch diverged",
+            DEFAULT_STATE_BRANCH,
+        )
+        main_before = git(self.clone, "rev-parse", "origin/main")
+
+        write(self.seed / legacy_path, '{"source":"late-legacy-main"}\n')
+        git(self.seed, "add", "-A")
+        git(self.seed, "commit", "-m", "late legacy textbook checkpoint")
+        git(self.seed, "push", "origin", "main")
+
+        result = restore_state(self.clone, DEFAULT_STATE_BRANCH)
+        self.assertEqual(DEFAULT_STATE_BRANCH, result["branch"])
+        self.assertEqual(
+            '{"source":"late-legacy-main"}\n',
+            (self.clone / legacy_path).read_text(encoding="utf-8"),
+        )
+        self.assertEqual(
+            '{"source":"isolated-state"}\n',
+            (self.clone / state_path).read_text(encoding="utf-8"),
+        )
+        git(self.clone, "fetch", "origin", DEFAULT_STATE_BRANCH, "main")
+        imported = git(self.clone, "show", f"origin/{DEFAULT_STATE_BRANCH}:{legacy_path}")
+        self.assertIn("late-legacy-main", imported)
+        self.assertNotEqual(main_before, git(self.clone, "rev-parse", "origin/main"))
+
+    def test_restore_rejects_same_path_legacy_main_conflict_without_overwriting_either_branch(self):
+        restore_state(self.clone, DEFAULT_STATE_BRANCH)
+        shared_path = "data/textbook-visuals/class6-en-science/index.json"
+
+        write(self.clone / shared_path, '{"source":"isolated-state"}\n')
+        commit_state(
+            self.clone, [shared_path], "checkpoint(content): state version",
+            DEFAULT_STATE_BRANCH,
+        )
+        state_before = git(self.clone, "rev-parse", f"origin/{DEFAULT_STATE_BRANCH}")
+
+        write(self.seed / shared_path, '{"source":"late-legacy-main"}\n')
+        git(self.seed, "add", "-A")
+        git(self.seed, "commit", "-m", "conflicting legacy textbook checkpoint")
+        git(self.seed, "push", "origin", "main")
+        main_before = git(self.clone, "ls-remote", "origin", "refs/heads/main").split()[0]
+
+        with self.assertRaisesRegex(RuntimeError, "both changed the same data path"):
+            restore_state(self.clone, DEFAULT_STATE_BRANCH)
+
+        git(self.clone, "fetch", "origin", DEFAULT_STATE_BRANCH, "main")
+        state_saved = git(self.clone, "show", f"origin/{DEFAULT_STATE_BRANCH}:{shared_path}")
+        main_saved = git(self.clone, "show", f"origin/main:{shared_path}")
+        self.assertIn("isolated-state", state_saved)
+        self.assertIn("late-legacy-main", main_saved)
+        self.assertEqual(state_before, git(self.clone, "rev-parse", f"origin/{DEFAULT_STATE_BRANCH}"))
+        self.assertEqual(main_before, git(self.clone, "rev-parse", "origin/main"))
+
     def test_rejects_application_code_and_parent_traversal(self):
         restore_state(self.clone, DEFAULT_STATE_BRANCH)
         with self.assertRaisesRegex(ValueError, "approved textbook data"):
