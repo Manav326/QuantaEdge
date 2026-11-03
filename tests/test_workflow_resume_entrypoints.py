@@ -66,7 +66,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertNotIn("\n  schedule:\n", coordinator)
         self.assertNotIn("\n  workflow_run:\n", coordinator)
         self.assertIn("workflow_dispatch:", coordinator)
-        self.assertIn("class_no: all", coordinator)
+        self.assertIn('options: ["all", "6", "7", "8"]', coordinator)
         self.assertIn("all_pending_pairs", coordinator)
         self.assertIn("selected_book_pair_ids", coordinator)
         self.assertIn("/actions/workflows/textbook-visual-candidates-v3.yml/dispatches", coordinator)
