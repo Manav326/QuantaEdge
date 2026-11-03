@@ -121,24 +121,18 @@ def commit_and_push_dataset(path: Path) -> None:
  resolved=path.resolve()
  try: relative=resolved.relative_to(repo_root.resolve())
  except ValueError as exc: raise ValueError("GitHub output must be inside the QuantaEdge repository.") from exc
- if not relative.parts or relative.parts[0] != "data":
-  raise ValueError("Generated AI training datasets may only be committed under data/.")
- def git(*args: str) -> str:
-  return subprocess.run(["git",*args],cwd=repo_root,check=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE).stdout.strip()
- branch=git("branch","--show-current")
- if branch!="main": raise ValueError(f"Refusing to push dataset from branch {branch!r}; switch to main first.")
- git("fetch","origin","main")
- if git("rev-parse","HEAD")!=git("rev-parse","origin/main"):
-  raise ValueError("Local main is not exactly aligned with origin/main. Pull/reconcile first; dataset was not pushed.")
- git("add","--",str(relative))
- changed=subprocess.run(["git","diff","--cached","--quiet","--",str(relative)],cwd=repo_root)
- if changed.returncode==0:
-  print("No dataset changes to commit.")
-  return
- if changed.returncode not in (0,1): raise RuntimeError("Unable to inspect staged dataset changes.")
- subprocess.run(["git","commit","--only","-m","Save generated QuantaEdge AI training data","--",str(relative)],cwd=repo_root,check=True)
- git("push","origin","main")
- print(f"Committed and pushed dataset to main: {relative.as_posix()}")
+ if not relative.parts or relative.parts[0] != "data" or len(relative.parts) < 2 or relative.parts[1] != "ai-training":
+  raise ValueError("Generated AI training datasets may only be committed under data/ai-training/.")
+ helper=repo_root/"scripts"/"persist_textbook_pipeline_state.py"
+ if not helper.is_file():
+  raise FileNotFoundError(f"Isolated textbook state helper is missing: {helper}")
+ subprocess.run(
+  [sys.executable,str(helper),"commit","--repo-root",str(repo_root),
+   "--message","data(ai): save generated QuantaEdge AI training data",
+   "--paths",relative.as_posix()],
+  cwd=repo_root,check=True,
+ )
+ print(f"Committed dataset to automation/textbook-pipeline-state: {relative.as_posix()}")
 
 def cmd_generate(a: argparse.Namespace) -> int:
  if not a.generate:
@@ -328,7 +322,7 @@ def cmd_validate(a:argparse.Namespace)->int:
  return 0
 def main()->int:
  p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest="command",required=True)
- g=sub.add_parser("generate"); g.add_argument("--input-dir",type=Path,default=Path("private-review")); g.add_argument("--output",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); g.add_argument("--target",type=int,default=25000); g.add_argument("--batch-size",type=int,default=5); g.add_argument("--max-api-calls",type=int,default=5000); g.add_argument("--provider",choices=("ollama","openai-compatible"),default=os.getenv("QUANTAEDGE_TRAINING_PROVIDER","ollama")); g.add_argument("--endpoint",default=""); g.add_argument("--model",default=""); g.add_argument("--generate",action="store_true"); g.add_argument("--confirm-external-processing",action="store_true"); g.add_argument("--commit-and-push",action="store_true",help="commit only the generated JSONL file and push it to origin/main after generation; requires a clean, synced local main"); g.set_defaults(func=cmd_generate)
+ g=sub.add_parser("generate"); g.add_argument("--input-dir",type=Path,default=Path("private-review")); g.add_argument("--output",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); g.add_argument("--target",type=int,default=25000); g.add_argument("--batch-size",type=int,default=5); g.add_argument("--max-api-calls",type=int,default=5000); g.add_argument("--provider",choices=("ollama","openai-compatible"),default=os.getenv("QUANTAEDGE_TRAINING_PROVIDER","ollama")); g.add_argument("--endpoint",default=""); g.add_argument("--model",default=""); g.add_argument("--generate",action="store_true"); g.add_argument("--confirm-external-processing",action="store_true"); g.add_argument("--commit-and-push",action="store_true",help="persist only the generated JSONL file to automation/textbook-pipeline-state after generation"); g.set_defaults(func=cmd_generate)
  b=sub.add_parser("build"); b.add_argument("--input",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); b.add_argument("--output-dir",type=Path,default=Path("data/ai-training/datasets")); b.add_argument("--include-drafts",action="store_true"); b.set_defaults(func=cmd_build)
  v=sub.add_parser("validate"); v.add_argument("--dataset-dir",type=Path,default=Path("data/ai-training/datasets")); v.add_argument("--require-approved",action="store_true"); v.set_defaults(func=cmd_validate)
  a=p.parse_args()
