@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3285,
-    "successful_visual_analyses": 3261,
-    "missing_visual_analyses": 4203,
+    "raw_analysis_result_rows": 3289,
+    "successful_visual_analyses": 3265,
+    "missing_visual_analyses": 4199,
     "failed_visual_analyses": 24,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4227,
+    "unresolved_count": 4223,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -129244,9 +129244,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -129262,9 +129271,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -129280,9 +129298,42 @@
       "asset_path": "page-0105.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing adolescence, its characteristics, and the importance of healthy habits during this stage.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "By staying informed, seeking support and guidance when\nneeded, and making healthy decisions, you can build a strong\nfoundation for your life ahead.",
+          "In a Nutshell",
+          "Adolescence is the period of change from childhood to\nadulthood. It generally begins around the age of 10 years\nand usually lasts until 19 years.",
+          "Adolescence is marked by significant and characteristic\nphysical, biological, and emotional changes.",
+          "Features that help to distinguish the male from the female\nbut are not directly involved in reproduction are called\nsecondary sexual characteristics.",
+          "Puberty is the stage in which the body of a child undergoes\nobservable and internal changes to develop into an adult\ncapable of reproduction.",
+          "Adolescence in girls is also marked by start of the menstrual\ncycle, during which there is a discharge of blood generally\nafter every 28–30 days, a process called menstruation.\nMenstruation begins at puberty and generally ends by the\nage of 45–55 years.",
+          "Adolescents face several emotional and behavioural changes.",
+          "Eating a balanced and healthy diet, maintaining good\npersonal hygiene, and participating in physical activities\nhelp adolescents to stay healthy.",
+          "Addictive substances, such as tobacco, alcohol, and drugs,\nhave adverse effects on the body and mind. It is wise to say\n'NO' to these substances and stay away from them.",
+          "Changes that take place in the body during adolescence are\nprimarily controlled by certain chemicals produced in the\nbody. These chemicals are called hormones.",
+          "Proper guidance and awareness help adolescents manage\nphysical, emotional, and behavioural changes effectively."
+        ],
+        "concepts": [
+          "adolescence",
+          "puberty",
+          "menstruation",
+          "addictive substances",
+          "chemicals",
+          "hormones",
+          "physical changes",
+          "emotional changes",
+          "behavioural changes"
+        ],
+        "context_relation": "The page provides information about adolescence, its characteristics, and the importance of healthy habits during this stage.",
+        "limitations": [
+          "The page does not provide specific examples or case studies.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -129298,9 +129349,18 @@
       "asset_path": "assets/01242f8d2bebb8ae886cdefbf7c7aa0bd74808e72f824c91686be04639a5d195.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl standing on a rope ladder with ice blocks in front of her.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a scenario where a girl is climbing a rope ladder with ice blocks in front of her.",
+        "limitations": [
+          "The image does not provide any specific question or context related to the food groups or the unscrambled word in sentences."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

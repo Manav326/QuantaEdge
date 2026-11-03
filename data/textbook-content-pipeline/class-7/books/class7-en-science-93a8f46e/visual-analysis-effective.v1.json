@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fa2790d809d2830cf4a783ee29c23d2e7d4282465f859c1dee9f589c5f6ef055",
+  "raw_analysis_sha256": "634820dbe8f2b7167960c767279b103660f3f92f73ad7930414410305bd0d9c6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41548040745",
-      "checkpointed_at": "2026-11-03T04:12:17Z",
+      "checkpointed_at": "2026-11-03T04:16:55Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -188639,6 +188639,214 @@
         "concepts": [],
         "context_relation": "The image is a simple illustration of a paper airplane.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "139c6d83fbc490be9ebda64b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:17:07Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2659b5602f1806c095d4f831",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:17:19Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ac81a9376f64b4c34ddf2b2f",
+      "asset_sha256": "a037bae00caba0e91ddfb16828b7eda70d476b9fe50de4f8bfe2deb1a9b2b3b1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 105,
+      "asset_path": "page-0105.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "eabad2d374c2bd111a1be049b7c4a4d67ad5a7b60f17252d38b6a1ae15f3de9f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing adolescence, its characteristics, and the importance of healthy habits during this stage.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "By staying informed, seeking support and guidance when\nneeded, and making healthy decisions, you can build a strong\nfoundation for your life ahead.",
+          "In a Nutshell",
+          "Adolescence is the period of change from childhood to\nadulthood. It generally begins around the age of 10 years\nand usually lasts until 19 years.",
+          "Adolescence is marked by significant and characteristic\nphysical, biological, and emotional changes.",
+          "Features that help to distinguish the male from the female\nbut are not directly involved in reproduction are called\nsecondary sexual characteristics.",
+          "Puberty is the stage in which the body of a child undergoes\nobservable and internal changes to develop into an adult\ncapable of reproduction.",
+          "Adolescence in girls is also marked by start of the menstrual\ncycle, during which there is a discharge of blood generally\nafter every 28–30 days, a process called menstruation.\nMenstruation begins at puberty and generally ends by the\nage of 45–55 years.",
+          "Adolescents face several emotional and behavioural changes.",
+          "Eating a balanced and healthy diet, maintaining good\npersonal hygiene, and participating in physical activities\nhelp adolescents to stay healthy.",
+          "Addictive substances, such as tobacco, alcohol, and drugs,\nhave adverse effects on the body and mind. It is wise to say\n'NO' to these substances and stay away from them.",
+          "Changes that take place in the body during adolescence are\nprimarily controlled by certain chemicals produced in the\nbody. These chemicals are called hormones.",
+          "Proper guidance and awareness help adolescents manage\nphysical, emotional, and behavioural changes effectively."
+        ],
+        "concepts": [
+          "adolescence",
+          "puberty",
+          "menstruation",
+          "addictive substances",
+          "chemicals",
+          "hormones",
+          "physical changes",
+          "emotional changes",
+          "behavioural changes"
+        ],
+        "context_relation": "The page provides information about adolescence, its characteristics, and the importance of healthy habits during this stage.",
+        "limitations": [
+          "The page does not provide specific examples or case studies.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:21:41Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing adolescence, its characteristics, and the importance of healthy habits during this stage.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "By staying informed, seeking support and guidance when\nneeded, and making healthy decisions, you can build a strong\nfoundation for your life ahead.",
+          "In a Nutshell",
+          "Adolescence is the period of change from childhood to\nadulthood. It generally begins around the age of 10 years\nand usually lasts until 19 years.",
+          "Adolescence is marked by significant and characteristic\nphysical, biological, and emotional changes.",
+          "Features that help to distinguish the male from the female\nbut are not directly involved in reproduction are called\nsecondary sexual characteristics.",
+          "Puberty is the stage in which the body of a child undergoes\nobservable and internal changes to develop into an adult\ncapable of reproduction.",
+          "Adolescence in girls is also marked by start of the menstrual\ncycle, during which there is a discharge of blood generally\nafter every 28–30 days, a process called menstruation.\nMenstruation begins at puberty and generally ends by the\nage of 45–55 years.",
+          "Adolescents face several emotional and behavioural changes.",
+          "Eating a balanced and healthy diet, maintaining good\npersonal hygiene, and participating in physical activities\nhelp adolescents to stay healthy.",
+          "Addictive substances, such as tobacco, alcohol, and drugs,\nhave adverse effects on the body and mind. It is wise to say\n'NO' to these substances and stay away from them.",
+          "Changes that take place in the body during adolescence are\nprimarily controlled by certain chemicals produced in the\nbody. These chemicals are called hormones.",
+          "Proper guidance and awareness help adolescents manage\nphysical, emotional, and behavioural changes effectively."
+        ],
+        "concepts": [
+          "adolescence",
+          "puberty",
+          "menstruation",
+          "addictive substances",
+          "chemicals",
+          "hormones",
+          "physical changes",
+          "emotional changes",
+          "behavioural changes"
+        ],
+        "context_relation": "The page provides information about adolescence, its characteristics, and the importance of healthy habits during this stage.",
+        "limitations": [
+          "The page does not provide specific examples or case studies.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "752a0ee79584199166d6423a",
+      "asset_sha256": "01242f8d2bebb8ae886cdefbf7c7aa0bd74808e72f824c91686be04639a5d195",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/01242f8d2bebb8ae886cdefbf7c7aa0bd74808e72f824c91686be04639a5d195.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5d114509e3a4235160a41433b160c3183a36bb973cee96aaa0b2e4088c2e1405",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl standing on a rope ladder with ice blocks in front of her.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a scenario where a girl is climbing a rope ladder with ice blocks in front of her.",
+        "limitations": [
+          "The image does not provide any specific question or context related to the food groups or the unscrambled word in sentences."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:23:12Z",
+      "effective_analysis": {
+        "visual_summary": "A girl standing on a rope ladder with ice blocks in front of her.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a scenario where a girl is climbing a rope ladder with ice blocks in front of her.",
+        "limitations": [
+          "The image does not provide any specific question or context related to the food groups or the unscrambled word in sentences."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
