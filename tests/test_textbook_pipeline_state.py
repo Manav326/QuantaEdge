@@ -203,11 +203,11 @@ class TextbookPipelineStateTests(unittest.TestCase):
         shared_path = "data/textbook-visuals/class6-en-science/index.json"
 
         write(self.clone / shared_path, '{"source":"isolated-state"}\n')
-        commit_state(
+        state_result = commit_state(
             self.clone, [shared_path], "checkpoint(content): state version",
             DEFAULT_STATE_BRANCH,
         )
-        state_before = git(self.clone, "rev-parse", f"origin/{DEFAULT_STATE_BRANCH}")
+        state_before = state_result["commit_sha"]
 
         write(self.seed / shared_path, '{"source":"late-legacy-main"}\n')
         git(self.seed, "add", "-A")
