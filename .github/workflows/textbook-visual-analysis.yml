@@ -85,7 +85,7 @@ jobs:
           set -euo pipefail
           [[ "$BOOK_SLUG" =~ ^[a-z0-9]+([.-][a-z0-9]+)*$ ]] || { echo "Invalid book_slug"; exit 2; }
           [[ "$BOOK_ID" =~ ^ncert-c${CLASS_NO}-${LANGUAGE}-[a-z0-9]+$ ]] || { echo "book_id must match the selected class and language"; exit 2; }
-          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2" "Pillow>=10,<13"
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
           python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
 
