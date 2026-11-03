@@ -346,7 +346,9 @@ def run_layers(args):
     if not isinstance(sources,list) or not sources:raise ValueError("The selected source set must contain at least one validated whole-book source.")
     if args.batch_size<1:raise ValueError("batch-size must be positive; it is not a total cap.")
     if args.max_batches_per_run < 1:raise ValueError("max-batches-per-run must be positive.")
-    if not 10 <= args.request_timeout <= 900:raise ValueError("request-timeout must be between 10 and 900 seconds so a stalled model request cannot hang a runner indefinitely.")
+    if not 10 <= args.request_timeout <= 900:raise ValueError("request-timeout must be between 10 and 900 seconds.")
+    if not 4096 <= args.num_ctx <= 32768:raise ValueError("num-ctx must be between 4096 and 32768.")
+    if not 256 <= args.num_predict <= 4096:raise ValueError("num-predict must be between 256 and 4096.")
     for source_position,s in enumerate(sources):
         if total_batches >= args.max_batches_per_run:
             run_yielded=True
@@ -434,7 +436,7 @@ def run_layers(args):
                 break
             batch_number+=1
             print(f"[pipeline] BATCH_START class={selection['class']} book={slug} batch={batch_number} batch_limit={args.batch_size} run_id={args.run_id}",flush=True)
-            cmd=[sys.executable,"scripts/analyze_visual_inventory_with_ollama.py","--inventory",str(inv),"--model",args.model,"--max-assets",str(args.batch_size),"--run-id",args.run_id,"--timeout",str(args.request_timeout),"--num-predict","512","--output",str(raw)]
+            cmd=[sys.executable,"scripts/analyze_visual_inventory_with_ollama.py","--inventory",str(inv),"--model",args.model,"--max-assets",str(args.batch_size),"--run-id",args.run_id,"--timeout",str(args.request_timeout),"--num-ctx",str(args.num_ctx),"--num-predict",str(args.num_predict),"--output",str(raw)]
             if raw.is_file():cmd.append("--resume")
             else:
                 pull=vis/".checkpoint-recovery";pull.mkdir(exist_ok=True)
@@ -514,7 +516,7 @@ def rebuild_corrections(args):
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest="mode",required=True)
-    q=sub.add_parser("run");q.add_argument("--selection",type=Path,required=True);q.add_argument("--source-root",type=Path,required=True);q.add_argument("--repo-root",type=Path,default=Path.cwd());q.add_argument("--package",required=True);q.add_argument("--run-id",required=True);q.add_argument("--model",required=True);q.add_argument("--batch-size",type=int,default=5,help="Assets per durable Layer 4–5 checkpoint; smaller batches make progress visible and reduce uncheckpointed work.");q.add_argument("--max-batches-per-run",type=int,default=8,help="Maximum durable analysis invocations per workflow run. Yield after a bounded run so GitHub's hard timeout cannot discard a long-running pass.");q.add_argument("--request-timeout",type=int,default=300,help="Maximum seconds for each Ollama HTTP request; prevents a stuck model call from hanging a GitHub runner indefinitely.")
+    q=sub.add_parser("run");q.add_argument("--selection",type=Path,required=True);q.add_argument("--source-root",type=Path,required=True);q.add_argument("--repo-root",type=Path,default=Path.cwd());q.add_argument("--package",required=True);q.add_argument("--run-id",required=True);q.add_argument("--model",required=True);q.add_argument("--batch-size",type=int,default=10,help="Assets per durable Layer 4–5 savepoint; larger batches amortize Git/GHCR overhead while preserving per-asset results.");q.add_argument("--max-batches-per-run",type=int,default=12,help="Maximum durable analysis invocations per workflow run; yields only after both languages receive a fair share.");q.add_argument("--request-timeout",type=int,default=360,help="Maximum seconds for each bounded Ollama HTTP request.");q.add_argument("--num-ctx",type=int,default=8192,help="Ollama context size for source-linked visual analysis.");q.add_argument("--num-predict",type=int,default=512,help="Bounded output-token budget for structured visual JSON.")
     q=sub.add_parser("ledger")
     for k in ("inventory","raw-analysis","manifest","text-jsonl","effective-output","ledger-output"):q.add_argument("--"+k,type=Path,required=True)
     q.add_argument("--corrections",type=Path);q.add_argument("--repo-root",type=Path,default=Path.cwd())
