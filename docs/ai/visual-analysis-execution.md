@@ -38,20 +38,20 @@ python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_olla
 
 Workflow: [textbook-visual-analysis.yml](../../.github/workflows/textbook-visual-analysis.yml). Run it from **Actions → Resumable textbook visual extraction and analysis → Run workflow**. The workflow automatically derives the existing class-wise image name (`ghcr.io/manav326/quantaedge-textbooks-class-<class>-<language>:latest`), pulls the whole-book PDF by book ID, and locates the matching committed source manifest/page JSONL by book ID and SHA-256. The default pilot is Class 6 English Science, `ncert-c6-english-fecu1`; use the stable slug `class6-curiosity-en` across reruns. No local PDF or local Ollama installation is needed.
 
-The workflow downloads the source from GHCR, verifies it against the committed manifest/index SHA-256, runs Ollama vision analysis on the GitHub runner in batches of 10, persists the inventory/analysis checkpoint to main and the GHCR checkpoint tag after each batch, executes focused regression tests, and publishes a full asset/preview bundle to GHCR under a run-specific tag and a stable per-book tag. It then commits the bundle index to main.
+The workflow downloads the source from GHCR, verifies it against the extraction manifest/index SHA-256, restores prior per-book state from `automation/textbook-pipeline-state`, and runs bounded Ollama batches. Completed analysis and bundle metadata are checkpointed to that state branch and the GHCR checkpoint/versioned package; application `main` is not modified. The specialist workflow shares the core visual workflow's concurrency group to prevent duplicate inference.
 
-The output index is under data/textbook-visuals/<book_slug>/bundle-index.v1.json. Per your requirement, the workflow mirrors the generated image binaries, page previews, inventory, analysis checkpoint and index into main, and publishes the complete bundle to GHCR. A normal git pull therefore includes the complete generated resources. GHCR remains the versioned registry copy with immutable run tags, a stable latest tag and a resumable checkpoint tag.
+The output index is under `data/textbook-visuals/<book_slug>/bundle-index.v1.json` on `automation/textbook-pipeline-state`. Generated binaries and previews are retained in the GHCR bundle; the isolated state branch carries the resumable metadata and selected review artefacts. A normal application `git pull` does not bring pipeline state into `main`; restore it explicitly with `scripts/persist_textbook_pipeline_state.py restore`. GHCR remains the versioned registry copy with immutable run tags, a stable latest tag and a resumable checkpoint tag.
 
-The runner caches Ollama model files when GitHub's cache service retains them. Analysis checkpoints are persisted to main after each run and each completed asset is atomically checkpointed during processing. Keep the same book slug and model to resume; use restart_analysis=true only when deliberately discarding the checkpoint. If a run is interrupted before it can commit the latest checkpoint, its last committed checkpoint is restored and only the in-flight asset may need repeating.
+The runner caches Ollama model files when GitHub's cache service retains them. Results are atomically written locally per asset and durably committed to the isolated state branch at the configured savepoint interval. Keep the same book slug and model to resume; use `restart_analysis=true` only when deliberately discarding that model's checkpoint. In the core pipeline, transient inference failures are retried on later runs up to three attempts per asset; terminal failures stop for review.
 
 
 ## Restore a complete bundle after Git pull
 
-After the first successful workflow run, the small index/checkpoint is committed to main. To restore all binaries and previews from the exact versioned GHCR package:
+After the first successful workflow run, the small index/checkpoint is committed to the isolated state branch. To restore all binaries and previews from the exact versioned GHCR package:
 
 ```powershell
 oras login ghcr.io
 powershell -ExecutionPolicy Bypass -File .\\scripts\\pull_textbook_visual_bundle.ps1 -BookSlug class6-curiosity-en
 ```
 
-Replace the slug with the exact one used for the workflow run. The script reads the committed index, pulls the immutable package tag, verifies the tarball SHA-256, checks required sidecars, and restores the bundle under visual-bundles/<book_slug>. It refuses an unindexed or checksum-mismatched package. A normal git pull already retrieves the mirrored assets. The restore script is optional when you want to verify and restore the exact immutable GHCR bundle into a separate local folder.
+Replace the slug with the exact one used for the workflow run. The script reads the committed index, pulls the immutable package tag, verifies the tarball SHA-256, checks required sidecars, and restores the bundle under visual-bundles/<book_slug>. It refuses an unindexed or checksum-mismatched package. The restore script verifies and restores the exact immutable GHCR bundle into a separate local folder. Pipeline-generated state remains separate from application `main`.

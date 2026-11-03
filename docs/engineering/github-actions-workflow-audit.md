@@ -25,7 +25,7 @@ A thin workflow whose only job is to set a mode on an existing reusable pipeline
 | Layers 1–5 (textbook visuals and candidates) | `.github/workflows/textbook-visual-candidates-v3.yml` | `prepare_only`, `analyze_all`, `resume_preparation`, `resume_layers_4_5`. Resume is selected from this workflow's own dispatch UI; separate resume wrappers are removed. |
 | Layers 6–8 (local Ollama generation) | `.github/workflows/quantaedge-layers-6-8.yml` | `benchmark`, `run`, `resume`, `refresh_benchmark`. Refresh is now a non-inference mode in the same workflow; no separate refresh workflow. |
 
-The independent `.github/workflows/textbook-visual-analysis.yml` is retained as a specialist **single-book visual artifact** tool with a custom model/restart/stable-GHCR-publishing contract. It is not the class-wide Layers 1–5 launcher; its bespoke operation should be migrated before removing it. It is referenced by its execution guides. The main eight-layer learning-content path remains the two entrypoints in the table above.
+The independent `.github/workflows/textbook-visual-analysis.yml` remains a specialist **single-book visual artifact** tool with a custom model/restart/stable-GHCR-publishing contract. It shares the core visual workflow's global concurrency group and persists resumable state to `automation/textbook-pipeline-state`, never application `main`. The main eight-layer learning-content path remains the two canonical entrypoints in the table above.
 
 ## Redundant workflows removed
 
@@ -57,7 +57,7 @@ The independent `.github/workflows/textbook-visual-analysis.yml` is retained as 
 | `textbook-cache.yml` | Source-of-truth whole-book GHCR cache and repair queue for textbook inputs. |
 | `curriculum-pipeline-audit.yml` | Audit report for textbook registry, cache/source presence and pipeline handoff integrity. |
 | `textbook-extraction-pilot.yml` | Extracts and validates Class 7/8 whole-book page data into run artifacts. |
-| `mirror-textbook-extraction-artifact.yml` | Validates and mirrors verified Class 7/8 extraction outputs from a source run to `data/`; the artifact handoff must not trust arbitrary workflow artifacts. |
+| `mirror-textbook-extraction-artifact.yml` | Manually validates Class 7/8 extraction outputs against a successful source run and persists them to `automation/textbook-pipeline-state`; no workflow-run chaining or main-branch data commit. |
 | `textbook-visual-analysis.yml` | Specialist single-book visual-analysis artifact flow, retained pending a deliberate migration into the class-wide pipeline. |
 | `textbook-visual-candidates-v3.yml` | Canonical Layers 1–5 pipeline. |
 | `quantaedge-layers-6-8.yml` | Canonical Layers 6–8 pipeline. |
@@ -78,12 +78,12 @@ The sample is not a full historical query. Manual deployment, release and audit 
 
 - Resume modes verify book identity, source PDF hash, model/prompt/contract fingerprints and saved checkpoint status before expensive model startup.
 - Generation remains review-only. A successful Actions run does not equal complete curriculum coverage or authorization to publish.
-- Generated pipeline outputs remain in `data/`; workflows/scripts/docs are not alternate output storage.
+- Generated pipeline outputs remain under approved `data/` paths on `automation/textbook-pipeline-state`; workflows/scripts/docs remain on the application code branch. No textbook checkpoint writer pushes to `main`.
 - The APK downloader prefers a successful exact-head `ci.yml` run. It only accepts an older build after the compatibility checker confirms every intervening path is in the narrow approved data-only/installer allowlist; unexpected or incomplete comparisons fail closed.
 
 ## Expected operating model
 
-For the general textbook lesson data pipeline, operators now have **two primary workflows**. Use the separate textbook cache/extraction artifact workflows only when the upstream source/page artifact itself must be created or repaired. Use artifact audit/export workflows only for their named artifact. Do not add another workflow just to expose a button for a mode already supported by a core workflow; add a mode/input to the canonical entrypoint instead.
+For the general textbook lesson data pipeline, operators use **two primary workflows**. The expensive processors, extraction handoffs and dataset generators are explicitly dispatched; ordinary application pushes do not start textbook inference. Pipeline-generated manifests, ledgers, lesson drafts and dataset records are persisted to `automation/textbook-pipeline-state`; original books and large visual bundles remain in GHCR. Application `main` carries source code/workflow definitions, not the repeatedly changing pipeline checkpoints. Use the separate textbook cache/extraction workflows only when the upstream source/cache itself must be created or repaired.
 
 ## Deferred TODO: user-friendly source selection for Layers 6–8
 

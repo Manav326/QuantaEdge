@@ -1,6 +1,6 @@
 # Textbook extraction and AI Tutor grounding — durable execution tracker
 
-This file is the durable checkpoint for the NCERT/SCERT extraction work. Continue from the first unchecked item when a conversation ends; do not restart at planning or repeat completed work. Keep implementation on `main` only (no branches or PRs), and update this tracker in the same commit as meaningful milestones.
+This file is the durable checkpoint for NCERT/SCERT extraction work. Continue from the first unchecked item; do not restart planning or repeat completed work. Keep application code/workflow changes on a repair branch and merge through PR after CI; persist extracted pages, visual analysis, ledgers and lesson drafts on `automation/textbook-pipeline-state`, not application `main`.
 
 **Operator runbook:** Read [Class 6 GHCR textbook extraction pilot](../runbooks/class6-ghcr-textbook-pilot.md) before repeating local import steps. It records commands, environment, source manifest totals, portal/cookie separation, failure history, safety gates, and the exact next action.
 
@@ -63,7 +63,7 @@ Corrected GHCR extraction workflow succeeded at https://github.com/Manav326/Quan
 
 ## Repository artifact mirror
 
-A GitHub Actions workflow (`.github/workflows/mirror-textbook-extraction-artifact.yml`) mirrors validated Class 7 or Class 8 extraction artifacts into the matching `data/textbook-extractions/class-{class}/` folder on `main`, so a normal `git pull` retrieves the page JSONL and manifests without a manual artifact download. The mirror contains extracted text and reports only; original PDFs remain in GHCR. These files are extraction-only and are not approved or published lesson content.
+A GitHub Actions workflow (`.github/workflows/mirror-textbook-extraction-artifact.yml`) validates Class 7/8 extraction artifacts and persists them under `data/textbook-extractions/class-{class}/` on `automation/textbook-pipeline-state`. The handoff is manually dispatched with the successful extraction run ID; it does not commit generated pages to application `main`. The mirror contains extracted text and reports only; original PDFs remain in GHCR. These files are extraction-only and are not approved or published lesson content.
 
 ## GHCR extraction to question-generation bridge
 
@@ -108,7 +108,7 @@ Next Phase A tasks:
 ## GitHub-hosted visual pipeline checkpoint (2026-10-15)
 
 - [x] Add per-asset resumable vision analysis. The analyzer atomically checkpoints every completed asset; successful entries are reused only when source asset SHA-256, model tag and prompt version match. Failed assets are retried. Subsequent runs process the next pending assets rather than redoing completed work.
-- [x] Add workflow .github/workflows/textbook-visual-analysis.yml to derive the class-wise GHCR image, fetch the whole-book PDF by book ID, and locate the matching committed manifest/page JSONL by book ID and SHA-256, build the additive visual inventory, run Ollama on the GitHub runner, execute focused tests, publish a run-versioned and stable per-book GHCR bundle, and mirror generated binaries, previews, inventory, checkpoint and index to main.
+- [x] Add workflow .github/workflows/textbook-visual-analysis.yml to derive the class-wise GHCR image, fetch the whole-book PDF by book ID, locate the matching source manifest/page JSONL, build the additive visual inventory, run Ollama on the GitHub runner, execute focused regression tests, publish a run-versioned and stable per-book GHCR bundle, and persist resumable metadata on the isolated textbook state branch (not application main).
 - [x] Store a stable bundle index in data/textbook-visuals/<book_slug>/bundle-index.v1.json; it records source PDF hash, model/prompt version, GHCR package/tags and bundle SHA-256.
 - [ ] Run the workflow on one exact Class 6 source image, inspect visual accuracy and runtime, and confirm GHCR publication plus the repository checkpoint commit. The workflow defaults to the existing Class 6 English Curiosity book and automatically resolves its class-wise GHCR image and source paths.
 - [ ] Review the sample captions and visible text, then run the next batch using the same book slug/model. Only after review should visual results be adapted into Content Studio lesson drafts.
@@ -125,7 +125,7 @@ Implementation commits:
 - [ ] Confirm the first workflow run on the actual existing GHCR source-book image; no real-book vision results or successful workflow run are claimed until that run completes.
 
 
-- [x] Strengthen runner resumability: process batches of 10, commit all generated inventory/analysis/assets/previews to main after each batch, and mirror the analysis checkpoint to a stable GHCR checkpoint tag. Same-run failures do not starve later assets; the next workflow run retries failed assets.
+- [x] Strengthen runner resumability: process batches of 10, checkpoint per-asset results to the isolated textbook state branch at savepoints, and mirror the analysis checkpoint to a stable GHCR checkpoint tag. Transient errors are retried across separate runs up to three times per asset; terminal errors stop for human review.
 - [ ] Validate the new workflow end-to-end. GitHub connector status output has not yet confirmed a successful Actions run for these commits.
 
 ## Class 7/8 source preparation and authoring handoff (2026-10-16)
@@ -135,7 +135,7 @@ The two class workflows deliberately accept **only Class 7 or Class 8**. Each se
 ### Required sequence
 
 1. Run [QuantaEdge GHCR Textbook Extraction Pilot](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-extraction-pilot.yml) and select Class 7 or 8. It extracts only matching Science/Maths subject-book pages in both languages and validates source hashes, full page continuity, the exact source counts and the Maths part labels.
-2. Only after that run succeeds, run [Mirror verified textbook extraction artifact to main](https://github.com/Manav326/QuantaEdge/actions/workflows/mirror-textbook-extraction-artifact.yml) with the same class and successful pilot run ID. This records the selected Class 7/8 extraction JSONL/manifests on `main`; original PDFs remain in GHCR.
+2. Only after that run succeeds, dispatch [Mirror verified textbook extraction artifact to isolated state](https://github.com/Manav326/QuantaEdge/actions/workflows/mirror-textbook-extraction-artifact.yml) with the same class and successful pilot run ID. This records the selected Class 7/8 extraction JSONL/manifests on `automation/textbook-pipeline-state`; original PDFs remain in GHCR.
 3. Run [Prepare textbook visual candidates v3 (additive)](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-visual-candidates-v3.yml) and select the same Class 7 or 8. It resolves the six expected sources automatically, verifies each selected GHCR PDF hash against its committed extraction manifest/page JSONL, and builds a separate review-only visual candidate pack per source book. The full visual assets are stored under immutable per-run GHCR tags; compact JSON, contact sheets, bundle indexes and the admin review catalog are checkpointed on `main`.
 4. Review source identity, page coverage, figures/tables, scientific meaning, Hindi/English semantic parity, visual labels, readability, rights/provenance and accessibility. Candidate generation is not lesson generation, approval or publication.
 5. Then author the chapter-specific bilingual lesson JSON using [the reusable textbook content-generation prompt](reusable-textbook-content-generation-prompt.md). Read the current production index and [Issue #56](https://github.com/Manav326/QuantaEdge/issues/56) before starting; never assume a previous chat's context or reuse stale source IDs.

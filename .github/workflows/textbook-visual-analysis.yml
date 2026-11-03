@@ -50,7 +50,7 @@ permissions:
   packages: write
 
 concurrency:
-  group: textbook-visual-analysis-${{ inputs.book_slug }}
+  group: qe-textbook-visual-candidates-v3-global
   cancel-in-progress: false
 
 jobs:
@@ -67,12 +67,17 @@ jobs:
       RESTART_ANALYSIS: ${{ inputs.restart_analysis }}
       PUBLISH_STABLE: ${{ inputs.publish_stable }}
     steps:
-      - name: Checkout main
+      - name: Checkout application code from main
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
           persist-credentials: true
+
+      - name: Restore isolated textbook pipeline state
+        env:
+          QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
+        run: python scripts/persist_textbook_pipeline_state.py restore --repo-root "$GITHUB_WORKSPACE"
 
       - name: Validate inputs and install Python dependencies
         shell: bash
@@ -80,7 +85,7 @@ jobs:
           set -euo pipefail
           [[ "$BOOK_SLUG" =~ ^[a-z0-9]+([.-][a-z0-9]+)*$ ]] || { echo "Invalid book_slug"; exit 2; }
           [[ "$BOOK_ID" =~ ^ncert-c${CLASS_NO}-${LANGUAGE}-[a-z0-9]+$ ]] || { echo "book_id must match the selected class and language"; exit 2; }
-          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2" "Pillow>=10,<13"
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
           python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
 
@@ -218,26 +223,25 @@ jobs:
 
           package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
           # Analyze the entire eligible inventory. Batch size controls checkpoints only.
-          batch_size=25
+          batch_size=10
           while true; do
             batch="$batch_size"
-            args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --include-page-previews --run-id "$GITHUB_RUN_ID" --timeout 0 --num-ctx 8192 --num-predict 1024 --output "$analysis_output")
+            # Full-page previews remain in the bundle as context; only embedded figures
+            # are sent to VLM inference to avoid spending minutes on duplicate whole pages.
+            args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --run-id "$GITHUB_RUN_ID" --timeout 360 --num-ctx 8192 --num-predict 512 --output "$analysis_output")
             if [[ -f "$analysis_output" ]]; then args+=(--resume); fi
             python scripts/analyze_visual_inventory_with_ollama.py "${args[@]}"
             batch_processed="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["summary"]["assets_processed_this_run"])' "$analysis_output")"
 
             # Commit each batch before proceeding. A cancelled runner only repeats the
             # currently active batch, not the book or already committed analysis.
-            # The user requires generated binaries and metadata in both main and GHCR.
-            git add "$out"
+            # Generated metadata is isolated from application main; full-resolution bundles live in GHCR.
             python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
-            if ! git diff --cached --quiet; then
-              git config user.name "github-actions[bot]"
-              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              git commit -m "Checkpoint textbook visual analysis batch: $BOOK_SLUG"
-            fi
-            git pull --rebase origin main
-            git push origin HEAD:main
+            python scripts/persist_textbook_pipeline_state.py commit \
+              --repo-root "$GITHUB_WORKSPACE" \
+              --message "checkpoint(content): specialist visual analysis batch $BOOK_SLUG" \
+              --paths "$out"
+            echo "Saved resumable visual analysis to automation/textbook-pipeline-state; main remains unchanged."
             # Mirror the small durable checkpoint to GHCR after the repository commit.
             oras push --artifact-type application/vnd.quantaedge.textbook.visual-analysis-checkpoint.v1 "$package:class${CLASS_NO}-$BOOK_SLUG-checkpoint" "$analysis_output:application/json"
 
@@ -315,12 +319,11 @@ jobs:
           }
           (out / "bundle-index.v1.json").write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$out/visual-inventory.v1.json" "$out/visual-analysis.v1.json" "$out/bundle-index.v1.json"
-          git diff --cached --quiet || git commit -m "Checkpoint textbook visual analysis: $BOOK_SLUG"
-          git pull --rebase origin main
-          git push origin HEAD:main
+          python scripts/persist_textbook_pipeline_state.py commit \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --message "status(content): specialist visual analysis bundle $BOOK_SLUG" \
+            --paths "$out"
+          echo "Saved visual bundle metadata to automation/textbook-pipeline-state; main remains unchanged."
 
       - name: Upload run summary
         if: always()

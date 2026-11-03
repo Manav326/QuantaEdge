@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import base64
 import hashlib
+import io
 import json
 import mimetypes
 import math
@@ -22,7 +23,82 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
+from PIL import Image, UnidentifiedImageError
+
 SUPPORTED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
+MAX_IMAGE_DIMENSION = 4096
+
+ANALYSIS_RESPONSE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "visual_summary": {"type": "string", "minLength": 1},
+        "visual_type": {
+            "type": "string",
+            "enum": [
+                "diagram", "chart", "graph", "table", "map", "cartoon", "photo",
+                "illustration", "equation", "page_with_multiple_visuals", "other", "uncertain",
+            ],
+        },
+        "visible_text": {"type": "array", "items": {"type": "string"}, "maxItems": 30},
+        "concepts": {"type": "array", "items": {"type": "string"}, "maxItems": 20},
+        "context_relation": {"type": "string"},
+        "limitations": {"type": "array", "items": {"type": "string"}, "maxItems": 20},
+    },
+    "required": [
+        "visual_summary", "visual_type", "visible_text", "concepts",
+        "context_relation", "limitations",
+    ],
+    "additionalProperties": False,
+}
+
+
+def prepare_model_image(path: Path, media_type: str) -> tuple[bytes, dict[str, int | bool]]:
+    """Downscale only oversized model inputs; preserve the original extracted asset."""
+    original = path.read_bytes()
+    try:
+        with Image.open(path) as source:
+            source.load()
+            original_width, original_height = source.size
+            if max(original_width, original_height) <= MAX_IMAGE_DIMENSION:
+                return original, {
+                    "original_width": original_width,
+                    "original_height": original_height,
+                    "input_width": original_width,
+                    "input_height": original_height,
+                    "downscaled": False,
+                }
+
+            image = source.copy()
+            image.thumbnail(
+                (MAX_IMAGE_DIMENSION, MAX_IMAGE_DIMENSION),
+                Image.Resampling.LANCZOS,
+            )
+            output = io.BytesIO()
+            if media_type == "image/png" or "A" in image.getbands():
+                image.save(output, format="PNG", optimize=True)
+            elif media_type == "image/webp":
+                image.save(output, format="WEBP", quality=92, method=4)
+            else:
+                if image.mode not in {"RGB", "L"}:
+                    image = image.convert("RGB")
+                image.save(output, format="JPEG", quality=92, optimize=True)
+            return output.getvalue(), {
+                "original_width": original_width,
+                "original_height": original_height,
+                "input_width": image.width,
+                "input_height": image.height,
+                "downscaled": True,
+            }
+    except (UnidentifiedImageError, OSError, ValueError):
+        # Keep deterministic transport fixtures and already-validated non-Pillow
+        # decoders unchanged; Ollama will return a bounded diagnostic if malformed.
+        return original, {
+            "original_width": 0,
+            "original_height": 0,
+            "input_width": 0,
+            "input_height": 0,
+            "downscaled": False,
+        }
 
 
 def sha256_file(path: Path) -> str:
@@ -248,14 +324,17 @@ def analyze_one(
         f"Asset kind: {asset.get('kind', 'unknown')}\n"
         f"Nearby extracted page text (possibly incomplete):\n{context or '[No extracted text available]'}"
     )
+    model_image, image_dimensions = prepare_model_image(asset_path, media_type)
     payload = {
         "model": model,
         "stream": False,
-        "format": "json",
+        # Ollama supports JSON Schema structured output for vision models; this
+        # constrains generation instead of merely asking the model to emit JSON.
+        "format": ANALYSIS_RESPONSE_SCHEMA,
         "messages": [{
             "role": "user",
             "content": prompt,
-            "images": [base64.b64encode(asset_path.read_bytes()).decode("ascii")],
+            "images": [base64.b64encode(model_image).decode("ascii")],
         }],
         "options": {"temperature": 0, "num_ctx": num_ctx, "num_predict": num_predict},
     }
@@ -303,6 +382,8 @@ def analyze_one(
         "source_pdf_page_number": page_number,
         "asset_path": relative,
         "asset_kind": asset.get("kind"),
+        "model_input_image": image_dimensions,
+        "model_input_preprocessing_version": MODEL_IMAGE_PREPROCESS_VERSION,
         "page_text_context_sha256": hashlib.sha256(str(asset.get("page_text_context") or "")[:1600].encode("utf-8")).hexdigest(),
         "model_provider": "ollama_local",
         "model": model,
@@ -314,6 +395,8 @@ def analyze_one(
 
 
 PROMPT_VERSION = "visual-analysis-prompt-v2"
+MODEL_IMAGE_PREPROCESS_VERSION = "image-input-max-4096-lanczos-v1"
+MAX_ASSET_ANALYSIS_ATTEMPTS = 3
 
 
 def run_analysis(
@@ -421,8 +504,36 @@ def run_analysis(
         ):
             skipped_from_checkpoint += 1
             continue
-        # Within a single GitHub run, don't retry a failed asset in every batch.
-        # A later workflow run has a different run_id and will retry it.
+        # A preprocessing change gets one fresh bounded retry budget for legacy
+        # failures (including terminal dimension errors). Existing successful results
+        # stay reusable because their source/hash/context/model/prompt are unchanged.
+        if (
+            existing.get("analysis_status") in {"ANALYSIS_ERROR", "ANALYSIS_ERROR_TERMINAL"}
+            and existing.get("model_input_preprocessing_version") != MODEL_IMAGE_PREPROCESS_VERSION
+        ):
+            existing = dict(existing)
+            existing["attempt_count"] = 0
+            existing["analysis_status"] = "ANALYSIS_ERROR"
+            existing["run_id"] = None
+            existing["model_input_preprocessing_version"] = MODEL_IMAGE_PREPROCESS_VERSION
+            existing["error"] = (
+                "Retrying under updated model-input preprocessing. "
+                + str(existing.get("error") or "")
+            )[:1200]
+            previous[str(asset_id)] = existing
+        # A transient inference error is retried only in a later workflow run.
+        # After three attempts under the current preprocessing version, keep it terminal.
+        if (
+            existing.get("analysis_status") == "ANALYSIS_ERROR_TERMINAL"
+            and existing.get("model_input_preprocessing_version") == MODEL_IMAGE_PREPROCESS_VERSION
+        ):
+            continue
+        if int(existing.get("attempt_count", 0) or 0) >= MAX_ASSET_ANALYSIS_ATTEMPTS:
+            existing["analysis_status"] = "ANALYSIS_ERROR_TERMINAL"
+            existing["human_review_required"] = True
+            existing["publication_allowed"] = False
+            previous[str(asset_id)] = existing
+            continue
         if run_id and existing.get("analysis_status") == "ANALYSIS_ERROR" and existing.get("run_id") == run_id:
             continue
         if max_assets is None or len(selected) < max_assets:
@@ -436,6 +547,8 @@ def run_analysis(
         ordered_results = list(results_by_id.values())
         analyzed_count = 0
         failed_count = 0
+        retryable_failure_count = 0
+        terminal_failure_count = 0
         for asset_id, asset_hash in current_asset_hashes.items():
             item = results_by_id.get(asset_id)
             if not isinstance(item, dict):
@@ -449,8 +562,12 @@ def run_analysis(
                 or item.get("prompt_version") != PROMPT_VERSION
             ):
                 continue
-            if item.get("analysis_status") == "ANALYSIS_ERROR":
+            if item.get("analysis_status") in {"ANALYSIS_ERROR", "ANALYSIS_ERROR_TERMINAL"}:
                 failed_count += 1
+                if item.get("analysis_status") == "ANALYSIS_ERROR_TERMINAL":
+                    terminal_failure_count += 1
+                else:
+                    retryable_failure_count += 1
                 continue
             if (
                 item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
@@ -467,6 +584,8 @@ def run_analysis(
             "assets_remaining": max(0, len(seen) - analyzed_count),
             "assets_completion_percent": round(100 * analyzed_count / len(seen), 1) if seen else 100.0,
             "assets_failed": failed_count,
+            "assets_retryable_failures": retryable_failure_count,
+            "assets_terminal_failures": terminal_failure_count,
             "assets_skipped_from_checkpoint": skipped_from_checkpoint,
             "batch_limit": max_assets,
             "publication_allowed": False,
@@ -480,6 +599,7 @@ def run_analysis(
             "model_provider": "ollama_local",
             "model": model,
             "prompt_version": PROMPT_VERSION,
+            "model_input_preprocessing_version": MODEL_IMAGE_PREPROCESS_VERSION,
             "summary": summary,
             "results": ordered_results,
         }
@@ -579,6 +699,8 @@ def run_analysis(
             )
         except Exception as exc:
             error_text = " ".join(str(exc).split())[:180]
+            attempt_count = int(existing.get("attempt_count", 0) or 0) + 1
+            terminal = attempt_count >= MAX_ASSET_ANALYSIS_ATTEMPTS
             results_by_id[asset_id] = {
                 "asset_id": asset.get("asset_id"),
                 "asset_sha256": asset.get("asset_sha256"),
@@ -590,15 +712,17 @@ def run_analysis(
                 "model_provider": "ollama_local",
                 "model": model,
                 "prompt_version": PROMPT_VERSION,
+                "model_input_preprocessing_version": MODEL_IMAGE_PREPROCESS_VERSION,
                 "run_id": run_id,
-                "analysis_status": "ANALYSIS_ERROR",
+                "attempt_count": attempt_count,
+                "analysis_status": "ANALYSIS_ERROR_TERMINAL" if terminal else "ANALYSIS_ERROR",
                 "error": str(exc)[:500],
                 "human_review_required": True,
                 "publication_allowed": False,
             }
             print(
-                f"[visual-analysis] RESULT asset_id={asset_id} status=ANALYSIS_ERROR "
-                f"duration_seconds={time.monotonic() - started_at:.1f} error={error_text}",
+                f"[visual-analysis] RESULT asset_id={asset_id} status={'ANALYSIS_ERROR_TERMINAL' if terminal else 'ANALYSIS_ERROR'} "
+                f"attempt={attempt_count}/{MAX_ASSET_ANALYSIS_ATTEMPTS} duration_seconds={time.monotonic() - started_at:.1f} error={error_text}",
                 flush=True,
             )
         processed_this_run += 1

@@ -25,14 +25,14 @@ Each generated record carries class, subject, language, chapter, source URL, exa
    python scripts/ai_training_dataset.py generate --input-dir private-review --target 200
 5. After checking provider privacy and rights, explicitly allow external processing:
    python scripts/ai_training_dataset.py generate --input-dir private-review --target 25000 --batch-size 5 --max-api-calls 5000 --generate --confirm-external-processing --commit-and-push
-   This resumes from drafts.jsonl. The generation script outputs only original messages and provenance metadata, not source excerpts. With --commit-and-push, it commits only this JSONL file and pushes to origin/main after generation; it refuses to push if the local branch is not main or is not exactly aligned with origin/main. Review generated content before training.
+   This resumes from drafts.jsonl. The generation script outputs only original messages and provenance metadata, not source excerpts. With `--commit-and-push`, it persists only this JSONL file to `automation/textbook-pipeline-state` via `scripts/persist_textbook_pipeline_state.py`; it never pushes generated data to application `main`. Review generated content before training.
 6. Review and approve examples with curriculum editors. Change review_status only after actual review; never bulk-mark generated records approved without review.
 7. Export approved data:
    python scripts/ai_training_dataset.py build --input data/ai-training/generated/drafts.jsonl
    The default refuses machine-validated drafts. For a controlled, explicitly experimental pilot only, use --include-drafts; its manifest is marked DRAFT_EXPERIMENT.
 8. Validate:
    python scripts/ai_training_dataset.py validate --dataset-dir data/ai-training/datasets --require-approved
-9. Commit only rights-cleared original generated records, manifests and evaluation artifacts to GitHub. Do not commit private source files. Keep datasets versioned under data/ai-training/datasets/ and push to main using the normal repository workflow.
+9. Persist only rights-cleared original generated records, manifests and evaluation artefacts under `data/ai-training/datasets/` on `automation/textbook-pipeline-state`. Do not commit private source files or generated data to application `main`. The repository is public, so anything committed to the state branch is also public.
 
 ## Splits and deduplication
 

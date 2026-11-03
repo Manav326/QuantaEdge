@@ -8,6 +8,8 @@ from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
+from PIL import Image
+
 from scripts.analyze_visual_inventory_with_ollama import analyze_one, run_analysis, _json_object_from_response, main
 
 
@@ -52,6 +54,10 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual("qwen2.5vl:3b", payload["model"])
         self.assertEqual(8192, payload["options"]["num_ctx"])
         self.assertEqual(1024, payload["options"]["num_predict"])
+        self.assertEqual("object", payload["format"]["type"])
+        self.assertIn("visual_summary", payload["format"]["required"])
+        self.assertIn("visual_type", payload["format"]["properties"])
+        self.assertFalse(payload["format"]["additionalProperties"])
         self.assertEqual("Water cycle", payload["messages"][0]["content"].split("Nearby extracted page text")[1].splitlines()[1])
         self.assertEqual(base64.b64encode(self.asset_path.read_bytes()).decode("ascii"), payload["messages"][0]["images"][0])
         return FakeResponse({"message": {"content": json.dumps({
@@ -81,6 +87,61 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual("diagram", result["results"][0]["analysis"]["visual_type"])
         self.assertEqual(original, self.inventory_path.read_bytes())
 
+
+    def test_oversized_figure_is_downscaled_only_for_model_input(self):
+        image = Image.new("RGB", (5000, 2500), (30, 120, 180))
+        image.save(self.asset_path, format="JPEG", quality=95)
+        original_bytes = self.asset_path.read_bytes()
+        original_hash = hashlib.sha256(original_bytes).hexdigest()
+        seen = {}
+
+        def inspect_downscaled_input(request, timeout=180):
+            payload = json.loads(request.data.decode("utf-8"))
+            model_bytes = base64.b64decode(payload["messages"][0]["images"][0])
+            with Image.open(io.BytesIO(model_bytes)) as model_image:
+                seen["dimensions"] = model_image.size
+                self.assertLessEqual(max(model_image.size), 4096)
+                self.assertEqual((4096, 2048), model_image.size)
+            return FakeResponse({"message": {"content": json.dumps({
+                "visual_summary": "A textbook figure.",
+                "visual_type": "illustration",
+                "visible_text": [],
+                "concepts": ["science"],
+                "context_relation": "Figure for the current source page.",
+                "limitations": [],
+            })}})
+
+        result = analyze_one(
+            self.root,
+            {
+                "asset_id": "large-figure",
+                "kind": "embedded_image",
+                "asset_path": self.asset_path.name,
+                "asset_sha256": original_hash,
+                "media_type": "image/jpeg",
+                "source_book_id": "book-c6-science",
+                "source_pdf_sha256": "a" * 64,
+                "source_pdf_page_number": 12,
+                "page_text_context": "Large textbook figure",
+            },
+            endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b",
+            opener=inspect_downscaled_input,
+        )
+
+        self.assertEqual((4096, 2048), seen["dimensions"])
+        self.assertEqual(
+            {
+                "original_width": 5000,
+                "original_height": 2500,
+                "input_width": 4096,
+                "input_height": 2048,
+                "downscaled": True,
+            },
+            result["model_input_image"],
+        )
+        self.assertEqual(original_bytes, self.asset_path.read_bytes())
+        self.assertEqual(original_hash, hashlib.sha256(self.asset_path.read_bytes()).hexdigest())
 
     def test_unknown_visual_type_is_conservatively_normalized_for_review(self):
         result = _json_object_from_response({
@@ -116,6 +177,37 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
             }, endpoint="http://127.0.0.1:11434", model="vision", opener=self._opener)
 
 
+    def test_failed_visual_asset_retries_at_most_three_runs_then_becomes_terminal(self):
+        output = self.root / "visual-analysis.v1.json"
+        def failing_opener(request, timeout=180):
+            raise TimeoutError("simulated Ollama request timeout")
+
+        for attempt in range(1, 4):
+            result = run_analysis(
+                self.inventory_path, endpoint="http://127.0.0.1:11434",
+                model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+                opener=failing_opener, output_path=output,
+                resume=attempt > 1, run_id=f"run-{attempt}",
+            )
+            row = result["results"][0]
+            self.assertEqual(attempt, row["attempt_count"])
+            self.assertEqual("ANALYSIS_ERROR_TERMINAL" if attempt == 3 else "ANALYSIS_ERROR", row["analysis_status"])
+            self.assertEqual(1, result["summary"]["assets_failed"])
+            self.assertEqual(1 if attempt == 3 else 0, result["summary"]["assets_terminal_failures"])
+            self.assertEqual(0 if attempt == 3 else 1, result["summary"]["assets_retryable_failures"])
+
+        def must_not_retry(*args, **kwargs):
+            raise AssertionError("terminal visual failures must not be retried automatically")
+
+        terminal = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=must_not_retry, output_path=output, resume=True, run_id="run-4",
+        )
+        self.assertEqual(0, terminal["summary"]["assets_processed_this_run"])
+        self.assertEqual(1, terminal["summary"]["assets_terminal_failures"])
+        self.assertEqual("ANALYSIS_ERROR_TERMINAL", terminal["results"][0]["analysis_status"])
+
     def test_resume_skips_successful_matching_asset_checkpoint(self):
         output = self.root / "visual-analysis.v1.json"
         first = run_analysis(
@@ -124,6 +216,12 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
             opener=self._opener, output_path=output,
         )
         self.assertEqual(1, first["summary"]["assets_analyzed"])
+        # A pre-resize success remains reusable; don't rerun thousands of valid analyses.
+        legacy = json.loads(output.read_text(encoding="utf-8"))
+        legacy.pop("model_input_preprocessing_version", None)
+        legacy["results"][0].pop("model_input_preprocessing_version", None)
+        legacy["results"][0].pop("model_input_image", None)
+        output.write_text(json.dumps(legacy), encoding="utf-8")
 
         def must_not_call(*args, **kwargs):
             raise AssertionError("a matching successful asset must not be re-analyzed")
@@ -135,6 +233,57 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         )
         self.assertEqual(1, resumed["summary"]["assets_skipped_from_checkpoint"])
         self.assertEqual(1, resumed["summary"]["assets_analyzed"])
+
+    def test_legacy_terminal_failures_get_one_fresh_retry_budget_after_preprocessing_upgrade(self):
+        output = self.root / "visual-analysis.v1.json"
+        legacy = {
+            "schema_version": "quantaedge.visual-analysis.v1",
+            "analysis_status": "DRAFT_VISION_ANALYSIS_ONLY",
+            "source_inventory": self.inventory_path.name,
+            "source_book_id": "book-c6-science",
+            "source_pdf_sha256": "a" * 64,
+            "model_provider": "ollama_local",
+            "model": "qwen2.5vl:3b",
+            "prompt_version": "visual-analysis-prompt-v2",
+            "summary": {"assets_analyzed": 0, "assets_failed": 1},
+            "results": [{
+                "asset_id": "asset-1",
+                "asset_sha256": self.asset_hash,
+                "source_book_id": "book-c6-science",
+                "source_pdf_sha256": "a" * 64,
+                "source_pdf_page_number": 1,
+                "asset_path": self.asset_path.name,
+                "model": "qwen2.5vl:3b",
+                "prompt_version": "visual-analysis-prompt-v2",
+                "analysis_status": "ANALYSIS_ERROR_TERMINAL",
+                "attempt_count": 3,
+                "run_id": "legacy-run",
+                "error": "Ollama HTTP 400: image exceeds supported dimensions",
+                "human_review_required": True,
+                "publication_allowed": False,
+            }],
+        }
+        output.write_text(json.dumps(legacy), encoding="utf-8")
+        original = self.asset_path.read_bytes()
+
+        result = run_analysis(
+            self.inventory_path,
+            endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b",
+            max_assets=1,
+            include_page_previews=True,
+            opener=self._opener,
+            output_path=output,
+            resume=True,
+            run_id="new-preprocessing-run",
+        )
+
+        self.assertEqual(1, result["summary"]["assets_processed_this_run"])
+        self.assertEqual(1, result["summary"]["assets_analyzed"])
+        row = result["results"][0]
+        self.assertEqual("DRAFT_REQUIRES_REVIEW", row["analysis_status"])
+        self.assertEqual("image-input-max-4096-lanczos-v1", row["model_input_preprocessing_version"])
+        self.assertEqual(original, self.asset_path.read_bytes())
 
     def test_resume_reanalyzes_legacy_success_without_context_fingerprint(self):
         output = self.root / "visual-analysis.v1.json"

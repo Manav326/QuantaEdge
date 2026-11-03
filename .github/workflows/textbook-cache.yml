@@ -1,13 +1,6 @@
 name: QuantaEdge Textbook Cache
 
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - "scripts/textbook_registry.py"
-      - ".github/workflows/textbook-cache.yml"
-      - "tests/test_textbook_registry.py"
-      - "data/textbook-cache/repair-queue.json"
   workflow_dispatch:
     inputs:
       language:
@@ -40,6 +33,11 @@ on:
         type: boolean
         default: false
         required: true
+      repair_queue:
+        description: "Explicitly process the five pre-approved missing-book repairs in data/textbook-cache/repair-queue.json"
+        type: boolean
+        default: false
+        required: true
       download_workers:
         description: "Number of parallel whole-book downloads"
         type: number
@@ -62,10 +60,8 @@ permissions:
 
 concurrency:
   group: quantaedge-textbook-cache-final
-  # Never interrupt a writer or its recovery/export steps mid-run; the next publisher
-  # resumes from the last atomically pushed class-image index.
-  # A targeted main push must replace stale publishers; manual full-catalog dispatches do not cancel each other.
-  cancel-in-progress: ${{ github.event_name == 'push' }}
+  # Never interrupt a writer or its recovery/export steps mid-run.
+  cancel-in-progress: false
 
 jobs:
   cache-textbooks:
@@ -125,6 +121,7 @@ jobs:
           INPUT_BOOK_CODE: ${{ inputs.book_code }}
           INPUT_MAX_BOOKS: ${{ inputs.max_books }}
           INPUT_REFRESH: ${{ inputs.refresh }}
+          INPUT_REPAIR_QUEUE: ${{ inputs.repair_queue }}
           INPUT_DOWNLOAD_WORKERS: ${{ inputs.download_workers }}
           INPUT_PUSH_BATCH_SIZE: ${{ inputs.push_batch_size }}
           INPUT_RETRY_ROUNDS: ${{ inputs.retry_rounds }}
@@ -139,9 +136,9 @@ jobs:
           owner="$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
           image_prefix="ghcr.io/$owner/quantaedge-textbooks"
           repair_queue="data/textbook-cache/repair-queue.json"
-          if [ "$EVENT_NAME" = "push" ]; then
-            # Fail closed: a push-triggered run may ONLY process these five books.
-            # Never fall through to the general publisher for an implicit full-catalog scan.
+          if [ "$INPUT_REPAIR_QUEUE" = "true" ]; then
+            # Explicitly dispatched repair runs may ONLY process these five approved books.
+            # Never fall through to the general publisher for an implicit repair queue.
             if [ ! -f "$repair_queue" ] || ! jq -e '
               .enabled == true
               and (.books | type == "array")

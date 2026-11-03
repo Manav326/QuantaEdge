@@ -1,11 +1,6 @@
 name: Generate API-key-free AI training dataset
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "scripts/ai_training_offline_seed.py"
-      - ".github/workflows/ai-training-offline-dataset.yml"
   workflow_dispatch:
     inputs:
       target:
@@ -17,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: quantaedge-offline-dataset-main
+  group: qe-textbook-pipeline-state-global
   cancel-in-progress: false
 
 jobs:
@@ -25,11 +20,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout main
+      - name: Checkout application code from main
         uses: actions/checkout@v4
         with:
           ref: main
           persist-credentials: true
+      - name: Restore isolated textbook and AI dataset state
+        env:
+          QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
+        run: python scripts/persist_textbook_pipeline_state.py restore --repo-root "$GITHUB_WORKSPACE"
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -56,15 +55,14 @@ jobs:
           assert all(x["metadata"]["provenance_type"] == "synthetic_curriculum_alignment" for x in master)
           print(f"Verified {len(master)} unique records; no source PDF pages/hashes were fabricated.")
           PY
-      - name: Commit generated dataset to main
+      - name: Persist generated dataset on isolated state branch
+        env:
+          QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
         shell: bash
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ai-training/datasets/
-          if git diff --cached --quiet; then
-            echo "Dataset unchanged; no commit required."
-            exit 0
-          fi
-          git commit -m "Add 25000 API-key-free curriculum-aligned draft examples [skip ci]"
-          git push origin HEAD:main
+          set -euo pipefail
+          python scripts/persist_textbook_pipeline_state.py commit \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --message "data(ai): add API-key-free curriculum-aligned draft examples" \
+            --paths data/ai-training/datasets
+          echo "Dataset persisted to automation/textbook-pipeline-state; application main remains unchanged."

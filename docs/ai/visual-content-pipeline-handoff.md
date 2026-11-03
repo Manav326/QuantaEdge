@@ -3,7 +3,7 @@
 **Purpose:** Continue this work in a future chat without restarting discovery or repeating decisions.  
 **Status:** Planning/audit only. This document adds a roadmap; it does not mean the review UI or import pipeline exists.  
 **Last researched:** 2026-10-15  
-**Repository:** \`Manav326/QuantaEdge\`, work directly on \`main\` unless explicitly instructed otherwise.
+**Repository:** `Manav326/QuantaEdge`. Application code changes go through a repair/feature branch and PR to `main`; generated textbook data and resumable checkpoints belong on `automation/textbook-pipeline-state`, never on application `main`.
 
 ## Start here in the next chat
 
@@ -11,7 +11,7 @@
 2. Re-check current \`main\` HEAD and relevant GitHub Actions status before implementation; another commit may have landed since this document was written.
 3. Read the linked current-state audit, existing analyzer workflow/script, Content Studio, learner renderer and Admin API before touching code.
 4. Continue from **Phase 1 below**, not from zero.
-5. Keep changes additive: do not replace existing extraction, chapter content, lesson blocks, Content Studio flows, current v2 checkpoint, or approved/published content. Add versioned outputs, new endpoints/tables and new UI. Commit directly to \`main\` as the project owner prefers, and check CI after each logical stage.
+5. Keep changes additive: do not replace existing extraction, chapter content, lesson blocks, Content Studio flows, current checkpoints, or approved/published content. Add versioned outputs, endpoints/tables and UI. Keep source code/workflows on the code branch; persist generated data only on `automation/textbook-pipeline-state`. Validate through PR CI before merge.
 
 ## Product outcome
 
@@ -35,7 +35,7 @@ Target placements:
 - Keep practice questions separate. This work is for textbook visuals, not generating assessment questions.
 - New lesson insertion must be non-destructive. Never replace a lesson's current blocks to import a visual. Use a new safe append/insert service/endpoint with transaction, ordering, audit trail and tests.
 - Follow existing permissions/roles and central QuantaEdge branding. Enforce authentication and review/publish permission server-side.
-- The owner prefers artefacts committed to GitHub so \`git pull\` updates local work. Continue durable/versioned output in Git and GHCR, but avoid committing redundant gigantic derivatives blindly; document what resides in Git versus the versioned bundle and provide integrity hashes/restore tooling.
+- Keep generated artefacts durable in Git, but separate from application `main`: compact manifests, ledgers and review metadata live on `automation/textbook-pipeline-state`; full visual binaries/previews live in GHCR versioned bundles. Avoid committing redundant derivatives; document paths and provide integrity hashes/restore tooling.
 
 ## Current pilot and evidence
 
@@ -64,7 +64,7 @@ Target placements:
 
 ## GitHub-hosted runner: yes, use it
 
-Use the existing GitHub-hosted Actions runner as the repeatable extraction/processing worker. The runner is ephemeral, so nothing important may exist only on its disk. At the start of each run, verify the official whole-book source against the existing manifest/checksum; at the end and at checkpoints, persist versioned outputs to the repository and GHCR as appropriate. Preserve the project's \`git pull\` workflow for review manifests and deliverables. Never move the stable GHCR tag to a partial diagnostic result: set \`publish_stable: false\` for comparisons and partial runs.
+Use the existing GitHub-hosted Actions runner as the repeatable extraction/processing worker. The runner is ephemeral, so nothing important may exist only on its disk. At the start of each run, verify the official whole-book source against the matching manifest/checksum; at checkpoints, persist resumable state to `automation/textbook-pipeline-state` and versioned binaries to GHCR as appropriate. Application `main` must not be used as a pipeline state store or trigger for these workers. Never move the stable GHCR tag to a partial diagnostic result: set `publish_stable: false` for comparisons and partial runs.
 
 The runner can do without image-generation credit:
 - Download/checksum-verify PDF and its existing page-text JSONL/manifest.
@@ -76,7 +76,7 @@ The runner can do without image-generation credit:
 - Recreate suitable structured diagrams as real SVG/XML using templates/code; labels remain editable text. Use only source-verified labels/arrows/relationships.
 - Run optional local vision-model comparisons in small, stratified batches. Check actual runner RAM/CPU/GPU, Ollama version, model download size and context window at runtime; do not assume GPU availability or that the larger model fits. Model is a helper, not the selector of record.
 - Validate metadata/schema, hashes, asset dimensions, duplicate rate, page coverage and output package.
-- Commit deterministic manifests/compact review artefacts to \`main\`; publish an immutable GHCR bundle with the full assets and checksums; move the stable tag only after a full validated run, not an experiment.
+- Commit deterministic manifests/compact review artefacts to `automation/textbook-pipeline-state`; publish an immutable GHCR bundle with the full assets and checksums; move the stable tag only after a full validated run, not an experiment.
 
 The runner does not run this chat's model internally. My contextual judgement can be used in this conversation when representative images/page context are actually surfaced or attached. For automated unattended runs, use deterministic checks and/or explicitly configured models; do not pretend this assistant silently runs inside the Action. External vision APIs must be opt-in, with credentials managed as GitHub secrets, clear cost/privacy choice and no silent fallback.
 
