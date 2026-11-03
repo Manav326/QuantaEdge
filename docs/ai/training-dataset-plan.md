@@ -32,7 +32,7 @@ Each generated record carries class, subject, language, chapter, source URL, exa
    The default refuses machine-validated drafts. For a controlled, explicitly experimental pilot only, use --include-drafts; its manifest is marked DRAFT_EXPERIMENT.
 8. Validate:
    python scripts/ai_training_dataset.py validate --dataset-dir data/ai-training/datasets --require-approved
-9. Commit only rights-cleared original generated records, manifests and evaluation artifacts to GitHub. Do not commit private source files. Keep datasets versioned under data/ai-training/datasets/ and push to main using the normal repository workflow.
+9. Persist only rights-cleared original generated records, manifests and evaluation artefacts under `data/ai-training/datasets/` on `automation/textbook-pipeline-state`. Do not commit private source files or generated data to application `main`. The repository is public, so anything committed to the state branch is also public.
 
 ## Splits and deduplication
 
