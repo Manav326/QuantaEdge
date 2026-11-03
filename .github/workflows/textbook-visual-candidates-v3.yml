@@ -138,7 +138,7 @@ jobs:
       QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
       VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}
       CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}
-      MAX_BATCHES_PER_RUN: 12
+      MAX_BATCHES_PER_RUN: 8
     steps:
       - name: Checkout main with write permission for review metadata
         uses: actions/checkout@v4
@@ -662,7 +662,7 @@ jobs:
             --model "$VISION_MODEL" \
             --batch-size "$CHECKPOINT_BATCH_SIZE" \
             --max-batches-per-run "$MAX_BATCHES_PER_RUN" \
-            --request-timeout 360 --num-ctx 8192 --num-predict 512; then
+            --request-timeout 210 --num-ctx 8192 --num-predict 512; then
             echo "yielded=false" >> "$GITHUB_OUTPUT"
           else
             result=$?
