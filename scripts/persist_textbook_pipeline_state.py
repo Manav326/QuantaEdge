@@ -313,6 +313,40 @@ def restore_state(repo_root: Path, branch: str = DEFAULT_STATE_BRANCH) -> dict[s
     }
 
 
+def _changed_state_paths(repo: Path, base: str, head: str) -> list[str]:
+    raw = _git(
+        repo,
+        "diff",
+        "--name-only",
+        "-z",
+        "--no-renames",
+        base,
+        head,
+        "--",
+        *STATE_PATHS,
+    ).stdout
+    values = [item for item in raw.split("\\0") if item]
+    return _validate_paths(repo, values) if values else []
+
+
+def _sync_committed_state_to_checkout(
+    repo: Path,
+    worktree: Path,
+    paths: Sequence[str],
+    committed_paths: Sequence[str],
+) -> None:
+    """Refresh imported/disjoint state paths without replacing this call's own inputs."""
+    for relative in paths:
+        if any(
+            relative == committed
+            or relative.startswith(committed + "/")
+            or committed.startswith(relative + "/")
+            for committed in committed_paths
+        ):
+            continue
+        _copy_path(worktree / relative, repo / relative)
+
+
 def _copy_path(source: Path, destination: Path) -> None:
     if destination.is_dir() and not destination.is_symlink():
         shutil.rmtree(destination)
@@ -352,7 +386,9 @@ def commit_state(
             diff = _git(worktree, "diff", "--cached", "--quiet", check=False)
             if diff.returncode == 0:
                 commit_sha = _git(worktree, "rev-parse", "HEAD").stdout.strip()
-                _write_baseline(repo, branch, _git(repo, "rev-parse", state_ref).stdout.strip())
+                changed_state = _changed_state_paths(repo, baseline_sha, commit_sha)
+                _sync_committed_state_to_checkout(repo, worktree, changed_state, normalized_paths)
+                _write_baseline(repo, branch, commit_sha)
                 return {
                     "branch": branch,
                     "commit_sha": commit_sha,
@@ -374,6 +410,8 @@ def commit_state(
                 )
                 if pushed.returncode == 0:
                     commit_sha = _git(worktree, "rev-parse", "HEAD").stdout.strip()
+                    changed_state = _changed_state_paths(repo, baseline_sha, commit_sha)
+                    _sync_committed_state_to_checkout(repo, worktree, changed_state, normalized_paths)
                     _write_baseline(repo, branch, commit_sha)
                     return {
                         "branch": branch,
