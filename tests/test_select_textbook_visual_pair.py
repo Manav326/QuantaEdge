@@ -34,6 +34,7 @@ class TextbookVisualPairSelectionTests(unittest.TestCase):
             class_no=self.pair["class_no"],
             book_ids_csv=self.pair["book_ids_csv"],
             source_slugs_csv=self.pair["source_slugs_csv"],
+            book_pair_id=self.pair["book_pair_id"],
         )
 
     def test_selects_only_the_planned_math_pair_not_the_entire_class(self):
@@ -42,7 +43,7 @@ class TextbookVisualPairSelectionTests(unittest.TestCase):
         self.assertEqual(self.pair["book_ids_csv"].split(","), [x["book_id"] for x in selected["sources"]])
         self.assertEqual(self.pair["source_slugs_csv"].split(","), [x["book_slug"] for x in selected["sources"]])
         self.assertEqual(["english", "hindi"], [x["source_language"] for x in selected["sources"]])
-        self.assertEqual(["mathematics", "maths"], [x["subject"].lower() for x in selected["sources"]])
+        self.assertEqual(["maths", "maths"], [x["subject"].lower() for x in selected["sources"]])
         self.assertFalse(selected["publication_allowed"])
 
     def test_fails_closed_when_an_assigned_book_is_missing(self):
@@ -77,6 +78,7 @@ class TextbookVisualPairSelectionTests(unittest.TestCase):
                 self.english, self.hindi, class_no="6",
                 book_ids_csv="ncert-c6-english-fegp1",
                 source_slugs_csv=self.pair["source_slugs_csv"],
+                book_pair_id=self.pair["book_pair_id"],
             )
 
 
