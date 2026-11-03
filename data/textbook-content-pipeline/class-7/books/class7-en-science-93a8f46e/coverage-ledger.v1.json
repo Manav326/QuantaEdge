@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3326,
-    "successful_visual_analyses": 3288,
-    "missing_visual_analyses": 4162,
-    "failed_visual_analyses": 38,
+    "raw_analysis_result_rows": 3330,
+    "successful_visual_analyses": 3291,
+    "missing_visual_analyses": 4158,
+    "failed_visual_analyses": 39,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4200,
+    "unresolved_count": 4197,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -130341,7 +130341,7 @@
       "asset_path": "assets/12f345ebf96c26bdad2e5d84cfa1709429373ad021c5ecf58803647b1aee5338.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -130359,9 +130359,18 @@
       "asset_path": "assets/eb5d5d05f7ceb9575551cba9b1427062684825b65295e172b32bf858b8775841.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0777CH07' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0777CH07"
+        ],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -130377,9 +130386,35 @@
       "asset_path": "assets/ba84ccae392daaa92b7023a981aa06ae4c03f4d968be6cc3e27a3f0acd3348b8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing heat transfer in nature, with images of a fireplace, a plant, a watermelon, a ruler, and a city.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer",
+          "A page from a textbook discussing heat transfer in nature, with images of a fireplace, a plant, a watermelon, a ruler, and a city."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Nature",
+          "Gangtok",
+          "Kerala",
+          "Equator",
+          "Coastline",
+          "Climate",
+          "Cold",
+          "Warm",
+          "Humid"
+        ],
+        "context_relation": "The grandfather's explanation about the difference in climate between Gangtok and Kerala is based on the geographical and climatic factors.",
+        "limitations": [
+          "The text is incomplete and does not provide the full explanation of why some places are cold and others are warm."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -130395,9 +130430,32 @@
       "asset_path": "assets/03f80b500abe1a75bda560ff5a2a2b89b2f366ee1444b627c43b0037ed931128.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An elderly man sitting in a garden with flowers and bushes in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi"
+        ],
+        "concepts": [
+          "heat transfer",
+          "equator",
+          "coastline",
+          "climate",
+          "winter",
+          "humidity",
+          "cold",
+          "warm",
+          "Kerala",
+          "Gangtok"
+        ],
+        "context_relation": "The image is a visual representation of the grandfather's explanation about the difference in climate between Kerala and Gangtok.",
+        "limitations": [
+          "The image does not provide specific details about the grandfather's explanation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

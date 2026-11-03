@@ -12,16 +12,16 @@
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "4332b8dc4e813ea580dd56d1",
-      "b6d59640d4c635a0bc9438c9",
-      "b8b16cd29915e5e29cf6e5f0",
-      "b655021abbc6938bb1728fb8"
+      "cb53f25d2aadb5c770561172",
+      "decfeaf4b15723519cb23248",
+      "8142561d01634c8f4dbc5a66",
+      "6d8fac1014de536aae0f656c"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3287,
-    "assets_remaining": 4201,
+    "assets_analyzed": 3290,
+    "assets_remaining": 4198,
     "assets_completion_percent": 43.9,
-    "assets_failed": 38,
+    "assets_failed": 39,
     "assets_skipped_from_checkpoint": 3287,
     "batch_limit": 5,
     "publication_allowed": false
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41588060680",
-      "checkpointed_at": "2026-11-03T08:44:45Z"
+      "checkpointed_at": "2026-11-03T08:57:24Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -121709,6 +121709,138 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "cb53f25d2aadb5c770561172",
+      "asset_sha256": "12f345ebf96c26bdad2e5d84cfa1709429373ad021c5ecf58803647b1aee5338",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/12f345ebf96c26bdad2e5d84cfa1709429373ad021c5ecf58803647b1aee5338.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41588060680",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "decfeaf4b15723519cb23248",
+      "asset_sha256": "eb5d5d05f7ceb9575551cba9b1427062684825b65295e172b32bf858b8775841",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/eb5d5d05f7ceb9575551cba9b1427062684825b65295e172b32bf858b8775841.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0777CH07' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0777CH07"
+        ],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41588060680",
+      "checkpointed_at": "2026-11-03T09:02:11Z"
+    },
+    {
+      "asset_id": "8142561d01634c8f4dbc5a66",
+      "asset_sha256": "ba84ccae392daaa92b7023a981aa06ae4c03f4d968be6cc3e27a3f0acd3348b8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/ba84ccae392daaa92b7023a981aa06ae4c03f4d968be6cc3e27a3f0acd3348b8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing heat transfer in nature, with images of a fireplace, a plant, a watermelon, a ruler, and a city.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer",
+          "A page from a textbook discussing heat transfer in nature, with images of a fireplace, a plant, a watermelon, a ruler, and a city."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Nature",
+          "Gangtok",
+          "Kerala",
+          "Equator",
+          "Coastline",
+          "Climate",
+          "Cold",
+          "Warm",
+          "Humid"
+        ],
+        "context_relation": "The grandfather's explanation about the difference in climate between Gangtok and Kerala is based on the geographical and climatic factors.",
+        "limitations": [
+          "The text is incomplete and does not provide the full explanation of why some places are cold and others are warm."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41588060680",
+      "checkpointed_at": "2026-11-03T09:04:15Z"
+    },
+    {
+      "asset_id": "6d8fac1014de536aae0f656c",
+      "asset_sha256": "03f80b500abe1a75bda560ff5a2a2b89b2f366ee1444b627c43b0037ed931128",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/03f80b500abe1a75bda560ff5a2a2b89b2f366ee1444b627c43b0037ed931128.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An elderly man sitting in a garden with flowers and bushes in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi"
+        ],
+        "concepts": [
+          "heat transfer",
+          "equator",
+          "coastline",
+          "climate",
+          "winter",
+          "humidity",
+          "cold",
+          "warm",
+          "Kerala",
+          "Gangtok"
+        ],
+        "context_relation": "The image is a visual representation of the grandfather's explanation about the difference in climate between Kerala and Gangtok.",
+        "limitations": [
+          "The image does not provide specific details about the grandfather's explanation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41588060680",
+      "checkpointed_at": "2026-11-03T09:06:08Z"
     }
   ]
 }
