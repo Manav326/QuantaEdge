@@ -25,7 +25,7 @@ Each generated record carries class, subject, language, chapter, source URL, exa
    python scripts/ai_training_dataset.py generate --input-dir private-review --target 200
 5. After checking provider privacy and rights, explicitly allow external processing:
    python scripts/ai_training_dataset.py generate --input-dir private-review --target 25000 --batch-size 5 --max-api-calls 5000 --generate --confirm-external-processing --commit-and-push
-   This resumes from drafts.jsonl. The generation script outputs only original messages and provenance metadata, not source excerpts. With --commit-and-push, it commits only this JSONL file and pushes to origin/main after generation; it refuses to push if the local branch is not main or is not exactly aligned with origin/main. Review generated content before training.
+   This resumes from drafts.jsonl. The generation script outputs only original messages and provenance metadata, not source excerpts. With `--commit-and-push`, it persists only this JSONL file to `automation/textbook-pipeline-state` via `scripts/persist_textbook_pipeline_state.py`; it never pushes generated data to application `main`. Review generated content before training.
 6. Review and approve examples with curriculum editors. Change review_status only after actual review; never bulk-mark generated records approved without review.
 7. Export approved data:
    python scripts/ai_training_dataset.py build --input data/ai-training/generated/drafts.jsonl
