@@ -76,7 +76,7 @@ The runner can do without image-generation credit:
 - Recreate suitable structured diagrams as real SVG/XML using templates/code; labels remain editable text. Use only source-verified labels/arrows/relationships.
 - Run optional local vision-model comparisons in small, stratified batches. Check actual runner RAM/CPU/GPU, Ollama version, model download size and context window at runtime; do not assume GPU availability or that the larger model fits. Model is a helper, not the selector of record.
 - Validate metadata/schema, hashes, asset dimensions, duplicate rate, page coverage and output package.
-- Commit deterministic manifests/compact review artefacts to \`main\`; publish an immutable GHCR bundle with the full assets and checksums; move the stable tag only after a full validated run, not an experiment.
+- Commit deterministic manifests/compact review artefacts to `automation/textbook-pipeline-state`; publish an immutable GHCR bundle with the full assets and checksums; move the stable tag only after a full validated run, not an experiment.
 
 The runner does not run this chat's model internally. My contextual judgement can be used in this conversation when representative images/page context are actually surfaced or attached. For automated unattended runs, use deterministic checks and/or explicitly configured models; do not pretend this assistant silently runs inside the Action. External vision APIs must be opt-in, with credentials managed as GitHub secrets, clear cost/privacy choice and no silent fallback.
 
