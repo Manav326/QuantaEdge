@@ -106,6 +106,33 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn('== "completed"', mirror)
         self.assertIn('== "success"', mirror)
 
+    def test_remaining_textbook_writers_are_dispatch_only_and_use_isolated_state(self):
+        specialist = read("textbook-visual-analysis.yml")
+        offline_dataset = read("ai-training-offline-dataset.yml")
+        cache = read("textbook-cache.yml")
+        ai_script = (ROOT / "scripts" / "ai_training_dataset.py").read_text(encoding="utf-8")
+
+        self.assertIn("workflow_dispatch:", specialist)
+        self.assertNotIn("\\n  push:\\n", specialist)
+        self.assertIn("group: qe-textbook-visual-candidates-v3-global", specialist)
+        self.assertIn("persist_textbook_pipeline_state.py restore", specialist)
+        self.assertIn("persist_textbook_pipeline_state.py commit", specialist)
+        self.assertNotIn("git push origin HEAD:main", specialist)
+
+        self.assertIn("workflow_dispatch:", offline_dataset)
+        self.assertNotIn("\\n  push:\\n", offline_dataset)
+        self.assertIn("automation/textbook-pipeline-state", offline_dataset)
+        self.assertIn("persist_textbook_pipeline_state.py commit", offline_dataset)
+        self.assertNotIn("git push origin HEAD:main", offline_dataset)
+        self.assertIn("persist_textbook_pipeline_state.py", ai_script)
+        self.assertNotIn('"HEAD:main"', ai_script)
+        self.assertIn("data/ai-training", ai_script)
+
+        self.assertIn("workflow_dispatch:", cache)
+        self.assertNotIn("\\n  push:\\n", cache)
+        self.assertIn("repair_queue", cache)
+        self.assertIn("INPUT_REPAIR_QUEUE", cache)
+
     def test_layers_6_to_8_are_manual_and_checkpoint_to_the_isolated_branch(self):
         workflow = read("quantaedge-layers-6-8.yml")
         script = (ROOT / "scripts" / "quantaedge_layers_6_8.py").read_text(encoding="utf-8")
