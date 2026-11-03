@@ -42,8 +42,8 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("select_bilingual_pair", selector)
         self.assertIn("exactly one assigned book_id", selector)
         self.assertIn('for selection, language, expected_id, expected_slug in (', selector)
-        self.assertIn('("english", book_ids[0]', selector)
-        self.assertIn('("hindi", book_ids[1]', selector)
+        self.assertIn('(english, "english", book_ids[0], source_slugs[0])', selector)
+        self.assertIn('(hindi, "hindi", book_ids[1], source_slugs[1])', selector)
         self.assertIn("wrong language identity", selector)
 
     def test_only_resume_work_is_pair_sharded_and_each_pair_is_source_bound(self):
