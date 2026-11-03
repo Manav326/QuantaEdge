@@ -97,7 +97,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install extraction dependency
-        run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+        run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2" "Pillow>=10,<13"
       - name: Compile preparation and validation scripts
         run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/select_textbook_visual_pair.py scripts/persist_textbook_pipeline_state.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/plan_textbook_layer45_matrix.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
       - name: Test source selection, extraction integrity and candidate preparation
@@ -159,7 +159,7 @@ jobs:
           [[ "$ANALYSIS_MODE" == "prepare_only" || "$ANALYSIS_MODE" == "analyze_all" || "$ANALYSIS_MODE" == "resume_preparation" || "$ANALYSIS_MODE" == "resume_layers_4_5" ]] || { echo "Invalid analysis_mode"; exit 2; }
           [[ -n "$VISION_MODEL" ]] || { echo "vision_model must be non-empty"; exit 2; }
           [[ "$CHECKPOINT_BATCH_SIZE" == "5" || "$CHECKPOINT_BATCH_SIZE" == "10" ]] || { echo "Invalid checkpoint_batch_size"; exit 2; }
-          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2" "Pillow>=10,<13"
       - name: Restore isolated textbook pipeline state
         env:
           QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
