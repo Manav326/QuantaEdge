@@ -64,7 +64,7 @@ Target placements:
 
 ## GitHub-hosted runner: yes, use it
 
-Use the existing GitHub-hosted Actions runner as the repeatable extraction/processing worker. The runner is ephemeral, so nothing important may exist only on its disk. At the start of each run, verify the official whole-book source against the existing manifest/checksum; at the end and at checkpoints, persist versioned outputs to the repository and GHCR as appropriate. Preserve the project's \`git pull\` workflow for review manifests and deliverables. Never move the stable GHCR tag to a partial diagnostic result: set \`publish_stable: false\` for comparisons and partial runs.
+Use the existing GitHub-hosted Actions runner as the repeatable extraction/processing worker. The runner is ephemeral, so nothing important may exist only on its disk. At the start of each run, verify the official whole-book source against the matching manifest/checksum; at checkpoints, persist resumable state to `automation/textbook-pipeline-state` and versioned binaries to GHCR as appropriate. Application `main` must not be used as a pipeline state store or trigger for these workers. Never move the stable GHCR tag to a partial diagnostic result: set `publish_stable: false` for comparisons and partial runs.
 
 The runner can do without image-generation credit:
 - Download/checksum-verify PDF and its existing page-text JSONL/manifest.
