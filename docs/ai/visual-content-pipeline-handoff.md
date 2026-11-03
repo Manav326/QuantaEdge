@@ -35,7 +35,7 @@ Target placements:
 - Keep practice questions separate. This work is for textbook visuals, not generating assessment questions.
 - New lesson insertion must be non-destructive. Never replace a lesson's current blocks to import a visual. Use a new safe append/insert service/endpoint with transaction, ordering, audit trail and tests.
 - Follow existing permissions/roles and central QuantaEdge branding. Enforce authentication and review/publish permission server-side.
-- The owner prefers artefacts committed to GitHub so \`git pull\` updates local work. Continue durable/versioned output in Git and GHCR, but avoid committing redundant gigantic derivatives blindly; document what resides in Git versus the versioned bundle and provide integrity hashes/restore tooling.
+- Keep generated artefacts durable in Git, but separate from application `main`: compact manifests, ledgers and review metadata live on `automation/textbook-pipeline-state`; full visual binaries/previews live in GHCR versioned bundles. Avoid committing redundant derivatives; document paths and provide integrity hashes/restore tooling.
 
 ## Current pilot and evidence
 
