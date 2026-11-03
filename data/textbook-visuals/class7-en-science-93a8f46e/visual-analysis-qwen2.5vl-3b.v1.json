@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3280,
+    "assets_selected": 3281,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "84efbe1aa3aec80f0d7d377e"
+      "120367215f628d2ad64aec29"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3276,
     "assets_remaining": 4212,
     "assets_completion_percent": 43.8,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 3275,
+    "assets_skipped_from_checkpoint": 3276,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:52:30Z"
+      "checkpointed_at": "2026-11-03T05:57:43Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:52:59Z"
+      "checkpointed_at": "2026-11-03T05:58:12Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:53:36Z"
+      "checkpointed_at": "2026-11-03T05:58:51Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:54:15Z"
+      "checkpointed_at": "2026-11-03T05:59:29Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -121046,9 +121046,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41548040745",
+      "run_id": "41580137854",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
