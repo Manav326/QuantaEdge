@@ -189,6 +189,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("images_built_this_run", ci)
         self.assertIn("retention-days: 90", ci)
         self.assertIn("actions/workflows/ci.yml/runs?head_sha=$target_sha", deploy)
+        self.assertIn('select(.conclusion == "success" and .event == "push")', deploy)
         self.assertIn("production-release-evidence.json", deploy)
         self.assertIn("tested_commit_sha", deploy)
         self.assertIn("image_source_commit_sha", deploy)
