@@ -3,7 +3,7 @@
 **Purpose:** Continue this work in a future chat without restarting discovery or repeating decisions.  
 **Status:** Planning/audit only. This document adds a roadmap; it does not mean the review UI or import pipeline exists.  
 **Last researched:** 2026-10-15  
-**Repository:** \`Manav326/QuantaEdge\`, work directly on \`main\` unless explicitly instructed otherwise.
+**Repository:** `Manav326/QuantaEdge`. Application code changes go through a repair/feature branch and PR to `main`; generated textbook data and resumable checkpoints belong on `automation/textbook-pipeline-state`, never on application `main`.
 
 ## Start here in the next chat
 
