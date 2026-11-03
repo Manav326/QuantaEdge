@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4e5028eb4771a1d082c992cfdd4543a14a4ddbbed89ef4086e728bd85b911d3f",
+  "raw_analysis_sha256": "09679e7b7c5a56b108f6b728a3c1c7d21bd0408ceaa154cf66a79fddafffc96b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41554177109",
-      "checkpointed_at": "2026-11-03T02:09:35Z",
+      "checkpointed_at": "2026-11-03T02:15:17Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41554177109",
-      "checkpointed_at": "2026-11-03T02:10:15Z",
+      "checkpointed_at": "2026-11-03T02:15:58Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41554177109",
-      "checkpointed_at": "2026-11-03T02:11:05Z",
+      "checkpointed_at": "2026-11-03T02:16:46Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -65411,7 +65411,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41554177109",
-      "checkpointed_at": "2026-11-03T02:12:22Z",
+      "checkpointed_at": "2026-11-03T02:18:04Z",
       "effective_analysis": {
         "visual_summary": "A diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
         "visual_type": "diagram",
@@ -66746,7 +66746,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41539693284",
+      "run_id": "41554177109",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
