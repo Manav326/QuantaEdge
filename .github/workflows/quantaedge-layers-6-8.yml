@@ -1,24 +1,6 @@
 name: QuantaEdge Layers 6-8 - local Ollama pipeline
 
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - "scripts/quantaedge_layers_6_8.py"
-      - "scripts/ai_training_dataset.py"
-      - "scripts/validate_structured_lesson_artifacts.py"
-      - "scripts/register_structured_lesson_drafts.py"
-      - "tests/test_quantaedge_layers_6_8.py"
-      - "tests/test_validate_structured_lesson_artifacts.py"
-      - "tests/test_register_structured_lesson_drafts.py"
-      - "data/structured-lessons/**"
-      - "services/api/src/main/java/com/quantaedge/api/StructuredLessonArtifactService.java"
-      - "services/api/src/test/java/com/quantaedge/api/StructuredLessonArtifactServiceTest.java"
-      - ".github/workflows/ci.yml"
-      - ".github/workflows/quantaedge-layers-6-8.yml"
-      - "tests/test_workflow_resume_entrypoints.py"
-      - "docs/textbook-content-pipeline-eight-layers.md"
-      - "apps/admin/app/structured-lesson-preview/page.tsx"
   workflow_dispatch:
     inputs:
       mode:
@@ -118,6 +100,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Restore isolated textbook pipeline state
+        env:
+          QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
+        run: python scripts/persist_textbook_pipeline_state.py restore --repo-root "$GITHUB_WORKSPACE"
       - name: Compile pipeline and content-contract scripts
         run: python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py scripts/validate_structured_lesson_artifacts.py scripts/register_structured_lesson_drafts.py
       - name: Test pipeline contracts, native Ollama, provenance, resume and split safety
@@ -142,7 +128,7 @@ jobs:
       CHECKPOINT_EVERY: ${{ inputs.checkpoint_every || '2' }}
       MAX_MODEL_CALLS: ${{ inputs.max_model_calls || '6' }}
     steps:
-      - name: Checkout main with checkpoint write permission
+      - name: Checkout application code from main
         uses: actions/checkout@v4
         with:
           ref: main
@@ -151,6 +137,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Restore isolated textbook pipeline state
+        env:
+          QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
+        run: python scripts/persist_textbook_pipeline_state.py restore --repo-root "$GITHUB_WORKSPACE"
       - name: Repeat checks on the execution checkout
         run: |
           [[ "$CHECKPOINT_EVERY" =~ ^[0-9]+$ ]] && (( CHECKPOINT_EVERY >= 1 && CHECKPOINT_EVERY <= 5 )) || { echo "checkpoint_every must be 1..5"; exit 2; }
@@ -336,7 +326,7 @@ jobs:
             echo "## QuantaEdge Layers 6-8"
             echo "- Provider: native local Ollama /api/chat; no OpenAI API key or hosted endpoint."
             echo "- One whole-book source per run and a strict model-call budget."
-            echo "- Git savepoints are pushed to main; resume reuses matching source, edition, model, prompt, contract and visual-evidence fingerprints."
+            echo "- Git savepoints are pushed only to automation/textbook-pipeline-state; application main remains unchanged."
             if [[ "${{ inputs.mode }}" == "resume" ]]; then echo "- Explicit RESUME mode selected: completed matching segments are reused; only pending/error segments within the new model-call budget are attempted."; fi
             if [[ ("${{ inputs.mode }}" == "resume" || "${{ inputs.mode }}" == "run") && "${{ steps.generation_preflight.outputs.preflight_state }}" == "MATCHED_CHECKPOINT" && "${{ steps.generation_preflight.outputs.retryable_segments }}" == "0" ]]; then echo "- All segments are already terminal; skipped Ollama startup/model download/inference."; fi
             echo "- Lessons, retrieval records and SFT examples remain review-only; production selection remains pending human review."
