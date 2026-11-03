@@ -98,6 +98,73 @@ class TextbookPipelineStateTests(unittest.TestCase):
         )
         self.assertIn("draft-1", saved_dataset)
 
+
+    def _make_second_clone(self) -> Path:
+        second = Path(self.temp.name) / "clone-second"
+        subprocess.run(
+            ["git", "clone", str(self.remote), str(second)],
+            check=True,
+            capture_output=True,
+        )
+        git(second, "config", "user.name", "test")
+        git(second, "config", "user.email", "test@example.invalid")
+        git(second, "fetch", "origin", DEFAULT_STATE_BRANCH)
+        return second
+
+    def test_concurrent_disjoint_book_checkpoints_are_both_preserved(self):
+        second = self._make_second_clone()
+        restore_state(self.clone, DEFAULT_STATE_BRANCH)
+        restore_state(second, DEFAULT_STATE_BRANCH)
+        main_before = git(self.clone, "rev-parse", "origin/main")
+
+        first_path = "data/textbook-visuals/class6-en-science/index.json"
+        second_path = "data/textbook-visuals/class6-hi-science/index.json"
+        write(self.clone / first_path, '{"book":"english","checkpoint":1}\n')
+        write(second / second_path, '{"book":"hindi","checkpoint":1}\n')
+
+        first = commit_state(
+            self.clone, [first_path], "checkpoint(content): English book checkpoint",
+            DEFAULT_STATE_BRANCH,
+        )
+        second_result = commit_state(
+            second, [second_path], "checkpoint(content): Hindi book checkpoint",
+            DEFAULT_STATE_BRANCH,
+        )
+        self.assertTrue(first["changed"])
+        self.assertTrue(second_result["changed"])
+
+        git(self.clone, "fetch", "origin", DEFAULT_STATE_BRANCH, "main")
+        english = git(self.clone, "show", f"origin/{DEFAULT_STATE_BRANCH}:{first_path}")
+        hindi = git(self.clone, "show", f"origin/{DEFAULT_STATE_BRANCH}:{second_path}")
+        self.assertIn("english", english)
+        self.assertIn("hindi", hindi)
+        self.assertEqual(main_before, git(self.clone, "rev-parse", "origin/main"))
+
+    def test_concurrent_same_file_checkpoint_conflict_fails_without_force_push(self):
+        second = self._make_second_clone()
+        restore_state(self.clone, DEFAULT_STATE_BRANCH)
+        restore_state(second, DEFAULT_STATE_BRANCH)
+        main_before = git(self.clone, "rev-parse", "origin/main")
+        shared_path = "data/textbook-content-pipeline/class-6/books/shared/coverage-ledger.v1.json"
+
+        write(self.clone / shared_path, '{"status":"ENGLISH"}\n')
+        write(second / shared_path, '{"status":"HINDI"}\n')
+        commit_state(
+            self.clone, [shared_path], "checkpoint(content): first shared path writer",
+            DEFAULT_STATE_BRANCH,
+        )
+        with self.assertRaisesRegex(RuntimeError, "overlapping write"):
+            commit_state(
+                second, [shared_path], "checkpoint(content): conflicting shared path writer",
+                DEFAULT_STATE_BRANCH,
+            )
+
+        git(self.clone, "fetch", "origin", DEFAULT_STATE_BRANCH, "main")
+        saved = git(self.clone, "show", f"origin/{DEFAULT_STATE_BRANCH}:{shared_path}")
+        self.assertIn("ENGLISH", saved)
+        self.assertNotIn("HINDI", saved)
+        self.assertEqual(main_before, git(self.clone, "rev-parse", "origin/main"))
+
     def test_rejects_application_code_and_parent_traversal(self):
         restore_state(self.clone, DEFAULT_STATE_BRANCH)
         with self.assertRaisesRegex(ValueError, "approved textbook data"):
