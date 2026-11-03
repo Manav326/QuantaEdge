@@ -46,6 +46,30 @@ class PipelineTests(unittest.TestCase):
   self.assertEqual("PAGE_PREVIEW_CONTEXT_ONLY",preview_row["analysis_status"])
  def test_missing_analysis_is_not_dropped(self):
   r=json.loads(self.raw.read_text());r["results"]=[];w(self.raw,r);out=self.build();self.assertEqual("INCOMPLETE",out["ledger_status"]);self.assertEqual("ANALYSIS_MISSING",out["visuals"][0]["analysis_status"])
+ def test_retryable_inference_failure_is_distinguished_from_terminal_failure(self):
+  raw=json.loads(self.raw.read_text(encoding="utf-8"))
+  row=raw["results"][0]
+  row.pop("analysis")
+  row["analysis_status"]="ANALYSIS_ERROR"
+  row["attempt_count"]=2
+  w(self.raw,raw)
+  out=self.build()
+  self.assertEqual("INCOMPLETE",out["ledger_status"])
+  self.assertEqual(1,out["summary"]["retryable_visual_failures"])
+  self.assertEqual(0,out["summary"]["terminal_visual_failures"])
+  self.assertEqual("ANALYSIS_ERROR",out["visuals"][0]["analysis_status"])
+ def test_terminal_inference_failure_is_not_counted_as_retryable(self):
+  raw=json.loads(self.raw.read_text(encoding="utf-8"))
+  row=raw["results"][0]
+  row.pop("analysis")
+  row["analysis_status"]="ANALYSIS_ERROR_TERMINAL"
+  row["attempt_count"]=3
+  w(self.raw,raw)
+  out=self.build()
+  self.assertEqual("INCOMPLETE",out["ledger_status"])
+  self.assertEqual(0,out["summary"]["retryable_visual_failures"])
+  self.assertEqual(1,out["summary"]["terminal_visual_failures"])
+  self.assertEqual("ANALYSIS_ERROR_TERMINAL",out["visuals"][0]["analysis_status"])
  def test_correction_changes_effective_not_raw(self):
   before=self.raw.read_bytes();p=self.root/"c.json";w(p,{"schema_version":"quantaedge.visual-analysis-corrections.v1","source_pdf_sha256":self.sha,"corrections":[{"asset_id":"a1","asset_sha256":self.ash,"status":"ACCEPTED","reviewer":"editor","reason":"correct","analysis_patch":{"visual_summary":"Corrected"}}]})
   out=self.build(p);e=json.loads(self.eff.read_text());self.assertEqual("Corrected",e["results"][0]["effective_analysis"]["visual_summary"]);self.assertEqual(before,self.raw.read_bytes());self.assertEqual(1,out["summary"]["corrections_applied"])
