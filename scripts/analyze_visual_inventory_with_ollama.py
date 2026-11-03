@@ -456,7 +456,6 @@ def run_analysis(
             existing["analysis_status"] = "ANALYSIS_ERROR_TERMINAL"
             existing["human_review_required"] = True
             existing["publication_allowed"] = False
-            results_by_terminal = existing
             previous[str(asset_id)] = existing
             continue
         if run_id and existing.get("analysis_status") == "ANALYSIS_ERROR" and existing.get("run_id") == run_id:
