@@ -37,6 +37,7 @@ def select_bilingual_pair(
     class_no: str,
     book_ids_csv: str,
     source_slugs_csv: str,
+    book_pair_id: str,
 ) -> dict[str, Any]:
     book_ids = _csv_values(book_ids_csv, "book_ids_csv")
     source_slugs = _csv_values(source_slugs_csv, "source_slugs_csv")
@@ -86,10 +87,12 @@ def select_bilingual_pair(
     if selected[0]["book_id"] == selected[1]["book_id"]:
         raise ValueError("English and Hindi source IDs must be different.")
 
+    if not book_pair_id or not book_pair_id.startswith(f"class{expected_class}-") or not book_pair_id.endswith("-bilingual"):
+        raise ValueError("book_pair_id must identify the selected class and end in -bilingual.")
     return {
         "class": expected_class,
         "sources": selected,
-        "book_pair_id": f"class{expected_class}-{english_subject}-bilingual",
+        "book_pair_id": book_pair_id,
         "publication_allowed": False,
         "review_required": True,
     }
@@ -100,6 +103,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--class-no", required=True, choices=("6", "7", "8"))
     parser.add_argument("--book-ids-csv", required=True)
     parser.add_argument("--source-slugs-csv", required=True)
+    parser.add_argument("--book-pair-id", required=True)
     parser.add_argument("--english-selection", type=Path, required=True)
     parser.add_argument("--hindi-selection", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -113,6 +117,7 @@ def main(argv: list[str] | None = None) -> int:
             class_no=args.class_no,
             book_ids_csv=args.book_ids_csv,
             source_slugs_csv=args.source_slugs_csv,
+            book_pair_id=args.book_pair_id,
         )
         args.output.parent.mkdir(parents=True, exist_ok=True)
         temporary = args.output.with_suffix(args.output.suffix + ".tmp")
