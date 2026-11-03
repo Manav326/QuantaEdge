@@ -198,6 +198,44 @@ class TextbookPipelineStateTests(unittest.TestCase):
         self.assertIn("late-legacy-main", imported)
         self.assertNotEqual(main_before, git(self.clone, "rev-parse", "origin/main"))
 
+
+    def test_checkpoint_syncs_imported_legacy_paths_before_future_directory_savepoints(self):
+        restore_state(self.clone, DEFAULT_STATE_BRANCH)
+        legacy_path = "data/textbook-visuals/class6-en-science/late-legacy.json"
+        worker_path = "data/textbook-visuals/class6-hi-science/index.json"
+
+        write(self.seed / legacy_path, '{"source":"late-legacy-main"}\n')
+        git(self.seed, "add", "-A")
+        git(self.seed, "commit", "-m", "late legacy visual checkpoint")
+        git(self.seed, "push", "origin", "main")
+
+        write(self.clone / worker_path, '{"source":"current-worker"}\n')
+        commit_state(
+            self.clone, [worker_path], "checkpoint(content): persist current worker after legacy import",
+            DEFAULT_STATE_BRANCH,
+        )
+        self.assertEqual(
+            '{"source":"late-legacy-main"}\n',
+            (self.clone / legacy_path).read_text(encoding="utf-8"),
+        )
+
+        write(self.clone / "data/textbook-visuals/class6-hi-science/second.json", '{"second":true}\n')
+        commit_state(
+            self.clone, ["data/textbook-visuals"],
+            "checkpoint(content): broad visual directory after legacy import",
+            DEFAULT_STATE_BRANCH,
+        )
+        git(self.clone, "fetch", "origin", DEFAULT_STATE_BRANCH)
+        saved_legacy = git(self.clone, "show", f"origin/{DEFAULT_STATE_BRANCH}:{legacy_path}")
+        saved_worker = git(self.clone, "show", f"origin/{DEFAULT_STATE_BRANCH}:{worker_path}")
+        saved_second = git(
+            self.clone, "show",
+            f"origin/{DEFAULT_STATE_BRANCH}:data/textbook-visuals/class6-hi-science/second.json",
+        )
+        self.assertIn("late-legacy-main", saved_legacy)
+        self.assertIn("current-worker", saved_worker)
+        self.assertIn("true", saved_second)
+
     def test_restore_rejects_same_path_legacy_main_conflict_without_overwriting_either_branch(self):
         restore_state(self.clone, DEFAULT_STATE_BRANCH)
         shared_path = "data/textbook-visuals/class6-en-science/index.json"
