@@ -52,6 +52,10 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual("qwen2.5vl:3b", payload["model"])
         self.assertEqual(8192, payload["options"]["num_ctx"])
         self.assertEqual(1024, payload["options"]["num_predict"])
+        self.assertEqual("object", payload["format"]["type"])
+        self.assertIn("visual_summary", payload["format"]["required"])
+        self.assertIn("visual_type", payload["format"]["properties"])
+        self.assertFalse(payload["format"]["additionalProperties"])
         self.assertEqual("Water cycle", payload["messages"][0]["content"].split("Nearby extracted page text")[1].splitlines()[1])
         self.assertEqual(base64.b64encode(self.asset_path.read_bytes()).decode("ascii"), payload["messages"][0]["images"][0])
         return FakeResponse({"message": {"content": json.dumps({
