@@ -52,14 +52,15 @@ jobs:
           host: ${{ secrets.QUANTAEDGE_DEPLOY_HOST }}
           username: ${{ secrets.QUANTAEDGE_DEPLOY_USER }}
           key: ${{ secrets.QUANTAEDGE_DEPLOY_SSH_KEY }}
-          envs: APP_RAZORPAY_KEY_ID,APP_RAZORPAY_KEY_SECRET,QUANTAEDGE_GHCR_TOKEN,QUANTAEDGE_GHCR_OWNER,DEPLOY_TARGET_SHA,IMAGE_SOURCE_SHA,CI_EVIDENCE_RUN_ID,RELEASE_EVIDENCE_BASE64
+          envs: APP_RAZORPAY_KEY_ID,APP_RAZORPAY_KEY_SECRET,QUANTAEDGE_GHCR_TOKEN,QUANTAEDGE_GHCR_OWNER,DEPLOY_TARGET_SHA,IMAGE_SOURCE_SHA,CI_EVIDENCE_RUN_ID,RELEASE_EVIDENCE_BASE64,QUANTAEDGE_GHCR_TOKEN,QUANTAEDGE_GHCR_OWNER,DEPLOY_TARGET_SHA,IMAGE_SOURCE_SHA,CI_EVIDENCE_RUN_ID,RELEASE_EVIDENCE_BASE64
           script_stop: true
           script: |
             set -eu
             cd /opt/quantaedge
             git fetch --prune origin
-            git checkout "${{ inputs.ref }}"
-            git reset --hard "origin/${{ inputs.ref }}"
+            git checkout --detach "$DEPLOY_TARGET_SHA"
+            git reset --hard "$DEPLOY_TARGET_SHA"
+            test "$(git rev-parse HEAD)" = "$DEPLOY_TARGET_SHA"
 
             # Configure payment secrets from the protected GitHub environment if supplied.
             # If not supplied, retain an already-configured server .env; never print secret values.
@@ -113,13 +114,28 @@ jobs:
             print("Razorpay runtime configuration is present; secret values are not displayed.")
             PY
 
-            export QUANTAEDGE_IMAGE_TAG="sha-$(git rev-parse HEAD)"
-            export QUANTAEDGE_GHCR_OWNER="${{ github.repository_owner }}"
-            echo "${{ secrets.QUANTAEDGE_GHCR_TOKEN }}" | docker login ghcr.io -u "${{ github.repository_owner }}" --password-stdin
+            [[ "$DEPLOY_TARGET_SHA" =~ ^[0-9a-f]{40}$ ]]
+            [[ "$IMAGE_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+            [[ "$CI_EVIDENCE_RUN_ID" =~ ^[0-9]+$ ]]
+            mkdir -p /opt/quantaedge/release-evidence
+            printf '%s' "$RELEASE_EVIDENCE_BASE64" | base64 --decode \
+              > "/opt/quantaedge/release-evidence/$DEPLOY_TARGET_SHA.json"
+            python3 - "$DEPLOY_TARGET_SHA" "$IMAGE_SOURCE_SHA" \
+              "/opt/quantaedge/release-evidence/$DEPLOY_TARGET_SHA.json" <<'PY'
+            import json,sys
+            from pathlib import Path
+            target,image,path=sys.argv[1:]
+            evidence=json.loads(Path(path).read_text(encoding="utf-8"))
+            if evidence.get("tested_commit_sha")!=target or evidence.get("image_source_commit_sha")!=image or evidence.get("status")!="PASS":
+                raise SystemExit("Refusing deploy: release evidence does not match source/image.")
+            PY
+            export QUANTAEDGE_IMAGE_TAG="sha-$IMAGE_SOURCE_SHA"
+            echo "$QUANTAEDGE_GHCR_TOKEN" | docker login ghcr.io -u "$QUANTAEDGE_GHCR_OWNER" --password-stdin
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d --remove-orphans
             docker image prune -f
             docker compose -f docker-compose.prod.yml ps
+            echo "Deployed source $DEPLOY_TARGET_SHA using image source $IMAGE_SOURCE_SHA (CI run $CI_EVIDENCE_RUN_ID)."
 \\t' -k2,2n "$RUNNER_TEMP/ci-runs.tsv" | tail -n 1 | cut -f1)"
           [[ "$ci_run_id" =~ ^[0-9]+$ ]] || {
             echo "::error::No successful QuantaEdge CI run exists for exact commit $target_sha. Deploy is blocked."
@@ -172,10 +188,10 @@ jobs:
               if any(checks.get(key)!="success" for key in ("api_image","web_image","admin_image","people_image")):
                   raise SystemExit("The new image SHA does not have all four successful image builds.")
           with Path(output).open("a",encoding="utf-8") as out:
-              out.write("target_sha="+target_sha+"\\n")
-              out.write("image_source_sha="+image_sha+"\\n")
-              out.write("ci_run_id="+ci_run_id+"\\n")
-              out.write("evidence_base64="+base64.b64encode(raw).decode("ascii")+"\\n")
+              out.write("target_sha="+target_sha+"\n")
+              out.write("image_source_sha="+image_sha+"\n")
+              out.write("ci_run_id="+ci_run_id+"\n")
+              out.write("evidence_base64="+base64.b64encode(raw).decode("ascii")+"\n")
           print(json.dumps({"deployment_commit":target_sha,"image_source_commit":image_sha,
                             "verified_ci_run_id":ci_run_id,"image_tag":"sha-"+image_sha}))
           PY
