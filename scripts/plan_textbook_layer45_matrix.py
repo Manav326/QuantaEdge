@@ -92,10 +92,8 @@ def plan_matrix(
 
     selected = str(class_no).strip().lower()
     if selected == "all":
-        if analysis_mode != "resume_layers_4_5":
-            raise ValueError("class_no=all is supported only for synchronized Layer 4–5 resume.")
         grades = ("6", "7", "8")
-        pair_sharded = True
+        pair_sharded = analysis_mode == "resume_layers_4_5"
     elif selected in {"6", "7", "8"}:
         grades = (selected,)
         pair_sharded = analysis_mode == "resume_layers_4_5"
