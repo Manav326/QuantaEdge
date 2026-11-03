@@ -225,7 +225,7 @@ jobs:
             PY
 
             export QUANTAEDGE_IMAGE_TAG="sha-$IMAGE_SOURCE_SHA"
-            export QUANTAEDGE_GHCR_OWNER="$QUANTAEDGE_GHCR_OWNER"
+            export QUANTAEDGE_GHCR_OWNER="$(printf '%s' "$QUANTAEDGE_GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
             echo "$QUANTAEDGE_GHCR_TOKEN" | docker login ghcr.io -u "$QUANTAEDGE_GHCR_OWNER" --password-stdin
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d --remove-orphans
