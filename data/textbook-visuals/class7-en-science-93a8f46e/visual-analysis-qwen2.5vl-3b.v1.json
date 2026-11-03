@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3273,
+    "assets_selected": 3276,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "d93a9ffc8a187f26f388383d",
-      "3f5de10c646657b8157d40ad",
-      "120367215f628d2ad64aec29",
-      "71a9c45a0c419265eb389efc"
+      "68fdabd0a7055d37246b771f",
+      "a8b41826c746c7307f39bcaf",
+      "fa721875eb94b3720be693f5",
+      "abfe02036cae065be98b1ac4"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3271,
-    "assets_remaining": 4217,
+    "assets_analyzed": 3275,
+    "assets_remaining": 4213,
     "assets_completion_percent": 43.7,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 3268,
+    "assets_skipped_from_checkpoint": 3271,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41548040745",
-      "checkpointed_at": "2026-11-03T04:31:59Z"
+      "checkpointed_at": "2026-11-03T04:39:27Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -120958,6 +120958,157 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41548040745",
       "checkpointed_at": "2026-11-03T04:38:10Z"
+    },
+    {
+      "asset_id": "68fdabd0a7055d37246b771f",
+      "asset_sha256": "101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 107,
+      "asset_path": "assets/101c3a2b23ba77b31518ee2b5c02f3a6aac7de39129a5e737b763b2df9f7ea46.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2603e24d0ff9de2ada4d39ae90029114946ea38fe3123f7f9c7e0225868e844",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue paper airplane flying in the air.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:39:35Z"
+    },
+    {
+      "asset_id": "a8b41826c746c7307f39bcaf",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 107,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2603e24d0ff9de2ada4d39ae90029114946ea38fe3123f7f9c7e0225868e844",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:39:47Z"
+    },
+    {
+      "asset_id": "fa721875eb94b3720be693f5",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 107,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2603e24d0ff9de2ada4d39ae90029114946ea38fe3123f7f9c7e0225868e844",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:39:59Z"
+    },
+    {
+      "asset_id": "abfe02036cae065be98b1ac4",
+      "asset_sha256": "534a261477708f81b648d6054791910f033bcdb017350cffbbaaeb6e07c1fa5b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 107,
+      "asset_path": "page-0107.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c2603e24d0ff9de2ada4d39ae90029114946ea38fe3123f7f9c7e0225868e844",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing physical changes during adolescence and providing a table for categorization.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "87",
+          "of menstrual hygiene and healthy sanitary habits. What",
+          "menstrual hygiene and sanitary habits would you suggest to",
+          "your friends?",
+          "8. Mary and Manoj were classmates and good friends. On",
+          "turning 11, Mary developed a little bulge on the front of",
+          "her neck. She visited the doctor who gave her medication",
+          "and asked to take iodine-rich diet. Similarly, a bump was",
+          "developed on the front of Manoj’s neck when he turned 12.",
+          "However, the doctor told him that it was a part of growing",
+          "up. According to you, what could be the possible reason for",
+          "advising Mary and Manoj differently?",
+          "9. During adolescence, the boys and girls undergo certain",
+          "physical changes, a few of which are given below.",
+          "(i) Change in voice",
+          "(ii) Development of breasts",
+          "(iii) Growth of moustache",
+          "(iv) Growth of facial hair",
+          "(v) Pimples on the face",
+          "(vi) Growth of hair in the pubic region",
+          "(vii) Growth of hair in armpits",
+          "Categorise these changes in the table given below:",
+          "Physical changes during adolescence",
+          "Observed only",
+          "in boys",
+          "Observed only",
+          "in girls",
+          "Common in",
+          "boys and girls",
+          "10. Prepare a poster mentioning the tips for adolescents to live"
+        ],
+        "concepts": [
+          "adolescence",
+          "physical changes",
+          "menstrual hygiene",
+          "sanitary habits",
+          "iodine-rich diet",
+          "pubic region",
+          "armpits",
+          "healthy lifestyle"
+        ],
+        "context_relation": "The page discusses physical changes during adolescence and provides a table for categorization.",
+        "limitations": [
+          "The page does not provide specific answers to the questions.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:44:18Z"
     }
   ]
 }
