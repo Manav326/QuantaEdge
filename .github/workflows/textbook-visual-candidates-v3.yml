@@ -8,7 +8,7 @@ on:
         description: "Prepare candidates for this complete bilingual class source set"
         required: true
         type: choice
-        options: ["6", "7", "8"]
+        options: ["all", "6", "7", "8"]
         default: "7"
       analysis_mode:
         description: "Prepare only, run Layers 1–5, resume missing Layer 1–3 book checkpoints, or resume Layer 4–5 analysis without rebuilding candidates"
@@ -659,7 +659,7 @@ jobs:
             --model "$VISION_MODEL" \
             --batch-size "$CHECKPOINT_BATCH_SIZE" \
             --max-batches-per-run "$MAX_BATCHES_PER_RUN" \
-            --request-timeout 300; then
+            --request-timeout 180; then
             echo "yielded=false" >> "$GITHUB_OUTPUT"
           else
             result=$?
@@ -693,9 +693,9 @@ jobs:
       always() &&
       needs.plan.result == 'success' &&
       needs.validate.result == 'success' &&
-      needs.prepare.result != 'skipped' &&
+      needs.prepare.result == 'success' &&
       (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call') &&
-      inputs.analysis_mode == 'resume_layers_4_5'
+      (inputs.analysis_mode == 'resume_layers_4_5' || inputs.analysis_mode == 'analyze_all')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -818,7 +818,7 @@ jobs:
       always() &&
       needs.plan.result == 'success' &&
       needs.validate.result == 'success' &&
-      needs.prepare.result != 'skipped' &&
+      needs.prepare.result == 'success' &&
       (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call') &&
       (inputs.analysis_mode == 'resume_layers_4_5' || inputs.analysis_mode == 'analyze_all')
     runs-on: ubuntu-latest
