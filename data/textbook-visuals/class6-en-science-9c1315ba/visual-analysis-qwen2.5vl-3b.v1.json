@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
-      "b90b1ccd2f380e4a35f9f791",
-      "055ba61cf9184b7284850138",
-      "2185c15c0a88a108ea516878"
+      "7648bdfd0ca00b2a9aab1c0d",
+      "264647961a857697afa5e279",
+      "b90b1ccd2f380e4a35f9f791"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1589,
@@ -437,33 +437,26 @@
           "Foundational and Preparatory Stages",
           "Middle Stage",
           "Secondary Stages",
-          "Analytical, descriptive, and narrative capabilities",
-          "Challenges and opportunities",
-          "Diverse curriculum",
-          "Three languages",
-          "Science, Mathematics, Social Sciences",
-          "Art Education",
-          "Physical Education and Well-being",
-          "Vocational Education",
-          "Transformative learning culture",
-          "Appropriate textbooks",
-          "Curricular areas",
-          "Direct instruction",
-          "Opportunities for exploration and inquiry",
-          "Classroom arrangement"
+          "holistic development",
+          "transformative learning culture",
+          "appropriate textbooks",
+          "curricular areas",
+          "content and pedagogy",
+          "classroom arrangement",
+          "teacher preparation",
+          "conceptual connections",
+          "National Council of Educational Research and Training"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving the policy's goals.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic educational development.",
         "limitations": [
-          "The foreword does not provide specific details about the textbooks or their content.",
-          "The foreword does not mention the exact number of subjects covered in the curriculum.",
-          "The foreword does not describe the specific challenges and opportunities that students will face in the Middle Stage."
+          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41556687238",
-      "checkpointed_at": "2026-11-03T03:11:43Z"
+      "run_id": "41564394345",
+      "checkpointed_at": "2026-11-03T03:37:58Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20139,8 +20132,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41556687238",
-      "checkpointed_at": "2026-11-03T03:13:23Z"
+      "run_id": "41564394345",
+      "checkpointed_at": "2026-11-03T03:41:33Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -21422,7 +21415,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41556687238",
+      "run_id": "41564394345",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -22021,7 +22014,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41556687238",
+      "run_id": "41564394345",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -23751,7 +23744,7 @@
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
         "visible_text": [
-          "Presence/absence of flowers",
+          "Presence/ absence of flowers",
           "Hard/soft stem",
           "Eating habits",
           "Place they live",
@@ -23772,7 +23765,6 @@
           "grouping",
           "plants",
           "animals",
-          "criteria",
           "features",
           "stems",
           "leaves",
@@ -23783,12 +23775,13 @@
           "colour",
           "size",
           "arrangement",
+          "height",
+          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "height",
-          "types of stem",
-          "features of plants"
+          "nature walk",
+          "observations"
         ],
         "context_relation": "The text is a part of a larger educational content, specifically discussing the criteria for grouping plants and animals.",
         "limitations": [
@@ -23798,8 +23791,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41556687238",
-      "checkpointed_at": "2026-11-03T03:14:51Z"
+      "run_id": "41564394345",
+      "checkpointed_at": "2026-11-03T03:53:10Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
