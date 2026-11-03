@@ -63,7 +63,7 @@ Corrected GHCR extraction workflow succeeded at https://github.com/Manav326/Quan
 
 ## Repository artifact mirror
 
-A GitHub Actions workflow (`.github/workflows/mirror-textbook-extraction-artifact.yml`) mirrors validated Class 7 or Class 8 extraction artifacts into the matching `data/textbook-extractions/class-{class}/` folder on `main`, so a normal `git pull` retrieves the page JSONL and manifests without a manual artifact download. The mirror contains extracted text and reports only; original PDFs remain in GHCR. These files are extraction-only and are not approved or published lesson content.
+A GitHub Actions workflow (`.github/workflows/mirror-textbook-extraction-artifact.yml`) validates Class 7/8 extraction artifacts and persists them under `data/textbook-extractions/class-{class}/` on `automation/textbook-pipeline-state`. The handoff is manually dispatched with the successful extraction run ID; it does not commit generated pages to application `main`. The mirror contains extracted text and reports only; original PDFs remain in GHCR. These files are extraction-only and are not approved or published lesson content.
 
 ## GHCR extraction to question-generation bridge
 
