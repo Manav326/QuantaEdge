@@ -74,7 +74,6 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
     def test_bilingual_resume_uses_ten_asset_savepoints_and_fair_book_budget(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
-        analyzer = (ROOT / "scripts" / "analyze_visual_inventory_with_ollama.py").read_text(encoding="utf-8")
         self.assertIn('default: "10"', workflow)
         self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}", workflow)
         self.assertIn('max-batches-per-run "$MAX_BATCHES_PER_RUN"', workflow)
@@ -83,7 +82,9 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("BATCH_CHECKPOINTED", pipeline)
         self.assertIn("RUN_BUDGET_REACHED", pipeline)
         self.assertIn('if raw.is_file():cmd.append("--resume")', pipeline)
-        self.assertIn('"num_ctx": 4096', analyzer)
+        self.assertIn('"--num-ctx",str(args.num_ctx)', pipeline)
+        self.assertIn("--num-ctx 8192", workflow)
+        self.assertIn("default=8192", (ROOT / "scripts" / "analyze_visual_inventory_with_ollama.py").read_text(encoding="utf-8"))
 
     def test_visual_catalog_shared_index_is_serialized_for_initial_builds(self):
         workflow = read("textbook-visual-candidates-v3.yml")
