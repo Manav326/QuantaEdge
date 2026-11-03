@@ -52,26 +52,12 @@ permissions:
   packages: write
 
 concurrency:
-  group: textbook-visual-candidates-v3-${{ (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && '6') || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]')) && '7') || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')) && '8') || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && 'classes-7-8-resume') || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') && 'classes-6-8-resume') || inputs.class_no || 'validation-only' }}
-  # Push recovery markers select the per-class concurrency lane before reusable/manual inputs, so only the matching stale runner is replaced.
-  cancel-in-progress: ${{ github.event_name == 'push' && ((contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]') && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')) || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')) }}
+  group: qe-textbook-visual-${{ inputs.class_no || 'shared' }}
+  cancel-in-progress: false
 
 jobs:
   plan:
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'workflow_call' ||
-      (github.event_name == 'push' &&
-        !contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]') &&
-        (
-          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') ||
-          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') ||
-          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') ||
-          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') ||
-          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') ||
-          contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') ||
-          contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')
-        ))
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
     name: Plan source-bound Layer 4–5 workers
     runs-on: ubuntu-latest
     outputs:
@@ -84,7 +70,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Plan one runner per whole book on resume
+      - name: Restore isolated textbook pipeline state
+        env:
+          QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
+        run: python scripts/persist_textbook_pipeline_state.py restore --repo-root "$GITHUB_WORKSPACE"
+      - name: Plan one runner per bilingual book pair on resume
         id: plan_matrix
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -94,7 +84,7 @@ jobs:
         run: python scripts/plan_textbook_layer45_matrix.py --github-output "$GITHUB_OUTPUT"
 
   validate:
-    if: github.event_name == 'push' && !(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]'))
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
     name: Validate additive v3 preparation scripts
     runs-on: ubuntu-latest
     steps:
@@ -124,24 +114,26 @@ jobs:
           python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
           python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
           python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
+          python -m unittest discover -s tests -p "test_textbook_pipeline_state.py" -v
           python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
 
   prepare:
-    needs: [plan]
-    if: needs.plan.result == 'success' && needs.plan.outputs.matrix != '{"include":[]}'
+    needs: [plan, validate]
+    if: needs.plan.result == 'success' && needs.validate.result == 'success' && needs.plan.outputs.matrix != '{"include":[]}'
     name: Prepare full bilingual Class ${{ matrix.class_no }} candidate set - ${{ matrix.book_slug }}
     outputs:
       yielded: ${{ steps.layer45_run.outputs.yielded || 'false' }}
     strategy:
       fail-fast: false
-      max-parallel: 16
+      max-parallel: 8
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:
       CLASS_NO: ${{ matrix.class_no || inputs.class_no }}
-      BOOK_ID: ${{ matrix.book_id || '' }}
-      ANALYSIS_MODE: ${{ inputs.analysis_mode || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')) && 'analyze_all') || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')) && 'resume_layers_4_5') }}
+      BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}
+      ANALYSIS_MODE: ${{ inputs.analysis_mode || 'analyze_all' }}
+      QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
       VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}
       CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}
       MAX_BATCHES_PER_RUN: 12
@@ -157,7 +149,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Validate inputs and run regression tests
+      - name: Validate worker inputs and install extraction dependency
         shell: bash
         run: |
           set -euo pipefail
@@ -166,16 +158,10 @@ jobs:
           [[ -n "$VISION_MODEL" ]] || { echo "vision_model must be non-empty"; exit 2; }
           [[ "$CHECKPOINT_BATCH_SIZE" == "5" || "$CHECKPOINT_BATCH_SIZE" == "10" ]] || { echo "Invalid checkpoint_batch_size"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
-          python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
-          python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
-          python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
-          python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
-          python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
-          python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
-          python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
-          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
-          python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
-          python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
+      - name: Restore isolated textbook pipeline state
+        env:
+          QUANTAEDGE_TEXTBOOK_STATE_BRANCH: automation/textbook-pipeline-state
+        run: python scripts/persist_textbook_pipeline_state.py restore --repo-root "$GITHUB_WORKSPACE"
 
       - name: Authenticate to GHCR
         env:
