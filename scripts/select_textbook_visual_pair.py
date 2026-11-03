@@ -16,6 +16,20 @@ def _csv_values(raw: str, label: str) -> list[str]:
     return values
 
 
+def _normalize_subject(value: Any) -> str:
+    normalized = str(value or "").strip().lower()
+    return "maths" if normalized in {"maths", "mathematics"} else normalized
+
+
+def _normalize_class(value: Any) -> str:
+    normalized = str(value or "").strip().lower()
+    if normalized.startswith("class "):
+        normalized = normalized[6:].strip()
+    if normalized.startswith("class-"):
+        normalized = normalized[6:].strip()
+    return normalized
+
+
 def select_bilingual_pair(
     english: dict[str, Any],
     hindi: dict[str, Any],
@@ -53,16 +67,18 @@ def select_bilingual_pair(
             raise ValueError(
                 f"{language} source slug mismatch for {expected_id}: expected {expected_slug}, found {source.get('book_slug')}."
             )
-        if str(source.get("class_no") or source.get("class") or expected_class) != str(expected_class):
+        source_class = source.get("class_no") or source.get("class") or expected_class
+        if _normalize_class(source_class) != str(expected_class):
             raise ValueError(f"{language} source {expected_id} is bound to another class.")
-        subject = str(source.get("subject") or "").strip().lower()
+        subject = _normalize_subject(source.get("subject"))
         if not subject:
             raise ValueError(f"{language} source {expected_id} has no subject.")
+        source["subject"] = subject
         source["source_language"] = language
         selected.append(source)
 
-    english_subject = str(selected[0].get("subject") or "").strip().lower()
-    hindi_subject = str(selected[1].get("subject") or "").strip().lower()
+    english_subject = _normalize_subject(selected[0].get("subject"))
+    hindi_subject = _normalize_subject(selected[1].get("subject"))
     if english_subject != hindi_subject:
         raise ValueError(
             f"Bilingual pair subject mismatch: English={english_subject!r}, Hindi={hindi_subject!r}."
