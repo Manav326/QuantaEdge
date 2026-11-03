@@ -15,11 +15,11 @@
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
       "f5cfd5f0dfcebd60e3212f1b",
-      "120367215f628d2ad64aec29"
+      "9ebaa248b21cf39cdfe7afe3"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3276,
-    "assets_remaining": 4212,
+    "assets_analyzed": 3277,
+    "assets_remaining": 4211,
     "assets_completion_percent": 43.8,
     "assets_failed": 21,
     "assets_skipped_from_checkpoint": 3276,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:57:43Z"
+      "checkpointed_at": "2026-11-03T06:02:40Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:58:12Z"
+      "checkpointed_at": "2026-11-03T06:03:08Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:58:51Z"
+      "checkpointed_at": "2026-11-03T06:03:45Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -104958,7 +104958,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:59:29Z"
+      "checkpointed_at": "2026-11-03T06:04:24Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -121228,6 +121228,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41548040745",
       "checkpointed_at": "2026-11-03T04:44:18Z"
+    },
+    {
+      "asset_id": "9ebaa248b21cf39cdfe7afe3",
+      "asset_sha256": "bbb082fb26dbb4a1db1c3a86feb3441e9f363633c5dcb60082cd9c331dafaa5f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 108,
+      "asset_path": "assets/bbb082fb26dbb4a1db1c3a86feb3441e9f363633c5dcb60082cd9c331dafaa5f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d00d93ce9025dfb8e6edbe78021096eaa46538fdbe7eb38cec142f36729bdefa",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with blue rings at both ends.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Exploratory Projects",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41580137854",
+      "checkpointed_at": "2026-11-03T06:05:01Z"
     }
   ]
 }

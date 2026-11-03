@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "45326c5c9e1e7625e524196b0710e78435e289b7fc07ebc6d7eb675e387889cb",
+  "raw_analysis_sha256": "020884ac61eb1da3af426fb4f5c82ffb6a7f2f00452326b881587867ac926d69",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:57:43Z",
+      "checkpointed_at": "2026-11-03T06:02:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:58:12Z",
+      "checkpointed_at": "2026-11-03T06:03:08Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:58:51Z",
+      "checkpointed_at": "2026-11-03T06:03:45Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41580137854",
-      "checkpointed_at": "2026-11-03T05:59:29Z",
+      "checkpointed_at": "2026-11-03T06:04:24Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -189635,6 +189635,42 @@
           "The page does not provide specific answers to the questions.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9ebaa248b21cf39cdfe7afe3",
+      "asset_sha256": "bbb082fb26dbb4a1db1c3a86feb3441e9f363633c5dcb60082cd9c331dafaa5f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 108,
+      "asset_path": "assets/bbb082fb26dbb4a1db1c3a86feb3441e9f363633c5dcb60082cd9c331dafaa5f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d00d93ce9025dfb8e6edbe78021096eaa46538fdbe7eb38cec142f36729bdefa",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with blue rings at both ends.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Exploratory Projects",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41580137854",
+      "checkpointed_at": "2026-11-03T06:05:01Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with blue rings at both ends.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Exploratory Projects",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
