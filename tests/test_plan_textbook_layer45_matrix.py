@@ -7,44 +7,23 @@ from scripts.plan_textbook_layer45_matrix import BOOKS, BOOK_PAIRS, pair_complet
 
 
 class TextbookLayer45MatrixTests(unittest.TestCase):
-    def test_all_class_resume_creates_eight_paired_book_jobs_not_sixteen_language_jobs(self):
-        planned = plan_matrix("push", "[resume-visual-layers-4-5-classes-6-8]")
+    def test_all_class_resume_returns_eight_exact_bilingual_pairs(self):
+        planned = plan_matrix("workflow_dispatch", class_no="all", analysis_mode="resume_layers_4_5")
         self.assertEqual(8, len(planned))
         self.assertEqual({"6": 2, "7": 3, "8": 3}, {
             grade: sum(row["class_no"] == grade for row in planned) for grade in ("6", "7", "8")
         })
         for row in planned:
-            ids = row["book_ids_csv"].split(",")
-            self.assertEqual(2, len(ids))
+            self.assertEqual(2, len(row["book_ids_csv"].split(",")))
             self.assertEqual(2, len(row["source_slugs_csv"].split(",")))
-            self.assertTrue(any("-english-" in item for item in ids))
-            self.assertTrue(any("-hindi-" in item for item in ids))
+            self.assertNotIn("book_id", row)
             self.assertTrue(row["book_pair_id"].endswith("-bilingual"))
 
-    def test_single_class_resume_only_schedules_that_class_as_language_pairs(self):
+    def test_single_class_resume_only_schedules_that_classes_pairs(self):
         planned = plan_matrix("workflow_dispatch", class_no="7", analysis_mode="resume_layers_4_5")
         self.assertEqual(3, len(planned))
-        self.assertTrue(all(row["class_no"] == "7" and len(row["book_ids_csv"].split(",")) == 2 for row in planned))
-
-    def test_coordinator_dispatches_one_all_class_run(self):
-        planned = plan_matrix("workflow_dispatch", class_no="all", analysis_mode="resume_layers_4_5")
-        self.assertEqual(8, len(planned))
-
-    def test_class_specific_markers_are_pair_sharded(self):
-        self.assertEqual(2, len(plan_matrix("push", "[resume-visual-layers-4-5-class-6]")))
-        self.assertEqual(3, len(plan_matrix("push", "[resume-visual-layers-4-5-class-7]")))
-        self.assertEqual(3, len(plan_matrix("push", "[resume-visual-layers-4-5-class-8]")))
-        self.assertEqual(6, len(plan_matrix("push", "[resume-visual-layers-4-5-classes-7-8]")))
-
-    def test_catalog_rebuild_modes_remain_class_wide(self):
-        self.assertEqual(
-            [{
-                "class_no": "8", "book_slug": "all-books", "book_pair_id": "",
-                "book_label": "class-wide", "book_ids_csv": "", "source_slugs_csv": "",
-            }],
-            plan_matrix("workflow_dispatch", class_no="8", analysis_mode="analyze_all"),
-        )
-        self.assertEqual("all-books", plan_matrix("push", "[analyze-all-visual-layers-4-5-class-7]")[0]["book_slug"])
+        self.assertTrue(all(row["class_no"] == "7" for row in planned))
+        self.assertTrue(all(len(row["book_ids_csv"].split(",")) == 2 for row in planned))
 
     def test_completed_pair_is_skipped_only_when_both_language_ledgers_are_valid(self):
         pair = next(item for item in BOOK_PAIRS if item["class_no"] == "6" and item["book_label"] == "Science")
@@ -70,7 +49,7 @@ class TextbookLayer45MatrixTests(unittest.TestCase):
             self.assertTrue(pair_complete(root, pair))
             remaining = plan_matrix(
                 "workflow_dispatch", class_no="all", analysis_mode="resume_layers_4_5",
-                repo_root=root, skip_completed=True,
+                repo_root=root,
             )
             self.assertEqual(7, len(remaining))
             self.assertNotIn(pair["book_pair_id"], {x["book_pair_id"] for x in remaining})
@@ -80,16 +59,33 @@ class TextbookLayer45MatrixTests(unittest.TestCase):
             bad["summary"]["unresolved_count"] = 1
             bad_ledger.write_text(json.dumps(bad), encoding="utf-8")
             self.assertFalse(pair_complete(root, pair))
+            remaining = plan_matrix(
+                "workflow_dispatch", class_no="all", analysis_mode="resume_layers_4_5",
+                repo_root=root,
+            )
+            self.assertIn(pair["book_pair_id"], {x["book_pair_id"] for x in remaining})
+
+    def test_initial_preparation_and_analysis_modes_are_class_wide(self):
+        expected = [{
+            "class_no": "8", "book_slug": "all-books", "book_pair_id": "",
+            "book_label": "class-wide", "book_ids_csv": "", "source_slugs_csv": "",
+        }]
+        self.assertEqual(expected, plan_matrix("workflow_dispatch", class_no="8", analysis_mode="analyze_all"))
+        self.assertEqual(expected, plan_matrix("workflow_dispatch", class_no="8", analysis_mode="prepare_only"))
 
     def test_matrix_output_uses_github_include_envelope(self):
         planner = (Path(__file__).resolve().parents[1] / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
         self.assertIn('json.dumps({"include": matrix}, separators=(",", ":"))', planner)
 
-    def test_unknown_events_do_not_start_workers(self):
-        self.assertEqual([], plan_matrix("push", "unmarked commit"))
-        self.assertEqual([], plan_matrix("schedule"))
+    def test_non_dispatch_events_never_start_textbook_workers(self):
+        for event in ("push", "schedule", "workflow_run", "unknown"):
+            self.assertEqual([], plan_matrix(event, "[resume-visual-layers-4-5-classes-6-8]"))
         self.assertEqual(16, len(BOOKS))
         self.assertEqual(8, len(BOOK_PAIRS))
+
+    def test_all_class_scope_is_resume_only(self):
+        with self.assertRaisesRegex(ValueError, "only for synchronized"):
+            plan_matrix("workflow_dispatch", class_no="all", analysis_mode="analyze_all")
 
 
 if __name__ == "__main__":
