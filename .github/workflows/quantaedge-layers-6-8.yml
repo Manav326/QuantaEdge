@@ -86,7 +86,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: qe-layers-6-8-${{ inputs.class_no || '6' }}-${{ inputs.source_book_id || 'validation' }}-${{ ((inputs.mode == 'benchmark' || inputs.mode == 'refresh_benchmark') && 'benchmark') || 'generation' }}
+  # Benchmarks are shared across book-generation runs; serialize all state-branch writers.
+  group: qe-textbook-pipeline-state-global
   cancel-in-progress: false
 
 jobs:
