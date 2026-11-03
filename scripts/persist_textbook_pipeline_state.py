@@ -19,6 +19,7 @@ STATE_PATHS = (
     "data/textbook-visuals",
     "data/textbook-content-pipeline",
     "data/structured-lessons",
+    "data/ai-training",
 )
 
 
