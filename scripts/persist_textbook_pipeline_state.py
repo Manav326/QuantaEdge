@@ -72,6 +72,71 @@ def _is_ancestor(repo: Path, older: str, newer: str) -> bool:
     return result.returncode == 0
 
 
+def _baseline_file(repo: Path) -> Path:
+    raw = _git(repo, "rev-parse", "--git-path", "quantaedge-textbook-state-base.json").stdout.strip()
+    path = Path(raw)
+    return path if path.is_absolute() else repo / path
+
+
+def _write_baseline(repo: Path, branch: str, commit_sha: str) -> None:
+    path = _baseline_file(repo)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(
+        json.dumps({"branch": branch, "commit_sha": commit_sha}, sort_keys=True) + "\\n",
+        encoding="utf-8",
+    )
+    temporary.replace(path)
+
+
+def _read_baseline(repo: Path, branch: str) -> str:
+    path = _baseline_file(repo)
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise RuntimeError(
+            "No valid textbook state baseline exists for this checkout. "
+            "Run 'restore' before committing pipeline checkpoints."
+        ) from exc
+    commit_sha = str(value.get("commit_sha") or "")
+    if value.get("branch") != branch or len(commit_sha) != 40:
+        raise RuntimeError("Textbook state baseline does not match the requested branch.")
+    return commit_sha
+
+
+def _reject_stale_path_writes(
+    repo: Path,
+    branch: str,
+    baseline_sha: str,
+    latest_state_ref: str,
+    paths: Sequence[str],
+) -> None:
+    latest_sha = _git(repo, "rev-parse", latest_state_ref).stdout.strip()
+    if baseline_sha == latest_sha:
+        return
+    if not _is_ancestor(repo, baseline_sha, latest_sha):
+        raise RuntimeError(
+            "The isolated textbook state branch was rewritten after this checkout restored it. "
+            "No checkpoint was committed; restore the latest state and retry."
+        )
+    changed: list[str] = []
+    for relative in paths:
+        result = _git(repo, "diff", "--quiet", baseline_sha, latest_sha, "--", relative, check=False)
+        if result.returncode == 1:
+            changed.append(relative)
+        elif result.returncode != 0:
+            raise RuntimeError(
+                f"Could not compare the saved textbook checkpoint baseline for {relative}: "
+                f"{result.stderr.strip()}"
+            )
+    if changed:
+        raise RuntimeError(
+            "Concurrent textbook state changed the same checkpoint path(s) after this checkout "
+            f"restored its baseline: {', '.join(changed)}. No checkpoint was overwritten. "
+            "Restore the latest state and retry this book."
+        )
+
+
 def _seed_state_from_latest_main(repo: Path, branch: str) -> str:
     """Fast-forward the untouched state branch to latest main exactly once.
 
@@ -106,9 +171,12 @@ def restore_state(repo_root: Path, branch: str = DEFAULT_STATE_BRANCH) -> dict[s
             existing.append(path)
     if existing:
         _git(repo, "restore", "--source", state_ref, "--worktree", "--", *existing)
+    baseline_sha = _git(repo, "rev-parse", state_ref).stdout.strip()
+    _write_baseline(repo, branch, baseline_sha)
     return {
         "branch": branch,
         "source_ref": state_ref,
+        "baseline_sha": baseline_sha,
         "restored_paths": ",".join(existing),
     }
 
@@ -139,6 +207,8 @@ def commit_state(
         raise ValueError("A non-empty checkpoint commit message is required.")
     normalized_paths = _validate_paths(repo, paths)
     state_ref = _seed_state_from_latest_main(repo, branch)
+    baseline_sha = _read_baseline(repo, branch)
+    _reject_stale_path_writes(repo, branch, baseline_sha, state_ref, normalized_paths)
 
     with tempfile.TemporaryDirectory(prefix="qe-textbook-state-") as temp:
         worktree = Path(temp) / "worktree"
@@ -149,9 +219,11 @@ def commit_state(
             _git(worktree, "add", "-A", "--", *normalized_paths)
             diff = _git(worktree, "diff", "--cached", "--quiet", check=False)
             if diff.returncode == 0:
+                commit_sha = _git(worktree, "rev-parse", "HEAD").stdout.strip()
+                _write_baseline(repo, branch, _git(repo, "rev-parse", state_ref).stdout.strip())
                 return {
                     "branch": branch,
-                    "commit_sha": _git(worktree, "rev-parse", "HEAD").stdout.strip(),
+                    "commit_sha": commit_sha,
                     "changed": False,
                 }
             if diff.returncode != 1:
@@ -169,9 +241,11 @@ def commit_state(
                     check=False,
                 )
                 if pushed.returncode == 0:
+                    commit_sha = _git(worktree, "rev-parse", "HEAD").stdout.strip()
+                    _write_baseline(repo, branch, commit_sha)
                     return {
                         "branch": branch,
-                        "commit_sha": _git(worktree, "rev-parse", "HEAD").stdout.strip(),
+                        "commit_sha": commit_sha,
                         "changed": True,
                     }
 
