@@ -83,9 +83,12 @@ class TextbookLayer45MatrixTests(unittest.TestCase):
         self.assertEqual(16, len(BOOKS))
         self.assertEqual(8, len(BOOK_PAIRS))
 
-    def test_all_class_scope_is_resume_only(self):
-        with self.assertRaisesRegex(ValueError, "only for synchronized"):
-            plan_matrix("workflow_dispatch", class_no="all", analysis_mode="analyze_all")
+    def test_all_class_analysis_and_preparation_schedule_one_class_job_per_class(self):
+        for mode in ("analyze_all", "prepare_only", "resume_preparation"):
+            planned = plan_matrix("workflow_dispatch", class_no="all", analysis_mode=mode)
+            self.assertEqual(["6", "7", "8"], [row["class_no"] for row in planned])
+            self.assertTrue(all(row["book_slug"] == "all-books" for row in planned))
+            self.assertTrue(all(not row["book_ids_csv"] for row in planned))
 
 
 if __name__ == "__main__":
