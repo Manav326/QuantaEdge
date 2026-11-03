@@ -555,12 +555,13 @@ jobs:
       github.event_name == 'push' &&
       always() &&
       needs.changes.result == 'success' &&
-      needs.build-android-apk.result == 'success' || (
-        github.event_name == 'push' &&
-        always() &&
-        needs.changes.result == 'success' &&
-        needs.build-android-apk.result == 'skipped'
-      )
+      (needs.build-android-apk.result == 'success' || needs.build-android-apk.result == 'skipped') &&
+      (needs.validate-content-import.result == 'success' || needs.validate-content-import.result == 'skipped') &&
+      (needs.validate-api.result == 'success' || needs.validate-api.result == 'skipped') &&
+      (needs.build-api.result == 'success' || needs.build-api.result == 'skipped') &&
+      (needs.build-web.result == 'success' || needs.build-web.result == 'skipped') &&
+      (needs.build-admin.result == 'success' || needs.build-admin.result == 'skipped') &&
+      (needs.build-people.result == 'success' || needs.build-people.result == 'skipped')
     steps:
       - name: Checkout exact tested main commit
         uses: actions/checkout@v4
