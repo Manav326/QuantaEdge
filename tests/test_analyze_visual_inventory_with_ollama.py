@@ -216,6 +216,12 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
             opener=self._opener, output_path=output,
         )
         self.assertEqual(1, first["summary"]["assets_analyzed"])
+        # A pre-resize success remains reusable; don't rerun thousands of valid analyses.
+        legacy = json.loads(output.read_text(encoding="utf-8"))
+        legacy.pop("model_input_preprocessing_version", None)
+        legacy["results"][0].pop("model_input_preprocessing_version", None)
+        legacy["results"][0].pop("model_input_image", None)
+        output.write_text(json.dumps(legacy), encoding="utf-8")
 
         def must_not_call(*args, **kwargs):
             raise AssertionError("a matching successful asset must not be re-analyzed")
@@ -227,6 +233,57 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         )
         self.assertEqual(1, resumed["summary"]["assets_skipped_from_checkpoint"])
         self.assertEqual(1, resumed["summary"]["assets_analyzed"])
+
+    def test_legacy_terminal_failures_get_one_fresh_retry_budget_after_preprocessing_upgrade(self):
+        output = self.root / "visual-analysis.v1.json"
+        legacy = {
+            "schema_version": "quantaedge.visual-analysis.v1",
+            "analysis_status": "DRAFT_VISION_ANALYSIS_ONLY",
+            "source_inventory": self.inventory_path.name,
+            "source_book_id": "book-c6-science",
+            "source_pdf_sha256": "a" * 64,
+            "model_provider": "ollama_local",
+            "model": "qwen2.5vl:3b",
+            "prompt_version": "visual-analysis-prompt-v2",
+            "summary": {"assets_analyzed": 0, "assets_failed": 1},
+            "results": [{
+                "asset_id": "asset-1",
+                "asset_sha256": self.asset_hash,
+                "source_book_id": "book-c6-science",
+                "source_pdf_sha256": "a" * 64,
+                "source_pdf_page_number": 1,
+                "asset_path": self.asset_path.name,
+                "model": "qwen2.5vl:3b",
+                "prompt_version": "visual-analysis-prompt-v2",
+                "analysis_status": "ANALYSIS_ERROR_TERMINAL",
+                "attempt_count": 3,
+                "run_id": "legacy-run",
+                "error": "Ollama HTTP 400: image exceeds supported dimensions",
+                "human_review_required": True,
+                "publication_allowed": False,
+            }],
+        }
+        output.write_text(json.dumps(legacy), encoding="utf-8")
+        original = self.asset_path.read_bytes()
+
+        result = run_analysis(
+            self.inventory_path,
+            endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b",
+            max_assets=1,
+            include_page_previews=True,
+            opener=self._opener,
+            output_path=output,
+            resume=True,
+            run_id="new-preprocessing-run",
+        )
+
+        self.assertEqual(1, result["summary"]["assets_processed_this_run"])
+        self.assertEqual(1, result["summary"]["assets_analyzed"])
+        row = result["results"][0]
+        self.assertEqual("DRAFT_REQUIRES_REVIEW", row["analysis_status"])
+        self.assertEqual("image-input-max-4096-lanczos-v1", row["model_input_preprocessing_version"])
+        self.assertEqual(original, self.asset_path.read_bytes())
 
     def test_resume_reanalyzes_legacy_success_without_context_fingerprint(self):
         output = self.root / "visual-analysis.v1.json"
