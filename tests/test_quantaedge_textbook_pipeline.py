@@ -27,13 +27,23 @@ class PipelineTests(unittest.TestCase):
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name);self.sha="a"*64;self.ash=hashlib.sha256(b"x").hexdigest()
   self.inv=self.root/"i.json";self.raw=self.root/"r.json";self.man=self.root/"m.json";self.txt=self.root/"p.jsonl";self.eff=self.root/"eff.json";self.ledger=self.root/"ledger.json"
-  w(self.inv,{"schema_version":"quantaedge.visual-inventory.v1","source":{"book_id":"b","pdf_sha256":self.sha,"pdf_page_count":1,"class":"6"},"pages":[{"source_pdf_page_number":1}],"assets":[{"asset_id":"a1","kind":"page_preview","source_pdf_page_number":1,"asset_sha256":self.ash,"page_text_context":""}]})
+  w(self.inv,{"schema_version":"quantaedge.visual-inventory.v1","source":{"book_id":"b","pdf_sha256":self.sha,"pdf_page_count":1,"class":"6"},"pages":[{"source_pdf_page_number":1}],"assets":[{"asset_id":"a1","kind":"embedded_image","source_pdf_page_number":1,"asset_sha256":self.ash,"page_text_context":""}]})
   w(self.man,{"book_id":"b","original_book_sha256":self.sha});self.txt.write_text(json.dumps({"source_book_page_number":1,"text":"Water","review_status":"TEXT_EXTRACTED"})+"\n")
   self.analysis={"visual_summary":"Water diagram","visual_type":"diagram","visible_text":[],"concepts":["water"],"context_relation":"near text","limitations":[]}
   w(self.raw,{"schema_version":"quantaedge.visual-analysis.v1","source_book_id":"b","source_pdf_sha256":self.sha,"model":"vision","prompt_version":"p1","results":[{"asset_id":"a1","asset_sha256":self.ash,"source_book_id":"b","source_pdf_sha256":self.sha,"model":"vision","prompt_version":"p1","page_text_context_sha256":hashlib.sha256(b"").hexdigest(),"analysis_status":"DRAFT_REQUIRES_REVIEW","analysis":self.analysis}]})
  def build(self,c=None):return build_coverage_ledger(self.inv,self.raw,self.man,self.txt,self.eff,self.ledger,corrections_path=c,repo_root=self.root)
  def test_complete_inventory(self):
   r=self.build();self.assertEqual("COMPLETE",r["ledger_status"]);self.assertEqual(1,len(r["pages"]));self.assertEqual(1,len(r["visuals"]))
+ def test_page_previews_remain_context_only_and_do_not_block_layer5(self):
+  inv=json.loads(self.inv.read_text(encoding="utf-8"))
+  preview=dict(inv["assets"][0]);preview.update({"asset_id":"preview-1","kind":"page_preview","asset_path":"page-preview.jpg","asset_sha256":"b"*64})
+  inv["assets"].append(preview);w(self.inv,inv)
+  out=self.build()
+  self.assertEqual("COMPLETE",out["ledger_status"])
+  self.assertEqual(1,out["summary"]["eligible_visual_asset_rows"])
+  self.assertEqual(1,out["summary"]["page_preview_context_rows"])
+  preview_row=next(row for row in out["visuals"] if row["asset_id"]=="preview-1")
+  self.assertEqual("PAGE_PREVIEW_CONTEXT_ONLY",preview_row["analysis_status"])
  def test_missing_analysis_is_not_dropped(self):
   r=json.loads(self.raw.read_text());r["results"]=[];w(self.raw,r);out=self.build();self.assertEqual("INCOMPLETE",out["ledger_status"]);self.assertEqual("ANALYSIS_MISSING",out["visuals"][0]["analysis_status"])
  def test_correction_changes_effective_not_raw(self):
