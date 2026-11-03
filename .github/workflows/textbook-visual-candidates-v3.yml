@@ -821,7 +821,7 @@ jobs:
       always() &&
       needs.plan.result == 'success' &&
       needs.validate.result == 'success' &&
-      needs.prepare.result == 'success' &&
+      (needs.prepare.result == 'success' || needs.prepare.result == 'skipped') &&
       (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call') &&
       (inputs.analysis_mode == 'resume_layers_4_5' || inputs.analysis_mode == 'analyze_all')
     runs-on: ubuntu-latest
