@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "20b8bc7f1508e74ea7fc321dd9cf690d09637dd696c821fc32ef946a419e2ea6",
+  "raw_analysis_sha256": "bbce4875c5eed22a1d25e386797032fceb0cb283922ecc06a38f4ff52a24fcf4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41619867897",
-      "checkpointed_at": "2026-11-03T12:13:28Z",
+      "checkpointed_at": "2026-11-03T12:19:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41619867897",
-      "checkpointed_at": "2026-11-03T12:14:06Z",
+      "checkpointed_at": "2026-11-03T12:19:49Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41619867897",
-      "checkpointed_at": "2026-11-03T12:14:57Z",
+      "checkpointed_at": "2026-11-03T12:20:39Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41619867897",
-      "checkpointed_at": "2026-11-03T12:15:50Z",
+      "checkpointed_at": "2026-11-03T12:21:31Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -190312,21 +190312,69 @@
     {
       "asset_id": "77b89f2cf94652961cb95817",
       "asset_sha256": "be0660a399175c415e4a965fd23a9353b17e68d921a12ecc4e8167713904d6cb",
-      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/be0660a399175c415e4a965fd23a9353b17e68d921a12ecc4e8167713904d6cb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41588060680",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A winter scene with two children, Pema and Palden, sitting around a fireplace in Gangtok, discussing the difference in winter temperatures between their home and Kerala.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and Palden are both curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Winter temperatures",
+          "Equator",
+          "Coastline",
+          "Weather",
+          "Science"
+        ],
+        "context_relation": "The grandfather's explanation about the difference in weather between Gangtok and Kerala is the context for the children's curiosity about why some places are cold and others are warm.",
+        "limitations": [
+          "The image does not show the actual weather conditions in Gangtok and Kerala.",
+          "The image does not show the children's reactions to the grandfather's explanation."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41619867897",
+      "checkpointed_at": "2026-11-03T12:22:57Z",
+      "effective_analysis": {
+        "visual_summary": "A winter scene with two children, Pema and Palden, sitting around a fireplace in Gangtok, discussing the difference in winter temperatures between their home and Kerala.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and Palden are both curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Winter temperatures",
+          "Equator",
+          "Coastline",
+          "Weather",
+          "Science"
+        ],
+        "context_relation": "The grandfather's explanation about the difference in weather between Gangtok and Kerala is the context for the children's curiosity about why some places are cold and others are warm.",
+        "limitations": [
+          "The image does not show the actual weather conditions in Gangtok and Kerala.",
+          "The image does not show the children's reactions to the grandfather's explanation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
