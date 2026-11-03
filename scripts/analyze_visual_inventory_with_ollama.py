@@ -383,6 +383,7 @@ def analyze_one(
         "asset_path": relative,
         "asset_kind": asset.get("kind"),
         "model_input_image": image_dimensions,
+        "model_input_preprocessing_version": MODEL_IMAGE_PREPROCESS_VERSION,
         "page_text_context_sha256": hashlib.sha256(str(asset.get("page_text_context") or "")[:1600].encode("utf-8")).hexdigest(),
         "model_provider": "ollama_local",
         "model": model,
@@ -394,6 +395,7 @@ def analyze_one(
 
 
 PROMPT_VERSION = "visual-analysis-prompt-v2"
+MODEL_IMAGE_PREPROCESS_VERSION = "image-input-max-4096-lanczos-v1"
 MAX_ASSET_ANALYSIS_ATTEMPTS = 3
 
 
@@ -502,10 +504,29 @@ def run_analysis(
         ):
             skipped_from_checkpoint += 1
             continue
+        # A preprocessing change gets one fresh bounded retry budget for legacy
+        # failures (including terminal dimension errors). Existing successful results
+        # stay reusable because their source/hash/context/model/prompt are unchanged.
+        if (
+            existing.get("analysis_status") in {"ANALYSIS_ERROR", "ANALYSIS_ERROR_TERMINAL"}
+            and existing.get("model_input_preprocessing_version") != MODEL_IMAGE_PREPROCESS_VERSION
+        ):
+            existing = dict(existing)
+            existing["attempt_count"] = 0
+            existing["analysis_status"] = "ANALYSIS_ERROR"
+            existing["run_id"] = None
+            existing["model_input_preprocessing_version"] = MODEL_IMAGE_PREPROCESS_VERSION
+            existing["error"] = (
+                "Retrying under updated model-input preprocessing. "
+                + str(existing.get("error") or "")
+            )[:1200]
+            previous[str(asset_id)] = existing
         # A transient inference error is retried only in a later workflow run.
-        # After three recorded attempts, keep the asset terminal and require review;
-        # do not let the coordinator retry a permanently failing image forever.
-        if existing.get("analysis_status") == "ANALYSIS_ERROR_TERMINAL":
+        # After three attempts under the current preprocessing version, keep it terminal.
+        if (
+            existing.get("analysis_status") == "ANALYSIS_ERROR_TERMINAL"
+            and existing.get("model_input_preprocessing_version") == MODEL_IMAGE_PREPROCESS_VERSION
+        ):
             continue
         if int(existing.get("attempt_count", 0) or 0) >= MAX_ASSET_ANALYSIS_ATTEMPTS:
             existing["analysis_status"] = "ANALYSIS_ERROR_TERMINAL"
@@ -578,6 +599,7 @@ def run_analysis(
             "model_provider": "ollama_local",
             "model": model,
             "prompt_version": PROMPT_VERSION,
+            "model_input_preprocessing_version": MODEL_IMAGE_PREPROCESS_VERSION,
             "summary": summary,
             "results": ordered_results,
         }
@@ -690,6 +712,7 @@ def run_analysis(
                 "model_provider": "ollama_local",
                 "model": model,
                 "prompt_version": PROMPT_VERSION,
+                "model_input_preprocessing_version": MODEL_IMAGE_PREPROCESS_VERSION,
                 "run_id": run_id,
                 "attempt_count": attempt_count,
                 "analysis_status": "ANALYSIS_ERROR_TERMINAL" if terminal else "ANALYSIS_ERROR",
