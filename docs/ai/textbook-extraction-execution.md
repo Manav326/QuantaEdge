@@ -1,6 +1,6 @@
 # Textbook extraction and AI Tutor grounding — durable execution tracker
 
-This file is the durable checkpoint for the NCERT/SCERT extraction work. Continue from the first unchecked item when a conversation ends; do not restart at planning or repeat completed work. Keep implementation on `main` only (no branches or PRs), and update this tracker in the same commit as meaningful milestones.
+This file is the durable checkpoint for NCERT/SCERT extraction work. Continue from the first unchecked item; do not restart planning or repeat completed work. Keep application code/workflow changes on a repair branch and merge through PR after CI; persist extracted pages, visual analysis, ledgers and lesson drafts on `automation/textbook-pipeline-state`, not application `main`.
 
 **Operator runbook:** Read [Class 6 GHCR textbook extraction pilot](../runbooks/class6-ghcr-textbook-pilot.md) before repeating local import steps. It records commands, environment, source manifest totals, portal/cookie separation, failure history, safety gates, and the exact next action.
 
