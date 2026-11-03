@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3269,
+    "assets_selected": 3273,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "05d12573b13b9037c2a9b403",
-      "d32a8344427c2eee93c977d2",
-      "c990a971a0f9d5b1183be66a",
-      "baa59501bd94f32729554f91"
+      "d93a9ffc8a187f26f388383d",
+      "3f5de10c646657b8157d40ad",
+      "120367215f628d2ad64aec29",
+      "71a9c45a0c419265eb389efc"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3268,
-    "assets_remaining": 4220,
-    "assets_completion_percent": 43.6,
-    "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 3264,
+    "assets_analyzed": 3271,
+    "assets_remaining": 4217,
+    "assets_completion_percent": 43.7,
+    "assets_failed": 25,
+    "assets_skipped_from_checkpoint": 3268,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41548040745",
-      "checkpointed_at": "2026-11-03T04:24:28Z"
+      "checkpointed_at": "2026-11-03T04:31:59Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -120859,6 +120859,105 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41548040745",
       "checkpointed_at": "2026-11-03T04:30:42Z"
+    },
+    {
+      "asset_id": "d93a9ffc8a187f26f388383d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5d114509e3a4235160a41433b160c3183a36bb973cee96aaa0b2e4088c2e1405",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:32:12Z"
+    },
+    {
+      "asset_id": "3f5de10c646657b8157d40ad",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5d114509e3a4235160a41433b160c3183a36bb973cee96aaa0b2e4088c2e1405",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:32:24Z"
+    },
+    {
+      "asset_id": "120367215f628d2ad64aec29",
+      "asset_sha256": "b61fe250c8974e90fba1353d327a7c94c3d34938ac847726575d5a7c6dfe6139",
+      "page_text_context_sha256": "5d114509e3a4235160a41433b160c3183a36bb973cee96aaa0b2e4088c2e1405",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 106,
+      "asset_path": "page-0106.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "71a9c45a0c419265eb389efc",
+      "asset_sha256": "b2b21194723f4817d16e7344e99c087ce5a4ae66c5642b630285d7198d844975",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 107,
+      "asset_path": "assets/b2b21194723f4817d16e7344e99c087ce5a4ae66c5642b630285d7198d844975.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2603e24d0ff9de2ada4d39ae90029114946ea38fe3123f7f9c7e0225868e844",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person climbing a rope ladder.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:38:10Z"
     }
   ]
 }
