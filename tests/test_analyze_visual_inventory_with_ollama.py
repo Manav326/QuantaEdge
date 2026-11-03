@@ -8,6 +8,8 @@ from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
+from PIL import Image
+
 from scripts.analyze_visual_inventory_with_ollama import analyze_one, run_analysis, _json_object_from_response, main
 
 
@@ -85,6 +87,61 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual("diagram", result["results"][0]["analysis"]["visual_type"])
         self.assertEqual(original, self.inventory_path.read_bytes())
 
+
+    def test_oversized_figure_is_downscaled_only_for_model_input(self):
+        image = Image.new("RGB", (5000, 2500), (30, 120, 180))
+        image.save(self.asset_path, format="JPEG", quality=95)
+        original_bytes = self.asset_path.read_bytes()
+        original_hash = hashlib.sha256(original_bytes).hexdigest()
+        seen = {}
+
+        def inspect_downscaled_input(request, timeout=180):
+            payload = json.loads(request.data.decode("utf-8"))
+            model_bytes = base64.b64decode(payload["messages"][0]["images"][0])
+            with Image.open(io.BytesIO(model_bytes)) as model_image:
+                seen["dimensions"] = model_image.size
+                self.assertLessEqual(max(model_image.size), 4096)
+                self.assertEqual((4096, 2048), model_image.size)
+            return FakeResponse({"message": {"content": json.dumps({
+                "visual_summary": "A textbook figure.",
+                "visual_type": "illustration",
+                "visible_text": [],
+                "concepts": ["science"],
+                "context_relation": "Figure for the current source page.",
+                "limitations": [],
+            })}})
+
+        result = analyze_one(
+            self.root,
+            {
+                "asset_id": "large-figure",
+                "kind": "embedded_image",
+                "asset_path": self.asset_path.name,
+                "asset_sha256": original_hash,
+                "media_type": "image/jpeg",
+                "source_book_id": "book-c6-science",
+                "source_pdf_sha256": "a" * 64,
+                "source_pdf_page_number": 12,
+                "page_text_context": "Large textbook figure",
+            },
+            endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b",
+            opener=inspect_downscaled_input,
+        )
+
+        self.assertEqual((4096, 2048), seen["dimensions"])
+        self.assertEqual(
+            {
+                "original_width": 5000,
+                "original_height": 2500,
+                "input_width": 4096,
+                "input_height": 2048,
+                "downscaled": True,
+            },
+            result["model_input_image"],
+        )
+        self.assertEqual(original_bytes, self.asset_path.read_bytes())
+        self.assertEqual(original_hash, hashlib.sha256(self.asset_path.read_bytes()).hexdigest())
 
     def test_unknown_visual_type_is_conservatively_normalized_for_review(self):
         result = _json_object_from_response({
