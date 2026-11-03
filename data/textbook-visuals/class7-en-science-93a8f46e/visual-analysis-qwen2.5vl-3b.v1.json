@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3265,
+    "assets_selected": 3269,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "139c6d83fbc490be9ebda64b",
-      "2659b5602f1806c095d4f831",
-      "ac81a9376f64b4c34ddf2b2f",
-      "752a0ee79584199166d6423a"
+      "05d12573b13b9037c2a9b403",
+      "d32a8344427c2eee93c977d2",
+      "c990a971a0f9d5b1183be66a",
+      "baa59501bd94f32729554f91"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3264,
-    "assets_remaining": 4224,
+    "assets_analyzed": 3268,
+    "assets_remaining": 4220,
     "assets_completion_percent": 43.6,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 3260,
+    "assets_skipped_from_checkpoint": 3264,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41548040745",
-      "checkpointed_at": "2026-11-03T04:16:55Z"
+      "checkpointed_at": "2026-11-03T04:24:28Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -120735,6 +120735,130 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41548040745",
       "checkpointed_at": "2026-11-03T04:23:12Z"
+    },
+    {
+      "asset_id": "05d12573b13b9037c2a9b403",
+      "asset_sha256": "778d711b7c4dc622a8193799fe328b777301f598f21561fd96d2d0865a1c0dac",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/778d711b7c4dc622a8193799fe328b777301f598f21561fd96d2d0865a1c0dac.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5d114509e3a4235160a41433b160c3183a36bb973cee96aaa0b2e4088c2e1405",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the image is a full page or cropped figure",
+          "unclear if the image is related to the text content"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:26:00Z"
+    },
+    {
+      "asset_id": "d32a8344427c2eee93c977d2",
+      "asset_sha256": "a2cf2302ce14bed940caaf530d4bec9d53284f6fd71073dd82fb1675be093eae",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/a2cf2302ce14bed940caaf530d4bec9d53284f6fd71073dd82fb1675be093eae.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5d114509e3a4235160a41433b160c3183a36bb973cee96aaa0b2e4088c2e1405",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of various fast food items including burgers, fries, donuts, and a bowl of chips.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fast food",
+          "adolescents",
+          "nutrition",
+          "food groups"
+        ],
+        "context_relation": "The image is related to the question about food groups for adolescents.",
+        "limitations": [
+          "The image does not provide specific information about the nutritional content of the food items.",
+          "The image does not show the unscrambled words from the sentences."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:27:34Z"
+    },
+    {
+      "asset_id": "c990a971a0f9d5b1183be66a",
+      "asset_sha256": "159814532e12f18ba42393606214a57b6f1cee75e3af2d571524e0a91b55488d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/159814532e12f18ba42393606214a57b6f1cee75e3af2d571524e0a91b55488d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5d114509e3a4235160a41433b160c3183a36bb973cee96aaa0b2e4088c2e1405",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A plate of Indian food including rice, dal, roti, and vegetables.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "Indian cuisine",
+          "food groups",
+          "adolescents",
+          "nutrition",
+          "discharge of blood"
+        ],
+        "context_relation": "The image is related to the nutritional needs of adolescents and the types of food they should consume.",
+        "limitations": [
+          "The image does not provide specific nutritional information or details about the food items.",
+          "The image does not show the types of food groups present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:29:11Z"
+    },
+    {
+      "asset_id": "baa59501bd94f32729554f91",
+      "asset_sha256": "8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/8a81d5ec74747af395661a71df4d50feb6f8ff3070ec6edae8fa73705bd954c1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5d114509e3a4235160a41433b160c3183a36bb973cee96aaa0b2e4088c2e1405",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue line drawing of a fish swimming in the water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41548040745",
+      "checkpointed_at": "2026-11-03T04:30:42Z"
     }
   ]
 }
