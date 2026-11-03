@@ -27,6 +27,7 @@ jobs:
       admin: ${{ steps.detect.outputs.admin }}
       people: ${{ steps.detect.outputs.people }}
       content: ${{ steps.detect.outputs.content }}
+      images: ${{ steps.detect.outputs.images }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -161,23 +162,32 @@ jobs:
           admin=false
           people=false
           content=false
-          all=false
+          images=false
           printf '%s\n' "$files"
-          if printf '%s\n' "$files" | grep -qE '^services/api/'; then api=true; fi
-          if printf '%s\n' "$files" | grep -qE '^apps/web/'; then web=true; fi
-          if printf '%s\n' "$files" | grep -qE '^apps/admin/'; then admin=true; fi
-          if printf '%s\n' "$files" | grep -qE '^apps/people/'; then people=true; fi
-          if printf '%s\n' "$files" | grep -qE '^scripts/|^tests/test_.*\.py$|^\.github/workflows/'; then content=true; fi
-          if printf '%s\n' "$files" | grep -qE '^docker-compose(\.prod)?\.yml$'; then all=true; fi
-          # Production deploys a single SHA tag for API, web, and admin. Publish all
-          # three images on each main push so every deploy SHA has a tag for each service.
-          if [ "$EVENT_NAME" = "push" ]; then all=true; fi
-          if [ "$all" = "true" ]; then api=true; web=true; admin=true; people=true; content=true; fi
+
+          # The production compose file uses one shared image tag for all four services.
+          # When any service image input changes, build all four at that source SHA so
+          # deploy can consume one coherent, exact image set. Data-only changes do not
+          # create a new image tag and must not trigger application image builds.
+          if printf '%s\n' "$files" | grep -qE '^(services/api/|apps/web/|apps/admin/|apps/people/|data/structured-lessons/|scripts/package_published_structured_lessons\.py$|\.dockerignore$|services/api/Dockerfile$|apps/(web|admin|people)/Dockerfile$)'; then
+            images=true
+          fi
+          if [ "$images" = "true" ]; then
+            api=true; web=true; admin=true; people=true
+          fi
+
+          if printf '%s\n' "$files" | grep -qE '^scripts/|^tests/|^\.github/workflows/|^data/'; then content=true; fi
+          # Workflow definition and image-context changes require the content/import
+          # contracts as well as the affected application validation.
+          if printf '%s\n' "$files" | grep -qE '^(services/api/|apps/web/|apps/admin/|apps/people/)'; then content=true; fi
+
           echo "api=$api" >> "$GITHUB_OUTPUT"
           echo "web=$web" >> "$GITHUB_OUTPUT"
           echo "admin=$admin" >> "$GITHUB_OUTPUT"
           echo "people=$people" >> "$GITHUB_OUTPUT"
           echo "content=$content" >> "$GITHUB_OUTPUT"
+          echo "images=$images" >> "$GITHUB_OUTPUT"
+          echo "images_built_this_run=$images" >> "$GITHUB_OUTPUT"
 
   build-android-apk:
     name: Build Android APK
