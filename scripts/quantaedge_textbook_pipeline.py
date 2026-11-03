@@ -174,6 +174,7 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
             if r is None:state="ANALYSIS_MISSING"
             elif r.get("asset_sha256")!=a.get("asset_sha256"):state="ASSET_HASH_MISMATCH"
             elif r.get("analysis_status")=="ANALYSIS_ERROR":state="ANALYSIS_ERROR"
+            elif r.get("analysis_status")=="ANALYSIS_ERROR_TERMINAL":state="ANALYSIS_ERROR_TERMINAL"
             elif r.get("checkpoint_fingerprint_status")=="PAGE_TEXT_CONTEXT_MISMATCH":state="ANALYSIS_STALE_CONTEXT"
             elif r.get("checkpoint_fingerprint_status") not in {None,"MATCHED"}:state="ANALYSIS_STALE_CHECKPOINT"
             elif r.get("analysis_status")=="DRAFT_REQUIRES_REVIEW" and isinstance(r.get("effective_analysis"),dict):state="ANALYZED_REQUIRES_HUMAN_REVIEW";ea=r["effective_analysis"];cs=r.get("correction_status","NONE")
@@ -184,7 +185,7 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
     visual_bad+=len(orphans);unresolved=page_bad+visual_bad
     paths={"inventory":rel(inventory_path,root),"raw_analysis":rel(raw_path,root),"manifest":rel(manifest_path,root),"text_jsonl":rel(text_path,root),"corrections":rel(corrections_path,root) if corrections_path else None,"effective_analysis_output":rel(effective_path,root),"coverage_ledger_output":rel(ledger_path,root)}
     write_json(effective_path,{"schema_version":"quantaedge.visual-analysis-effective.v1","source_book_id":bid,"source_pdf_sha256":sha,"raw_analysis_path":paths["raw_analysis"],"raw_analysis_sha256":hashlib.sha256(Path(raw_path).read_bytes()).hexdigest(),"model":raw.get("model"),"prompt_version":raw.get("prompt_version"),"corrections_path":paths["corrections"],"corrections_applied_count":len(accepted),"results":eff,"human_review_required":True,"publication_allowed":False})
-    out={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,"ledger_status":"COMPLETE" if unresolved==0 else "INCOMPLETE","source":{"class":src.get("class"),"language":src.get("language"),"subject":src.get("subject"),"source_book_id":bid,"source_pdf_sha256":sha,"edition":src.get("edition"),"pdf_page_count":count},"source_paths":paths,"summary":{"source_pdf_page_count":count,"inventory_page_records":len(pages),"page_text_records":sum(map(len,texts.values())),"pages_with_unresolved_text":page_bad,"inventory_asset_rows":len(assets),"eligible_visual_asset_rows":eligible,"page_preview_context_rows":sum(1 for item in visual_rows if item["asset_kind"]=="page_preview"),"raw_analysis_result_rows":len(results),"successful_visual_analyses":sum(x["analysis_status"]=="ANALYZED_REQUIRES_HUMAN_REVIEW" for x in visual_rows),"missing_visual_analyses":sum(x["analysis_status"]=="ANALYSIS_MISSING" for x in visual_rows),"failed_visual_analyses":sum(x["analysis_status"] in {"ANALYSIS_ERROR","ASSET_HASH_MISMATCH","ANALYSIS_STATUS_UNKNOWN","ANALYSIS_STALE_CONTEXT","ANALYSIS_STALE_CHECKPOINT"} for x in visual_rows),"orphan_analysis_results":len(orphans),"corrections_applied":len(accepted),"unresolved_count":unresolved,"mapping_status":"NOT_STARTED","analysis_model":raw.get("model"),"analysis_prompt_version":raw.get("prompt_version"),"publication_allowed":False},"pages":page_rows,"visuals":visual_rows,"orphan_analysis_asset_ids":orphans,"human_review_required":True,"publication_allowed":False}
+    out={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,"ledger_status":"COMPLETE" if unresolved==0 else "INCOMPLETE","source":{"class":src.get("class"),"language":src.get("language"),"subject":src.get("subject"),"source_book_id":bid,"source_pdf_sha256":sha,"edition":src.get("edition"),"pdf_page_count":count},"source_paths":paths,"summary":{"source_pdf_page_count":count,"inventory_page_records":len(pages),"page_text_records":sum(map(len,texts.values())),"pages_with_unresolved_text":page_bad,"inventory_asset_rows":len(assets),"eligible_visual_asset_rows":eligible,"page_preview_context_rows":sum(1 for item in visual_rows if item["asset_kind"]=="page_preview"),"raw_analysis_result_rows":len(results),"successful_visual_analyses":sum(x["analysis_status"]=="ANALYZED_REQUIRES_HUMAN_REVIEW" for x in visual_rows),"missing_visual_analyses":sum(x["analysis_status"]=="ANALYSIS_MISSING" for x in visual_rows),"failed_visual_analyses":sum(x["analysis_status"] in {"ANALYSIS_ERROR","ANALYSIS_ERROR_TERMINAL","ASSET_HASH_MISMATCH","ANALYSIS_STATUS_UNKNOWN","ANALYSIS_STALE_CONTEXT","ANALYSIS_STALE_CHECKPOINT"} for x in visual_rows),"retryable_visual_failures":sum(x["analysis_status"]=="ANALYSIS_ERROR" for x in visual_rows),"terminal_visual_failures":sum(x["analysis_status"]=="ANALYSIS_ERROR_TERMINAL" for x in visual_rows),"orphan_analysis_results":len(orphans),"corrections_applied":len(accepted),"unresolved_count":unresolved,"mapping_status":"NOT_STARTED","analysis_model":raw.get("model"),"analysis_prompt_version":raw.get("prompt_version"),"publication_allowed":False},"pages":page_rows,"visuals":visual_rows,"orphan_analysis_asset_ids":orphans,"human_review_required":True,"publication_allowed":False}
     write_json(ledger_path,out);return out
 
 def git_checkpoint(repo,paths,message):
@@ -485,11 +486,36 @@ def run_layers(args):
             if processed==0:break
         result=read_json(ledger);idx=read_json(index);idx["layers"]["4"]="CHECKPOINTED";idx["layers"]["5"]=result["ledger_status"];write_json(index,idx);git_checkpoint(repo,[rel(index,repo)],f"status(content): Layer 5 {slug}")
         print(json.dumps({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]}))
-        if result["ledger_status"]!="COMPLETE":bad.append({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]})
+        if result["ledger_status"]!="COMPLETE":
+            summary=result["summary"]
+            bad.append({
+                "book":slug,
+                "ledger_status":result["ledger_status"],
+                "unresolved_count":summary["unresolved_count"],
+                "retryable_visual_failures":summary.get("retryable_visual_failures",0),
+                "terminal_visual_failures":summary.get("terminal_visual_failures",0),
+                "orphan_analysis_results":summary.get("orphan_analysis_results",0),
+                "pages_with_unresolved_text":summary.get("pages_with_unresolved_text",0),
+            })
         if book_yielded:
             print(json.dumps({"pipeline_run_status":"YIELDED_FOR_RESUME","class":selection["class"],"book":slug,"batches_this_book":book_batches,"completed_batches_total":total_batches,"book_batch_budget":book_batch_budget,"max_batches_per_run":args.max_batches_per_run,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"],"publication_allowed":False}),flush=True)
     print(json.dumps({"class":selection["class"],"incomplete_books":bad,"batches_this_run":total_batches,"budget_yielded":run_yielded,"layers_6_to_8":"NOT_STARTED","publication_allowed":False},indent=2))
     if run_yielded:return 10
+    if bad:
+        # Only transient vision request failures are automatically resumable.
+        # Missing pages, stale/hash-mismatched evidence, terminal failures and
+        # orphan analyses stop for review rather than waking an endless coordinator.
+        retryable_only=all(
+            item["unresolved_count"] > 0
+            and item["unresolved_count"] == item["retryable_visual_failures"]
+            and item["terminal_visual_failures"] == 0
+            and item["orphan_analysis_results"] == 0
+            and item["pages_with_unresolved_text"] == 0
+            for item in bad
+        )
+        if retryable_only:
+            print("[pipeline] RETRYABLE_VISION_FAILURES_ONLY: saved checkpoints are durable; a later run may retry each failed asset up to its three-attempt limit.",flush=True)
+            return 10
     return 3 if bad else 0
 
 def changed_correction_paths(event_path,root):
