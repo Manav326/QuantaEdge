@@ -14,8 +14,8 @@
       "8d35dc673109641624e2223c",
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
-      "2104ecb647e20f98cb93ca2e",
-      "2185c15c0a88a108ea516878"
+      "47bbaaf66932c5ee5e514c6c",
+      "9f51f614abe6354db658fd1d"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1592,
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41688676054",
-      "checkpointed_at": "2026-11-03T19:06:07Z"
+      "checkpointed_at": "2026-11-03T19:17:04Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23752,7 +23752,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41688676054",
-      "checkpointed_at": "2026-11-03T19:07:15Z"
+      "checkpointed_at": "2026-11-03T19:18:13Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37997,7 +37997,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41688676054",
-      "checkpointed_at": "2026-11-03T19:08:14Z"
+      "checkpointed_at": "2026-11-03T19:19:11Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44123,7 +44123,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
+        "visual_summary": "An educational page about Oral Rehydration Solution (ORS) and its preparation.",
         "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
@@ -44142,22 +44142,23 @@
           "Diarrhoea",
           "Health Centres",
           "Preparation of ORS",
+          "Water Solubility",
           "Gases in Water",
-          "Solubility",
+          "Survival of Animals and Plants",
           "Density",
-          "Survival of Animals and Plants"
+          "Comparing Density"
         ],
-        "context_relation": "Explanation and activity related to ORS and its properties",
+        "context_relation": "Introduction to ORS and its preparation, followed by a question about the solubility of gases in water and the importance of ORS in maintaining water balance in the body.",
         "limitations": [
-          "No specific limitations mentioned",
+          "The text does not provide specific instructions for preparing ORS or explaining the solubility of gases in water.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41642480964",
-      "checkpointed_at": "2026-11-03T16:00:40Z"
+      "run_id": "41688676054",
+      "checkpointed_at": "2026-11-03T19:23:33Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44617,7 +44618,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41642480964",
+      "run_id": "41688676054",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
