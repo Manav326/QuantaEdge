@@ -8231,19 +8231,26 @@
           "Foundational and Preparatory Stages",
           "Middle Stage",
           "Secondary Stages",
-          "holistic development",
-          "transformative learning culture",
-          "appropriate textbooks",
-          "curricular areas",
-          "content and pedagogy",
-          "classroom arrangement",
-          "teacher preparation",
-          "conceptual connections",
-          "National Council of Educational Research and Training"
+          "Analytical, descriptive, and narrative capabilities",
+          "Challenges and opportunities",
+          "Diverse curriculum",
+          "Three languages",
+          "Science, Mathematics, Social Sciences",
+          "Art Education",
+          "Physical Education and Well-being",
+          "Vocational Education",
+          "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
+          "Direct instruction",
+          "Opportunities for exploration and inquiry",
+          "Classroom arrangement"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic educational development.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving the policy's goals.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
+          "The foreword does not provide specific details about the textbooks or their content.",
+          "The foreword does not mention the exact number of subjects covered in the curriculum.",
+          "The foreword does not describe the specific challenges and opportunities that students will face in the Middle Stage."
         ]
       },
       "chapter_id": null,
@@ -30777,7 +30784,7 @@
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
         "visible_text": [
-          "Presence/ absence of flowers",
+          "Presence/absence of flowers",
           "Hard/soft stem",
           "Eating habits",
           "Place they live",
@@ -30798,6 +30805,7 @@
           "grouping",
           "plants",
           "animals",
+          "criteria",
           "features",
           "stems",
           "leaves",
@@ -30808,13 +30816,12 @@
           "colour",
           "size",
           "arrangement",
-          "height",
-          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "nature walk",
-          "observations"
+          "height",
+          "types of stem",
+          "features of plants"
         ],
         "context_relation": "The text is a part of a larger educational content, specifically discussing the criteria for grouping plants and animals.",
         "limitations": [
