@@ -22,7 +22,10 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
+from PIL import Image, UnidentifiedImageError
+
 SUPPORTED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
+MAX_IMAGE_DIMENSION = 4096
 
 ANALYSIS_RESPONSE_SCHEMA = {
     "type": "object",
@@ -46,6 +49,55 @@ ANALYSIS_RESPONSE_SCHEMA = {
     ],
     "additionalProperties": False,
 }
+
+
+def prepare_model_image(path: Path, media_type: str) -> tuple[bytes, dict[str, int | bool]]:
+    """Downscale only oversized model inputs; preserve the original extracted asset."""
+    original = path.read_bytes()
+    try:
+        with Image.open(path) as source:
+            source.load()
+            original_width, original_height = source.size
+            if max(original_width, original_height) <= MAX_IMAGE_DIMENSION:
+                return original, {
+                    "original_width": original_width,
+                    "original_height": original_height,
+                    "input_width": original_width,
+                    "input_height": original_height,
+                    "downscaled": False,
+                }
+
+            image = source.copy()
+            image.thumbnail(
+                (MAX_IMAGE_DIMENSION, MAX_IMAGE_DIMENSION),
+                Image.Resampling.LANCZOS,
+            )
+            output = io.BytesIO()
+            if media_type == "image/png" or "A" in image.getbands():
+                image.save(output, format="PNG", optimize=True)
+            elif media_type == "image/webp":
+                image.save(output, format="WEBP", quality=92, method=4)
+            else:
+                if image.mode not in {"RGB", "L"}:
+                    image = image.convert("RGB")
+                image.save(output, format="JPEG", quality=92, optimize=True)
+            return output.getvalue(), {
+                "original_width": original_width,
+                "original_height": original_height,
+                "input_width": image.width,
+                "input_height": image.height,
+                "downscaled": True,
+            }
+    except (UnidentifiedImageError, OSError, ValueError):
+        # Keep deterministic transport fixtures and already-validated non-Pillow
+        # decoders unchanged; Ollama will return a bounded diagnostic if malformed.
+        return original, {
+            "original_width": 0,
+            "original_height": 0,
+            "input_width": 0,
+            "input_height": 0,
+            "downscaled": False,
+        }
 
 
 def sha256_file(path: Path) -> str:
@@ -271,6 +323,7 @@ def analyze_one(
         f"Asset kind: {asset.get('kind', 'unknown')}\n"
         f"Nearby extracted page text (possibly incomplete):\n{context or '[No extracted text available]'}"
     )
+    model_image, image_dimensions = prepare_model_image(asset_path, media_type)
     payload = {
         "model": model,
         "stream": False,
@@ -280,7 +333,7 @@ def analyze_one(
         "messages": [{
             "role": "user",
             "content": prompt,
-            "images": [base64.b64encode(asset_path.read_bytes()).decode("ascii")],
+            "images": [base64.b64encode(model_image).decode("ascii")],
         }],
         "options": {"temperature": 0, "num_ctx": num_ctx, "num_predict": num_predict},
     }
@@ -328,6 +381,7 @@ def analyze_one(
         "source_pdf_page_number": page_number,
         "asset_path": relative,
         "asset_kind": asset.get("kind"),
+        "model_input_image": image_dimensions,
         "page_text_context_sha256": hashlib.sha256(str(asset.get("page_text_context") or "")[:1600].encode("utf-8")).hexdigest(),
         "model_provider": "ollama_local",
         "model": model,
