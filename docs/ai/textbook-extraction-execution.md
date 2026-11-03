@@ -125,7 +125,7 @@ Implementation commits:
 - [ ] Confirm the first workflow run on the actual existing GHCR source-book image; no real-book vision results or successful workflow run are claimed until that run completes.
 
 
-- [x] Strengthen runner resumability: process batches of 10, commit all generated inventory/analysis/assets/previews to main after each batch, and mirror the analysis checkpoint to a stable GHCR checkpoint tag. Same-run failures do not starve later assets; the next workflow run retries failed assets.
+- [x] Strengthen runner resumability: process batches of 10, checkpoint per-asset results to the isolated textbook state branch at savepoints, and mirror the analysis checkpoint to a stable GHCR checkpoint tag. Transient errors are retried across separate runs up to three times per asset; terminal errors stop for human review.
 - [ ] Validate the new workflow end-to-end. GitHub connector status output has not yet confirmed a successful Actions run for these commits.
 
 ## Class 7/8 source preparation and authoring handoff (2026-10-16)
