@@ -49673,7 +49673,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface, with instructions on how to perform an activity related to atmospheric pressure.",
         "visual_type": "diagram",
         "visible_text": [
           "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
@@ -49693,22 +49693,19 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "air pressure",
+          "pressure difference",
+          "atmospheric force",
           "SI unit of pressure",
+          "practical unit of air pressure",
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
         "context_relation": "educational",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual experiment of pulling the sucker off the surface.",
           "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
