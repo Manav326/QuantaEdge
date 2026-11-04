@@ -13,14 +13,14 @@
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "a49d7787a94b67e1b38d30d0",
-      "5abf5b43650d77843396badb",
-      "58c4cf310bee9a3cb17c81d3"
+      "cb6aea496d93b5440e9f4578",
+      "931c8b02ea8423f01ef94286",
+      "913c0666f74a34ae60f391bc"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1592,
-    "assets_remaining": 486,
-    "assets_completion_percent": 76.6,
+    "assets_analyzed": 1595,
+    "assets_remaining": 483,
+    "assets_completion_percent": 76.8,
     "assets_failed": 26,
     "assets_skipped_from_checkpoint": 1592,
     "batch_limit": 5,
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41852106782",
-      "checkpointed_at": "2026-11-04T17:04:39Z"
+      "checkpointed_at": "2026-11-04T17:19:00Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41852106782",
-      "checkpointed_at": "2026-11-04T17:05:30Z"
+      "checkpointed_at": "2026-11-04T17:19:53Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -54442,6 +54442,93 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41642480964",
       "checkpointed_at": "2026-11-03T16:03:48Z"
+    },
+    {
+      "asset_id": "cb6aea496d93b5440e9f4578",
+      "asset_sha256": "a6616bd0c3343ba68df19b7975d92c010acc919f11669190af2101b82777b3e1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 187,
+      "asset_path": "assets/a6616bd0c3343ba68df19b7975d92c010acc919f11669190af2101b82777b3e1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "818a9d1d0c8d00ea9bf8381d8812a115573140fcaef59abd59ee414de2637c1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person wearing a light blue shirt.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a standalone illustration without any specific context or relation to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:21:28Z"
+    },
+    {
+      "asset_id": "931c8b02ea8423f01ef94286",
+      "asset_sha256": "53b03b10ca55fe4e61b842db5dd2d49f1293c7802e577c96b65a78a194a1488a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 187,
+      "asset_path": "assets/53b03b10ca55fe4e61b842db5dd2d49f1293c7802e577c96b65a78a194a1488a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "818a9d1d0c8d00ea9bf8381d8812a115573140fcaef59abd59ee414de2637c1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A kettle boiling water on a gas stove, with steam rising from the kettle lid.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "boiling water",
+          "gas stove",
+          "kettle",
+          "steam"
+        ],
+        "context_relation": "The image depicts a common household activity of boiling water, which is a part of the traditional Indian system of holistic health and medicine called Ayurveda.",
+        "limitations": [
+          "The image does not provide specific details about the herbs or plants being dried in the shade as mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:23:10Z"
+    },
+    {
+      "asset_id": "913c0666f74a34ae60f391bc",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 187,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "818a9d1d0c8d00ea9bf8381d8812a115573140fcaef59abd59ee414de2637c1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:23:25Z"
     }
   ]
 }
