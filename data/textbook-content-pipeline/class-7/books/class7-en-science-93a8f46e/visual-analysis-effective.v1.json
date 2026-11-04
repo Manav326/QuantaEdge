@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "67f8fb59b80fd8df8ef458f4f8fc4a1d57cad63b53006b832a1659a42d22f7a1",
+  "raw_analysis_sha256": "2e177b26c1756b8c235e117e8a74109d34c1db2d6abcdae441de6f5f9f94bab2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41760883132",
-      "checkpointed_at": "2026-11-04T03:37:25Z",
+      "checkpointed_at": "2026-11-04T03:41:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41760883132",
-      "checkpointed_at": "2026-11-04T03:37:54Z",
+      "checkpointed_at": "2026-11-04T03:42:01Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41760883132",
-      "checkpointed_at": "2026-11-04T03:38:33Z",
+      "checkpointed_at": "2026-11-04T03:42:38Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -164778,7 +164778,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41760883132",
-      "checkpointed_at": "2026-11-04T03:39:13Z",
+      "checkpointed_at": "2026-11-04T03:43:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -190388,7 +190388,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41688679736",
+      "run_id": "41760883132",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
