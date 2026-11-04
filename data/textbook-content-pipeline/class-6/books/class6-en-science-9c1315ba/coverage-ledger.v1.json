@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1626,
-    "successful_visual_analyses": 1600,
-    "missing_visual_analyses": 452,
+    "raw_analysis_result_rows": 1629,
+    "successful_visual_analyses": 1603,
+    "missing_visual_analyses": 449,
     "failed_visual_analyses": 26,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 478,
+    "unresolved_count": 475,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -60918,9 +60918,18 @@
       "asset_path": "assets/41602a1167c5a9ceab4b471bbe455d90e46d141f18c890c109c2b97886dbc42b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy thinking with his hand on his chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the text.",
+        "limitations": [
+          "The image does not provide any specific information about the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60936,9 +60945,37 @@
       "asset_path": "assets/db50f0e353ec94cf91531173a76de8129d281dd6de5fe9c8e977c4f20daee65e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person pouring tea leaves into a strainer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Dada: I shall prepare tea for you.",
+          "Tea",
+          "Children: We will also help you.",
+          "leaves",
+          "As Dada makes the tea, he shares tips on how to make a",
+          "cup of tea.",
+          "Balan: After preparing tea, how do you remove the tea",
+          "leaves?",
+          "Dada: Obviously, with a strainer. You know if we do not",
+          "have a strainer, we can still remove most of the tea leaves.",
+          "Valli: How?",
+          "Dada: Leave the sauce pan  (vessel) containing  tea",
+          "Fig. 9.9: Decantatio"
+        ],
+        "concepts": [
+          "tea preparation",
+          "strainer",
+          "tea leaves",
+          "removing tea leaves"
+        ],
+        "context_relation": "Tea preparation",
+        "limitations": [
+          "The image does not show the actual process of removing tea leaves."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -60954,9 +60991,34 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scene from a tea-making demonstration, with children and Dada discussing the process and tips for making tea.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Dada: I shall prepare tea for you.",
+          "Tea    Children: We will also help you.",
+          "leaves    As Dada makes the tea, he shares tips on how to make a",
+          "cup of tea.",
+          "Balan: After preparing tea, how do you remove the tea",
+          "leaves?",
+          "Dada: Obviously, with a strainer. You know if we do not",
+          "have a strainer, we can still remove most of the tea leaves.",
+          "Valli: How?",
+          "Dada: Leave the sauce pan  (vessel) containing  tea",
+          "Fig. 9.9: Decantatio"
+        ],
+        "concepts": [
+          "tea-making",
+          "strainer",
+          "removing tea leaves"
+        ],
+        "context_relation": "The image shows a conversation between Dada, children, and Balan about making tea and removing tea leaves.",
+        "limitations": [
+          "The image does not show the actual process of making tea or removing tea leaves."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

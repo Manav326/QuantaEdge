@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4cb9f86a0b0b9d477eba6be4fe14302611e19a9b7d5938a62f1a0d92df96b373",
+  "raw_analysis_sha256": "3c9208e2fefc6ba67b19a25ee42294fd8e878234f3426129c6033c91ea32ceea",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41852106782",
-      "checkpointed_at": "2026-11-04T17:24:35Z",
+      "checkpointed_at": "2026-11-04T17:33:25Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41852106782",
-      "checkpointed_at": "2026-11-04T17:25:27Z",
+      "checkpointed_at": "2026-11-04T17:34:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -83340,6 +83340,196 @@
         "context_relation": "The image illustrates a step in the process of making tea, specifically the removal of tea leaves using a strainer.",
         "limitations": [
           "The image does not show the actual process of making tea, only the removal of tea leaves."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fb3b6cd4d7508c0be4b3da30",
+      "asset_sha256": "41602a1167c5a9ceab4b471bbe455d90e46d141f18c890c109c2b97886dbc42b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 188,
+      "asset_path": "assets/41602a1167c5a9ceab4b471bbe455d90e46d141f18c890c109c2b97886dbc42b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dab9da065057ed8687ab7bec168e3bc7c0b0c6807082e52bc9806e10e9b7680c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a boy thinking with his hand on his chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the text.",
+        "limitations": [
+          "The image does not provide any specific information about the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:35:56Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy thinking with his hand on his chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the text.",
+        "limitations": [
+          "The image does not provide any specific information about the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bcdb46784908e68f638a006b",
+      "asset_sha256": "db50f0e353ec94cf91531173a76de8129d281dd6de5fe9c8e977c4f20daee65e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 188,
+      "asset_path": "assets/db50f0e353ec94cf91531173a76de8129d281dd6de5fe9c8e977c4f20daee65e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dab9da065057ed8687ab7bec168e3bc7c0b0c6807082e52bc9806e10e9b7680c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person pouring tea leaves into a strainer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Dada: I shall prepare tea for you.",
+          "Tea",
+          "Children: We will also help you.",
+          "leaves",
+          "As Dada makes the tea, he shares tips on how to make a",
+          "cup of tea.",
+          "Balan: After preparing tea, how do you remove the tea",
+          "leaves?",
+          "Dada: Obviously, with a strainer. You know if we do not",
+          "have a strainer, we can still remove most of the tea leaves.",
+          "Valli: How?",
+          "Dada: Leave the sauce pan  (vessel) containing  tea",
+          "Fig. 9.9: Decantatio"
+        ],
+        "concepts": [
+          "tea preparation",
+          "strainer",
+          "tea leaves",
+          "removing tea leaves"
+        ],
+        "context_relation": "Tea preparation",
+        "limitations": [
+          "The image does not show the actual process of removing tea leaves."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:37:49Z",
+      "effective_analysis": {
+        "visual_summary": "A person pouring tea leaves into a strainer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Dada: I shall prepare tea for you.",
+          "Tea",
+          "Children: We will also help you.",
+          "leaves",
+          "As Dada makes the tea, he shares tips on how to make a",
+          "cup of tea.",
+          "Balan: After preparing tea, how do you remove the tea",
+          "leaves?",
+          "Dada: Obviously, with a strainer. You know if we do not",
+          "have a strainer, we can still remove most of the tea leaves.",
+          "Valli: How?",
+          "Dada: Leave the sauce pan  (vessel) containing  tea",
+          "Fig. 9.9: Decantatio"
+        ],
+        "concepts": [
+          "tea preparation",
+          "strainer",
+          "tea leaves",
+          "removing tea leaves"
+        ],
+        "context_relation": "Tea preparation",
+        "limitations": [
+          "The image does not show the actual process of removing tea leaves."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "662dd82d99e8c8dcebbedb55",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 188,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dab9da065057ed8687ab7bec168e3bc7c0b0c6807082e52bc9806e10e9b7680c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scene from a tea-making demonstration, with children and Dada discussing the process and tips for making tea.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Dada: I shall prepare tea for you.",
+          "Tea    Children: We will also help you.",
+          "leaves    As Dada makes the tea, he shares tips on how to make a",
+          "cup of tea.",
+          "Balan: After preparing tea, how do you remove the tea",
+          "leaves?",
+          "Dada: Obviously, with a strainer. You know if we do not",
+          "have a strainer, we can still remove most of the tea leaves.",
+          "Valli: How?",
+          "Dada: Leave the sauce pan  (vessel) containing  tea",
+          "Fig. 9.9: Decantatio"
+        ],
+        "concepts": [
+          "tea-making",
+          "strainer",
+          "removing tea leaves"
+        ],
+        "context_relation": "The image shows a conversation between Dada, children, and Balan about making tea and removing tea leaves.",
+        "limitations": [
+          "The image does not show the actual process of making tea or removing tea leaves."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:38:35Z",
+      "effective_analysis": {
+        "visual_summary": "A scene from a tea-making demonstration, with children and Dada discussing the process and tips for making tea.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Dada: I shall prepare tea for you.",
+          "Tea    Children: We will also help you.",
+          "leaves    As Dada makes the tea, he shares tips on how to make a",
+          "cup of tea.",
+          "Balan: After preparing tea, how do you remove the tea",
+          "leaves?",
+          "Dada: Obviously, with a strainer. You know if we do not",
+          "have a strainer, we can still remove most of the tea leaves.",
+          "Valli: How?",
+          "Dada: Leave the sauce pan  (vessel) containing  tea",
+          "Fig. 9.9: Decantatio"
+        ],
+        "concepts": [
+          "tea-making",
+          "strainer",
+          "removing tea leaves"
+        ],
+        "context_relation": "The image shows a conversation between Dada, children, and Balan about making tea and removing tea leaves.",
+        "limitations": [
+          "The image does not show the actual process of making tea or removing tea leaves."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

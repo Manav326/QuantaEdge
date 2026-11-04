@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1600,
+    "assets_selected": 1603,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "517147d30ef2a668c7161edf",
-      "b06448319db77495354684b2",
-      "aeb4b6bf3d262202b4e079cc"
+      "fb3b6cd4d7508c0be4b3da30",
+      "bcdb46784908e68f638a006b",
+      "662dd82d99e8c8dcebbedb55"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1598,
-    "assets_remaining": 480,
-    "assets_completion_percent": 76.9,
+    "assets_analyzed": 1601,
+    "assets_remaining": 477,
+    "assets_completion_percent": 77.0,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 1595,
+    "assets_skipped_from_checkpoint": 1598,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41852106782",
-      "checkpointed_at": "2026-11-04T17:24:35Z"
+      "checkpointed_at": "2026-11-04T17:33:25Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41852106782",
-      "checkpointed_at": "2026-11-04T17:25:27Z"
+      "checkpointed_at": "2026-11-04T17:34:16Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -54676,6 +54676,125 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41852106782",
       "checkpointed_at": "2026-11-04T17:32:18Z"
+    },
+    {
+      "asset_id": "fb3b6cd4d7508c0be4b3da30",
+      "asset_sha256": "41602a1167c5a9ceab4b471bbe455d90e46d141f18c890c109c2b97886dbc42b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 188,
+      "asset_path": "assets/41602a1167c5a9ceab4b471bbe455d90e46d141f18c890c109c2b97886dbc42b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dab9da065057ed8687ab7bec168e3bc7c0b0c6807082e52bc9806e10e9b7680c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a boy thinking with his hand on his chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the text.",
+        "limitations": [
+          "The image does not provide any specific information about the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:35:56Z"
+    },
+    {
+      "asset_id": "bcdb46784908e68f638a006b",
+      "asset_sha256": "db50f0e353ec94cf91531173a76de8129d281dd6de5fe9c8e977c4f20daee65e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 188,
+      "asset_path": "assets/db50f0e353ec94cf91531173a76de8129d281dd6de5fe9c8e977c4f20daee65e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dab9da065057ed8687ab7bec168e3bc7c0b0c6807082e52bc9806e10e9b7680c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person pouring tea leaves into a strainer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Dada: I shall prepare tea for you.",
+          "Tea",
+          "Children: We will also help you.",
+          "leaves",
+          "As Dada makes the tea, he shares tips on how to make a",
+          "cup of tea.",
+          "Balan: After preparing tea, how do you remove the tea",
+          "leaves?",
+          "Dada: Obviously, with a strainer. You know if we do not",
+          "have a strainer, we can still remove most of the tea leaves.",
+          "Valli: How?",
+          "Dada: Leave the sauce pan  (vessel) containing  tea",
+          "Fig. 9.9: Decantatio"
+        ],
+        "concepts": [
+          "tea preparation",
+          "strainer",
+          "tea leaves",
+          "removing tea leaves"
+        ],
+        "context_relation": "Tea preparation",
+        "limitations": [
+          "The image does not show the actual process of removing tea leaves."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:37:49Z"
+    },
+    {
+      "asset_id": "662dd82d99e8c8dcebbedb55",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 188,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dab9da065057ed8687ab7bec168e3bc7c0b0c6807082e52bc9806e10e9b7680c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scene from a tea-making demonstration, with children and Dada discussing the process and tips for making tea.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Dada: I shall prepare tea for you.",
+          "Tea    Children: We will also help you.",
+          "leaves    As Dada makes the tea, he shares tips on how to make a",
+          "cup of tea.",
+          "Balan: After preparing tea, how do you remove the tea",
+          "leaves?",
+          "Dada: Obviously, with a strainer. You know if we do not",
+          "have a strainer, we can still remove most of the tea leaves.",
+          "Valli: How?",
+          "Dada: Leave the sauce pan  (vessel) containing  tea",
+          "Fig. 9.9: Decantatio"
+        ],
+        "concepts": [
+          "tea-making",
+          "strainer",
+          "removing tea leaves"
+        ],
+        "context_relation": "The image shows a conversation between Dada, children, and Balan about making tea and removing tea leaves.",
+        "limitations": [
+          "The image does not show the actual process of making tea or removing tea leaves."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:38:35Z"
     }
   ]
 }
