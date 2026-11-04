@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3334,
-    "successful_visual_analyses": 3297,
-    "missing_visual_analyses": 4154,
-    "failed_visual_analyses": 37,
+    "raw_analysis_result_rows": 3338,
+    "successful_visual_analyses": 3299,
+    "missing_visual_analyses": 4150,
+    "failed_visual_analyses": 39,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4191,
+    "unresolved_count": 4189,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -130665,9 +130665,26 @@
       "asset_path": "assets/01fa78321b5ed952389981d395935a7c5d575ac5e2c0593a0af65c1c63e2e0aa.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the relationship between latitude, longitude, and temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "concepts": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "context_relation": "The diagram illustrates the geographical factors affecting temperature.",
+        "limitations": [
+          "The diagram does not provide specific numerical values for latitude, longitude, and temperature."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -130683,9 +130700,26 @@
       "asset_path": "assets/36c2cf594b53e365f97b7ca39c1cc7677f9ca4621df703717d32c3939d0565a0.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the relationship between latitude, longitude, and temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "concepts": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "context_relation": "The diagram illustrates the geographical factors that influence temperature.",
+        "limitations": [
+          "The diagram does not provide specific numerical values for latitude, longitude, and temperature."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -130701,7 +130735,7 @@
       "asset_path": "assets/4c3e4450cd3ebf4f6c484d344b8a0882d3e5785d54f07118b5ae55c86b4d7f6e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -130719,7 +130753,7 @@
       "asset_path": "assets/c8d1bd5aa637b3413320883321cfd649a48e8014cdd187731b55de18ab14b4c2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,

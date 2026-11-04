@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a967c1f54a5eb2b9a168c47493d7f3d60b91a6c437ac2ee88bbcd752b625241c",
+  "raw_analysis_sha256": "c9f9138d78b54d7d13fdfac986a22759b2cd154efad6adf944c684678705da75",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -164567,7 +164567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41780904893",
-      "checkpointed_at": "2026-11-04T08:05:12Z",
+      "checkpointed_at": "2026-11-04T08:15:30Z",
       "effective_analysis": {
         "visual_summary": "Page discussing the burning of candles and the role of oxygen in combustion.",
         "visual_type": "page_with_multiple_visuals",
@@ -190771,6 +190771,158 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9ecd6c79ddab4f61db94bdec",
+      "asset_sha256": "01fa78321b5ed952389981d395935a7c5d575ac5e2c0593a0af65c1c63e2e0aa",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/01fa78321b5ed952389981d395935a7c5d575ac5e2c0593a0af65c1c63e2e0aa.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the relationship between latitude, longitude, and temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "concepts": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "context_relation": "The diagram illustrates the geographical factors affecting temperature.",
+        "limitations": [
+          "The diagram does not provide specific numerical values for latitude, longitude, and temperature."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41780904893",
+      "checkpointed_at": "2026-11-04T08:17:08Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the relationship between latitude, longitude, and temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "concepts": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "context_relation": "The diagram illustrates the geographical factors affecting temperature.",
+        "limitations": [
+          "The diagram does not provide specific numerical values for latitude, longitude, and temperature."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1e04687b111588f40cc61999",
+      "asset_sha256": "36c2cf594b53e365f97b7ca39c1cc7677f9ca4621df703717d32c3939d0565a0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/36c2cf594b53e365f97b7ca39c1cc7677f9ca4621df703717d32c3939d0565a0.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the relationship between latitude, longitude, and temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "concepts": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "context_relation": "The diagram illustrates the geographical factors that influence temperature.",
+        "limitations": [
+          "The diagram does not provide specific numerical values for latitude, longitude, and temperature."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41780904893",
+      "checkpointed_at": "2026-11-04T08:18:49Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the relationship between latitude, longitude, and temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "concepts": [
+          "Latitude",
+          "Longitude",
+          "Temperature"
+        ],
+        "context_relation": "The diagram illustrates the geographical factors that influence temperature.",
+        "limitations": [
+          "The diagram does not provide specific numerical values for latitude, longitude, and temperature."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7d8dad96d387d62af0ca7ef5",
+      "asset_sha256": "4c3e4450cd3ebf4f6c484d344b8a0882d3e5785d54f07118b5ae55c86b4d7f6e",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/4c3e4450cd3ebf4f6c484d344b8a0882d3e5785d54f07118b5ae55c86b4d7f6e.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41780904893",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3488d8dd39995ddc9a824d27",
+      "asset_sha256": "c8d1bd5aa637b3413320883321cfd649a48e8014cdd187731b55de18ab14b4c2",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/c8d1bd5aa637b3413320883321cfd649a48e8014cdd187731b55de18ab14b4c2.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41780904893",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
