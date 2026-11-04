@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1603,
+    "assets_selected": 1606,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "fb3b6cd4d7508c0be4b3da30",
-      "bcdb46784908e68f638a006b",
-      "662dd82d99e8c8dcebbedb55"
+      "b8a8ea0df7d897609163ca50",
+      "9a29668704779933d8e3c096",
+      "4de3cc856d0666e9272b020e"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1601,
-    "assets_remaining": 477,
-    "assets_completion_percent": 77.0,
+    "assets_analyzed": 1604,
+    "assets_remaining": 474,
+    "assets_completion_percent": 77.2,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 1598,
+    "assets_skipped_from_checkpoint": 1601,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41852106782",
-      "checkpointed_at": "2026-11-04T17:33:25Z"
+      "checkpointed_at": "2026-11-04T17:39:44Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41852106782",
-      "checkpointed_at": "2026-11-04T17:34:16Z"
+      "checkpointed_at": "2026-11-04T17:40:36Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -54795,6 +54795,127 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41852106782",
       "checkpointed_at": "2026-11-04T17:38:35Z"
+    },
+    {
+      "asset_id": "b8a8ea0df7d897609163ca50",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 188,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dab9da065057ed8687ab7bec168e3bc7c0b0c6807082e52bc9806e10e9b7680c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scene showing a family preparing tea, with a focus on the process of removing tea leaves from the tea leaves.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Dada: I shall prepare tea for you.",
+          "Tea    Children: We will also help you.",
+          "leaves    As Dada makes the tea, he shares tips on how to make a",
+          "cup of tea.",
+          "Balan: After preparing tea, how do you remove the tea",
+          "leaves?",
+          "Dada: Obviously, with a strainer. You know if we do not",
+          "have a strainer, we can still remove most of the tea leaves.",
+          "Valli: How?",
+          "Dada: Leave the sauce pan  (vessel) containing  tea",
+          "leaves",
+          "Fig. 9.9: Decantatio"
+        ],
+        "concepts": [
+          "Tea preparation",
+          "Removing tea leaves",
+          "Strainer",
+          "Sauce pan"
+        ],
+        "context_relation": "The image is a part of a larger educational content about tea preparation.",
+        "limitations": [
+          "The image does not show the actual process of removing tea leaves."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:41:21Z"
+    },
+    {
+      "asset_id": "9a29668704779933d8e3c096",
+      "asset_sha256": "a57c191d05f5659862107d4a853e21bfc974fce81c820f6a7a0a6f4ddf354531",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 188,
+      "asset_path": "page-0188.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "dab9da065057ed8687ab7bec168e3bc7c0b0c6807082e52bc9806e10e9b7680c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the process of making tea and the method of removing tea leaves from the tea.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Dada: I shall prepare tea for you.",
+          "Children: We will also help you.",
+          "As Dada makes the tea, he shares tips on how to make a cup of tea.",
+          "Balan: After preparing tea, how do you remove the tea leaves?",
+          "Dada: Obviously, with a strainer. You know if we do not have a strainer, we can still remove most of the tea leaves.",
+          "Valli: How?",
+          "Dada: Leave the sauce pan (vessel) containing tea undisturbed for some time and gently pour the tea in a cup (Fig. 9.9).",
+          "Valli: Oh Yes! And then the tea leaves will be settled at the bottom.",
+          "The process of settling down of heavier insoluble component at the bottom of a liquid is called sedimentation. When the water (liquid) is removed by tilting the vessel, the process is called decantation.",
+          "In the chapter 'Materials Around Us', you have studied that oil does not mix with water and forms a separate layer when left undisturbed for some time. Which method of separation would you use to separate oil and water?",
+          "Dada: But I can still get a few tea leaves in my mouth because decantation does not completely separate all the tea leaves from the tea.",
+          "Balan: Oh! It means it is not a proper method of separation. Dada: Yes, you are right. The tea is ready now. Malli picks up the tea-strainer from the shelf and gives it to his Dada.",
+          "Dada: Let me pour the tea through this strainer. You can see all the tea leaves collected in the strainer. This process of separating tea leaves from tea is called filtration.",
+          "Balan asks Malli if he could use a tea strainer to filter muddy water. Let us try and find out. Dada: Also, try to filter the muddy water through a piece of cloth and observe the difference."
+        ],
+        "concepts": [
+          "tea",
+          "decantation",
+          "sedimentation",
+          "filtration",
+          "materials around us"
+        ],
+        "context_relation": "teaching",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:46:04Z"
+    },
+    {
+      "asset_id": "4de3cc856d0666e9272b020e",
+      "asset_sha256": "a6ae3f7123af782b1a84c28f3e47044bc934e8a8a1ea7a7930489143da6cfd18",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 189,
+      "asset_path": "assets/a6ae3f7123af782b1a84c28f3e47044bc934e8a8a1ea7a7930489143da6cfd18.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "19e02ceb61315bd1b60a3480af89124995622fe8a67b29c49f49aeed6755345b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is holding a white paper cup and pointing at it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a close-up of a person's hands holding and pointing at a white paper cup.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond what is visible in the frame."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41852106782",
+      "checkpointed_at": "2026-11-04T17:47:42Z"
     }
   ]
 }
