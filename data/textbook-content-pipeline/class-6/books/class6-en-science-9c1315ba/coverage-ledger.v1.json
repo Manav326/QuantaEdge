@@ -44691,7 +44691,7 @@
           "Handspans",
           "Length of the table"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans.",
         "limitations": [
           "The table does not provide the actual length of the table."
         ]
