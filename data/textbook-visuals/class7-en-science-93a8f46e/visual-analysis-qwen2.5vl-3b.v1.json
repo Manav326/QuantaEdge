@@ -12,16 +12,16 @@
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "f5cfd5f0dfcebd60e3212f1b",
-      "d00952224136c927b5e98d9f",
-      "10b64ec3cd08882a367aeea6",
-      "4ce0fa2f96e7002e7006048f",
-      "8cf70b776758c1a7ca1fae18"
+      "da25657e3983683acdf5594f",
+      "4b3169c5cf256b5aa242d2a1",
+      "9bcda30192c2436a7536c236",
+      "1534cda29035e5859c626168"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3301,
-    "assets_remaining": 4187,
+    "assets_analyzed": 3302,
+    "assets_remaining": 4186,
     "assets_completion_percent": 44.1,
-    "assets_failed": 44,
+    "assets_failed": 47,
     "assets_skipped_from_checkpoint": 3301,
     "batch_limit": 5,
     "publication_allowed": false
@@ -104850,7 +104850,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41820771307",
-      "checkpointed_at": "2026-11-04T13:58:48Z"
+      "checkpointed_at": "2026-11-04T14:13:06Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -122363,6 +122363,104 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "da25657e3983683acdf5594f",
+      "asset_sha256": "8af6459b9c2599010766f12a082bad31cffbd89be6758611eb79af5362a40429",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/8af6459b9c2599010766f12a082bad31cffbd89be6758611eb79af5362a40429.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41820771307",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "4b3169c5cf256b5aa242d2a1",
+      "asset_sha256": "a157e8d64e07d5b682627ffc21304751cf31174f03e6ba0fba335f39c97f0fc5",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/a157e8d64e07d5b682627ffc21304751cf31174f03e6ba0fba335f39c97f0fc5.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41820771307",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "9bcda30192c2436a7536c236",
+      "asset_sha256": "7f4d303ac38aacf17e8e6b61d9d3aa7a3c2e2ad0e4049e8640c2526cbcdea019",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/7f4d303ac38aacf17e8e6b61d9d3aa7a3c2e2ad0e4049e8640c2526cbcdea019.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41820771307",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "1534cda29035e5859c626168",
+      "asset_sha256": "d078512ad0769ae26330c847d4a8c17ee6efa186602255307e8e0052e57584df",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/d078512ad0769ae26330c847d4a8c17ee6efa186602255307e8e0052e57584df.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing heat transfer in nature, with a focus on the comparison between winter conditions in Gangtok and Kerala.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "The grandfather explains that the equator is the imaginary line around the Earth that divides the Earth into the Northern and Southern Hemispheres. It is located at approximately 0 degrees latitude.",
+          "The grandfather also mentions that the Earth's rotation causes the sun to shine more directly on the equator, resulting in warmer temperatures.",
+          "The grandfather further explains that the Earth's rotation also causes the sun to shine more directly on the equator, resulting in warmer temperatures.",
+          "The grandfather concludes by saying that the Earth's rotation causes the sun to shine more directly on the equator, resulting in warmer temperatures.",
+          "The grandfather concludes by saying that the Earth's rotation causes the sun to shine more directly on the equator, resulting in warmer temperatures."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Equator",
+          "Latitude",
+          "Rotation",
+          "Sunlight",
+          "Temperature",
+          "Hemispheres"
+        ],
+        "context_relation": "The grandfather's explanation is based on the physical principles of the Earth's rotation and the position of the equator.",
+        "limitations": [
+          "The grandfather's explanation is based on the physical principles of the Earth's rotation and the position of the equator.",
+          "The grandfather's explanation is based on the physical principles of the Earth's rotation and the position of the equator."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "41820771307",
+      "checkpointed_at": "2026-11-04T14:24:59Z"
     }
   ]
 }
