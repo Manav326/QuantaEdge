@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1447,
-    "successful_visual_analyses": 1426,
+    "successful_visual_analyses": 1427,
     "missing_visual_analyses": 844,
-    "failed_visual_analyses": 21,
+    "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 865,
+    "unresolved_count": 864,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49678,9 +49678,31 @@
       "asset_path": "page-0106.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl lifting a paper plate with a stick, demonstrating the concept of atmospheric pressure.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.9: (b) Inverted paper plate with two folds of chart paper",
+          "Fig. 6.9: (c) Inverted paper plate with unfolded chart paper",
+          "You would have observed that more effort is needed to lift the paper plate when it is covered with the unfolded chart paper, than with the folded chart paper. When we cover the paper plate with unfolded chart paper, the area of the covering sheet increases. The effort needed to lift the paper plate ",
+          "You must have experienced that when you blow air into a balloon, it gets inflated. Why? This is because the air being filled inside the balloon exerts pressure on the walls of the balloon (Fig. 6.10). Can we say that air exerts pressure in all directions? Yes, that is why the balloon expands in all "
+        ],
+        "concepts": [
+          "atmospheric pressure",
+          "force",
+          "pressure",
+          "area",
+          "force per unit area",
+          "inflation",
+          "expansion"
+        ],
+        "context_relation": "The image is a visual representation of the text explaining the concept of atmospheric pressure and its effect on objects.",
+        "limitations": [
+          "The image does not show the actual experiment being performed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
