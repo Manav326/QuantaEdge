@@ -15,13 +15,13 @@
       "35f32b476dc5977bc161e8e8",
       "414a0224c90f14c01c7da9e7",
       "f492c50e9c7d7ef8d140ae06",
-      "e03a02c3fc37627f873ab044"
+      "4fdef3a69f918bffeb046522"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1420,
-    "assets_remaining": 871,
+    "assets_analyzed": 1421,
+    "assets_remaining": 870,
     "assets_completion_percent": 62.0,
-    "assets_failed": 23,
+    "assets_failed": 22,
     "assets_skipped_from_checkpoint": 1420,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1228,7 +1228,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:26:05Z"
+      "checkpointed_at": "2026-11-06T01:30:47Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20246,7 +20246,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:26:32Z"
+      "checkpointed_at": "2026-11-06T01:31:14Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25952,7 +25952,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:27:18Z"
+      "checkpointed_at": "2026-11-06T01:31:59Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -38628,7 +38628,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:27:48Z"
+      "checkpointed_at": "2026-11-06T01:32:30Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42560,19 +42560,47 @@
     {
       "asset_id": "4fdef3a69f918bffeb046522",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 102,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129304656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black and white illustration of a water-filled bucket with broad and narrow handles, demonstrating the difference in comfort when carrying a bag with broad straps compared to narrow straps.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 6.2: Buckets with broad and narrow handles"
+        ],
+        "concepts": [
+          "comfort",
+          "straps",
+          "pressure"
+        ],
+        "context_relation": "The image is used to explain the concept of comfort in carrying bags with different types of straps.",
+        "limitations": [
+          "The image does not provide specific measurements or data to support the explanation."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 2480,
+        "source_height": 3508,
+        "inference_width": 679,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 4154,
+        "sha256": "0804d75ec68472f6cf9ced94a0a417c7893be69be9d79de1a26ae5ac1bc991a3"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42140325986",
+      "checkpointed_at": "2026-11-06T01:32:42Z"
     },
     {
       "asset_id": "19c227fd1fc13adb636a0c58",
