@@ -182,26 +182,125 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
     out={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,"ledger_status":"COMPLETE" if unresolved==0 else "INCOMPLETE","source":{"class":src.get("class"),"language":src.get("language"),"subject":src.get("subject"),"source_book_id":bid,"source_pdf_sha256":sha,"edition":src.get("edition"),"pdf_page_count":count},"source_paths":paths,"summary":{"source_pdf_page_count":count,"inventory_page_records":len(pages),"page_text_records":sum(map(len,texts.values())),"pages_with_unresolved_text":page_bad,"inventory_asset_rows":len(assets),"eligible_visual_asset_rows":eligible,"raw_analysis_result_rows":len(results),"successful_visual_analyses":sum(x["analysis_status"]=="ANALYZED_REQUIRES_HUMAN_REVIEW" for x in visual_rows),"missing_visual_analyses":sum(x["analysis_status"]=="ANALYSIS_MISSING" for x in visual_rows),"failed_visual_analyses":sum(x["analysis_status"] in {"ANALYSIS_ERROR","ASSET_HASH_MISMATCH","ANALYSIS_STATUS_UNKNOWN","ANALYSIS_STALE_CONTEXT","ANALYSIS_STALE_CHECKPOINT"} for x in visual_rows),"orphan_analysis_results":len(orphans),"corrections_applied":len(accepted),"unresolved_count":unresolved,"mapping_status":"NOT_STARTED","analysis_model":raw.get("model"),"analysis_prompt_version":raw.get("prompt_version"),"publication_allowed":False},"pages":page_rows,"visuals":visual_rows,"orphan_analysis_asset_ids":orphans,"human_review_required":True,"publication_allowed":False}
     write_json(ledger_path,out);return out
 
-def git_checkpoint(repo,paths,message):
-    # Pipeline-generated data is versioned only under data/, never in application/code folders.
-    repo_root=Path(repo).resolve()
-    data_root=(repo_root/"data").resolve()
-    staged_paths=[]
+_RETRYABLE_GIT_NETWORK_ERRORS = (
+    "could not resolve host", "connection timed out", "connection reset",
+    "remote end hung up unexpectedly", "rpc failed", "tls handshake",
+    "requested url returned error: 502", "requested url returned error: 503",
+    "requested url returned error: 504", "http 502", "http 503", "http 504",
+)
+_RETRYABLE_GIT_PUSH_RACES = (
+    "[rejected]", "non-fast-forward", "fetch first",
+    "failed to push some refs", "updates were rejected",
+    "remote contains work that you do not have",
+)
+
+
+def git_checkpoint(repo, paths, message):
+    """Commit data checkpoints and safely retry concurrent main-branch updates.
+
+    Each bilingual pair owns disjoint per-book paths. Several pair workers may
+    nevertheless push at nearly the same time, so a single pull/push retry is
+    insufficient. Fetch and rebase the local checkpoint on the latest main
+    before every push attempt. Never force-push or resolve same-path conflicts
+    automatically: those remain explicit failures.
+    """
+    repo_root = Path(repo).resolve()
+    data_root = (repo_root / "data").resolve()
+    staged_paths = []
     for raw_path in paths:
-        candidate=Path(raw_path)
-        if not candidate.is_absolute(): candidate=repo_root/candidate
-        try: relative=candidate.resolve().relative_to(data_root)
-        except ValueError as exc: raise ValueError(f"Pipeline checkpoints may only be committed under data/: {raw_path}") from exc
-        staged_paths.append((Path("data")/relative).as_posix())
-    subprocess.run(["git","add","--",*staged_paths],cwd=repo_root,check=True)
-    if subprocess.run(["git","diff","--cached","--quiet"],cwd=repo).returncode==0:return
-    subprocess.run(["git","config","user.name","github-actions[bot]"],cwd=repo,check=True);subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"],cwd=repo,check=True)
-    subprocess.run(["git","commit","-m",message],cwd=repo,check=True)
-    subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-    try:subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
-    except subprocess.CalledProcessError:
-        subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-        subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
+        candidate = Path(raw_path)
+        if not candidate.is_absolute():
+            candidate = repo_root / candidate
+        try:
+            relative = candidate.resolve().relative_to(data_root)
+        except ValueError as exc:
+            raise ValueError(
+                f"Pipeline checkpoints may only be committed under data/: {raw_path}"
+            ) from exc
+        staged_paths.append((Path("data") / relative).as_posix())
+
+    subprocess.run(["git", "add", "--", *staged_paths], cwd=repo_root, check=True)
+    if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=repo_root).returncode == 0:
+        return
+
+    subprocess.run(
+        ["git", "config", "user.name", "github-actions[bot]"],
+        cwd=repo_root, check=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"],
+        cwd=repo_root, check=True,
+    )
+    subprocess.run(["git", "commit", "-m", message], cwd=repo_root, check=True)
+
+    push_command = ["git", "push", "origin", "HEAD:main"]
+    max_attempts = 8
+    for attempt in range(1, max_attempts + 1):
+        fetch = subprocess.run(
+            ["git", "fetch", "origin", "main"],
+            cwd=repo_root, text=True, capture_output=True,
+        )
+        if fetch.returncode != 0:
+            detail = (fetch.stderr or fetch.stdout or f"exit code {fetch.returncode}").strip()
+            retryable = any(token in detail.lower() for token in _RETRYABLE_GIT_NETWORK_ERRORS)
+            if not retryable or attempt == max_attempts:
+                raise subprocess.CalledProcessError(
+                    fetch.returncode, ["git", "fetch", "origin", "main"],
+                    output=fetch.stdout, stderr=fetch.stderr,
+                )
+            delay = min(2 ** (attempt - 1), 8)
+            print(
+                f"[pipeline] CHECKPOINT_FETCH_RETRY attempt={attempt}/{max_attempts} "
+                f"delay_seconds={delay} error={detail}",
+                file=sys.stderr, flush=True,
+            )
+            time.sleep(delay)
+            continue
+
+        try:
+            subprocess.run(["git", "rebase", "origin/main"], cwd=repo_root, check=True)
+        except subprocess.CalledProcessError:
+            # Leave the local checkpoint commit intact, but do not leave Git in
+            # a half-rebased state if the worker is inspected before teardown.
+            subprocess.run(["git", "rebase", "--abort"], cwd=repo_root, check=False)
+            raise
+
+        pushed = subprocess.run(
+            push_command, cwd=repo_root, text=True, capture_output=True,
+        )
+        if pushed.returncode == 0:
+            if pushed.stdout:
+                print(pushed.stdout, end="" if pushed.stdout.endswith("\n") else "\n", flush=True)
+            print(
+                f"[pipeline] CHECKPOINT_PUSHED attempt={attempt}/{max_attempts} "
+                f"message={message}",
+                flush=True,
+            )
+            return
+
+        detail = (pushed.stderr or pushed.stdout or f"exit code {pushed.returncode}").strip()
+        retryable = any(token in detail.lower() for token in (
+            *_RETRYABLE_GIT_NETWORK_ERRORS, *_RETRYABLE_GIT_PUSH_RACES,
+        ))
+        if not retryable or attempt == max_attempts:
+            print(
+                f"[pipeline] CHECKPOINT_PUSH_FAILED attempt={attempt}/{max_attempts} "
+                f"message={message} error={detail}",
+                file=sys.stderr, flush=True,
+            )
+            raise subprocess.CalledProcessError(
+                pushed.returncode, push_command, output=pushed.stdout, stderr=pushed.stderr,
+            )
+
+        delay = min(2 ** (attempt - 1), 8)
+        print(
+            f"[pipeline] CHECKPOINT_PUSH_RETRY attempt={attempt}/{max_attempts} "
+            f"delay_seconds={delay} error={detail}",
+            file=sys.stderr, flush=True,
+        )
+        time.sleep(delay)
+
+    raise RuntimeError(f"Checkpoint push exhausted {max_attempts} attempts: {message}")
 
 def backfill_legacy_context_hashes(previous_inventory, raw_path, *, book_id, source_sha, model):
     """Recover legacy per-asset text-context fingerprints from the exact committed prior inventory.
