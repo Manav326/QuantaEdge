@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "db5448b16dba08d652190352c1d784076eaf6339564469c40df48002ba915809",
+  "raw_analysis_sha256": "4c0cf4d94282a85bc4b914403edf8d2ce4b1dbccdf1bc6f44650aa6dcd86dfa4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15089,7 +15089,7 @@
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or questions for exploration."
         ]
       },
       "vision_input": {
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T04:19:16Z",
+      "checkpointed_at": "2026-11-06T04:31:03Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -15137,7 +15137,7 @@
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or questions for exploration."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -20284,9 +20284,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, including eclipses, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the reader to perform."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "vision_input": {
@@ -20304,7 +20304,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T04:21:18Z",
+      "checkpointed_at": "2026-11-06T04:31:43Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20324,9 +20324,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, including eclipses, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the reader to perform."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -110600,21 +110600,76 @@
     {
       "asset_id": "6dde8a230a57eb95c08cc790",
       "asset_sha256": "fea535906c291b6384d5e9706d679a408e5cf70f0048571fd5e27b809aae8b6e",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/fea535906c291b6384d5e9706d679a408e5cf70f0048571fd5e27b809aae8b6e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42155520422",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a village scene with a woman standing under a thatched roof, possibly in a rural setting.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as flat pans (tawas),",
+          "The World of Metals",
+          "4      and Non-metals"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "The image is a visual representation of a conversation between Yashwant, Anandi, and Sudarshan uncle about the items made by ironsmiths.",
+        "limitations": [
+          "The image does not provide specific details about the items made by ironsmiths.",
+          "The image does not show the process of making these items."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 220,
+        "source_height": 1165,
+        "inference_width": 181,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 14351,
+        "sha256": "f85b392fc09cb4f59372201396015aea228946ad0957919ce2f49ca9e9c4dff7"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42161055386",
+      "checkpointed_at": "2026-11-06T04:33:39Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a village scene with a woman standing under a thatched roof, possibly in a rural setting.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as flat pans (tawas),",
+          "The World of Metals",
+          "4      and Non-metals"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "The image is a visual representation of a conversation between Yashwant, Anandi, and Sudarshan uncle about the items made by ironsmiths.",
+        "limitations": [
+          "The image does not provide specific details about the items made by ironsmiths.",
+          "The image does not show the process of making these items."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -115183,7 +115238,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42155520422",
+      "run_id": "42161055386",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -116511,7 +116566,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42155520422",
+      "run_id": "42161055386",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,

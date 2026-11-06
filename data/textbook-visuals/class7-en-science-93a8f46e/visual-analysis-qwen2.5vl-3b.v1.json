@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3320,
+    "assets_selected": 3321,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "c85f41bbf274ff0251ebf3e6",
-      "19182aa83463f523d90ed77b",
-      "156c826ab2a2fbe86cb5bfea"
+      "6dde8a230a57eb95c08cc790",
+      "617a7eb962b48f65cc1c1ca8",
+      "9af34fc1b7f333c1847afcdd"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3316,
-    "assets_remaining": 4172,
+    "assets_analyzed": 3317,
+    "assets_remaining": 4171,
     "assets_completion_percent": 44.3,
-    "assets_failed": 44,
-    "assets_skipped_from_checkpoint": 3315,
+    "assets_failed": 43,
+    "assets_skipped_from_checkpoint": 3316,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -10009,7 +10009,7 @@
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or questions for exploration."
         ]
       },
       "vision_input": {
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T04:19:16Z"
+      "checkpointed_at": "2026-11-06T04:31:03Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13511,9 +13511,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, including eclipses, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the reader to perform."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "vision_input": {
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T04:21:18Z"
+      "checkpointed_at": "2026-11-06T04:31:43Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -70395,19 +70395,53 @@
     {
       "asset_id": "6dde8a230a57eb95c08cc790",
       "asset_sha256": "fea535906c291b6384d5e9706d679a408e5cf70f0048571fd5e27b809aae8b6e",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/fea535906c291b6384d5e9706d679a408e5cf70f0048571fd5e27b809aae8b6e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42155520422",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a village scene with a woman standing under a thatched roof, possibly in a rural setting.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as flat pans (tawas),",
+          "The World of Metals",
+          "4      and Non-metals"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "The image is a visual representation of a conversation between Yashwant, Anandi, and Sudarshan uncle about the items made by ironsmiths.",
+        "limitations": [
+          "The image does not provide specific details about the items made by ironsmiths.",
+          "The image does not show the process of making these items."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 220,
+        "source_height": 1165,
+        "inference_width": 181,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 14351,
+        "sha256": "f85b392fc09cb4f59372201396015aea228946ad0957919ce2f49ca9e9c4dff7"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42161055386",
+      "checkpointed_at": "2026-11-06T04:33:39Z"
     },
     {
       "asset_id": "71413380368b7943df5ed9ff",
@@ -73239,7 +73273,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42155520422",
+      "run_id": "42161055386",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -74070,7 +74104,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42155520422",
+      "run_id": "42161055386",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
