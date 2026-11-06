@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1aaad18bc1308591e37c5572de9afd331f4e557ec6cefe5ac54b564d727ba86b",
+  "raw_analysis_sha256": "0a8f740b31ef33822cf0d9e4f1441b0928a0e1c1fd5419a1db3c3f70198798f8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1790,7 +1790,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1804,14 +1804,17 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
+          "inclusive nature",
+          "visualisation",
+          "peer interactions",
           "safety precautions",
-          "ever heard of",
-          "step further"
+          "challenging ideas",
+          "Ever heard of",
+          "A step further"
         ],
-        "context_relation": "The text discusses the educational benefits of open-ended questions and the various activities and resources included in the textbook to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
         "limitations": [
-          "The text does not provide specific examples or activities from the textbook."
+          "The page does not provide specific examples or activities for the open-ended questions."
         ]
       },
       "vision_input": {
@@ -1829,9 +1832,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:01:59Z",
+      "checkpointed_at": "2026-11-06T05:13:44Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1845,14 +1848,17 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
+          "inclusive nature",
+          "visualisation",
+          "peer interactions",
           "safety precautions",
-          "ever heard of",
-          "step further"
+          "challenging ideas",
+          "Ever heard of",
+          "A step further"
         ],
-        "context_relation": "The text discusses the educational benefits of open-ended questions and the various activities and resources included in the textbook to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
         "limitations": [
-          "The text does not provide specific examples or activities from the textbook."
+          "The page does not provide specific examples or activities for the open-ended questions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29441,7 +29447,7 @@
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific visual elements are described.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -29460,7 +29466,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:03:55Z",
+      "checkpointed_at": "2026-11-06T05:14:18Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
@@ -29481,7 +29487,7 @@
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific visual elements are described.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -45181,9 +45187,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42162898811",
+      "run_id": "42165203770",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -57574,21 +57580,100 @@
     {
       "asset_id": "7bceb11bef609f2404522955",
       "asset_sha256": "76fb7be1d37813fc0d2df54332206485ca55a08598caf305a63f18ded9378102",
-      "page_text_context_sha256": "5ef6be77826ded0e4c0fb51889bbddecdd1cfb40c0b3d5099b6975b4cf5a4ffe",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 85,
       "asset_path": "page-0085.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "5ef6be77826ded0e4c0fb51889bbddecdd1cfb40c0b3d5099b6975b4cf5a4ffe",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42162898811",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the effects of forces on objects in everyday life, including examples and questions about the application of force.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "In everyday life, we come across many situations where a force is applied (Fig. 5.2), for example, opening a drawer, stretching a rubber band, a fielder stopping a ball, kicking a football, applying brakes on a moving bicycle, rolling a chapati, or turning the steering handle of an autorickshaw. Wha",
+          "The force applied on an object may",
+          "- make an object move from rest.",
+          "- change the speed of an object if it is moving.",
+          "- change the direction of motion of an object.",
+          "- bring about a change in the shape of an object.",
+          "A step further",
+          "Suppose an object is at rest. Does it mean that no force is acting on this object? It means that the forces acting on the object are balancing one another. You will learn about balanced forces in higher grades.",
+          "5.3 Are Forces an Interaction Between Two or More Objects?",
+          "When you push a table, your hand is one object applying force on another object—the table. Here, we say that your hand and the table are two objects interacting with each other.",
+          "Think of all the actions listed in Table 5.1. How many objects are involved in each of the actions? Do you notice that forces result only when two objects are interacting in some way or the other? From these examples, we can infer that at least two objects must interact for a force to come into play",
+          "A force is a push or pull on an object resulting from the object's interaction with another object. The SI unit of force is newton (written with a small 'n') and its symbol is N."
+        ],
+        "concepts": [
+          "force",
+          "object",
+          "speed",
+          "direction",
+          "shape",
+          "rest",
+          "balance",
+          "interaction",
+          "SI unit of force"
+        ],
+        "context_relation": "exploring the effects of forces on objects in everyday life",
+        "limitations": [
+          "The text does not provide specific examples or illustrations of the effects of forces on objects.",
+          "The text does not provide a detailed explanation of balanced forces or the SI unit of force."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 140309,
+        "sha256": "c9d71f760f441e11ba0ebac062a2c034784e5dd5c3da0fb575673a82d7233d44"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42165203770",
+      "checkpointed_at": "2026-11-06T05:19:24Z",
+      "effective_analysis": {
+        "visual_summary": "Text discussing the effects of forces on objects in everyday life, including examples and questions about the application of force.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "In everyday life, we come across many situations where a force is applied (Fig. 5.2), for example, opening a drawer, stretching a rubber band, a fielder stopping a ball, kicking a football, applying brakes on a moving bicycle, rolling a chapati, or turning the steering handle of an autorickshaw. Wha",
+          "The force applied on an object may",
+          "- make an object move from rest.",
+          "- change the speed of an object if it is moving.",
+          "- change the direction of motion of an object.",
+          "- bring about a change in the shape of an object.",
+          "A step further",
+          "Suppose an object is at rest. Does it mean that no force is acting on this object? It means that the forces acting on the object are balancing one another. You will learn about balanced forces in higher grades.",
+          "5.3 Are Forces an Interaction Between Two or More Objects?",
+          "When you push a table, your hand is one object applying force on another object—the table. Here, we say that your hand and the table are two objects interacting with each other.",
+          "Think of all the actions listed in Table 5.1. How many objects are involved in each of the actions? Do you notice that forces result only when two objects are interacting in some way or the other? From these examples, we can infer that at least two objects must interact for a force to come into play",
+          "A force is a push or pull on an object resulting from the object's interaction with another object. The SI unit of force is newton (written with a small 'n') and its symbol is N."
+        ],
+        "concepts": [
+          "force",
+          "object",
+          "speed",
+          "direction",
+          "shape",
+          "rest",
+          "balance",
+          "interaction",
+          "SI unit of force"
+        ],
+        "context_relation": "exploring the effects of forces on objects in everyday life",
+        "limitations": [
+          "The text does not provide specific examples or illustrations of the effects of forces on objects.",
+          "The text does not provide a detailed explanation of balanced forces or the SI unit of force."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -58034,7 +58119,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An educational page about different types of forces, specifically contact forces, with images of animals and humans performing physical activities.",
+        "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -58051,9 +58136,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of contact forces and provides an example of muscular force.",
+        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a detailed explanation of the physics behind contact forces or muscular force."
+          "The page does not provide a detailed explanation of non-contact forces."
         ]
       },
       "vision_input": {
@@ -58070,10 +58155,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42162898811",
-      "checkpointed_at": "2026-11-06T04:46:23Z",
+      "run_id": "42165203770",
+      "checkpointed_at": "2026-11-06T05:21:22Z",
       "effective_analysis": {
-        "visual_summary": "An educational page about different types of forces, specifically contact forces, with images of animals and humans performing physical activities.",
+        "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -58090,9 +58175,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of contact forces and provides an example of muscular force.",
+        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a detailed explanation of the physics behind contact forces or muscular force."
+          "The page does not provide a detailed explanation of non-contact forces."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
