@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1610,
+    "assets_selected": 1611,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
-      "9f232483ce16973cb62998c9",
-      "01128e1da549b4881f224152"
+      "071b9ffb6e11765d8d17e2bf",
+      "ac3ef67e4ced1dc1152e7b14"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1606,
-    "assets_remaining": 472,
+    "assets_analyzed": 1607,
+    "assets_remaining": 471,
     "assets_completion_percent": 77.3,
-    "assets_failed": 46,
-    "assets_skipped_from_checkpoint": 1605,
+    "assets_failed": 45,
+    "assets_skipped_from_checkpoint": 1606,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -463,7 +463,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:06:43Z"
+      "checkpointed_at": "2026-11-06T01:11:08Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20154,7 +20154,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:07:25Z"
+      "checkpointed_at": "2026-11-06T01:11:50Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23853,7 +23853,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:07:57Z"
+      "checkpointed_at": "2026-11-06T01:12:23Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37331,19 +37331,51 @@
     {
       "asset_id": "071b9ffb6e11765d8d17e2bf",
       "asset_sha256": "e899d5e9310d3210a19e53fc2a2556c8d79dd54c7fe0cebf9e78fb8987140b45",
-      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 96,
       "asset_path": "assets/e899d5e9310d3210a19e53fc2a2556c8d79dd54c7fe0cebf9e78fb8987140b45.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42131820196",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of different shapes of magnets with their magnetic poles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet"
+        ],
+        "concepts": [
+          "Magnetic poles",
+          "Different shapes of magnets",
+          "Magnetism"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the different shapes of magnets and their magnetic poles.",
+        "limitations": [
+          "The image does not provide specific details about the size or strength of the magnets."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 140,
+        "source_height": 102,
+        "inference_width": 140,
+        "inference_height": 102,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 4015,
+        "sha256": "8ad29f467bc6af77a7f06c0f1500f9792018bb3ffd39a96e7149044e197c6c91"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42140323966",
+      "checkpointed_at": "2026-11-06T01:13:03Z"
     },
     {
       "asset_id": "3b3cc71bc24125905b5cc9a2",
@@ -37460,7 +37492,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42131820196",
+      "run_id": "42140323966",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,

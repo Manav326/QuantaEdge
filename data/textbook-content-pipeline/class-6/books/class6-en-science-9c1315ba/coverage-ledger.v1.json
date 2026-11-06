@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
     "raw_analysis_result_rows": 1655,
-    "successful_visual_analyses": 1609,
+    "successful_visual_analyses": 1610,
     "missing_visual_analyses": 423,
-    "failed_visual_analyses": 46,
+    "failed_visual_analyses": 45,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 469,
+    "unresolved_count": 468,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43952,9 +43952,28 @@
       "asset_path": "assets/e899d5e9310d3210a19e53fc2a2556c8d79dd54c7fe0cebf9e78fb8987140b45.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of different shapes of magnets with their magnetic poles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet"
+        ],
+        "concepts": [
+          "Magnetic poles",
+          "Different shapes of magnets",
+          "Magnetism"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the different shapes of magnets and their magnetic poles.",
+        "limitations": [
+          "The image does not provide specific details about the size or strength of the magnets."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
