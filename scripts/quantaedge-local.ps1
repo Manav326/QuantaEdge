@@ -141,6 +141,13 @@ $script:ComposeFiles = if ($BuildLocal) {
   @("-f", "docker-compose.yml", "-f", "docker-compose.ghcr.yml")
 }
 
+if ($Action -in @("up", "ai", "rebuild", "clean-build", "reset")) {
+  & docker network inspect cloudflare-edge *> $null
+  if ($LASTEXITCODE -ne 0) {
+    throw "The shared Docker network 'cloudflare-edge' is missing. Start the central connector from QuantaEdge-Production with .\scripts\local-ingress.ps1 up."
+  }
+}
+
 function Invoke-Compose {
   param([Parameter(Mandatory = $true)][string[]]$ComposeArgs)
 
