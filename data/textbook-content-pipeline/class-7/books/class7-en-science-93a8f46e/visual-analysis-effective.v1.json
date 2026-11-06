@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fa336a17e1c7c38aa149f9fad888adc839980f098b54a59ed4946322a723b2f1",
+  "raw_analysis_sha256": "d309f15c675974311ccdccc2cc36dc8e2980aaf644ceaab8b317125961fe2fa6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T01:32:21Z",
+      "checkpointed_at": "2026-11-06T01:36:56Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -20303,7 +20303,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T01:32:51Z",
+      "checkpointed_at": "2026-11-06T01:37:26Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -124485,7 +124485,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T01:33:33Z",
+      "checkpointed_at": "2026-11-06T01:38:08Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
@@ -165380,21 +165380,82 @@
     {
       "asset_id": "f5cfd5f0dfcebd60e3212f1b",
       "asset_sha256": "0441332749537be46707a905a7cde02d7f1b4fb59ae810d8363c2ac676b93ce6",
-      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 83,
       "asset_path": "page-0083.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e68e53844ebeb1ce296ee1771ab703dd01b767887f9d90478dd68d424069ebf5",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon. The component of air that supports combustion is oxygen. This can be confirmed by the presence of carbon dioxide in the glass tumbler inverted on the candle. How can you test the",
+          "You can test the carbon dioxide gas by adding a small amount of lime water in the petri dish. You will notice that it turns milky. This carbon dioxide was formed by the carbon from the wax and the oxygen from the air. In other words, oxygen is required for combustion.",
+          "SCIENCE AND SOCIETY\nIf a person's clothes catch fire, what is the best way to extinguish the fire?\nWrap a blanket or cloth around the person. This cuts off the supply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put out a fire, as these can melt ",
+          "FASCINATING FACTS\nNature's wonders: You might have seen some insects emitting light in a garden or a field in late evenings. These insects are called fireflies, and their light is produced by a chemical change. This type of light production (without heat) in living organisms is called bioluminescenc",
+          "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen are necessary for combustion. We also know that paper is a combustible substance, but we can keep it in the air for any length of time without it catching fire. What else is needed to start combustio"
+        ],
+        "concepts": [
+          "combustion",
+          "oxygen",
+          "carbon dioxide",
+          "fire",
+          "bioluminescence",
+          "combustible substances"
+        ],
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
+        "limitations": [
+          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 139214,
+        "sha256": "8e5275e9b3dbd29189e899f276aafc4727bc8f69bc8d06efc73153cf169a60ae"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42137960305",
+      "checkpointed_at": "2026-11-06T01:39:46Z",
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
+          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon. The component of air that supports combustion is oxygen. This can be confirmed by the presence of carbon dioxide in the glass tumbler inverted on the candle. How can you test the",
+          "You can test the carbon dioxide gas by adding a small amount of lime water in the petri dish. You will notice that it turns milky. This carbon dioxide was formed by the carbon from the wax and the oxygen from the air. In other words, oxygen is required for combustion.",
+          "SCIENCE AND SOCIETY\nIf a person's clothes catch fire, what is the best way to extinguish the fire?\nWrap a blanket or cloth around the person. This cuts off the supply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put out a fire, as these can melt ",
+          "FASCINATING FACTS\nNature's wonders: You might have seen some insects emitting light in a garden or a field in late evenings. These insects are called fireflies, and their light is produced by a chemical change. This type of light production (without heat) in living organisms is called bioluminescenc",
+          "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen are necessary for combustion. We also know that paper is a combustible substance, but we can keep it in the air for any length of time without it catching fire. What else is needed to start combustio"
+        ],
+        "concepts": [
+          "combustion",
+          "oxygen",
+          "carbon dioxide",
+          "fire",
+          "bioluminescence",
+          "combustible substances"
+        ],
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
+        "limitations": [
+          "The page does not provide specific instructions on how to test for carbon dioxide gas.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -181004,9 +181065,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42137960305",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
