@@ -288,14 +288,14 @@ class LayersTests(unittest.TestCase):
         seg={"source_pages":[1],"pieces":[{"page":1,"part":1,"text":"Plants have leaves."}]}
         prompt=prompt_for(source,seg,[])
         self.assertIn("There is NO question-type quota",prompt)
-        self.assertIn("Return 1 to 6 distinct, useful questions",prompt)
+        self.assertIn("Return 1 to 3 distinct, useful questions",prompt)
         self.assertNotIn("exactly two MCQs",prompt.lower())
 
     def test_prompt_separates_worked_examples_from_tutor_dialogues(self):
         source={"class_no":6,"subject":"science","language":"en","book_id":"book","title":"Curiosity","edition":"Reprint"}
         seg={"source_pages":[1],"pieces":[{"page":1,"part":1,"text":"Plants have leaves."}]}
         prompt=prompt_for(source,seg,[])
-        self.assertIn("worked_example_by_locale and tutor_examples are two different fields",prompt)
+        self.assertIn("\"worked_example_by_locale\" and \"tutor_examples\" are two different fields",prompt)
         self.assertIn("Do NOT put student_message, assistant_message, language, or source_pages inside worked_example_by_locale",prompt)
         self.assertIn("option id MUST be a JSON string",prompt)
         self.assertIn("at most 2 short paragraphs",prompt)
