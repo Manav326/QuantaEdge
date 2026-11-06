@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "479758197bcc521c20786d98099aec64d522101755e1c934c5f753d35a29a0ba",
+  "raw_analysis_sha256": "fa673419d59b7222d579d2d70eff3ea58a07e55caf2d24d4c380563e5e1b044f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1832,7 +1832,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42198565829",
-      "checkpointed_at": "2026-11-06T10:13:44Z",
+      "checkpointed_at": "2026-11-06T10:23:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -29466,7 +29466,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42198565829",
-      "checkpointed_at": "2026-11-06T10:14:15Z",
+      "checkpointed_at": "2026-11-06T10:23:33Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
@@ -58136,9 +58136,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a detailed explanation of non-contact forces."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "vision_input": {
@@ -58156,7 +58156,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42198565829",
-      "checkpointed_at": "2026-11-06T10:19:11Z",
+      "checkpointed_at": "2026-11-06T10:24:08Z",
       "effective_analysis": {
         "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
@@ -58175,9 +58175,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a detailed explanation of non-contact forces."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -65890,20 +65890,20 @@
           "inverted paper plate",
           "folded chart paper sheet",
           "unfolded chart paper sheet",
-          "lifting effort",
+          "effort to lift",
           "area of covering sheet",
-          "force",
-          "pressure",
+          "force on covering sheet",
           "atmospheric pressure",
-          "inflation",
-          "pressure on walls",
-          "expansion",
-          "air escaping"
+          "pressure on paper sheet",
+          "pressure exerted by air",
+          "inflation of balloon",
+          "pressure in all directions",
+          "escaping air from balloon"
         ],
-        "context_relation": "The image is a visual representation of an experiment involving an inverted paper plate and a folded chart paper sheet, demonstrating the concept of atmospheric pressure.",
+        "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
         "limitations": [
-          "The image does not provide specific measurements or numerical data.",
-          "The image does not show the actual lifting effort or the area of the covering sheet."
+          "The image does not show the actual experiment being conducted.",
+          "The image does not show the results of the experiment."
         ]
       },
       "vision_input": {
@@ -65920,8 +65920,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:43:13Z",
+      "run_id": "42198565829",
+      "checkpointed_at": "2026-11-06T10:26:32Z",
       "effective_analysis": {
         "visual_summary": "A student is demonstrating an experiment involving an inverted paper plate and a folded chart paper sheet.",
         "visual_type": "diagram",
@@ -65940,20 +65940,20 @@
           "inverted paper plate",
           "folded chart paper sheet",
           "unfolded chart paper sheet",
-          "lifting effort",
+          "effort to lift",
           "area of covering sheet",
-          "force",
-          "pressure",
+          "force on covering sheet",
           "atmospheric pressure",
-          "inflation",
-          "pressure on walls",
-          "expansion",
-          "air escaping"
+          "pressure on paper sheet",
+          "pressure exerted by air",
+          "inflation of balloon",
+          "pressure in all directions",
+          "escaping air from balloon"
         ],
-        "context_relation": "The image is a visual representation of an experiment involving an inverted paper plate and a folded chart paper sheet, demonstrating the concept of atmospheric pressure.",
+        "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
         "limitations": [
-          "The image does not provide specific measurements or numerical data.",
-          "The image does not show the actual lifting effort or the area of the covering sheet."
+          "The image does not show the actual experiment being conducted.",
+          "The image does not show the results of the experiment."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -66238,7 +66238,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42165203770",
+      "run_id": "42198565829",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,

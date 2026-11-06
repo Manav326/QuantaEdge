@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "aa8a149fa698d13f05cfdb3e",
       "f492c50e9c7d7ef8d140ae06",
-      "e03a02c3fc37627f873ab044"
+      "1851a22784c9105601dfe039",
+      "2e220d251d13a2e76c57e33b"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1424,
@@ -1230,7 +1230,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42198565829",
-      "checkpointed_at": "2026-11-06T10:13:44Z"
+      "checkpointed_at": "2026-11-06T10:23:02Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20248,7 +20248,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42198565829",
-      "checkpointed_at": "2026-11-06T10:14:15Z"
+      "checkpointed_at": "2026-11-06T10:23:33Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38609,9 +38609,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a detailed explanation of non-contact forces."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "vision_input": {
@@ -38629,7 +38629,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42198565829",
-      "checkpointed_at": "2026-11-06T10:19:11Z"
+      "checkpointed_at": "2026-11-06T10:24:08Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43595,20 +43595,20 @@
           "inverted paper plate",
           "folded chart paper sheet",
           "unfolded chart paper sheet",
-          "lifting effort",
+          "effort to lift",
           "area of covering sheet",
-          "force",
-          "pressure",
+          "force on covering sheet",
           "atmospheric pressure",
-          "inflation",
-          "pressure on walls",
-          "expansion",
-          "air escaping"
+          "pressure on paper sheet",
+          "pressure exerted by air",
+          "inflation of balloon",
+          "pressure in all directions",
+          "escaping air from balloon"
         ],
-        "context_relation": "The image is a visual representation of an experiment involving an inverted paper plate and a folded chart paper sheet, demonstrating the concept of atmospheric pressure.",
+        "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
         "limitations": [
-          "The image does not provide specific measurements or numerical data.",
-          "The image does not show the actual lifting effort or the area of the covering sheet."
+          "The image does not show the actual experiment being conducted.",
+          "The image does not show the results of the experiment."
         ]
       },
       "vision_input": {
@@ -43625,8 +43625,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:43:13Z"
+      "run_id": "42198565829",
+      "checkpointed_at": "2026-11-06T10:26:32Z"
     },
     {
       "asset_id": "46c9d5f38c6da536fdee0c3d",
@@ -43805,7 +43805,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42165203770",
+      "run_id": "42198565829",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
