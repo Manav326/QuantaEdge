@@ -14,8 +14,8 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "16349f665ff78d819176b971",
-      "70685314fc3f063e7fa84d71"
+      "0788af5240eb5a0d87d0e5d9",
+      "4332b8dc4e813ea580dd56d1"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3319,
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T05:16:13Z"
+      "checkpointed_at": "2026-11-06T05:22:14Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T05:16:52Z"
+      "checkpointed_at": "2026-11-06T05:22:54Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -105473,7 +105473,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T05:17:47Z"
+      "checkpointed_at": "2026-11-06T05:23:49Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -122398,7 +122398,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42155520422",
+      "run_id": "42161055386",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -122415,9 +122415,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42161055386",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
