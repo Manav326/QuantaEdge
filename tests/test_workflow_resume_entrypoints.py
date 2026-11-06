@@ -207,6 +207,18 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn('options: ["benchmark", "run", "resume", "refresh_benchmark"]', workflow)
         self.assertIn("github.event_name == 'workflow_call'", workflow)
 
+    def test_marked_push_runs_only_the_current_model_benchmark(self):
+        workflow = read("quantaedge-layers-6-8.yml")
+        self.assertIn("[benchmark-l6-l8]", workflow)
+        self.assertIn("execute_marked_benchmark:", workflow)
+        self.assertIn("needs: validate", workflow)
+        self.assertIn('ollama pull qwen3.5:2b', workflow)
+        self.assertIn('ollama pull qwen3.5:4b', workflow)
+        self.assertIn('--models "qwen3.5:2b,qwen3.5:4b"', workflow)
+        self.assertIn("--commit-checkpoints", workflow)
+        self.assertNotIn("ALLOW_EXPERIMENTAL_MODEL", workflow[workflow.index("execute_marked_benchmark:"):workflow.index("  execute:")])
+        self.assertIn("qwen3.5:4b", workflow)
+
     def test_refresh_benchmark_is_in_core_workflow_and_does_not_start_ollama(self):
         workflow = read("quantaedge-layers-6-8.yml")
         refresh = workflow.index("- name: Refresh saved benchmark samples without model inference")
