@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1609,
+    "assets_selected": 1610,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
-      "7648bdfd0ca00b2a9aab1c0d",
-      "264647961a857697afa5e279",
-      "b90b1ccd2f380e4a35f9f791"
+      "b90b1ccd2f380e4a35f9f791",
+      "9f232483ce16973cb62998c9",
+      "01128e1da549b4881f224152"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1605,
-    "assets_remaining": 473,
-    "assets_completion_percent": 77.2,
-    "assets_failed": 47,
-    "assets_skipped_from_checkpoint": 1604,
+    "assets_analyzed": 1606,
+    "assets_remaining": 472,
+    "assets_completion_percent": 77.3,
+    "assets_failed": 46,
+    "assets_skipped_from_checkpoint": 1605,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -421,7 +421,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
+        "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Foreword",
@@ -443,9 +443,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of a holistic approach to education and the role of textbooks in achieving this.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its components, including the National Curriculum Framework for School Education (NCF-SE) 2023, and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods used to prepare teachers."
+          "The foreword does not provide specific details about the content of the textbooks or the implementation strategies."
         ]
       },
       "vision_input": {
@@ -463,7 +463,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:01:32Z"
+      "checkpointed_at": "2026-11-06T01:06:43Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20104,7 +20104,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -20116,18 +20116,27 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Textbook",
-          "NCERT",
-          "DTP Cell",
-          "Publication Division",
+          "Planetarium",
+          "Academic support",
+          "Administrative support",
+          "Consultant",
+          "Programme Office",
+          "Senior Consultant",
+          "Educator",
+          "Development Sector Professional",
+          "Chief Consultant",
+          "Research Associates",
+          "Course Administrator",
+          "Junior Project Fellows",
           "Freelance Editor",
           "Proofreader",
+          "DTP Cell",
+          "Publication Division",
           "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
-          "No specific limitations mentioned.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "No specific limitations mentioned."
         ]
       },
       "vision_input": {
@@ -20145,7 +20154,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:02:40Z"
+      "checkpointed_at": "2026-11-06T01:07:25Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23844,7 +23853,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:05:59Z"
+      "checkpointed_at": "2026-11-06T01:07:57Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -34118,19 +34127,60 @@
     {
       "asset_id": "9f232483ce16973cb62998c9",
       "asset_sha256": "7454fc423f4fb78f48d2de98763f7fb9e48ffd0de92a90a79ec9fed660a27a8c",
-      "page_text_context_sha256": "5bde1d283bd7146d7766dafe9af7c2dcb529978fc840569292aa4955ea365085",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 82,
       "asset_path": "page-0082.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "5bde1d283bd7146d7766dafe9af7c2dcb529978fc840569292aa4955ea365085",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42131820196",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about magnetic materials and their attraction to magnets.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Was your prediction correct for all objects? Which materials stuck to the magnet? What conclusion can you draw?",
+          "Through this activity, we found out that some of the objects were attracted to the magnet and stuck to it, while others were not. The materials which are attracted towards a magnet are called magnetic materials.",
+          "The metal iron is a magnetic material. Nickel and cobalt are other metals that are also magnetic. Some of their combinations with other metals are also attracted towards magnets. The materials which are not attracted towards a magnet are called non-magnetic materials.",
+          "Which materials listed in Table 4.1 were found to be non-magnetic?",
+          "4.2 Poles of Magnet",
+          "Activity 4.2: Let us investigate",
+          "Spread some iron filings (very small pieces of iron) on a sheet of paper.",
+          "Place a bar magnet over them. Tap the paper and observe carefully what happens to the iron filings.",
+          "Do you observe anything special about the way they stick to the magnet? Do the iron filings stick all over the magnet uniformly? Or do the iron filings stick more at some places?",
+          "We find that maximum iron filings stick near the ends of the bar magnet, as shown in Fig. 4.4, while a very few iron filings stick at the remaining part of the magnet.",
+          "Fig. 4.4: Iron filings sticking to a bar magnet",
+          "If we repeat this activity with magnets of other shapes, do we get the same result?"
+        ],
+        "concepts": [
+          "magnetic materials",
+          "magnet attraction",
+          "non-magnetic materials",
+          "magnetic poles"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The page does not provide specific examples or results from the activity.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 125997,
+        "sha256": "de85caaf42e98152f6f859962ca3a87c1c2e45e30314442ca626f6ed39eb4eda"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42140323966",
+      "checkpointed_at": "2026-11-06T01:08:52Z"
     },
     {
       "asset_id": "99fe8a49c1884b424178d2ab",
@@ -35046,7 +35096,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42131820196",
+      "run_id": "42140323966",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
