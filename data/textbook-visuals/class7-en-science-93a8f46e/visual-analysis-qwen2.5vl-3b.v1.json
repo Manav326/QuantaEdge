@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3315,
+    "assets_selected": 3316,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "4b1298747dc1ec978a226ae5",
-      "647c2218dab5482dd1c1758e",
-      "0e143e54e2f709b8a4e5968d"
+      "463542d4277119b7abc93e3a",
+      "8604e838b1f1e41398ca72dd"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3311,
     "assets_remaining": 4177,
     "assets_completion_percent": 44.2,
     "assets_failed": 50,
-    "assets_skipped_from_checkpoint": 3310,
+    "assets_skipped_from_checkpoint": 3311,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T01:19:42Z"
+      "checkpointed_at": "2026-11-06T01:25:46Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13530,7 +13530,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T01:20:12Z"
+      "checkpointed_at": "2026-11-06T01:26:16Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79164,7 +79164,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T01:20:54Z"
+      "checkpointed_at": "2026-11-06T01:26:59Z"
     },
     {
       "asset_id": "42e2bad6ce513928f9ecea9b",
@@ -86042,9 +86042,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42137960305",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -86104,9 +86104,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42137960305",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
