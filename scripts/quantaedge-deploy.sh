@@ -20,6 +20,10 @@ echo "$QUANTAEDGE_GHCR_TOKEN" | docker login ghcr.io -u "$QUANTAEDGE_GHCR_OWNER"
 OWNER_LOWER="$(printf '%s' "$QUANTAEDGE_GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
 export QUANTAEDGE_TEXTBOOK_CACHE_DIR="${QUANTAEDGE_TEXTBOOK_CACHE_DIR:-$PWD/source-pdfs/registry-cache}"
 export APP_TEXTBOOK_CACHE_ONLY="${APP_TEXTBOOK_CACHE_ONLY:-true}"
+docker network inspect cloudflare-edge >/dev/null 2>&1 || {
+  echo "The shared Docker network 'cloudflare-edge' is missing. Start it from QuantaEdge-Production with scripts/local-ingress.ps1 up." >&2
+  exit 1
+}
 for GRADE in 6 7 8 9 10 11 12; do
   for MEDIUM in hindi english; do
     IMAGE="ghcr.io/$OWNER_LOWER/quantaedge-textbooks-class-$GRADE-$MEDIUM:latest"
