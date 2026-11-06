@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1423,
+    "assets_selected": 1424,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "414a0224c90f14c01c7da9e7",
-      "9c98ea470aafbf3dbbeffd67",
-      "7bceb11bef609f2404522955"
+      "f492c50e9c7d7ef8d140ae06",
+      "d55b4af2d39033d603cae25d"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1419,
-    "assets_remaining": 872,
-    "assets_completion_percent": 61.9,
-    "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1418,
+    "assets_analyzed": 1420,
+    "assets_remaining": 871,
+    "assets_completion_percent": 62.0,
+    "assets_failed": 23,
+    "assets_skipped_from_checkpoint": 1419,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1228,7 +1228,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:15:55Z"
+      "checkpointed_at": "2026-11-06T01:21:02Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20246,7 +20246,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:16:22Z"
+      "checkpointed_at": "2026-11-06T01:21:29Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25952,7 +25952,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:17:08Z"
+      "checkpointed_at": "2026-11-06T01:22:15Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -38581,19 +38581,54 @@
     {
       "asset_id": "f492c50e9c7d7ef8d140ae06",
       "asset_sha256": "a7af291e2290748a96224817655752fbfc27ba3bc7e0108999cc4c6c4b34bfe1",
-      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 86,
       "asset_path": "page-0086.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129304656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about different types of forces, specifically contact forces, with images of animals and humans performing physical activities.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A step further",
+          "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
+          "5.4 What Are the Different Types of Forces?",
+          "5.4.1 Contact forces",
+          "In many situations, we find that to apply a force on an object, physical contact is necessary between our body and the object. This contact can be direct, such as using our hands or other body parts, or indirect, such as using a stick or rope. Forces of this type which act only when there is physica",
+          "Muscular force",
+          "An example of contact force is muscular force. When we perform any physical activity, such as walking, running, lifting, pushing, jumping, or stretching, the force is caused by the action of muscles in our body. The force resulting due to the action of muscles is known as muscular force. Muscular fo",
+          "Animals, birds, fish, and insects use muscular forces for movement and survival (Fig. 5.3).",
+          "Fig. 5.3: Use of muscular force by living beings"
+        ],
+        "concepts": [
+          "contact forces",
+          "muscular force"
+        ],
+        "context_relation": "The page explains the concept of contact forces and provides an example of muscular force.",
+        "limitations": [
+          "The page does not provide a detailed explanation of the physics behind contact forces or muscular force."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 131099,
+        "sha256": "0d412dffd2052ec6b2fff21c9dc3b871c711f773c6d73c01dc417447c42733ae"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42140325986",
+      "checkpointed_at": "2026-11-06T01:23:43Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39206,19 +39241,66 @@
     {
       "asset_id": "d55b4af2d39033d603cae25d",
       "asset_sha256": "13e188b654d58239320b12b9a2387b84c91800b8b1b57e423b389f6c26eb9dae",
-      "page_text_context_sha256": "0172a5b6e6ae1e07aa7f4dc4b845bb40a12e216788b5e705cc16e254655a091e",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 89,
       "asset_path": "page-0089.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0172a5b6e6ae1e07aa7f4dc4b845bb40a12e216788b5e705cc16e254655a091e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129304656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook explaining non-contact forces, specifically magnetic force, and an activity to test the interaction between magnets.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "69",
+          "Is it essential for an object applying force on another object to always be in contact with it?",
+          "5.4.2 Non-contact forces",
+          "There are forces whose effect can be experienced even if the objects are not in contact. These forces are called non-contact forces. Let us learn about non-contact forces.",
+          "Magnetic force",
+          "Do you remember learning about magnets in the chapter 'Exploring Magnets' in Curiosity, Grade 6? We learnt that a magnet attracts objects made of magnetic materials. When two magnets are brought close to each other, like poles (North–North, South–South) repel each other while unlike poles (North–Sou",
+          "Activity 5.5: Let us test",
+          "• Take two ring magnets and a wooden stick.",
+          "• While holding the stick in a vertical position over a wooden table, insert one ring magnet onto the stick (Fig. 5.7).",
+          "• Now insert the second ring magnet above it such that the like poles of the two magnets face each other. Does the second magnet stay floating above the first magnet?",
+          "• Try pushing the second magnet down gently. Do you feel a force on it?",
+          "• Now, reverse the poles of both the magnets. Does the second magnet still remain floating?",
+          "We find that a magnet can exert force on another magnet or a magnetic material is called magnetic force. Since a magnet can exert a force from a distance without being in contact it is called a non-contact force.",
+          "Are there more such forces which act from a distance?"
+        ],
+        "concepts": [
+          "non-contact forces",
+          "magnetic force",
+          "magnets",
+          "electromagnets",
+          "magnetic materials",
+          "magnetic force",
+          "non-contact force"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "The page does not provide specific examples or illustrations of non-contact forces beyond the magnetic force.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 139293,
+        "sha256": "18a930948c070ad7d22ee2314a16520cdbaaae35d2aefe291f2853d36e9af8b4"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42140325986",
+      "checkpointed_at": "2026-11-06T01:25:21Z"
     },
     {
       "asset_id": "7df52762f8bfea95c0d8e2bf",
