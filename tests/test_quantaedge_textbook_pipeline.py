@@ -1,7 +1,7 @@
 import hashlib,json,tempfile,unittest,subprocess
 from pathlib import Path
 from unittest.mock import patch
-from scripts.quantaedge_textbook_pipeline import backfill_legacy_context_hashes,build_coverage_ledger,changed_correction_paths,layer1_inventory_bundle_from_marker,previous_inventory_for_resume,push_oci_artifact_with_retry
+from scripts.quantaedge_textbook_pipeline import backfill_legacy_context_hashes,build_coverage_ledger,changed_correction_paths,git_checkpoint,layer1_inventory_bundle_from_marker,previous_inventory_for_resume,push_oci_artifact_with_retry
 def w(p,v):p.write_text(json.dumps(v)+"\n",encoding="utf-8")
 class PipelineTests(unittest.TestCase):
  def test_registry_push_retries_transient_network_errors(self):
@@ -24,6 +24,45 @@ class PipelineTests(unittest.TestCase):
     push_oci_artifact_with_retry(["oras","push"],cwd=self.root,description="test checkpoint",attempts=4,initial_delay_seconds=1)
   run.assert_called_once()
   sleep.assert_not_called()
+ def test_git_checkpoint_retries_non_fast_forward_push_after_fetch_and_rebase(self):
+  data_path=self.root/"data"/"book"/"checkpoint.json"
+  w(data_path,{"checkpoint":1})
+  pushes=[
+   subprocess.CompletedProcess(["git","push","origin","HEAD:main"],1,"","! [rejected] HEAD -> main (fetch first)\\nerror: failed to push some refs"),
+   subprocess.CompletedProcess(["git","push","origin","HEAD:main"],0,"ok",""),
+  ]
+  commands=[]
+  def fake_run(command,**kwargs):
+   commands.append(command)
+   if command[:3]==["git","diff","--cached"]:
+    return subprocess.CompletedProcess(command,1,"","")
+   if command[:2]==["git","push"]:
+    return pushes.pop(0)
+   return subprocess.CompletedProcess(command,0,"","")
+  with patch("scripts.quantaedge_textbook_pipeline.subprocess.run",side_effect=fake_run), patch("scripts.quantaedge_textbook_pipeline.time.sleep") as sleep:
+   git_checkpoint(self.root,["data/book/checkpoint.json"],"checkpoint(content): test")
+  self.assertEqual(2,sum(command[:2]==["git","push"] for command in commands))
+  self.assertEqual(2,sum(command[:3]==["git","fetch","origin"] for command in commands))
+  self.assertEqual(2,sum(command[:2]==["git","rebase"] for command in commands))
+  sleep.assert_called_once_with(1)
+
+ def test_git_checkpoint_does_not_retry_non_retryable_push_failures(self):
+  data_path=self.root/"data"/"book"/"checkpoint.json"
+  w(data_path,{"checkpoint":1})
+  commands=[]
+  def fake_run(command,**kwargs):
+   commands.append(command)
+   if command[:3]==["git","diff","--cached"]:
+    return subprocess.CompletedProcess(command,1,"","")
+   if command[:2]==["git","push"]:
+    return subprocess.CompletedProcess(command,1,"","remote: Permission denied")
+   return subprocess.CompletedProcess(command,0,"","")
+  with patch("scripts.quantaedge_textbook_pipeline.subprocess.run",side_effect=fake_run), patch("scripts.quantaedge_textbook_pipeline.time.sleep") as sleep:
+   with self.assertRaises(subprocess.CalledProcessError):
+    git_checkpoint(self.root,["data/book/checkpoint.json"],"checkpoint(content): test")
+  self.assertEqual(1,sum(command[:2]==["git","push"] for command in commands))
+  sleep.assert_not_called()
+
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name);self.sha="a"*64;self.ash=hashlib.sha256(b"x").hexdigest()
   self.inv=self.root/"i.json";self.raw=self.root/"r.json";self.man=self.root/"m.json";self.txt=self.root/"p.jsonl";self.eff=self.root/"eff.json";self.ledger=self.root/"ledger.json"
