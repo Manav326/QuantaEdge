@@ -9,7 +9,7 @@ from types import SimpleNamespace
 from scripts.quantaedge_layers_6_8 import (
     PROMPT_VERSION, LESSON_CONTRACT_VERSION, benchmark as run_benchmark, lesson_from, load_visual_candidates, bind_layer5_evidence_to_visual_candidates, ollama_chat, sha, split_sft, refresh_benchmark,
     validate_lesson, validate_output, validate_splits, segments_for, tutor_citations_valid, write_rag, layer5_ledger, preflight_source,
-    write_json, write_jsonl, write_outputs, prompt_for, run as run_layers,
+    write_json, write_jsonl, write_outputs, prompt_for, run as run_layers, checkpoint_git,
 )
 
 class FakeResponse:
@@ -105,6 +105,55 @@ def install_layer5_fixture(root:Path, pagesdir:Path, book:str, pdfhash:str, body
 
 
 class LayersTests(unittest.TestCase):
+    def test_checkpoint_git_retries_concurrent_push_race_after_fetch_and_rebase(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            checkpoint=root/"data"/"book"/"generation-checkpoints.v1.json"
+            write_json(checkpoint,{"status":"IN_PROGRESS"})
+            push_results=[
+                subprocess.CompletedProcess(["git","push","origin","HEAD:main"],1,"","! [rejected] HEAD -> main (fetch first)\\nerror: failed to push some refs"),
+                subprocess.CompletedProcess(["git","push","origin","HEAD:main"],0,"ok",""),
+            ]
+            commands=[]
+            def fake_run(command,**kwargs):
+                commands.append(command)
+                if command[:3]==["git","diff","--cached"]:
+                    return subprocess.CompletedProcess(command,1,"","")
+                if command[:2]==["git","push"]:
+                    return push_results.pop(0)
+                return subprocess.CompletedProcess(command,0,"","")
+            with patch("scripts.quantaedge_layers_6_8.subprocess.run",side_effect=fake_run), patch("scripts.quantaedge_layers_6_8.time.sleep") as sleep:
+                checkpoint_git(root,[checkpoint],"checkpoint(content): test L6-8")
+            self.assertEqual(2,sum(command[:2]==["git","push"] for command in commands))
+            self.assertEqual(2,sum(command[:3]==["git","fetch","origin"] for command in commands))
+            self.assertEqual(2,sum(command[:2]==["git","rebase"] for command in commands))
+            sleep.assert_called_once_with(1)
+
+    def test_checkpoint_git_does_not_retry_permission_denied(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            checkpoint=root/"data"/"book"/"generation-checkpoints.v1.json"
+            write_json(checkpoint,{"status":"IN_PROGRESS"})
+            commands=[]
+            def fake_run(command,**kwargs):
+                commands.append(command)
+                if command[:3]==["git","diff","--cached"]:
+                    return subprocess.CompletedProcess(command,1,"","")
+                if command[:2]==["git","push"]:
+                    return subprocess.CompletedProcess(command,1,"","remote: Permission denied")
+                return subprocess.CompletedProcess(command,0,"","")
+            with patch("scripts.quantaedge_layers_6_8.subprocess.run",side_effect=fake_run), patch("scripts.quantaedge_layers_6_8.time.sleep") as sleep:
+                with self.assertRaises(subprocess.CalledProcessError):
+                    checkpoint_git(root,[checkpoint],"checkpoint(content): test L6-8")
+            self.assertEqual(1,sum(command[:2]==["git","push"] for command in commands))
+            sleep.assert_not_called()
+
+    def test_checkpoint_git_rejects_paths_outside_data(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            with self.assertRaisesRegex(ValueError,"outside repository"):
+                checkpoint_git(root,[root/"scripts"/"unsafe.py"],"must not commit")
+
     def test_canonical_layer5_index_disambiguates_legacy_duplicate_ledgers(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)
