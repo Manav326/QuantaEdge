@@ -621,30 +621,46 @@ jobs:
               print(json.dumps({"slug":slug,"checkpoint":"VERIFIED","tag":index["version_tag"],"candidate_count":index["candidate_count"],"archive_sha256":index["bundle_tar_sha256"],"publication_allowed":False}))
           PY
 
-      - name: Rebuild the catalog, test candidate-to-content contracts, and commit the full batch
+      - name: Commit only this bilingual pair's immutable candidate files
         if: env.ANALYSIS_MODE != 'resume_layers_4_5'
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/update_visual_catalog_index.py --catalog-dir data/textbook-visual-candidates-v3/catalogs --output data/textbook-visual-candidates-v3/index.v1.json
-          python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
-          python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
-          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
-          python -m unittest discover -s tests -p "test_pipeline_data_locations.py" -v
-          python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
-          git add -A data/textbook-visual-candidates-v3
-          python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
-          if ! git diff --cached --quiet; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "data(ai): prepare Class $CLASS_NO bilingual visual candidate batch"
-          else
-            echo "The candidate metadata and media manifest already match main; no Git commit required."
-            exit 0
-          fi
-          git pull --rebase origin main
-          git push origin HEAD:main
-          echo "Persisted review-only visual candidates for every required NCERT Maths and Science source book in English and Hindi. All candidate packs remain non-publishable."
+          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$GITHUB_WORKSPACE" "$CLASS_NO" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          from scripts.quantaedge_textbook_pipeline import git_checkpoint
+
+          selection_path, repo_arg, class_no = sys.argv[1:]
+          selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
+          repo = Path(repo_arg).resolve()
+          paths = []
+          sources = selection.get("sources")
+          if not isinstance(sources, list) or len(sources) != 2:
+              raise SystemExit("A bilingual pair must contain exactly two selected book sources.")
+          for source in sources:
+              slug = source.get("book_slug")
+              if not isinstance(slug, str) or not slug:
+                  raise SystemExit("Selected source is missing its book_slug.")
+              book_dir = Path("data") / "textbook-visual-candidates-v3" / slug
+              catalog = Path("data") / "textbook-visual-candidates-v3" / "catalogs" / f"{slug}.v3.json"
+              if not (repo / book_dir / "bundle-index.v3.json").is_file():
+                  raise SystemExit(f"{slug}: committed candidate bundle index is missing.")
+              if not (repo / book_dir / "candidates.v3.json").is_file():
+                  raise SystemExit(f"{slug}: candidate pack is missing.")
+              if not (repo / catalog).is_file():
+                  raise SystemExit(f"{slug}: per-book attachment catalog is missing.")
+              paths.extend([book_dir.as_posix(), catalog.as_posix()])
+
+          git_checkpoint(
+              repo,
+              paths,
+              f"data(ai): persist Class {class_no} bilingual visual candidate pair",
+          )
+          print(json.dumps({"class_no": class_no, "book_slugs": [s["book_slug"] for s in sources],
+                            "committed_paths": paths, "shared_catalog_index_write": "DEFERRED_TO_COORDINATOR"}))
+          PY
 
 
       - name: Start Ollama container and load vision model for Layer 4
@@ -704,13 +720,60 @@ jobs:
             echo "- All generated data remains review-only; publication_allowed=false."
           } >> "$GITHUB_STEP_SUMMARY"
 
+  finalize_visual_catalog_index:
+    name: Rebuild the shared visual catalog index after all book-pair workers
+    needs: [plan, prepare]
+    if: >-
+      needs.plan.result == 'success' &&
+      needs.prepare.result == 'success' &&
+      needs.plan.outputs.matrix != '{"include":[]}'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main after all pair-specific commits
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild and validate the one shared visual catalog index
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/update_visual_catalog_index.py \
+            --catalog-dir data/textbook-visual-candidates-v3/catalogs \
+            --output data/textbook-visual-candidates-v3/index.v1.json
+          python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
+          python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
+          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
+          python -m unittest discover -s tests -p "test_pipeline_data_locations.py" -v
+          python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
+          python - "$GITHUB_WORKSPACE" <<'PY'
+          import sys
+          from pathlib import Path
+          from scripts.quantaedge_textbook_pipeline import git_checkpoint
+
+          root = Path(sys.argv[1]).resolve()
+          git_checkpoint(
+              root,
+              ["data/textbook-visual-candidates-v3/index.v1.json"],
+              "index(content): rebuild shared review-only visual catalog",
+          )
+          PY
+
   record-completed-class-markers:
     name: Verify all whole-book Layer 5 ledgers and record class completion
-    needs: [plan, prepare]
+    needs: [plan, prepare, finalize_visual_catalog_index]
     if: >-
       always() &&
       needs.plan.result == 'success' &&
       needs.prepare.result != 'skipped' &&
+      needs.finalize_visual_catalog_index.result == 'success' &&
       (
         (github.event_name == 'push' && !contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]') && (
           contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') ||
