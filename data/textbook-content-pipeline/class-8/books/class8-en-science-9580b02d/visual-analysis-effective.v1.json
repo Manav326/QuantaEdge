@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0a8f740b31ef33822cf0d9e4f1441b0928a0e1c1fd5419a1db3c3f70198798f8",
+  "raw_analysis_sha256": "4e23a67cee18d7d146ca96ece4e170a58a3b16266a2b1a4e4b9248206482b3bd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1832,7 +1832,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:13:44Z",
+      "checkpointed_at": "2026-11-06T05:22:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -29466,7 +29466,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:14:18Z",
+      "checkpointed_at": "2026-11-06T05:22:53Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
@@ -58136,9 +58136,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a detailed explanation of non-contact forces."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "vision_input": {
@@ -58156,7 +58156,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:21:22Z",
+      "checkpointed_at": "2026-11-06T05:23:30Z",
       "effective_analysis": {
         "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
@@ -58175,9 +58175,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a detailed explanation of non-contact forces."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -60847,7 +60847,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42162898811",
+      "run_id": "42165203770",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -65873,26 +65873,37 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A girl lifting a paper plate with a stick, demonstrating the concept of atmospheric pressure.",
+        "visual_summary": "A student is demonstrating an experiment involving an inverted paper plate and a folded chart paper sheet.",
         "visual_type": "diagram",
         "visible_text": [
           "Fig. 6.9: (b) Inverted paper plate with two folds of chart paper",
-          "Fig. 6.9: (c) Inverted paper plate with unfolded chart paper",
+          "the folded chart paper sheet — big enough for the stick to come out. Place the folded sheet on top of the inverted paper plate as shown in Fig. 6.9b.",
+          "Now, try to lift the paper plate covered with a folded sheet using the stick.",
+          "Observe how much effort is needed to lift it.",
+          "Now, place the second unfolded chart paper sheet in place of the folded sheet. Make a hole at the centre of this chart paper for the stick to pass through. Cover the paper plate with the unfolded chart paper as shown in Fig. 6.9c.",
+          "Lift the paper plate again and feel the effort needed in doing so.",
+          "In which case is the lifting easier, with the folded or the unfolded chart paper covering the paper plate?",
           "You would have observed that more effort is needed to lift the paper plate when it is covered with the unfolded chart paper, than with the folded chart paper. When we cover the paper plate with unfolded chart paper, the area of the covering sheet increases. The effort needed to lift the paper plate ",
           "You must have experienced that when you blow air into a balloon, it gets inflated. Why? This is because the air being filled inside the balloon exerts pressure on the walls of the balloon (Fig. 6.10). Can we say that air exerts pressure in all directions? Yes, that is why the balloon expands in all "
         ],
         "concepts": [
+          "inverted paper plate",
+          "folded chart paper sheet",
+          "unfolded chart paper sheet",
+          "effort to lift",
+          "area of covering sheet",
+          "force on covering sheet",
           "atmospheric pressure",
-          "force",
-          "pressure",
-          "area",
-          "force per unit area",
-          "inflation",
-          "expansion"
+          "pressure on paper sheet",
+          "pressure exerted by air",
+          "inflation of balloon",
+          "pressure in all directions",
+          "escaping air from balloon"
         ],
-        "context_relation": "The image is a visual representation of the text explaining the concept of atmospheric pressure and its effect on objects.",
+        "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
         "limitations": [
-          "The image does not show the actual experiment being performed."
+          "The image does not show the actual experiment being conducted.",
+          "The image does not show the results of the experiment."
         ]
       },
       "vision_input": {
@@ -65909,29 +65920,40 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:40:50Z",
+      "run_id": "42165203770",
+      "checkpointed_at": "2026-11-06T05:28:50Z",
       "effective_analysis": {
-        "visual_summary": "A girl lifting a paper plate with a stick, demonstrating the concept of atmospheric pressure.",
+        "visual_summary": "A student is demonstrating an experiment involving an inverted paper plate and a folded chart paper sheet.",
         "visual_type": "diagram",
         "visible_text": [
           "Fig. 6.9: (b) Inverted paper plate with two folds of chart paper",
-          "Fig. 6.9: (c) Inverted paper plate with unfolded chart paper",
+          "the folded chart paper sheet — big enough for the stick to come out. Place the folded sheet on top of the inverted paper plate as shown in Fig. 6.9b.",
+          "Now, try to lift the paper plate covered with a folded sheet using the stick.",
+          "Observe how much effort is needed to lift it.",
+          "Now, place the second unfolded chart paper sheet in place of the folded sheet. Make a hole at the centre of this chart paper for the stick to pass through. Cover the paper plate with the unfolded chart paper as shown in Fig. 6.9c.",
+          "Lift the paper plate again and feel the effort needed in doing so.",
+          "In which case is the lifting easier, with the folded or the unfolded chart paper covering the paper plate?",
           "You would have observed that more effort is needed to lift the paper plate when it is covered with the unfolded chart paper, than with the folded chart paper. When we cover the paper plate with unfolded chart paper, the area of the covering sheet increases. The effort needed to lift the paper plate ",
           "You must have experienced that when you blow air into a balloon, it gets inflated. Why? This is because the air being filled inside the balloon exerts pressure on the walls of the balloon (Fig. 6.10). Can we say that air exerts pressure in all directions? Yes, that is why the balloon expands in all "
         ],
         "concepts": [
+          "inverted paper plate",
+          "folded chart paper sheet",
+          "unfolded chart paper sheet",
+          "effort to lift",
+          "area of covering sheet",
+          "force on covering sheet",
           "atmospheric pressure",
-          "force",
-          "pressure",
-          "area",
-          "force per unit area",
-          "inflation",
-          "expansion"
+          "pressure on paper sheet",
+          "pressure exerted by air",
+          "inflation of balloon",
+          "pressure in all directions",
+          "escaping air from balloon"
         ],
-        "context_relation": "The image is a visual representation of the text explaining the concept of atmospheric pressure and its effect on objects.",
+        "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
         "limitations": [
-          "The image does not show the actual experiment being performed."
+          "The image does not show the actual experiment being conducted.",
+          "The image does not show the results of the experiment."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

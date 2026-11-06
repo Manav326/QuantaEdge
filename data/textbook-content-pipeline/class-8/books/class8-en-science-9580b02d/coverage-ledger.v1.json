@@ -44891,9 +44891,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a detailed explanation of non-contact forces."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "chapter_id": null,
@@ -49682,26 +49682,37 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A girl lifting a paper plate with a stick, demonstrating the concept of atmospheric pressure.",
+        "visual_summary": "A student is demonstrating an experiment involving an inverted paper plate and a folded chart paper sheet.",
         "visual_type": "diagram",
         "visible_text": [
           "Fig. 6.9: (b) Inverted paper plate with two folds of chart paper",
-          "Fig. 6.9: (c) Inverted paper plate with unfolded chart paper",
+          "the folded chart paper sheet — big enough for the stick to come out. Place the folded sheet on top of the inverted paper plate as shown in Fig. 6.9b.",
+          "Now, try to lift the paper plate covered with a folded sheet using the stick.",
+          "Observe how much effort is needed to lift it.",
+          "Now, place the second unfolded chart paper sheet in place of the folded sheet. Make a hole at the centre of this chart paper for the stick to pass through. Cover the paper plate with the unfolded chart paper as shown in Fig. 6.9c.",
+          "Lift the paper plate again and feel the effort needed in doing so.",
+          "In which case is the lifting easier, with the folded or the unfolded chart paper covering the paper plate?",
           "You would have observed that more effort is needed to lift the paper plate when it is covered with the unfolded chart paper, than with the folded chart paper. When we cover the paper plate with unfolded chart paper, the area of the covering sheet increases. The effort needed to lift the paper plate ",
           "You must have experienced that when you blow air into a balloon, it gets inflated. Why? This is because the air being filled inside the balloon exerts pressure on the walls of the balloon (Fig. 6.10). Can we say that air exerts pressure in all directions? Yes, that is why the balloon expands in all "
         ],
         "concepts": [
+          "inverted paper plate",
+          "folded chart paper sheet",
+          "unfolded chart paper sheet",
+          "effort to lift",
+          "area of covering sheet",
+          "force on covering sheet",
           "atmospheric pressure",
-          "force",
-          "pressure",
-          "area",
-          "force per unit area",
-          "inflation",
-          "expansion"
+          "pressure on paper sheet",
+          "pressure exerted by air",
+          "inflation of balloon",
+          "pressure in all directions",
+          "escaping air from balloon"
         ],
-        "context_relation": "The image is a visual representation of the text explaining the concept of atmospheric pressure and its effect on objects.",
+        "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
         "limitations": [
-          "The image does not show the actual experiment being performed."
+          "The image does not show the actual experiment being conducted.",
+          "The image does not show the results of the experiment."
         ]
       },
       "chapter_id": null,
