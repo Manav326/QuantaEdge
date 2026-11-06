@@ -10,6 +10,13 @@ def read(name: str) -> str:
 
 
 class WorkflowResumeEntrypointTests(unittest.TestCase):
+    def test_layer45_serializes_workflow_runs_across_all_entrypoints_without_cancelling_active_work(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        self.assertIn("group: textbook-visual-candidates-v3-main", workflow)
+        self.assertIn("cancel-in-progress: false", workflow)
+        self.assertIn("max-parallel: 16", workflow)
+        self.assertNotIn("textbook-visual-candidates-v3-${{", workflow)
+
     def test_marked_push_can_reextract_one_class_without_rebuilding_the_other_class(self):
         workflow = read("textbook-extraction-pilot.yml")
         self.assertIn("[reextract-textbook-class-7]", workflow)
@@ -50,10 +57,9 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("source PDF SHA-256 differs", workflow)
         self.assertIn('"publication_allowed": False', workflow)
 
-    def test_class8_targeted_rebuild_replaces_only_the_class8_resume_lane(self):
+    def test_class8_targeted_rebuild_remains_source_scoped_under_shared_lock(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
-        self.assertIn("&& '8')", workflow)
         self.assertIn("[analyze-all-visual-layers-4-5-class-8]", workflow)
         self.assertIn("[analyze-all-visual-layers-4-5-class-8]", planner)
         self.assertIn("cancel-in-progress:", workflow)
@@ -87,7 +93,6 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}", workflow)
         self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}", workflow)
         self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
-        self.assertIn("'classes-7-8-resume'", workflow)
         self.assertIn("BOOK_ID: ${{ matrix.book_id || '' }}", workflow)
 
     def test_marked_push_can_resume_class7_and_class8_independently(self):
@@ -102,8 +107,6 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
             self.assertIn(marker, planner)
         self.assertIn("matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}", workflow)
         self.assertIn("max-parallel: 16", workflow)
-        self.assertIn("&& '7')", workflow)
-        self.assertIn("&& '8')", workflow)
 
     def test_cancelled_class6_to8_run_is_resumed_by_separate_coordinator(self):
         workflow = read("textbook-visual-candidates-v3.yml")
