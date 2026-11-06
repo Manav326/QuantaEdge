@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ab2ab582aefb26a12107155a8e8148f2e02a925618782c1afd99bc389cf279cd",
+  "raw_analysis_sha256": "862dcf027d5923446464c782d424d05b3a855fe97e42b2b05be8fe5fecdf7a13",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1780,87 +1780,21 @@
     {
       "asset_id": "2b71f040b18c02e306e02930",
       "asset_sha256": "e8fbcc2e3740a10eb93aae2a7cb2846d41998124e60b373dcb3a85844c542ab4",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 6,
       "asset_path": "page-0006.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
-          "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
-          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
-          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
-        ],
-        "concepts": [
-          "open-ended questions",
-          "thought-provoking questions",
-          "critical thinking",
-          "curiosity",
-          "science",
-          "teamwork",
-          "inclusive nature",
-          "special needs",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "safety precautions",
-          "fascinating facts",
-          "interesting observations",
-          "scientific principles",
-          "real-life applications"
-        ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42129304656",
-      "checkpointed_at": "2026-11-06T00:22:16Z",
-      "effective_analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
-          "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
-          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
-          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
-        ],
-        "concepts": [
-          "open-ended questions",
-          "thought-provoking questions",
-          "critical thinking",
-          "curiosity",
-          "science",
-          "teamwork",
-          "inclusive nature",
-          "special needs",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "safety precautions",
-          "fascinating facts",
-          "interesting observations",
-          "scientific principles",
-          "real-life applications"
-        ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -29300,73 +29234,21 @@
     {
       "asset_id": "35f32b476dc5977bc161e8e8",
       "asset_sha256": "362d4dcf2027094e5b567212d28e12d11b4d5208983201ca08847ce5f4c4741d",
+      "page_text_context_sha256": "09738dc25cf7b2ad7ed30b01ac62178a7d97d49e74848350cc5fe7a75c307c11",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 17,
       "asset_path": "page-0017.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "09738dc25cf7b2ad7ed30b01ac62178a7d97d49e74848350cc5fe7a75c307c11",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
-          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
-          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
-        ],
-        "concepts": [
-          "Acknowledgment",
-          "Textbook",
-          "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
-        ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
-        "limitations": [
-          "No specific visual elements are described."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42129304656",
-      "checkpointed_at": "2026-11-06T00:22:40Z",
-      "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
-          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
-          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
-        ],
-        "concepts": [
-          "Acknowledgment",
-          "Textbook",
-          "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
-        ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
-        "limitations": [
-          "No specific visual elements are described."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -57826,67 +57708,21 @@
     {
       "asset_id": "f492c50e9c7d7ef8d140ae06",
       "asset_sha256": "a7af291e2290748a96224817655752fbfc27ba3bc7e0108999cc4c6c4b34bfe1",
+      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 86,
       "asset_path": "page-0086.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "4d50fafdde9e1fa5b6f7ccd8a6414e18363b2b47f47fe44142f34c9e2d3d19e0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
-        "visible_text": [
-          "A step further",
-          "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
-          "5.4 What Are the Different Types of Forces?",
-          "5.4.1 Contact forces",
-          "In many situations, we find that to apply a force on an object, physical contact is necessary between our body and the object. This contact can be direct, such as using our hands or other body parts, or indirect, such as using a stick or rope. Forces of this type which act only when there is physica",
-          "Muscular force",
-          "An example of contact force is muscular force. When we perform any physical activity, such as walking, running, lifting, pushing, jumping, or stretching, the force is caused by the action of muscles in our body. The force resulting due to the action of muscles is known as muscular force. Muscular fo",
-          "Animals, birds, fish, and insects use muscular forces for movement and survival (Fig. 5.3).",
-          "Fig. 5.3: Use of muscular force by living beings"
-        ],
-        "concepts": [
-          "contact forces",
-          "muscular force"
-        ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42129304656",
-      "checkpointed_at": "2026-11-06T00:23:09Z",
-      "effective_analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
-        "visible_text": [
-          "A step further",
-          "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
-          "5.4 What Are the Different Types of Forces?",
-          "5.4.1 Contact forces",
-          "In many situations, we find that to apply a force on an object, physical contact is necessary between our body and the object. This contact can be direct, such as using our hands or other body parts, or indirect, such as using a stick or rope. Forces of this type which act only when there is physica",
-          "Muscular force",
-          "An example of contact force is muscular force. When we perform any physical activity, such as walking, running, lifting, pushing, jumping, or stretching, the force is caused by the action of muscles in our body. The force resulting due to the action of muscles is known as muscular force. Muscular fo",
-          "Animals, birds, fish, and insects use muscular forces for movement and survival (Fig. 5.3).",
-          "Fig. 5.3: Use of muscular force by living beings"
-        ],
-        "concepts": [
-          "contact forces",
-          "muscular force"
-        ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -65656,101 +65492,21 @@
     {
       "asset_id": "2e220d251d13a2e76c57e33b",
       "asset_sha256": "8365e4fa376ae0bf20050b6aad49cdd232cf9ca81ea7ca9a7d4fc7845600696e",
+      "page_text_context_sha256": "c837b29b08feb77ea963de909a5c33550b2e7ee7d30222c8fc6f62c5142c08d8",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 107,
       "asset_path": "page-0107.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "c837b29b08feb77ea963de909a5c33550b2e7ee7d30222c8fc6f62c5142c08d8",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
-        "visual_type": "diagram",
-        "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
-          "Activity 6.4: Let us perform",
-          "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
-          "Do you realise that it sticks to the surface?",
-          "Now, try to pull it off. Do you find it difficult to pull it off?",
-          "When we press the sucker, most of the air between its cup and the surface on which it is placed is pushed out and the air pressure inside it is reduced. The sucker sticks to the surface because the pressure of air surrounding the sucker is higher than the pressure exerted by the air inside the sucke",
-          "Do you know how large the atmospheric pressure is? The force exerted by the atmospheric air column over an area 15 cm × 15 cm is nearly equal to the force of gravity on an object of mass 225 kg (2250 N). The reason we are not crushed under this weight is that the pressure inside our bodies is also e",
-          "A step further",
-          "The SI unit of pressure is N/m², also known as pascal (Pa). However, the practical unit of air pressure is millibar (mb), which is equal to 100 Pa. Air pressure is also expressed in hectopascal (hPa), which is equal to 100 Pa.",
-          "6.3 Formation of Wind",
-          "You must have noticed that on some days, the wind blows strongly, whereas on other days, it is calm. Sometimes, wind becomes so strong that it causes damage to life and property.",
-          "You must have seen that when an inflated balloon is kept without closing its mouth, the air from the balloon escapes. Recall that when there is a puncture in the bicycle tube, the air escapes and the tube collapses. In both of these cases, does air move from a high pressure region to a low pressure "
-        ],
-        "concepts": [
-          "atmospheric pressure",
-          "rubber sucker",
-          "air pressure",
-          "SI unit of pressure",
-          "millibar",
-          "hectopascal",
-          "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
-        ],
-        "context_relation": "educational",
-        "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
-          "The image does not show the actual measurement of atmospheric pressure."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42129304656",
-      "checkpointed_at": "2026-11-06T00:23:50Z",
-      "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
-        "visual_type": "diagram",
-        "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
-          "Activity 6.4: Let us perform",
-          "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
-          "Do you realise that it sticks to the surface?",
-          "Now, try to pull it off. Do you find it difficult to pull it off?",
-          "When we press the sucker, most of the air between its cup and the surface on which it is placed is pushed out and the air pressure inside it is reduced. The sucker sticks to the surface because the pressure of air surrounding the sucker is higher than the pressure exerted by the air inside the sucke",
-          "Do you know how large the atmospheric pressure is? The force exerted by the atmospheric air column over an area 15 cm × 15 cm is nearly equal to the force of gravity on an object of mass 225 kg (2250 N). The reason we are not crushed under this weight is that the pressure inside our bodies is also e",
-          "A step further",
-          "The SI unit of pressure is N/m², also known as pascal (Pa). However, the practical unit of air pressure is millibar (mb), which is equal to 100 Pa. Air pressure is also expressed in hectopascal (hPa), which is equal to 100 Pa.",
-          "6.3 Formation of Wind",
-          "You must have noticed that on some days, the wind blows strongly, whereas on other days, it is calm. Sometimes, wind becomes so strong that it causes damage to life and property.",
-          "You must have seen that when an inflated balloon is kept without closing its mouth, the air from the balloon escapes. Recall that when there is a puncture in the bicycle tube, the air escapes and the tube collapses. In both of these cases, does air move from a high pressure region to a low pressure "
-        ],
-        "concepts": [
-          "atmospheric pressure",
-          "rubber sucker",
-          "air pressure",
-          "SI unit of pressure",
-          "millibar",
-          "hectopascal",
-          "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
-        ],
-        "context_relation": "educational",
-        "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
-          "The image does not show the actual measurement of atmospheric pressure."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -67862,9 +67618,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42109374489",
+      "run_id": "42129304656",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
