@@ -44763,14 +44763,13 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement",
+          "Measurement of Length and Motion",
           "Handspans",
-          "Length",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measurement using handspans as a unit.",
+        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
         "limitations": [
-          "The text does not provide a specific unit for measurement."
+          "The text does not provide specific measurements or units for the table's length."
         ]
       },
       "chapter_id": null,

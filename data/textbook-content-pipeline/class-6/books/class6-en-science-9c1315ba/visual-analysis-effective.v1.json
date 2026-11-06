@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "564efb8555f812df4c140764764d80bb873d08542303631a87e0dfd3c50d2945",
+  "raw_analysis_sha256": "de440b0d06920a67ecd8fce18bddaca02a081a018a38fdffd7a892161e969e87",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -650,7 +650,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42145454886",
-      "checkpointed_at": "2026-11-06T02:03:09Z",
+      "checkpointed_at": "2026-11-06T02:12:56Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
@@ -29461,7 +29461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42145454886",
-      "checkpointed_at": "2026-11-06T02:04:29Z",
+      "checkpointed_at": "2026-11-06T02:14:16Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "page_with_multiple_visuals",
@@ -35200,7 +35200,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42145454886",
-      "checkpointed_at": "2026-11-06T02:05:37Z",
+      "checkpointed_at": "2026-11-06T02:15:28Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -57657,14 +57657,13 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement",
+          "Measurement of Length and Motion",
           "Handspans",
-          "Length",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measurement using handspans as a unit.",
+        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
         "limitations": [
-          "The text does not provide a specific unit for measurement."
+          "The text does not provide specific measurements or units for the table's length."
         ]
       },
       "vision_input": {
@@ -57682,7 +57681,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42145454886",
-      "checkpointed_at": "2026-11-06T02:11:28Z",
+      "checkpointed_at": "2026-11-06T02:16:25Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57704,14 +57703,13 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement",
+          "Measurement of Length and Motion",
           "Handspans",
-          "Length",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measurement using handspans as a unit.",
+        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
         "limitations": [
-          "The text does not provide a specific unit for measurement."
+          "The text does not provide specific measurements or units for the table's length."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -58896,7 +58894,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42140323966",
+      "run_id": "42145454886",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
