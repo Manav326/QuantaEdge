@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import base64
 import hashlib
+import io
 import json
 import mimetypes
 import math
@@ -201,6 +202,80 @@ def _saved_analysis_is_valid(value: Any) -> bool:
         return False
 
 
+
+MAX_VISION_IMAGE_DIMENSION = 960
+VISION_IMAGE_JPEG_QUALITY = 82
+MAX_SOURCE_IMAGE_PIXELS = 40_000_000
+
+
+def prepare_vision_image(asset_path: Path) -> tuple[bytes, dict[str, Any]]:
+    """Create a bounded JPEG for Ollama without changing the source inventory asset.
+
+    Page previews and embedded images may be much larger than the model needs.
+    Inference uses a maximum 960-pixel edge and JPEG quality 82; the original
+    file and its inventory SHA-256 remain the durable provenance identity.
+    """
+    try:
+        from PIL import Image, ImageOps
+    except ImportError as exc:  # pragma: no cover - workflow installs this dependency
+        raise RuntimeError(
+            "Pillow is required for bounded vision inputs. Install Pillow>=10,<13."
+        ) from exc
+
+    with Image.open(asset_path) as source:
+        source_width, source_height = source.size
+        if (
+            not isinstance(source_width, int) or not isinstance(source_height, int)
+            or source_width < 1 or source_height < 1
+            or source_width * source_height > MAX_SOURCE_IMAGE_PIXELS
+        ):
+            raise ValueError(
+                f"Vision source image dimensions are outside the safe limit: "
+                f"{source_width}x{source_height}."
+            )
+        source.load()
+        oriented = ImageOps.exif_transpose(source)
+        image = oriented.copy()
+
+    image.thumbnail(
+        (MAX_VISION_IMAGE_DIMENSION, MAX_VISION_IMAGE_DIMENSION),
+        Image.Resampling.LANCZOS,
+    )
+    inference_width, inference_height = image.size
+
+    # White is a neutral, predictable background for transparent textbook assets.
+    if "A" in image.getbands() or "transparency" in image.info:
+        rgba = image.convert("RGBA")
+        rgb = Image.new("RGB", rgba.size, (255, 255, 255))
+        rgb.paste(rgba, mask=rgba.getchannel("A"))
+    else:
+        rgb = image.convert("RGB")
+
+    output = io.BytesIO()
+    rgb.save(
+        output,
+        format="JPEG",
+        quality=VISION_IMAGE_JPEG_QUALITY,
+        optimize=True,
+        progressive=False,
+    )
+    data = output.getvalue()
+    if not data:
+        raise ValueError("Vision image preprocessing produced an empty JPEG.")
+
+    return data, {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": source_width,
+        "source_height": source_height,
+        "inference_width": inference_width,
+        "inference_height": inference_height,
+        "media_type": "image/jpeg",
+        "jpeg_quality": VISION_IMAGE_JPEG_QUALITY,
+        "byte_count": len(data),
+        "sha256": hashlib.sha256(data).hexdigest(),
+    }
+
+
 def analyze_one(
     inventory_dir: Path,
     asset: dict[str, Any],
@@ -248,6 +323,7 @@ def analyze_one(
         f"Asset kind: {asset.get('kind', 'unknown')}\n"
         f"Nearby extracted page text (possibly incomplete):\n{context or '[No extracted text available]'}"
     )
+    vision_bytes, vision_input = prepare_vision_image(asset_path)
     payload = {
         "model": model,
         "stream": False,
@@ -255,7 +331,7 @@ def analyze_one(
         "messages": [{
             "role": "user",
             "content": prompt,
-            "images": [base64.b64encode(asset_path.read_bytes()).decode("ascii")],
+            "images": [base64.b64encode(vision_bytes).decode("ascii")],
         }],
         "options": {"temperature": 0, "num_ctx": num_ctx, "num_predict": num_predict},
     }
@@ -308,6 +384,7 @@ def analyze_one(
         "model": model,
         "analysis_status": "DRAFT_REQUIRES_REVIEW",
         "analysis": analysis,
+        "vision_input": vision_input,
         "human_review_required": True,
         "publication_allowed": False,
     }
