@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3318,
+    "assets_selected": 3319,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "4b1298747dc1ec978a226ae5",
       "f5cfd5f0dfcebd60e3212f1b",
-      "89d98bc3ac4c7e8be7594421"
+      "f06885fe871f653a442573be"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3314,
     "assets_remaining": 4174,
     "assets_completion_percent": 44.3,
     "assets_failed": 46,
-    "assets_skipped_from_checkpoint": 3313,
+    "assets_skipped_from_checkpoint": 3314,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42147499899",
-      "checkpointed_at": "2026-11-06T03:05:32Z"
+      "checkpointed_at": "2026-11-06T03:09:34Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13530,7 +13530,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42147499899",
-      "checkpointed_at": "2026-11-06T03:06:02Z"
+      "checkpointed_at": "2026-11-06T03:10:04Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79164,7 +79164,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42147499899",
-      "checkpointed_at": "2026-11-06T03:06:42Z"
+      "checkpointed_at": "2026-11-06T03:10:45Z"
     },
     {
       "asset_id": "42e2bad6ce513928f9ecea9b",
@@ -105363,7 +105363,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42147499899",
-      "checkpointed_at": "2026-11-06T03:07:22Z"
+      "checkpointed_at": "2026-11-06T03:11:24Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -122236,9 +122236,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42147499899",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
