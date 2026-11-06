@@ -88,6 +88,11 @@ services:
       - ${QUANTAEDGE_TEXTBOOK_CACHE_DIR:-./source-pdfs/registry-cache}:/var/lib/quantaedge/textbook-cache:ro
     ports:
       - "${API_PORT:-8080}:8080"
+    networks:
+      default: {}
+      cloudflare-edge:
+        aliases:
+          - quantaedge-api
     depends_on:
       postgres:
         condition: service_healthy
@@ -102,6 +107,11 @@ services:
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${WEB_PORT:-3000}:3000"
+    networks:
+      default: {}
+      cloudflare-edge:
+        aliases:
+          - quantaedge-web
     depends_on:
       - api
   admin:
@@ -111,6 +121,11 @@ services:
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${ADMIN_PORT:-3001}:3000"
+    networks:
+      default: {}
+      cloudflare-edge:
+        aliases:
+          - quantaedge-admin
     depends_on:
       - api
   people:
@@ -122,9 +137,19 @@ services:
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${PEOPLE_PORT:-3002}:3000"
+    networks:
+      default: {}
+      cloudflare-edge:
+        aliases:
+          - quantaedge-people
     depends_on:
       - api
 volumes:
   quantaedge_postgres:
   quantaedge_redis:
   quantaedge_media:
+
+networks:
+  cloudflare-edge:
+    external: true
+    name: cloudflare-edge
