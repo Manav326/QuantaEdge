@@ -291,6 +291,24 @@ class LayersTests(unittest.TestCase):
         self.assertIn("Return 1 to 6 distinct, useful questions",prompt)
         self.assertNotIn("exactly two MCQs",prompt.lower())
 
+    def test_prompt_separates_worked_examples_from_tutor_dialogues(self):
+        source={"class_no":6,"subject":"science","language":"en","book_id":"book","title":"Curiosity","edition":"Reprint"}
+        seg={"source_pages":[1],"pieces":[{"page":1,"part":1,"text":"Plants have leaves."}]}
+        prompt=prompt_for(source,seg,[])
+        self.assertIn("worked_example_by_locale and tutor_examples are two different fields",prompt)
+        self.assertIn("Do NOT put student_message, assistant_message, language, or source_pages inside worked_example_by_locale",prompt)
+        self.assertIn("option id MUST be a JSON string",prompt)
+        self.assertIn("at most 2 short paragraphs",prompt)
+        self.assertEqual("qe-l6-l8-ollama-v8-explicit-bilingual-object-contract",PROMPT_VERSION)
+
+    def test_repeated_hindi_placeholder_content_is_rejected(self):
+        generated=model_json([1,2])
+        generated["concepts_by_locale"]["hi"]=["सांस्कृतिक विचार"]*4
+        generated["explanation_by_locale"]["hi"]["paragraphs"]=["सांस्कृतिक विचारों को समझें।"]*6
+        errors=validate_output(generated,{1,2})
+        self.assertTrue(any("Hindi concepts contain repeated filler" in error for error in errors))
+        self.assertTrue(any("explanation_by_locale.hi contains repeated filler" in error for error in errors))
+
     def test_invalid_page_citations_fail_validation(self):
         v=model_json([99]); self.assertTrue(any("citations" in x for x in validate_output(v,{1,2})))
 
