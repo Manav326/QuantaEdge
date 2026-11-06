@@ -11,17 +11,17 @@
     "assets_selected": 1422,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "2b71f040b18c02e306e02930",
-      "35f32b476dc5977bc161e8e8",
-      "f492c50e9c7d7ef8d140ae06",
-      "2e220d251d13a2e76c57e33b",
-      "d6a3b284f120b97594630433"
+      "cc14e6ada5d4c7a1a403f0d8",
+      "36ec2d1cc980e6810b5a1e89",
+      "b653604f8babfb042cc21c4d",
+      "0d804f179212ca0c08779b08",
+      "d962c7dc3a4e58b8811ccb19"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1417,
     "assets_remaining": 874,
     "assets_completion_percent": 61.9,
-    "assets_failed": 23,
+    "assets_failed": 25,
     "assets_skipped_from_checkpoint": 1417,
     "batch_limit": 5,
     "publication_allowed": false
@@ -45213,9 +45213,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42109374489",
+      "run_id": "42129304656",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -46382,9 +46382,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42109374489",
+      "run_id": "42129304656",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -47052,9 +47052,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "41981049757",
+      "run_id": "42129304656",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -47349,6 +47349,40 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "41418058542",
       "checkpointed_at": "2026-11-02T11:46:59Z"
+    },
+    {
+      "asset_id": "0d804f179212ca0c08779b08",
+      "asset_sha256": "73dc0d5b48dd08b25bdbc6212527ca6e95c880b8e3673f43c84412caea9f5e2e",
+      "page_text_context_sha256": "06b6f84bbb245de19b346383f3aa28e31650952d6d6c06f66b6cd0414a51f469",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 124,
+      "asset_path": "assets/73dc0d5b48dd08b25bdbc6212527ca6e95c880b8e3673f43c84412caea9f5e2e.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42129304656",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "d962c7dc3a4e58b8811ccb19",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "06b6f84bbb245de19b346383f3aa28e31650952d6d6c06f66b6cd0414a51f469",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 124,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42129304656",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
