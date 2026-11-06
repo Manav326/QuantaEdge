@@ -26,6 +26,7 @@ class PipelineTests(unittest.TestCase):
   sleep.assert_not_called()
  def test_git_checkpoint_retries_non_fast_forward_push_after_fetch_and_rebase(self):
   data_path=self.root/"data"/"book"/"checkpoint.json"
+  data_path.parent.mkdir(parents=True,exist_ok=True)
   w(data_path,{"checkpoint":1})
   pushes=[
    subprocess.CompletedProcess(["git","push","origin","HEAD:main"],1,"","! [rejected] HEAD -> main (fetch first)\\nerror: failed to push some refs"),
@@ -48,6 +49,7 @@ class PipelineTests(unittest.TestCase):
 
  def test_git_checkpoint_does_not_retry_non_retryable_push_failures(self):
   data_path=self.root/"data"/"book"/"checkpoint.json"
+  data_path.parent.mkdir(parents=True,exist_ok=True)
   w(data_path,{"checkpoint":1})
   commands=[]
   def fake_run(command,**kwargs):
