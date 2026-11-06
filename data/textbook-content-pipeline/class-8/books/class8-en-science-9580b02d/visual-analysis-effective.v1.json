@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4e23a67cee18d7d146ca96ece4e170a58a3b16266a2b1a4e4b9248206482b3bd",
+  "raw_analysis_sha256": "42a4261627c41375f3f505b045c8f35107563f89e9a717b8969b19a529571639",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1832,7 +1832,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:22:19Z",
+      "checkpointed_at": "2026-11-06T05:29:47Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -29466,7 +29466,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:22:53Z",
+      "checkpointed_at": "2026-11-06T05:30:21Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
@@ -58156,7 +58156,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:23:30Z",
+      "checkpointed_at": "2026-11-06T05:30:59Z",
       "effective_analysis": {
         "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
@@ -65890,20 +65890,20 @@
           "inverted paper plate",
           "folded chart paper sheet",
           "unfolded chart paper sheet",
-          "effort to lift",
+          "lifting effort",
           "area of covering sheet",
-          "force on covering sheet",
+          "force",
+          "pressure",
           "atmospheric pressure",
-          "pressure on paper sheet",
-          "pressure exerted by air",
-          "inflation of balloon",
-          "pressure in all directions",
-          "escaping air from balloon"
+          "inflation",
+          "pressure on walls",
+          "expansion",
+          "air escaping"
         ],
-        "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
+        "context_relation": "The image is a visual representation of an experiment involving an inverted paper plate and a folded chart paper sheet, demonstrating the concept of atmospheric pressure.",
         "limitations": [
-          "The image does not show the actual experiment being conducted.",
-          "The image does not show the results of the experiment."
+          "The image does not provide specific measurements or numerical data.",
+          "The image does not show the actual lifting effort or the area of the covering sheet."
         ]
       },
       "vision_input": {
@@ -65921,7 +65921,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:28:50Z",
+      "checkpointed_at": "2026-11-06T05:32:01Z",
       "effective_analysis": {
         "visual_summary": "A student is demonstrating an experiment involving an inverted paper plate and a folded chart paper sheet.",
         "visual_type": "diagram",
@@ -65940,20 +65940,20 @@
           "inverted paper plate",
           "folded chart paper sheet",
           "unfolded chart paper sheet",
-          "effort to lift",
+          "lifting effort",
           "area of covering sheet",
-          "force on covering sheet",
+          "force",
+          "pressure",
           "atmospheric pressure",
-          "pressure on paper sheet",
-          "pressure exerted by air",
-          "inflation of balloon",
-          "pressure in all directions",
-          "escaping air from balloon"
+          "inflation",
+          "pressure on walls",
+          "expansion",
+          "air escaping"
         ],
-        "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
+        "context_relation": "The image is a visual representation of an experiment involving an inverted paper plate and a folded chart paper sheet, demonstrating the concept of atmospheric pressure.",
         "limitations": [
-          "The image does not show the actual experiment being conducted.",
-          "The image does not show the results of the experiment."
+          "The image does not provide specific measurements or numerical data.",
+          "The image does not show the actual lifting effort or the area of the covering sheet."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -66238,9 +66238,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129304656",
+      "run_id": "42165203770",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,

@@ -49699,20 +49699,20 @@
           "inverted paper plate",
           "folded chart paper sheet",
           "unfolded chart paper sheet",
-          "effort to lift",
+          "lifting effort",
           "area of covering sheet",
-          "force on covering sheet",
+          "force",
+          "pressure",
           "atmospheric pressure",
-          "pressure on paper sheet",
-          "pressure exerted by air",
-          "inflation of balloon",
-          "pressure in all directions",
-          "escaping air from balloon"
+          "inflation",
+          "pressure on walls",
+          "expansion",
+          "air escaping"
         ],
-        "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
+        "context_relation": "The image is a visual representation of an experiment involving an inverted paper plate and a folded chart paper sheet, demonstrating the concept of atmospheric pressure.",
         "limitations": [
-          "The image does not show the actual experiment being conducted.",
-          "The image does not show the results of the experiment."
+          "The image does not provide specific measurements or numerical data.",
+          "The image does not show the actual lifting effort or the area of the covering sheet."
         ]
       },
       "chapter_id": null,
