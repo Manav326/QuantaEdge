@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 3364,
-    "successful_visual_analyses": 3304,
+    "successful_visual_analyses": 3308,
     "missing_visual_analyses": 4124,
-    "failed_visual_analyses": 60,
+    "failed_visual_analyses": 56,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4184,
+    "unresolved_count": 4180,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -16554,9 +16554,18 @@
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a simple black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment of support and contributions from various individuals and departments",
+        "limitations": [
+          "No specific content or information is visible on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21527,9 +21536,40 @@
       "asset_path": "page-0022.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of patterns in nature.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
+          "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
+          "But let's get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
+        ],
+        "concepts": [
+          "exploration",
+          "science",
+          "curiosity",
+          "questions",
+          "unknown",
+          "process",
+          "environment",
+          "responsibility",
+          "human activities",
+          "natural world",
+          "society",
+          "environmental challenges",
+          "sustainability",
+          "properties of materials",
+          "scientific ideas",
+          "discoveries",
+          "questions"
+        ],
+        "context_relation": "The text discusses the nature of science and its exploration of patterns in nature, emphasizing the importance of curiosity, asking questions, and understanding the interconnectedness of scientific ideas.",
+        "limitations": [
+          "The text does not provide specific examples or illustrations to support the points made."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24884,9 +24924,32 @@
       "asset_path": "page-0025.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
+          "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
+          "1.1 Happy Exploring!",
+          "Activity 1.1: Question the Answer",
+          "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "eclipses",
+          "Earth's rotation",
+          "Moon's orbit",
+          "day and night",
+          "scientific thinking"
+        ],
+        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages scientific thinking and exploration.",
+        "limitations": [
+          "The page does not provide specific examples or experiments to illustrate the concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56280,9 +56343,43 @@
       "asset_path": "page-0044.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page about electricity and its uses, including a diagram of a warning sign.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Caution — The danger signs on electric poles and other appliances warn people that electricity can be dangerous if not carefully handled. Never ever perform experiments with power supply at your home or school. Even electricity from portable generators can be dangerous. Use only batteries or cells, ",
+          "3.1 A Torchlight",
+          "You might have used a torchlight, also called a torch or a flashlight.",
+          "Activity 3.1: Let us explore",
+          "Take a torchlight similar to the one shown in Fig. 3.1.",
+          "Observe it carefully. Do you notice a lamp? And a switch?",
+          "Slide its switch and observe. Does the torch lamp glow?",
+          "Now slide the switch back to its original position and observe the torch lamp.",
+          "You might have noticed that in one position of the switch, the torch lamp glows and in the other position the lamp does not glow.",
+          "Now, open the torchlight. What do you find inside?",
+          "Inside the torchlight, you may find two or more electric cells.",
+          "Why does the torch lamp glow in one position of its switch?"
+        ],
+        "concepts": [
+          "electricity",
+          "uses of electricity",
+          "solar panels",
+          "wind energy",
+          "falling water",
+          "natural gas",
+          "coal",
+          "electricity generation",
+          "electricity usage",
+          "electricity safety",
+          "electricity experiments"
+        ],
+        "context_relation": "The page discusses the uses and safety of electricity, focusing on a torchlight as an example.",
+        "limitations": [
+          "The page does not provide specific solutions or answers to the questions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
