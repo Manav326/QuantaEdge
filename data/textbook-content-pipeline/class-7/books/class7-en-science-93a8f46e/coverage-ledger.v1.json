@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 3364,
-    "successful_visual_analyses": 3321,
+    "successful_visual_analyses": 3322,
     "missing_visual_analyses": 4124,
-    "failed_visual_analyses": 43,
+    "failed_visual_analyses": 42,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4167,
+    "unresolved_count": 4166,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -95578,9 +95578,33 @@
       "asset_path": "assets/9da1131a9fc292d3136221b7019504c8f518903a373f291928e0f50e571ec04e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a fork, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable",
+          "to"
+        ],
+        "concepts": [
+          "Effect of Air and Water on Other Metals",
+          "Demonstration Activity",
+          "Non-metals",
+          "Teacher Demonstration",
+          "Caution"
+        ],
+        "context_relation": "The image is a close-up of a hand holding a fork, with a blurred background. The visible text is related to a physics or chemistry activity involving metals and their interaction with air and water.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the demonstration."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -114312,15 +114336,15 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
-          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
-          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon. The component of air that supports combustion is oxygen. This can be confirmed by the presence of carbon dioxide in the glass tumbler inverted on the candle. How can you test the",
-          "You can test the carbon dioxide gas by adding a small amount of lime water in the petri dish. You will notice that it turns milky. This carbon dioxide was formed by the carbon from the wax and the oxygen from the air. In other words, oxygen is required for combustion.",
-          "SCIENCE AND SOCIETY\nIf a person's clothes catch fire, what is the best way to extinguish the fire?\nWrap a blanket or cloth around the person. This cuts off the supply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put out a fire, as these can melt ",
-          "FASCINATING FACTS\nNature's wonders: You might have seen some insects emitting light in a garden or a field in late evenings. These insects are called fireflies, and their light is produced by a chemical change. This type of light production (without heat) in living organisms is called bioluminescenc",
-          "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen are necessary for combustion. We also know that paper is a combustible substance, but we can keep it in the air for any length of time without it catching fire. What else is needed to start combustio"
+          "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?",
+          "Since the candle covered by the glass tumbler does not have\na continuous supply of air, the flame gets extinguished soon.\nThe component of air that supports combustion is oxygen. This\ncan be confirmed by the presence of carbon dioxide in the glass\ntumbler inverted on the candle. How can you test the",
+          "You can test the carbon dioxide gas by adding a small amount\nof lime water in the petri dish. You will notice that it turns milky.\nThis carbon dioxide was formed by the carbon from the wax and\nthe oxygen from the air. In other words, oxygen is required for\ncombustion.",
+          "SCIENCE AND SOCIETY\nIf a person's clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt ",
+          "FASCINATING FACTS\nNature's wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
+          "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
           "combustion",
@@ -114330,7 +114354,7 @@
           "bioluminescence",
           "combustible substances"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the role of oxygen in combustion.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
