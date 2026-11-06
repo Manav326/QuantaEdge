@@ -5,7 +5,7 @@ import argparse, hashlib, json, re, subprocess, sys, time, urllib.error, urllib.
 from pathlib import Path
 from typing import Any
 
-PROMPT_VERSION = "qe-l6-l8-ollama-v7-exact-visual-asset-crosswalk"
+PROMPT_VERSION = "qe-l6-l8-ollama-v8-explicit-bilingual-object-contract"
 LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-contextual-questions-runtime-schema.v5"
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
@@ -582,7 +582,14 @@ Supported types and purpose:
 - scenario_based: apply the concept to a distinct realistic scenario with a choice response.
 The only eligible image candidates for this excerpt are: {visual_text}. Do not use image_observation if no relevant candidate exists in this allowlist. Never invent visual IDs. A visual candidate is still unapproved; all visual-dependent output remains non-publishable and blocked from student rendering.
 Every generated question must assess a stated learning objective, cite one or more exact allowed source PDF pages {allowed}, remain within the mapped chapter, and add information not already asked redundantly by another question. Source sections, tables, activities and examples may be accounted for through explanation or worked example; do not force every item to become a question.
-Keep all learner-facing content semantically aligned in natural English and Hindi. Use one concise bilingual learning objective, at most two concepts per locale, concise explanations and one worked example when supported. Create exactly two tutor examples: one English and one Hindi; each must cite allowed pages.
+Keep all learner-facing content semantically aligned in natural English and natural Hindi. Use exactly one concise bilingual learning objective, at most two distinct concepts per locale, one short explanation of 1–2 paragraphs per locale, and one worked example of 1–2 steps/paragraphs per locale when supported. Usually create 1–2 distinct questions; create a third only when it tests a genuinely different source-supported objective. Avoid long lists and repeated wording. Every Hindi field must be an actual Hindi rendering, not copied English, invented transliteration, or a generic placeholder. Never repeat one generic Hindi phrase across concepts or paragraphs to fill space. Preserve correct scientific terms (for example, Celsius, Fahrenheit, kelvin) within grammatical Hindi sentences.
+
+IMPORTANT: "worked_example_by_locale" and "tutor_examples" are two different fields and MUST NOT be mixed:
+- worked_example_by_locale.en and .hi are each an object with exactly this shape: {"heading":"Convert 25 °C to kelvin","paragraphs":["Add 273.15 to the Celsius value.","25 + 273.15 = 298.15 K."]}. The Hindi object has the same heading + paragraphs shape in natural Hindi. Do NOT put student_message, assistant_message, language, or source_pages inside worked_example_by_locale.
+- tutor_examples is a separate array containing exactly two dialogue objects: one {"language":"en","student_message":"...","assistant_message":"...","source_pages":[PAGE]} and one corresponding Hindi object with "language":"hi". Do NOT put heading or paragraphs in tutor_examples.
+- For every choice question, every option id MUST be a JSON string such as "a" or "b" (never a number), and correct_answer_ids MUST contain those exact string IDs. Include 2–4 options, all bilingual. Check that every correct answer actually matches the explanation. For arithmetic, calculate each result independently before writing options and feedback.
+- The worked example must use the schema above; do not substitute a chat transcript or question object.
+- Keep each explanation locale to at most 2 short paragraphs, each worked example locale to at most 2 short steps/paragraphs, each recap to one sentence, and each tutor dialogue to one concise exchange.
 Return JSON only:
 {{
   "chapter_number": 1,
@@ -672,6 +679,16 @@ def _bilingual_items(items: Any) -> bool:
         seen.add(item["id"])
     return True
 
+def _has_repeated_fill_content(values: Any) -> bool:
+    """Detect repeated filler strings used to pad Hindi concepts or paragraphs."""
+    if not isinstance(values, list) or len(values) < 3:
+        return False
+    normalized = [" ".join(value.split()).strip().casefold() for value in values if isinstance(value, str) and value.strip()]
+    if len(normalized) < 3:
+        return False
+    return len(set(normalized)) <= max(1, len(normalized) // 2)
+
+
 def validate_output(v: Any, allowed: set[int], visuals: list[dict[str,Any]]|None=None) -> list[str]:
     errors=[]
     if not isinstance(v,dict): return ["not an object"]
@@ -759,6 +776,18 @@ def validate_output(v: Any, allowed: set[int], visuals: list[dict[str,Any]]|None
             found.add(e["language"]); refs=e.get("source_pages")
             if not isinstance(refs,list) or not refs or any(not isinstance(p,int) or isinstance(p,bool) or p not in allowed for p in refs): errors.append(f"tutor example {i} page citations invalid")
         if found!={"en","hi"}: errors.append("tutor examples must cover English and Hindi")
+
+    # Reject obvious low-quality placeholder repetition before a draft can be
+    # counted as a complete L6-L8 segment. Human review remains mandatory.
+    hi_concepts = concepts.get("hi") if isinstance(concepts, dict) else None
+    if _has_repeated_fill_content(hi_concepts):
+        errors.append("Hindi concepts contain repeated filler instead of distinct concepts")
+    for field in ("explanation_by_locale", "worked_example_by_locale"):
+        locale_block = v.get(field)
+        hi_block = locale_block.get("hi") if isinstance(locale_block, dict) else None
+        paragraphs = hi_block.get("paragraphs") if isinstance(hi_block, dict) else None
+        if _has_repeated_fill_content(paragraphs):
+            errors.append(f"{field}.hi contains repeated filler paragraphs")
     return errors
 
 def tutor_citations_valid(value: Any, allowed_pages: set[int]) -> bool:
