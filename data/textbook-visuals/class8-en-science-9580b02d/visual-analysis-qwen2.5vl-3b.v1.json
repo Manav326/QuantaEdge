@@ -15,13 +15,13 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "1851a22784c9105601dfe039",
-      "2e220d251d13a2e76c57e33b"
+      "ed47972eb74639ec9bc709d3"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1423,
-    "assets_remaining": 868,
-    "assets_completion_percent": 62.1,
-    "assets_failed": 20,
+    "assets_analyzed": 1424,
+    "assets_remaining": 867,
+    "assets_completion_percent": 62.2,
+    "assets_failed": 19,
     "assets_skipped_from_checkpoint": 1423,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1230,7 +1230,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:29:47Z"
+      "checkpointed_at": "2026-11-06T05:35:55Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20248,7 +20248,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:30:21Z"
+      "checkpointed_at": "2026-11-06T05:36:29Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38629,7 +38629,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:30:59Z"
+      "checkpointed_at": "2026-11-06T05:37:06Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43626,7 +43626,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:32:01Z"
+      "checkpointed_at": "2026-11-06T05:38:09Z"
     },
     {
       "asset_id": "46c9d5f38c6da536fdee0c3d",
@@ -44459,19 +44459,50 @@
     {
       "asset_id": "ed47972eb74639ec9bc709d3",
       "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "page_text_context_sha256": "23a534507295986cb38f896a36acbcd95ccd1ae45a82b50233bf7077ecb5a51a",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 110,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23a534507295986cb38f896a36acbcd95ccd1ae45a82b50233bf7077ecb5a51a",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129304656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An explanation of how high-speed winds create low-pressure areas over houses, leading to potential roof damage.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th",
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th"
+        ],
+        "concepts": [
+          "high-speed winds",
+          "low-pressure areas",
+          "air pressure",
+          "roof damage"
+        ],
+        "context_relation": "Explanation of roof damage due to high-speed winds",
+        "limitations": [
+          "The image does not show any visual representation of the described phenomenon.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1894,
+        "source_height": 1894,
+        "inference_width": 960,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 5684,
+        "sha256": "7d67c032e97924cc0afddf3b630d861987a378106390d2df45aae0b54c8d955e"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42165203770",
+      "checkpointed_at": "2026-11-06T05:40:03Z"
     },
     {
       "asset_id": "76280016fe1a2acc0892509e",
