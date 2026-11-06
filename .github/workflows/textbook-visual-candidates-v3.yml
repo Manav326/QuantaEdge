@@ -130,6 +130,11 @@ jobs:
     needs: [plan]
     if: needs.plan.result == 'success' && needs.plan.outputs.matrix != '{"include":[]}'
     name: Prepare full bilingual Class ${{ matrix.class_no }} candidate set - ${{ matrix.book_slug }}
+    concurrency:
+      # A second guard prevents the same bilingual pair from running twice
+      # across older workflow invocations with different workflow-level locks.
+      group: textbook-layer45-pair-${{ matrix.book_slug }}
+      cancel-in-progress: false
     outputs:
       yielded: ${{ steps.layer45_run.outputs.yielded || 'false' }}
     strategy:
