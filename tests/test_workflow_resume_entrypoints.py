@@ -10,14 +10,15 @@ def read(name: str) -> str:
 
 
 class WorkflowResumeEntrypointTests(unittest.TestCase):
-    def test_layer45_serializes_workflow_runs_across_all_entrypoints_without_cancelling_active_work(self):
+    def test_layer45_serializes_per_class_and_per_pair_without_dropping_other_classes(self):
         workflow = read("textbook-visual-candidates-v3.yml")
-        self.assertIn("group: textbook-visual-candidates-v3-main", workflow)
+        self.assertIn("group: textbook-visual-candidates-v3-${{ inputs.class_no", workflow)
+        self.assertIn("controller must be able to queue Classes 6 and 8 while Class 7 is running", workflow)
+        self.assertIn("group: textbook-layer45-pair-${{ matrix.book_slug }}", workflow)
+        self.assertIn("group: textbook-layer45-shared-visual-catalog-index", workflow)
+        self.assertIn("group: textbook-layer45-completion-markers", workflow)
         self.assertIn("cancel-in-progress: false", workflow)
         self.assertIn("max-parallel: 16", workflow)
-        self.assertIn("group: textbook-layer45-pair-${{ matrix.book_slug }}", workflow)
-        self.assertIn("A second guard prevents the same bilingual pair", workflow)
-        self.assertNotIn("textbook-visual-candidates-v3-${{", workflow)
 
     def test_layer45_pair_workers_do_not_write_the_shared_visual_catalog_index(self):
         workflow = read("textbook-visual-candidates-v3.yml")
