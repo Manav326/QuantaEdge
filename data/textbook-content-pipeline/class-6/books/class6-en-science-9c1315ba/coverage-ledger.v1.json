@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
     "raw_analysis_result_rows": 1655,
-    "successful_visual_analyses": 1613,
+    "successful_visual_analyses": 1614,
     "missing_visual_analyses": 423,
-    "failed_visual_analyses": 42,
+    "failed_visual_analyses": 41,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 465,
+    "unresolved_count": 464,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8215,10 +8215,10 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Foreword of a National Education Policy document.",
+        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -8233,13 +8233,18 @@
           "Analytical, descriptive, and narrative capabilities",
           "Holistic development",
           "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
           "Classroom arrangement",
           "Teacher preparation",
-          "Curricular Area Groups"
+          "Conceptual connections",
+          "Direct instruction",
+          "Exploration and inquiry"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its components, including the National Curriculum Framework for School Education (NCF-SE) 2023, and the role of textbooks in education.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of holistic development, balanced instruction, and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the implementation strategies."
+          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the specific subjects covered in the curriculum.",
+          "The foreword does not mention the role of the National Council of Educational Research and Training in providing textbooks."
         ]
       },
       "chapter_id": null,
@@ -27227,8 +27232,8 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgements page for a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -27238,29 +27243,23 @@
         ],
         "concepts": [
           "Acknowledgements",
+          "Textbook",
           "Photographs",
           "Illustrations",
-          "Planetarium",
           "Academic support",
           "Administrative support",
           "Consultant",
           "Programme Office",
-          "Senior Consultant",
-          "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Research Associates",
-          "Course Administrator",
-          "Junior Project Fellows",
-          "Freelance Editor",
-          "Proofreader",
+          "NCERT",
           "DTP Cell",
           "Publication Division",
-          "Contractual"
+          "Freelance Editor",
+          "Proofreader"
         ],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "Acknowledgements for textbook",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "chapter_id": null,
@@ -29115,9 +29114,37 @@
       "asset_path": "page-0023.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook discussing scientific inquiry and the scientific method.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "We will have an almost unending list of questions about everything on Earth as we further explore this book. But why limit our questions to the Earth alone? We can ask questions on things beyond—the Sun, the Moon, and the millions of stars that shine in the sky!",
+          "Whether you are learning about the structure of a leaf, discovering how things move, or separating the skin of a peanut seed, we hope each chapter of this book will ignite your spirit of inquiry. And hopefully you will have lots of questions on your mind!",
+          "Even though you may have not realised, you have already been finding answers to many of your questions. Suppose your pen stops writing. What would you do? You would ask yourself the question, \"Why did my pen stop writing?\" You might guess that the ink finished.",
+          "You would then test this guess by opening the pen and checking the ink refill. If it is empty, you would know that your guess was correct. But suppose you found that the ink was not finished. Now what would you do? You would make another guess—perhaps the ink might have dried up. To test if this gue",
+          "This is exactly how Science works! The way you tried to find out why your pen stopped writing is an example of the scientific method.",
+          "Activity 1.1: Let us think and write",
+          "Write about a similar problem that you tried to solve.",
+          "What steps did you take?",
+          "Science is not just about memorising facts and figures or doing experiments. It is about following a step-by-step process that helps us find answers to our questions. So what are the steps that we can follow?"
+        ],
+        "concepts": [
+          "scientific inquiry",
+          "scientific method",
+          "exploring beyond Earth",
+          "questioning and exploring",
+          "testing hypotheses",
+          "step-by-step process"
+        ],
+        "context_relation": "The page discusses the scientific method and encourages students to think critically about their own experiences with scientific inquiry.",
+        "limitations": [
+          "The page does not provide specific examples or exercises for students to follow.",
+          "The page assumes that students have some background knowledge about scientific inquiry.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
