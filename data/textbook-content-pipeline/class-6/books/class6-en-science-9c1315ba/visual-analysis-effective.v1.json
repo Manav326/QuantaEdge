@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a4c8ac96ac69ccb7bb30bacd1243ab8b3a20dd1cebd286161d78b895713da652",
+  "raw_analysis_sha256": "80f0c9f8516d622aa226e6169e44160887f7ff23a280df68be88bc5256dc0c26",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -650,7 +650,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:19:50Z",
+      "checkpointed_at": "2026-11-06T01:23:13Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
@@ -29468,7 +29468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:20:32Z",
+      "checkpointed_at": "2026-11-06T01:23:53Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "page_with_multiple_visuals",
@@ -35145,7 +35145,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:21:05Z",
+      "checkpointed_at": "2026-11-06T01:24:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -57627,7 +57627,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:21:34Z",
+      "checkpointed_at": "2026-11-06T01:24:55Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -60831,23 +60831,23 @@
           "Deepa looked around her in the bus and noticed that all\nthe passengers were seated. She looked around again after\na minute and found them still occupying their seats. She\nwondered, ‘Are they moving?’ She concluded that the position\nof the passengers was not changing with time. Therefore, they\nwere c",
           "The reference point is important in deciding whether an object\nis at rest or in motion. If Deepa considered herself (or\nthe bus) as the refer",
           "Suppose you are travelling on a ship which is moving at a constant speed along a straight line on a calm sea. Suppose there is no window on the ship. Is there any way that you can\ndetermine whether the ship is moving or is\nstationary?",
-          "Activity 5.3: Let us explore\n\nTake an eraser and drop it from a certain height.\nObserve its motion.\nDoes it move along a straight line? When an orange drops\nfrom the tree, does it move in a straight line? Have you seen\nthe Republic Day parade? Recall the march-past of students\nduring the parade. Do ",
-          "More to know!",
-          "Measurement of Length and Motion"
+          "Activity 5.3: Let us explore\n    * Take an eraser and drop it from a certain height.\n    * Observe its motion.\n    * Does it move along a straight line? When an orange drops\n    from the tree, does it move in a straight line? Have you seen\n    the Republic Day parade? Recall the march-past of studen",
+          "Measurement of Length and Motion",
+          "Reprint 2026-27"
         ],
         "concepts": [
-          "motion",
-          "reference point",
-          "rest",
-          "motion",
-          "constant speed",
-          "straight line",
-          "certain height",
-          "straight line path"
+          "Motion",
+          "Reference point",
+          "Observation",
+          "Constant speed",
+          "Straight line",
+          "Stationary",
+          "Observation",
+          "Measurement"
         ],
         "context_relation": "The page discusses the concept of motion and reference points, using Deepa's observations in a bus as an example.",
         "limitations": [
-          "The text does not provide a solution to the thought-provoking question about determining motion on a ship."
+          "The page does not provide a solution to the thought-provoking question about determining motion on a ship."
         ]
       },
       "vision_input": {
@@ -60865,7 +60865,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:22:31Z",
+      "checkpointed_at": "2026-11-06T01:25:24Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing motion and reference points, with a focus on Deepa's observations in a bus and a thought-provoking question about determining motion on a ship.",
         "visual_type": "page_with_multiple_visuals",
@@ -60873,23 +60873,23 @@
           "Deepa looked around her in the bus and noticed that all\nthe passengers were seated. She looked around again after\na minute and found them still occupying their seats. She\nwondered, ‘Are they moving?’ She concluded that the position\nof the passengers was not changing with time. Therefore, they\nwere c",
           "The reference point is important in deciding whether an object\nis at rest or in motion. If Deepa considered herself (or\nthe bus) as the refer",
           "Suppose you are travelling on a ship which is moving at a constant speed along a straight line on a calm sea. Suppose there is no window on the ship. Is there any way that you can\ndetermine whether the ship is moving or is\nstationary?",
-          "Activity 5.3: Let us explore\n\nTake an eraser and drop it from a certain height.\nObserve its motion.\nDoes it move along a straight line? When an orange drops\nfrom the tree, does it move in a straight line? Have you seen\nthe Republic Day parade? Recall the march-past of students\nduring the parade. Do ",
-          "More to know!",
-          "Measurement of Length and Motion"
+          "Activity 5.3: Let us explore\n    * Take an eraser and drop it from a certain height.\n    * Observe its motion.\n    * Does it move along a straight line? When an orange drops\n    from the tree, does it move in a straight line? Have you seen\n    the Republic Day parade? Recall the march-past of studen",
+          "Measurement of Length and Motion",
+          "Reprint 2026-27"
         ],
         "concepts": [
-          "motion",
-          "reference point",
-          "rest",
-          "motion",
-          "constant speed",
-          "straight line",
-          "certain height",
-          "straight line path"
+          "Motion",
+          "Reference point",
+          "Observation",
+          "Constant speed",
+          "Straight line",
+          "Stationary",
+          "Observation",
+          "Measurement"
         ],
         "context_relation": "The page discusses the concept of motion and reference points, using Deepa's observations in a bus as an example.",
         "limitations": [
-          "The text does not provide a solution to the thought-provoking question about determining motion on a ship."
+          "The page does not provide a solution to the thought-provoking question about determining motion on a ship."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
