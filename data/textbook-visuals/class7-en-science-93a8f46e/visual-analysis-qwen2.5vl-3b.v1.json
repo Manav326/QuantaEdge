@@ -14,8 +14,8 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "b6d59640d4c635a0bc9438c9",
-      "b8b16cd29915e5e29cf6e5f0"
+      "b655021abbc6938bb1728fb8",
+      "cb53f25d2aadb5c770561172"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3319,
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T05:29:45Z"
+      "checkpointed_at": "2026-11-06T05:38:44Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T05:30:25Z"
+      "checkpointed_at": "2026-11-06T05:39:24Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -105473,7 +105473,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T05:31:20Z"
+      "checkpointed_at": "2026-11-06T05:40:20Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -122466,9 +122466,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42161055386",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -122483,9 +122483,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42161055386",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
