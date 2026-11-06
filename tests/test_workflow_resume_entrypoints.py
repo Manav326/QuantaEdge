@@ -35,11 +35,13 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("update_visual_catalog_index.py", finalize_job)
         self.assertIn('git_checkpoint(', finalize_job)
         self.assertIn("test_textbook_visual_end_to_end_contract.py", finalize_job)
+        self.assertIn("inputs.analysis_mode == 'resume_layers_4_5'", finalize_job)
+        self.assertIn("[resume-visual-layers-4-5-classes-6-8]", finalize_job)
         class_marker_start = workflow.index("  record-completed-class-markers:")
         class_marker_end = workflow.index("  wake-resume-coordinator:", class_marker_start)
         class_marker_job = workflow[class_marker_start:class_marker_end]
         self.assertIn("finalize_visual_catalog_index", class_marker_job)
-        self.assertIn("needs.finalize_visual_catalog_index.result == 'success'", class_marker_job)
+        self.assertIn("needs.finalize_visual_catalog_index.result == 'success' || needs.finalize_visual_catalog_index.result == 'skipped'", class_marker_job)
 
     def test_marked_push_can_reextract_one_class_without_rebuilding_the_other_class(self):
         workflow = read("textbook-extraction-pilot.yml")
