@@ -104,6 +104,7 @@ services:
       args:
         NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN: ${NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN:-http://localhost:3001}
     environment:
+      HOSTNAME: "0.0.0.0"
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${WEB_BIND_ADDRESS:-127.0.0.1}:${WEB_PORT:-13004}:3000"
@@ -118,6 +119,7 @@ services:
     build:
       context: ./apps/admin
     environment:
+      HOSTNAME: "0.0.0.0"
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${ADMIN_BIND_ADDRESS:-127.0.0.1}:${ADMIN_PORT:-3001}:3000"
@@ -134,6 +136,7 @@ services:
       args:
         NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN: ${NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN:-http://localhost:3001}
     environment:
+      HOSTNAME: "0.0.0.0"
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${PEOPLE_BIND_ADDRESS:-127.0.0.1}:${PEOPLE_PORT:-3002}:3000"
