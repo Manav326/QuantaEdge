@@ -152,7 +152,7 @@ class LayersTests(unittest.TestCase):
     def test_checkpoint_git_rejects_paths_outside_data(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)
-            with self.assertRaisesRegex(ValueError,"outside repository"):
+            with self.assertRaisesRegex(ValueError,"may only be committed under data/"):
                 checkpoint_git(root,[root/"scripts"/"unsafe.py"],"must not commit")
 
     def test_canonical_layer5_index_disambiguates_legacy_duplicate_ledgers(self):
