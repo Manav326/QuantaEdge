@@ -726,7 +726,17 @@ jobs:
     if: >-
       needs.plan.result == 'success' &&
       needs.prepare.result == 'success' &&
-      needs.plan.outputs.matrix != '{"include":[]}'
+      needs.plan.outputs.matrix != '{"include":[]}' &&
+      !(
+        ((github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call') && inputs.analysis_mode == 'resume_layers_4_5') ||
+        (github.event_name == 'push' && (
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')
+        ))
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -773,7 +783,7 @@ jobs:
       always() &&
       needs.plan.result == 'success' &&
       needs.prepare.result != 'skipped' &&
-      needs.finalize_visual_catalog_index.result == 'success' &&
+      (needs.finalize_visual_catalog_index.result == 'success' || needs.finalize_visual_catalog_index.result == 'skipped') &&
       (
         (github.event_name == 'push' && !contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]') && (
           contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') ||
