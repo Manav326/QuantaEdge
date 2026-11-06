@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3313,
+    "assets_selected": 3315,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "25477d9d165b80a701e0e7dd",
-      "5ee56b21f0830e88558f6ff0",
-      "4b1298747dc1ec978a226ae5"
+      "4b1298747dc1ec978a226ae5",
+      "647c2218dab5482dd1c1758e",
+      "0e143e54e2f709b8a4e5968d"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3310,
-    "assets_remaining": 4178,
+    "assets_analyzed": 3311,
+    "assets_remaining": 4177,
     "assets_completion_percent": 44.2,
-    "assets_failed": 51,
-    "assets_skipped_from_checkpoint": 3308,
+    "assets_failed": 50,
+    "assets_skipped_from_checkpoint": 3310,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T01:13:46Z"
+      "checkpointed_at": "2026-11-06T01:19:42Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13530,7 +13530,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T01:14:16Z"
+      "checkpointed_at": "2026-11-06T01:20:12Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79117,7 +79117,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of different materials and their impact on civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -79131,25 +79131,22 @@
           "You might have seen wires of metals like copper or aluminium in electrical fittings. Some ornaments, like bangles, necklaces, earrings, etc., are also made from metal wires. Metal wires play important functions in a variety of stringed musical instruments, such as veena, sitar, violin, and guitar.",
           "This property of materials by which they can be drawn into wires is called ductility.",
           "This property of ductility is mainly possessed by metals.",
-          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!",
-          "The ductile nature of metals enables for the creation of this tea strainer with metal wire."
+          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
         ],
         "concepts": [
+          "brittle",
+          "malleable",
           "ductility",
-          "brittleness",
-          "malleability",
-          "Harappans",
-          "iron",
           "copper",
           "gold",
-          "metallic properties",
-          "cultural impact of metals",
-          "cultural evolution",
-          "historical significance of metals"
+          "iron",
+          "Harappans",
+          "agricultural tools",
+          "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of India's civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
         "limitations": [
-          "The text does not provide specific examples or evidence for the claims made."
+          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
         ]
       },
       "vision_input": {
@@ -79167,7 +79164,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T01:18:51Z"
+      "checkpointed_at": "2026-11-06T01:20:54Z"
     },
     {
       "asset_id": "42e2bad6ce513928f9ecea9b",
@@ -82769,19 +82766,93 @@
     {
       "asset_id": "647c2218dab5482dd1c1758e",
       "asset_sha256": "45edabb2714e7f95fb97c158abb162630c6e9bd186be9c2d5dc88943361663a6",
-      "page_text_context_sha256": "e9258aeb99f4225e1c253ba01b279591c6e7575591ca7471e78d2c0397257e4b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 67,
       "asset_path": "page-0067.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e9258aeb99f4225e1c253ba01b279591c6e7575591ca7471e78d2c0397257e4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook discussing heat transfer and electrical circuits.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "47",
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along",
+          "the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch",
+          "than the wooden spoon. Even though both spoons are immersed",
+          "in the water of the same temperature and for the same time. This",
+          "shows that the heat transfers through the metal spoon, making it",
+          "hotter. In contrast, the wooden spoon transfers heat poorly.",
+          "In such cases, the transfer of heat from one point to another",
+          "of a material is called conduction, and materials that transfer",
+          "heat are called conductors.",
+          "Based on the observations, one can say that metals are good",
+          "conductors of heat, whereas wood is a poor conductor of heat.",
+          "Now, we can understand why mostly metal vessels are used",
+          "for cooking, and their handles are made with wood or other",
+          "materials that do not conduct heat. You will learn more about",
+          "this in the chapter 'Heat Transfer in Nature'.",
+          "4.1.5 Conduction of electricity",
+          "Have you ever seen an electrician using a screwdriver? What",
+          "type of material is used for making its handle? You may have",
+          "also noticed the electrician wearing rubber gloves and shoes",
+          "while working. What can be the reason for this?",
+          "Activity 4.4: Let us design and create",
+          "Design an electric circuit, like the 'tester' circuit in the chapter",
+          "Electricity: Circuits and their Components'. Repeat the same",
+          "activity using the materials listed below and record your",
+          "observations in Table 4.2.",
+          "You may collect a few objects, such as a piece of aluminium"
+        ],
+        "concepts": [
+          "heat transfer",
+          "conductors",
+          "electricity",
+          "circuits",
+          "materials",
+          "rubber gloves",
+          "heat conduction",
+          "electrician",
+          "rubber gloves and shoes",
+          "electric circuit",
+          "aluminium foil",
+          "iron nail",
+          "sulfur",
+          "copper wire",
+          "coal",
+          "dry wood",
+          "stone",
+          "eraser",
+          "nylon rope"
+        ],
+        "context_relation": "heat transfer and electrical circuits",
+        "limitations": [
+          "The text does not provide specific solutions or answers to the questions.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 127277,
+        "sha256": "45b82beb75df4f2eaca7833efe99365f8ee6576df505123515705b07777448db"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42137960305",
+      "checkpointed_at": "2026-11-06T01:22:39Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -85715,9 +85786,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42137960305",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
