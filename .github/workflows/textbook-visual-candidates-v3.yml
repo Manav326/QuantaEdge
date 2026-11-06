@@ -52,9 +52,10 @@ permissions:
   packages: write
 
 concurrency:
-  # A single workflow-level lock covers manual, all-class, and automatic resume
-  # entrypoints. Different bilingual pair jobs inside this one run stay parallel.
-  group: textbook-visual-candidates-v3-main
+  # Serialize duplicate workflow entrypoints per class, not globally. The recovery
+  # controller must be able to queue Classes 6 and 8 while Class 7 is running.
+  # Shared catalog and completion metadata have their own single-writer job locks.
+  group: textbook-visual-candidates-v3-${{ inputs.class_no || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && '6') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && '7') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') && '8') || (contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') && '7') || (contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]') && '8') || ((contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')) && 'all') || 'unscoped' }}
   cancel-in-progress: false
 jobs:
   plan:
@@ -721,6 +722,9 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   finalize_visual_catalog_index:
+    concurrency:
+      group: textbook-layer45-shared-visual-catalog-index
+      cancel-in-progress: false
     name: Rebuild the shared visual catalog index after all book-pair workers
     needs: [plan, prepare]
     if: >-
@@ -777,6 +781,9 @@ jobs:
           PY
 
   record-completed-class-markers:
+    concurrency:
+      group: textbook-layer45-completion-markers
+      cancel-in-progress: false
     name: Verify all whole-book Layer 5 ledgers and record class completion
     needs: [plan, prepare, finalize_visual_catalog_index]
     if: >-
