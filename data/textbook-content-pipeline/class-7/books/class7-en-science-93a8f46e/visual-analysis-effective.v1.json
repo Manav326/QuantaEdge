@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b81127d3969ecd6f6443038839af51d3d037ea5b96f6921348213ce06efcdbe0",
+  "raw_analysis_sha256": "32c6916cfb7579a1f4bb43163762b258036a65354b30d1f823903fad1d4a65d7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15061,7 +15061,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of patterns in nature.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15087,9 +15087,9 @@
           "discoveries",
           "questions"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of patterns in nature, emphasizing the importance of curiosity, asking questions, and understanding the interconnectedness of scientific ideas.",
+        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and responsibility.",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the points made."
+          "The text does not provide specific examples or illustrations."
         ]
       },
       "vision_input": {
@@ -15107,9 +15107,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T00:46:30Z",
+      "checkpointed_at": "2026-11-06T00:52:30Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of patterns in nature.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15135,9 +15135,9 @@
           "discoveries",
           "questions"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of patterns in nature, emphasizing the importance of curiosity, asking questions, and understanding the interconnectedness of scientific ideas.",
+        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and responsibility.",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the points made."
+          "The text does not provide specific examples or illustrations."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -20276,17 +20276,16 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light",
-          "universe",
+          "light and its effects",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages scientific thinking and exploration.",
+        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation, encouraging readers to think like scientists and question their answers.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts."
+          "The page does not provide specific examples or experiments for the concepts discussed."
         ]
       },
       "vision_input": {
@@ -20304,7 +20303,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T00:47:57Z",
+      "checkpointed_at": "2026-11-06T00:53:00Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20316,17 +20315,16 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light",
-          "universe",
+          "light and its effects",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages scientific thinking and exploration.",
+        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation, encouraging readers to think like scientists and question their answers.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts."
+          "The page does not provide specific examples or experiments for the concepts discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -72069,38 +72067,60 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An educational page about electricity and its uses, including a diagram of a warning sign.",
-        "visual_type": "diagram",
+        "visual_summary": "A page from a textbook explaining the use of a torchlight and its components.",
+        "visual_type": "uncertain",
         "visible_text": [
-          "Caution — The danger signs on electric poles and other appliances warn people that electricity can be dangerous if not carefully handled. Never ever perform experiments with power supply at your home or school. Even electricity from portable generators can be dangerous. Use only batteries or cells, ",
+          "Can you help Nihal by adding some more uses to his lists?",
+          "Also, suggest some other ways of grouping the uses of electricity.",
+          "We use electricity all the time, so let us learn something more",
+          "about electricity. You have learnt earlier that electricity is",
+          "generated in multiple ways—by windmills, by using wind",
+          "energy, by solar panels capturing the Sun’s energy, by falling",
+          "water and by using natural gas or coal (in the chapter ‘Nature’s",
+          "Treasures’ in the Grade 6 Science textbook Curiosity). The electric",
+          "supply from these sources reaches our homes and factories via",
+          "wires. For example, at home we plug in various devices to the",
+          "electrical sockets in the wall. However, to learn about electricity,",
+          "we will focus on a portable source of electricity that most of us",
+          "may have used. Let us start with its use in a common device like",
+          "a torchlight.",
+          "Caution—The danger signs on electric poles and",
+          "other appliances warn people that electricity can",
+          "be dangerous if not carefully handled. Never ever",
+          "perform experiments with power supply at your",
+          "home or school. Even electricity from portable",
+          "generators can be dangerous. Use only batteries or",
+          "cells, like those in torchlights, wall clocks, radios, or",
+          "remotes, for experiments with electricity.",
           "3.1 A Torchlight",
           "You might have used a torchlight, also called a torch or a flashlight.",
           "Activity 3.1: Let us explore",
           "Take a torchlight similar to the one shown in Fig. 3.1.",
           "Observe it carefully. Do you notice a lamp? And a switch?",
           "Slide its switch and observe. Does the torch lamp glow?",
-          "Now slide the switch back to its original position and observe the torch lamp.",
-          "You might have noticed that in one position of the switch, the torch lamp glows and in the other position the lamp does not glow.",
-          "Now, open the torchlight. What do you find inside?",
-          "Inside the torchlight, you may find two or more electric cells.",
-          "Why does the torch lamp glow in one position of its switch?"
+          "Now slide the switch back to its original position and observe",
+          "the torch lamp."
         ],
         "concepts": [
           "electricity",
-          "uses of electricity",
+          "torchlight",
+          "electric cells",
           "solar panels",
-          "wind energy",
-          "falling water",
+          "windmills",
           "natural gas",
           "coal",
-          "electricity generation",
-          "electricity usage",
-          "electricity safety",
-          "electricity experiments"
+          "electricity supply",
+          "electrical sockets",
+          "portable source of electricity",
+          "danger signs",
+          "portable generators",
+          "experiments with electricity",
+          "torchlight components"
         ],
-        "context_relation": "The page discusses the uses and safety of electricity, focusing on a torchlight as an example.",
+        "context_relation": "explaining the use of a torchlight and its components",
         "limitations": [
-          "The page does not provide specific solutions or answers to the questions."
+          "The text does not provide specific instructions for the experiment.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "vision_input": {
@@ -72118,40 +72138,62 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42137960305",
-      "checkpointed_at": "2026-11-06T00:49:24Z",
+      "checkpointed_at": "2026-11-06T00:53:50Z",
       "effective_analysis": {
-        "visual_summary": "An educational page about electricity and its uses, including a diagram of a warning sign.",
-        "visual_type": "diagram",
+        "visual_summary": "A page from a textbook explaining the use of a torchlight and its components.",
+        "visual_type": "uncertain",
         "visible_text": [
-          "Caution — The danger signs on electric poles and other appliances warn people that electricity can be dangerous if not carefully handled. Never ever perform experiments with power supply at your home or school. Even electricity from portable generators can be dangerous. Use only batteries or cells, ",
+          "Can you help Nihal by adding some more uses to his lists?",
+          "Also, suggest some other ways of grouping the uses of electricity.",
+          "We use electricity all the time, so let us learn something more",
+          "about electricity. You have learnt earlier that electricity is",
+          "generated in multiple ways—by windmills, by using wind",
+          "energy, by solar panels capturing the Sun’s energy, by falling",
+          "water and by using natural gas or coal (in the chapter ‘Nature’s",
+          "Treasures’ in the Grade 6 Science textbook Curiosity). The electric",
+          "supply from these sources reaches our homes and factories via",
+          "wires. For example, at home we plug in various devices to the",
+          "electrical sockets in the wall. However, to learn about electricity,",
+          "we will focus on a portable source of electricity that most of us",
+          "may have used. Let us start with its use in a common device like",
+          "a torchlight.",
+          "Caution—The danger signs on electric poles and",
+          "other appliances warn people that electricity can",
+          "be dangerous if not carefully handled. Never ever",
+          "perform experiments with power supply at your",
+          "home or school. Even electricity from portable",
+          "generators can be dangerous. Use only batteries or",
+          "cells, like those in torchlights, wall clocks, radios, or",
+          "remotes, for experiments with electricity.",
           "3.1 A Torchlight",
           "You might have used a torchlight, also called a torch or a flashlight.",
           "Activity 3.1: Let us explore",
           "Take a torchlight similar to the one shown in Fig. 3.1.",
           "Observe it carefully. Do you notice a lamp? And a switch?",
           "Slide its switch and observe. Does the torch lamp glow?",
-          "Now slide the switch back to its original position and observe the torch lamp.",
-          "You might have noticed that in one position of the switch, the torch lamp glows and in the other position the lamp does not glow.",
-          "Now, open the torchlight. What do you find inside?",
-          "Inside the torchlight, you may find two or more electric cells.",
-          "Why does the torch lamp glow in one position of its switch?"
+          "Now slide the switch back to its original position and observe",
+          "the torch lamp."
         ],
         "concepts": [
           "electricity",
-          "uses of electricity",
+          "torchlight",
+          "electric cells",
           "solar panels",
-          "wind energy",
-          "falling water",
+          "windmills",
           "natural gas",
           "coal",
-          "electricity generation",
-          "electricity usage",
-          "electricity safety",
-          "electricity experiments"
+          "electricity supply",
+          "electrical sockets",
+          "portable source of electricity",
+          "danger signs",
+          "portable generators",
+          "experiments with electricity",
+          "torchlight components"
         ],
-        "context_relation": "The page discusses the uses and safety of electricity, focusing on a torchlight as an example.",
+        "context_relation": "explaining the use of a torchlight and its components",
         "limitations": [
-          "The page does not provide specific solutions or answers to the questions."
+          "The text does not provide specific instructions for the experiment.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -78910,7 +78952,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42137960305",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -99290,9 +99332,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42137960305",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
