@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1428,
+    "assets_selected": 1429,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "1851a22784c9105601dfe039",
-      "ed47972eb74639ec9bc709d3"
+      "52885281ae21238e9ccc031f"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1424,
     "assets_remaining": 867,
     "assets_completion_percent": 62.2,
-    "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1423,
+    "assets_failed": 18,
+    "assets_skipped_from_checkpoint": 1424,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1230,7 +1230,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:35:55Z"
+      "checkpointed_at": "2026-11-06T05:40:59Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20248,7 +20248,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:36:29Z"
+      "checkpointed_at": "2026-11-06T05:41:33Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38629,7 +38629,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:37:06Z"
+      "checkpointed_at": "2026-11-06T05:42:10Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43626,7 +43626,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42165203770",
-      "checkpointed_at": "2026-11-06T05:38:09Z"
+      "checkpointed_at": "2026-11-06T05:43:13Z"
     },
     {
       "asset_id": "46c9d5f38c6da536fdee0c3d",
@@ -44755,19 +44755,56 @@
     {
       "asset_id": "52885281ae21238e9ccc031f",
       "asset_sha256": "fe59359cb8342e88b557d6166a640b2ef6acf08ebc62aa0c63e90e8dec6d5b45",
-      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 111,
       "asset_path": "page-0111.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129304656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a thunderstorm with lightning and clouds, explaining the formation of static electric charges in clouds.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation within the cloud takes place. Also, when the negatively charged lower part of the cloud move",
+          "Lightning can occur when opposite charges collide within a cloud, between clouds, or between clouds and the ground. Lightning rapidly heats up the air around it, causing the air to expand and produce a loud sound known as thunder. A storm accompanied by lightning and thunder is called a thunderstorm",
+          "Isolated and localised thunderstorms can sometimes occur in various regions of India. These thunderstorms are known by various names such as Kalboishakhi in West Bengal, Bihar, and Jharkhand and Bordoisila in Assam. They occur before the arrival of the monsoon, thereby helping kharif crops to grow. ",
+          "Lightning can be dangerous! It can ignite fires, damage buildings, and cause severe burns or death in humans and animals. We must take necessary precautions and protect ourselves from lightning. During lightning, stay away from tall objects, find a low-lying open area and crouch down, and minimise c"
+        ],
+        "concepts": [
+          "Static electric charges",
+          "Thunderstorm",
+          "Lightning",
+          "Thunder",
+          "Monsoon",
+          "Kharif crops",
+          "Mango showers",
+          "Coffee plants",
+          "Precautions during lightning"
+        ],
+        "context_relation": "The image explains the formation of static electric charges in clouds and the subsequent phenomena of thunderstorms and lightning.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of ice particles and water droplets."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 177291,
+        "sha256": "ebc2b8fff31e82175b705c51f9e0f6ef697c1aa3cd3fca0e37dca30b8e964979"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42165203770",
+      "checkpointed_at": "2026-11-06T05:45:23Z"
     },
     {
       "asset_id": "02cdb1f955dd51e569c06039",

@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1447,
-    "successful_visual_analyses": 1428,
+    "successful_visual_analyses": 1429,
     "missing_visual_analyses": 844,
-    "failed_visual_analyses": 19,
+    "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 863,
+    "unresolved_count": 862,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50815,9 +50815,33 @@
       "asset_path": "page-0111.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a thunderstorm with lightning and clouds, explaining the formation of static electric charges in clouds.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation within the cloud takes place. Also, when the negatively charged lower part of the cloud move",
+          "Lightning can occur when opposite charges collide within a cloud, between clouds, or between clouds and the ground. Lightning rapidly heats up the air around it, causing the air to expand and produce a loud sound known as thunder. A storm accompanied by lightning and thunder is called a thunderstorm",
+          "Isolated and localised thunderstorms can sometimes occur in various regions of India. These thunderstorms are known by various names such as Kalboishakhi in West Bengal, Bihar, and Jharkhand and Bordoisila in Assam. They occur before the arrival of the monsoon, thereby helping kharif crops to grow. ",
+          "Lightning can be dangerous! It can ignite fires, damage buildings, and cause severe burns or death in humans and animals. We must take necessary precautions and protect ourselves from lightning. During lightning, stay away from tall objects, find a low-lying open area and crouch down, and minimise c"
+        ],
+        "concepts": [
+          "Static electric charges",
+          "Thunderstorm",
+          "Lightning",
+          "Thunder",
+          "Monsoon",
+          "Kharif crops",
+          "Mango showers",
+          "Coffee plants",
+          "Precautions during lightning"
+        ],
+        "context_relation": "The image explains the formation of static electric charges in clouds and the subsequent phenomena of thunderstorms and lightning.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of ice particles and water droplets."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
