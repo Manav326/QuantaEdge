@@ -108,7 +108,7 @@ function Ensure-ApiPortAvailable {
       $portsJson = & docker inspect --format '{{json .NetworkSettings.Ports}}' $existingApiId 2>$null
       if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace(($portsJson -join ""))) {
         $ports = (($portsJson -join "`n") | ConvertFrom-Json)
-        $apiBindingsProperty = $ports.PSObject.Properties["$preferredApiPort/tcp"]
+        $apiBindingsProperty = $ports.PSObject.Properties["8080/tcp"]
         if ($null -ne $apiBindingsProperty -and $null -ne $apiBindingsProperty.Value) {
           $apiBindings = @($apiBindingsProperty.Value)
           if ($apiBindings.Count -gt 0) {
