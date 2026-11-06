@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "33981101406a5f9edb080afcc661f95e83a856c0c454b029ac3e50573c10cf51",
+  "raw_analysis_sha256": "c0db7c0db09542faef01475590d7bc74cfacb9a9db5181c7f40a7a810b35dde4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42266965434",
-      "checkpointed_at": "2026-11-06T18:26:11Z",
+      "checkpointed_at": "2026-11-06T18:32:14Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -20303,7 +20303,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42266965434",
-      "checkpointed_at": "2026-11-06T18:26:42Z",
+      "checkpointed_at": "2026-11-06T18:32:44Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -124680,7 +124680,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42266965434",
-      "checkpointed_at": "2026-11-06T18:27:24Z",
+      "checkpointed_at": "2026-11-06T18:33:26Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
@@ -165646,7 +165646,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
@@ -165664,7 +165664,7 @@
           "bioluminescence",
           "combustible substances"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the role of oxygen in combustion.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -165685,9 +165685,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42266965434",
-      "checkpointed_at": "2026-11-06T18:31:25Z",
+      "checkpointed_at": "2026-11-06T18:34:06Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
@@ -165705,7 +165705,7 @@
           "bioluminescence",
           "combustible substances"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the role of oxygen in combustion.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -181321,7 +181321,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42248620231",
+      "run_id": "42266965434",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
