@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3324,
+    "assets_selected": 3325,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "f5cfd5f0dfcebd60e3212f1b",
-      "c7d1e435a7d68509a205c9d2",
-      "7d8dad96d387d62af0ca7ef5"
+      "3488d8dd39995ddc9a824d27",
+      "8cf47dd631f05b62a4da4b58"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3320,
-    "assets_remaining": 4168,
-    "assets_completion_percent": 44.3,
-    "assets_failed": 41,
-    "assets_skipped_from_checkpoint": 3319,
+    "assets_analyzed": 3321,
+    "assets_remaining": 4167,
+    "assets_completion_percent": 44.4,
+    "assets_failed": 40,
+    "assets_skipped_from_checkpoint": 3320,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T05:47:43Z"
+      "checkpointed_at": "2026-11-06T05:55:49Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T05:48:23Z"
+      "checkpointed_at": "2026-11-06T05:56:29Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -105473,7 +105473,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42161055386",
-      "checkpointed_at": "2026-11-06T05:49:18Z"
+      "checkpointed_at": "2026-11-06T05:57:23Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -122874,19 +122874,57 @@
     {
       "asset_id": "3488d8dd39995ddc9a824d27",
       "asset_sha256": "c8d1bd5aa637b3413320883321cfd649a48e8014cdd187731b55de18ab14b4c2",
-      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/c8d1bd5aa637b3413320883321cfd649a48e8014cdd187731b55de18ab14b4c2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two people sitting around a campfire, with a focus on their feet and the fire.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "campfire",
+          "feet",
+          "fire",
+          "camping",
+          "cold",
+          "warm",
+          "coastline",
+          "equator",
+          "winter",
+          "curiosity",
+          "science",
+          "grandfather",
+          "Kerala",
+          "Sikkim",
+          "heat transfer"
+        ],
+        "context_relation": "The image is related to the text discussing the reasons for different climates in different places.",
+        "limitations": [
+          "The image does not show the full page or the entire text."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 715,
+        "source_height": 224,
+        "inference_width": 715,
+        "inference_height": 224,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 32890,
+        "sha256": "ac81c8a20f40ac540d89dc0a6e85912949c7135ba2efda62c65bea0f88aabb18"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42161055386",
+      "checkpointed_at": "2026-11-06T05:59:05Z"
     },
     {
       "asset_id": "320e3ce84c4685a2726cb030",
@@ -122935,9 +122973,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42161055386",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
