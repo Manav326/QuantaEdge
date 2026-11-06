@@ -19,6 +19,28 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("A second guard prevents the same bilingual pair", workflow)
         self.assertNotIn("textbook-visual-candidates-v3-${{", workflow)
 
+    def test_layer45_pair_workers_do_not_write_the_shared_visual_catalog_index(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        pair_start = workflow.index("- name: Commit only this bilingual pair's immutable candidate files")
+        pair_end = workflow.index("- name: Start Ollama container and load vision model for Layer 4", pair_start)
+        pair_step = workflow[pair_start:pair_end]
+        self.assertIn("git_checkpoint(", pair_step)
+        self.assertIn("DEFERRED_TO_COORDINATOR", pair_step)
+        self.assertNotIn("update_visual_catalog_index.py", pair_step)
+        self.assertNotIn("git add -A data/textbook-visual-candidates-v3", pair_step)
+        finalize_start = workflow.index("  finalize_visual_catalog_index:")
+        finalize_end = workflow.index("  record-completed-class-markers:", finalize_start)
+        finalize_job = workflow[finalize_start:finalize_end]
+        self.assertIn("needs: [plan, prepare]", finalize_job)
+        self.assertIn("update_visual_catalog_index.py", finalize_job)
+        self.assertIn('git_checkpoint(', finalize_job)
+        self.assertIn("test_textbook_visual_end_to_end_contract.py", finalize_job)
+        class_marker_start = workflow.index("  record-completed-class-markers:")
+        class_marker_end = workflow.index("  wake-resume-coordinator:", class_marker_start)
+        class_marker_job = workflow[class_marker_start:class_marker_end]
+        self.assertIn("finalize_visual_catalog_index", class_marker_job)
+        self.assertIn("needs.finalize_visual_catalog_index.result == 'success'", class_marker_job)
+
     def test_marked_push_can_reextract_one_class_without_rebuilding_the_other_class(self):
         workflow = read("textbook-extraction-pilot.yml")
         self.assertIn("[reextract-textbook-class-7]", workflow)
