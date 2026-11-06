@@ -15,6 +15,8 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("group: textbook-visual-candidates-v3-main", workflow)
         self.assertIn("cancel-in-progress: false", workflow)
         self.assertIn("max-parallel: 16", workflow)
+        self.assertIn("group: textbook-layer45-pair-${{ matrix.book_slug }}", workflow)
+        self.assertIn("A second guard prevents the same bilingual pair", workflow)
         self.assertNotIn("textbook-visual-candidates-v3-${{", workflow)
 
     def test_marked_push_can_reextract_one_class_without_rebuilding_the_other_class(self):
