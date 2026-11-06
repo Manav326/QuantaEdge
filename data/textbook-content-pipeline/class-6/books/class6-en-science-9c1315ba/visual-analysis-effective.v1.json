@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "95635f60b25d79a88075df85cfed8dc690509dbe0b5c6e02c16cbf8399cd1553",
+  "raw_analysis_sha256": "94568c34efed1c959ee65081833801a706925cf40a063f5c2f82099e80d75a40",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -620,7 +620,7 @@
         "concepts": [
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
-          "paichakoshas",
+          "paichakoshlas",
           "Middle Stage",
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
@@ -632,7 +632,7 @@
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a diverse curriculum and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the textbooks."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of implementation of the NCF-SE 2023."
         ]
       },
       "vision_input": {
@@ -649,8 +649,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42162542113",
-      "checkpointed_at": "2026-11-06T04:46:47Z",
+      "run_id": "42166162175",
+      "checkpointed_at": "2026-11-06T05:11:29Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
@@ -664,7 +664,7 @@
         "concepts": [
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
-          "paichakoshas",
+          "paichakoshlas",
           "Middle Stage",
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
@@ -676,7 +676,7 @@
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a diverse curriculum and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the textbooks."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of implementation of the NCF-SE 2023."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29417,14 +29417,14 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
           "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
           "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhirgara, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrati",
-          "Acknowledgements are due to Ankeeta Bezborua, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contrib"
+          "Acknowledgements are due to Ankeeta Bezboruah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contri"
         ],
         "concepts": [
           "Acknowledgements",
@@ -29435,15 +29435,17 @@
           "Consultant",
           "Programme Office",
           "Senior Consultant",
+          "Educator",
           "Course Administrator",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "vision_input": {
@@ -29460,17 +29462,17 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42162542113",
-      "checkpointed_at": "2026-11-06T04:47:53Z",
+      "run_id": "42166162175",
+      "checkpointed_at": "2026-11-06T05:13:44Z",
       "effective_analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
           "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
           "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhirgara, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrati",
-          "Acknowledgements are due to Ankeeta Bezborua, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contrib"
+          "Acknowledgements are due to Ankeeta Bezboruah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contri"
         ],
         "concepts": [
           "Acknowledgements",
@@ -29481,15 +29483,17 @@
           "Consultant",
           "Programme Office",
           "Senior Consultant",
+          "Educator",
           "Course Administrator",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -35179,9 +35183,9 @@
           "eating habits",
           "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants based on the criteria mentioned.",
+          "The page does not provide specific examples or details for each criterion.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -35199,8 +35203,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42162542113",
-      "checkpointed_at": "2026-11-06T04:48:53Z",
+      "run_id": "42166162175",
+      "checkpointed_at": "2026-11-06T05:15:44Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -35237,9 +35241,9 @@
           "eating habits",
           "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants based on the criteria mentioned.",
+          "The page does not provide specific examples or details for each criterion.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -52914,21 +52918,68 @@
     {
       "asset_id": "01128e1da549b4881f224152",
       "asset_sha256": "0b1cf9c03f9e0e5248d25c88f59435a8a24151937d29162b4227e4f26a449a7c",
-      "page_text_context_sha256": "6b6a5eab82c85eb414199ad1be714fb6ee43475ba1e8716e804d0181367925ee",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 87,
       "asset_path": "assets/0b1cf9c03f9e0e5248d25c88f59435a8a24151937d29162b4227e4f26a449a7c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6b6a5eab82c85eb414199ad1be714fb6ee43475ba1e8716e804d0181367925ee",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42162542113",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass with a needle pointing towards the north, surrounded by a circular scale with cardinal directions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "compass needle",
+          "north",
+          "cardinal directions"
+        ],
+        "concepts": [
+          "compass",
+          "magnetic field",
+          "north-south direction"
+        ],
+        "context_relation": "The compass needle is pointing towards the north, indicating the direction of the magnetic field.",
+        "limitations": [
+          "The compass needle is pointing towards the north, indicating the direction of the magnetic field."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 623,
+        "source_height": 249,
+        "inference_width": 623,
+        "inference_height": 249,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 15921,
+        "sha256": "68aca0f641074590df46ec5dc4e21635889b86e3e037e5955e34a9c77d260b68"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42166162175",
+      "checkpointed_at": "2026-11-06T05:16:49Z",
+      "effective_analysis": {
+        "visual_summary": "A compass with a needle pointing towards the north, surrounded by a circular scale with cardinal directions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "compass needle",
+          "north",
+          "cardinal directions"
+        ],
+        "concepts": [
+          "compass",
+          "magnetic field",
+          "north-south direction"
+        ],
+        "context_relation": "The compass needle is pointing towards the north, indicating the direction of the magnetic field.",
+        "limitations": [
+          "The compass needle is pointing towards the north, indicating the direction of the magnetic field."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -56633,7 +56684,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42162542113",
+      "run_id": "42166162175",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
