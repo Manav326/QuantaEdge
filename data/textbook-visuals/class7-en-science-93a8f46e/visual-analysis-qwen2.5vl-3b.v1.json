@@ -15,13 +15,13 @@
       "e16d4a62f7889b707898ea77",
       "4b1298747dc1ec978a226ae5",
       "f5cfd5f0dfcebd60e3212f1b",
-      "70685314fc3f063e7fa84d71"
+      "0788af5240eb5a0d87d0e5d9"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3321,
-    "assets_remaining": 4167,
+    "assets_analyzed": 3322,
+    "assets_remaining": 4166,
     "assets_completion_percent": 44.4,
-    "assets_failed": 39,
+    "assets_failed": 38,
     "assets_skipped_from_checkpoint": 3321,
     "batch_limit": 5,
     "publication_allowed": false
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42172343695",
-      "checkpointed_at": "2026-11-06T06:59:08Z"
+      "checkpointed_at": "2026-11-06T07:03:01Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13530,7 +13530,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42172343695",
-      "checkpointed_at": "2026-11-06T06:59:37Z"
+      "checkpointed_at": "2026-11-06T07:03:31Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79281,7 +79281,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42172343695",
-      "checkpointed_at": "2026-11-06T07:00:18Z"
+      "checkpointed_at": "2026-11-06T07:04:12Z"
     },
     {
       "asset_id": "42e2bad6ce513928f9ecea9b",
@@ -105517,7 +105517,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42172343695",
-      "checkpointed_at": "2026-11-06T07:00:57Z"
+      "checkpointed_at": "2026-11-06T07:04:51Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -122434,19 +122434,54 @@
     {
       "asset_id": "0788af5240eb5a0d87d0e5d9",
       "asset_sha256": "f07daaf03de7b31dc1f2e22c63b50c79fba92f8594f25a1b3fa731eb4bd7d38a",
-      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/f07daaf03de7b31dc1f2e22c63b50c79fba92f8594f25a1b3fa731eb4bd7d38a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42161055386",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A winter scene with two children, Pema and Palden, sitting around a fireplace in Gangtok, discussing the difference in winter weather between Gangtok and Kerala.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and Palden are curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Winter Weather",
+          "Equator",
+          "Coastline",
+          "Climate",
+          "Science"
+        ],
+        "context_relation": "The grandfather's explanation about the difference in weather between Gangtok and Kerala is based on the geographical and climatic factors.",
+        "limitations": [
+          "The image does not show any visual representation of the geographical or climatic factors mentioned in the text."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 34,
+        "source_height": 21,
+        "inference_width": 34,
+        "inference_height": 21,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 292,
+        "sha256": "1eb84ce366ff785c36badc346547ee7a585e84f9302525e99dee4d1bc3c3bdf9"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42172343695",
+      "checkpointed_at": "2026-11-06T07:06:17Z"
     },
     {
       "asset_id": "4332b8dc4e813ea580dd56d1",
