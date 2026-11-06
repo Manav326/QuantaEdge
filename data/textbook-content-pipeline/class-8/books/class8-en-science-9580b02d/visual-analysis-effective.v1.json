@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7624be642d7d857f9da55b06daf6aa05c1aaf854d4afa6f4821631a88985b1c4",
+  "raw_analysis_sha256": "37db0522b8717dddfc5111e75c37806e230a862b4391973b54ebe28f4938d1ca",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1830,7 +1830,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:30:47Z",
+      "checkpointed_at": "2026-11-06T01:33:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -29462,7 +29462,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:31:14Z",
+      "checkpointed_at": "2026-11-06T01:33:54Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
@@ -38406,7 +38406,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:31:59Z",
+      "checkpointed_at": "2026-11-06T01:34:39Z",
       "effective_analysis": {
         "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development.",
         "visual_type": "page_with_multiple_visuals",
@@ -58154,7 +58154,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:32:30Z",
+      "checkpointed_at": "2026-11-06T01:35:09Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
@@ -64406,21 +64406,98 @@
     {
       "asset_id": "35ff0b921f1e0b0945a8f8df",
       "asset_sha256": "17660b7f37dd3b6003520efe3ae1e2c53163ffffee0702f7e058a857644b72fe",
-      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 102,
       "asset_path": "page-0102.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129304656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a page from a textbook explaining the concept of pressure and its application in everyday life, using examples like buckets with broad and narrow handles and people carrying loads.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 6.2: Buckets with broad and narrow handles",
+          "Broad straps reduce the pressure exerted by the bag on our shoulders as compared to narrow straps. Therefore, we feel more comfortable carrying a bag with broad straps.",
+          "Can you now understand why it feels easier to lift a water-filled bucket with a broad handle than with a narrow handle (Fig. 6.2)? Similarly, we have seen that when people carry loads like pots or vegetable baskets on their heads, they often place a round piece of cloth under the loads (Fig. 6.3). I",
+          "Pressure is defined as the force per unit area. The SI unit of force is newton and that of area is metre². Therefore, the SI unit of pressure is newton/metre² (N/m²). This unit is also called a pascal, denoted by Pa.",
+          "If a force of 100 N is applied on a cardboard of area 2 m², then the pressure applied on the cardboard will be:",
+          "Pressure = Force / Area = 100 N / 2 m² = 50 N/m²",
+          "There are many situations in daily life where pressure plays a role. Conduct the activities given in Table 6.1 and record your observations. Explain how pressure influences the mode of action undertaken for each activity.",
+          "Safety first",
+          "The activities listed in Table 6.1 should be conducted under the supervision of an adult.",
+          "Table 6.1: Record your observations",
+          "Activity | Modes of action | Easy or difficult to perform? Give reasons.",
+          "Driving an iron nail | By the head of the nail | By the pointed end of the nail |",
+          "Cutting an apple with a knife | Using the sharp edge of the knife | Using the blunt edge of the knife |"
+        ],
+        "concepts": [
+          "Pressure",
+          "SI units",
+          "Force",
+          "Area",
+          "Pascal",
+          "Safety",
+          "Observations",
+          "Modes of action"
+        ],
+        "context_relation": "The image is a page from a textbook explaining the concept of pressure and its application in everyday life, using examples like buckets with broad and narrow handles and people carrying loads.",
+        "limitations": [
+          "The image does not provide specific details about the activities in Table 6.1, only the general instructions to conduct them under adult supervision."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 142264,
+        "sha256": "dabf6558cd6eec07b2b70b339eb209b5d55b1436929beb562955f581e933b84d"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42140325986",
+      "checkpointed_at": "2026-11-06T01:36:51Z",
+      "effective_analysis": {
+        "visual_summary": "The image shows a page from a textbook explaining the concept of pressure and its application in everyday life, using examples like buckets with broad and narrow handles and people carrying loads.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 6.2: Buckets with broad and narrow handles",
+          "Broad straps reduce the pressure exerted by the bag on our shoulders as compared to narrow straps. Therefore, we feel more comfortable carrying a bag with broad straps.",
+          "Can you now understand why it feels easier to lift a water-filled bucket with a broad handle than with a narrow handle (Fig. 6.2)? Similarly, we have seen that when people carry loads like pots or vegetable baskets on their heads, they often place a round piece of cloth under the loads (Fig. 6.3). I",
+          "Pressure is defined as the force per unit area. The SI unit of force is newton and that of area is metre². Therefore, the SI unit of pressure is newton/metre² (N/m²). This unit is also called a pascal, denoted by Pa.",
+          "If a force of 100 N is applied on a cardboard of area 2 m², then the pressure applied on the cardboard will be:",
+          "Pressure = Force / Area = 100 N / 2 m² = 50 N/m²",
+          "There are many situations in daily life where pressure plays a role. Conduct the activities given in Table 6.1 and record your observations. Explain how pressure influences the mode of action undertaken for each activity.",
+          "Safety first",
+          "The activities listed in Table 6.1 should be conducted under the supervision of an adult.",
+          "Table 6.1: Record your observations",
+          "Activity | Modes of action | Easy or difficult to perform? Give reasons.",
+          "Driving an iron nail | By the head of the nail | By the pointed end of the nail |",
+          "Cutting an apple with a knife | Using the sharp edge of the knife | Using the blunt edge of the knife |"
+        ],
+        "concepts": [
+          "Pressure",
+          "SI units",
+          "Force",
+          "Area",
+          "Pascal",
+          "Safety",
+          "Observations",
+          "Modes of action"
+        ],
+        "context_relation": "The image is a page from a textbook explaining the concept of pressure and its application in everyday life, using examples like buckets with broad and narrow handles and people carrying loads.",
+        "limitations": [
+          "The image does not provide specific details about the activities in Table 6.1, only the general instructions to conduct them under adult supervision."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

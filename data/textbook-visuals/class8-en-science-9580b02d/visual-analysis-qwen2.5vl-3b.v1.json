@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1425,
+    "assets_selected": 1426,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "414a0224c90f14c01c7da9e7",
       "f492c50e9c7d7ef8d140ae06",
-      "4fdef3a69f918bffeb046522"
+      "35ff0b921f1e0b0945a8f8df"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1421,
-    "assets_remaining": 870,
-    "assets_completion_percent": 62.0,
-    "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1420,
+    "assets_analyzed": 1422,
+    "assets_remaining": 869,
+    "assets_completion_percent": 62.1,
+    "assets_failed": 21,
+    "assets_skipped_from_checkpoint": 1421,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1228,7 +1228,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:30:47Z"
+      "checkpointed_at": "2026-11-06T01:33:27Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20246,7 +20246,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:31:14Z"
+      "checkpointed_at": "2026-11-06T01:33:54Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25952,7 +25952,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:31:59Z"
+      "checkpointed_at": "2026-11-06T01:34:39Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -38628,7 +38628,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:32:30Z"
+      "checkpointed_at": "2026-11-06T01:35:09Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42642,19 +42642,64 @@
     {
       "asset_id": "35ff0b921f1e0b0945a8f8df",
       "asset_sha256": "17660b7f37dd3b6003520efe3ae1e2c53163ffffee0702f7e058a857644b72fe",
-      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 102,
       "asset_path": "page-0102.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129304656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a page from a textbook explaining the concept of pressure and its application in everyday life, using examples like buckets with broad and narrow handles and people carrying loads.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 6.2: Buckets with broad and narrow handles",
+          "Broad straps reduce the pressure exerted by the bag on our shoulders as compared to narrow straps. Therefore, we feel more comfortable carrying a bag with broad straps.",
+          "Can you now understand why it feels easier to lift a water-filled bucket with a broad handle than with a narrow handle (Fig. 6.2)? Similarly, we have seen that when people carry loads like pots or vegetable baskets on their heads, they often place a round piece of cloth under the loads (Fig. 6.3). I",
+          "Pressure is defined as the force per unit area. The SI unit of force is newton and that of area is metre². Therefore, the SI unit of pressure is newton/metre² (N/m²). This unit is also called a pascal, denoted by Pa.",
+          "If a force of 100 N is applied on a cardboard of area 2 m², then the pressure applied on the cardboard will be:",
+          "Pressure = Force / Area = 100 N / 2 m² = 50 N/m²",
+          "There are many situations in daily life where pressure plays a role. Conduct the activities given in Table 6.1 and record your observations. Explain how pressure influences the mode of action undertaken for each activity.",
+          "Safety first",
+          "The activities listed in Table 6.1 should be conducted under the supervision of an adult.",
+          "Table 6.1: Record your observations",
+          "Activity | Modes of action | Easy or difficult to perform? Give reasons.",
+          "Driving an iron nail | By the head of the nail | By the pointed end of the nail |",
+          "Cutting an apple with a knife | Using the sharp edge of the knife | Using the blunt edge of the knife |"
+        ],
+        "concepts": [
+          "Pressure",
+          "SI units",
+          "Force",
+          "Area",
+          "Pascal",
+          "Safety",
+          "Observations",
+          "Modes of action"
+        ],
+        "context_relation": "The image is a page from a textbook explaining the concept of pressure and its application in everyday life, using examples like buckets with broad and narrow handles and people carrying loads.",
+        "limitations": [
+          "The image does not provide specific details about the activities in Table 6.1, only the general instructions to conduct them under adult supervision."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 142264,
+        "sha256": "dabf6558cd6eec07b2b70b339eb209b5d55b1436929beb562955f581e933b84d"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42140325986",
+      "checkpointed_at": "2026-11-06T01:36:51Z"
     },
     {
       "asset_id": "e616bcedcee1f19d79e7f4f4",
