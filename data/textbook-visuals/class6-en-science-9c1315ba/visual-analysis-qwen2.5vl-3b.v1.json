@@ -15,13 +15,13 @@
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
-      "2104ecb647e20f98cb93ca2e"
+      "2185c15c0a88a108ea516878"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1607,
     "assets_remaining": 471,
     "assets_completion_percent": 77.3,
-    "assets_failed": 44,
+    "assets_failed": 43,
     "assets_skipped_from_checkpoint": 1607,
     "batch_limit": 5,
     "publication_allowed": false
@@ -463,7 +463,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:15:16Z"
+      "checkpointed_at": "2026-11-06T01:19:50Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20154,7 +20154,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:15:57Z"
+      "checkpointed_at": "2026-11-06T01:20:32Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23853,7 +23853,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:16:31Z"
+      "checkpointed_at": "2026-11-06T01:21:05Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -38162,10 +38162,10 @@
           "Handspans",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans.",
-          "The text does not provide the actual length of the table in handspans."
+          "The table does not provide a standard unit of measurement for length.",
+          "The text assumes that handspans are a reliable unit of measurement for length."
         ]
       },
       "vision_input": {
@@ -38183,7 +38183,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:17:33Z"
+      "checkpointed_at": "2026-11-06T01:21:34Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -40186,19 +40186,57 @@
     {
       "asset_id": "2185c15c0a88a108ea516878",
       "asset_sha256": "9ec157be1b2f439e1a301a92f008de212dec7042241058b5a3a0fbfa16e9d23c",
-      "page_text_context_sha256": "8175aaf2da7b6610de89595ea9ed0a6c55d0113973980930e1bf757ce7cabce5",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 109,
       "asset_path": "page-0109.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "8175aaf2da7b6610de89595ea9ed0a6c55d0113973980930e1bf757ce7cabce5",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42131820196",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing motion and reference points, with a focus on Deepa's observations in a bus and a thought-provoking question about determining motion on a ship.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Deepa looked around her in the bus and noticed that all\nthe passengers were seated. She looked around again after\na minute and found them still occupying their seats. She\nwondered, ‘Are they moving?’ She concluded that the position\nof the passengers was not changing with time. Therefore, they\nwere c",
+          "The reference point is important in deciding whether an object\nis at rest or in motion. If Deepa considered herself (or\nthe bus) as the refer",
+          "Suppose you are travelling on a ship which is moving at a constant speed along a straight line on a calm sea. Suppose there is no window on the ship. Is there any way that you can\ndetermine whether the ship is moving or is\nstationary?",
+          "Activity 5.3: Let us explore\n\nTake an eraser and drop it from a certain height.\nObserve its motion.\nDoes it move along a straight line? When an orange drops\nfrom the tree, does it move in a straight line? Have you seen\nthe Republic Day parade? Recall the march-past of students\nduring the parade. Do ",
+          "More to know!",
+          "Measurement of Length and Motion"
+        ],
+        "concepts": [
+          "motion",
+          "reference point",
+          "rest",
+          "motion",
+          "constant speed",
+          "straight line",
+          "certain height",
+          "straight line path"
+        ],
+        "context_relation": "The page discusses the concept of motion and reference points, using Deepa's observations in a bus as an example.",
+        "limitations": [
+          "The text does not provide a solution to the thought-provoking question about determining motion on a ship."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 126836,
+        "sha256": "c7d78103c9e5902da69393651604e10853d5221005de2e88c1601dfbaeca4a7a"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42140323966",
+      "checkpointed_at": "2026-11-06T01:22:31Z"
     },
     {
       "asset_id": "332c364ac43d3ed344326731",

@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
     "raw_analysis_result_rows": 1655,
-    "successful_visual_analyses": 1611,
+    "successful_visual_analyses": 1612,
     "missing_visual_analyses": 423,
-    "failed_visual_analyses": 44,
+    "failed_visual_analyses": 43,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 467,
+    "unresolved_count": 466,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44746,10 +44746,10 @@
           "Handspans",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans.",
-          "The text does not provide the actual length of the table in handspans."
+          "The table does not provide a standard unit of measurement for length.",
+          "The text assumes that handspans are a reliable unit of measurement for length."
         ]
       },
       "chapter_id": null,
@@ -46714,9 +46714,34 @@
       "asset_path": "page-0109.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing motion and reference points, with a focus on Deepa's observations in a bus and a thought-provoking question about determining motion on a ship.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Deepa looked around her in the bus and noticed that all\nthe passengers were seated. She looked around again after\na minute and found them still occupying their seats. She\nwondered, ‘Are they moving?’ She concluded that the position\nof the passengers was not changing with time. Therefore, they\nwere c",
+          "The reference point is important in deciding whether an object\nis at rest or in motion. If Deepa considered herself (or\nthe bus) as the refer",
+          "Suppose you are travelling on a ship which is moving at a constant speed along a straight line on a calm sea. Suppose there is no window on the ship. Is there any way that you can\ndetermine whether the ship is moving or is\nstationary?",
+          "Activity 5.3: Let us explore\n\nTake an eraser and drop it from a certain height.\nObserve its motion.\nDoes it move along a straight line? When an orange drops\nfrom the tree, does it move in a straight line? Have you seen\nthe Republic Day parade? Recall the march-past of students\nduring the parade. Do ",
+          "More to know!",
+          "Measurement of Length and Motion"
+        ],
+        "concepts": [
+          "motion",
+          "reference point",
+          "rest",
+          "motion",
+          "constant speed",
+          "straight line",
+          "certain height",
+          "straight line path"
+        ],
+        "context_relation": "The page discusses the concept of motion and reference points, using Deepa's observations in a bus as an example.",
+        "limitations": [
+          "The text does not provide a solution to the thought-provoking question about determining motion on a ship."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
