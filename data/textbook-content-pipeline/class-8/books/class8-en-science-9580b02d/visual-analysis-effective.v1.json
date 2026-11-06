@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "133bfc2f1dc9615d503b5be6083ae0e14d1d76197b3b3e02453e55013c330631",
+  "raw_analysis_sha256": "68339a0acf5b6e1e7ecbd5b88ac1d76788da6be3b50693f7df1091bd5ce738cc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1830,7 +1830,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:10:12Z",
+      "checkpointed_at": "2026-11-06T01:15:55Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -29462,7 +29462,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:10:39Z",
+      "checkpointed_at": "2026-11-06T01:16:22Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
@@ -38406,7 +38406,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140325986",
-      "checkpointed_at": "2026-11-06T01:11:24Z",
+      "checkpointed_at": "2026-11-06T01:17:08Z",
       "effective_analysis": {
         "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development.",
         "visual_type": "page_with_multiple_visuals",
@@ -45938,21 +45938,100 @@
     {
       "asset_id": "9c98ea470aafbf3dbbeffd67",
       "asset_sha256": "6257767b10661dd8961e818a3a43cbfad1e594872ad378045eb0f58d5773fdf1",
-      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 58,
       "asset_path": "page-0058.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129304656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about the history of vaccines, specifically focusing on Edward Jenner and the smallpox vaccine.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "to make a harmless part of the germ, which our immune system\nthen learns to fight.",
+          "For example, a tetanus shot, often given after an injury\nprotects against infection by the tetanus-causing bacteria.\nIt contains an inactivated bacterial toxin that helps the immune\nsystem develop protection without causing the disease.",
+          "Do you know when the first vaccine was discovered?",
+          "Edward Jenner and the smallpox vaccine",
+          "Smallpox was a deadly disease that caused blisters and killed\nmillions. A milder disease called cowpox, seen in cows, could also\ninfect humans. In the late 1700s, English doctor Edward Jenner\ndiscovered that people who had cowpox did not get smallpox.\nThis led to the invention of the first vaccine a",
+          "Long before modern vaccines, India had a traditional method called\nvariolation to protect against smallpox. It involved using material\nfrom a smallpox sore to scratch the skin and create a mild infection\nand build immunity. People who performed this practice were known\nas teekedaars.",
+          "Observations\nJenner observed that milkmaids who had\ncowpox did not catch smallpox, likely because\nthe two viruses are related.",
+          "Hypothesis\nContent in the pus of cowpox blisters protected people from smallpox.",
+          "Experimentation\nHe tested this by injecting cowpox sap into a\nboy, who later showed no illness when exposed\nto smallpox.",
+          "Results\nHe found that people who were infected\nwith cowpox sap were now resistant to\nsmallpox.",
+          "Application\nMass vaccination eventually helped\neradicate smallpox worldwide."
+        ],
+        "concepts": [
+          "vaccines",
+          "Edward Jenner",
+          "smallpox",
+          "cowpox",
+          "virology",
+          "immunology",
+          "vaccination",
+          "vaccine development",
+          "vaccine efficacy",
+          "vaccine history"
+        ],
+        "context_relation": "The page provides historical context and scientific reasoning behind the development of the smallpox vaccine, linking it to Edward Jenner's observations and experiments.",
+        "limitations": [
+          "The page does not provide detailed scientific explanations for the mechanisms of action of vaccines or the immune response to vaccines.",
+          "The page does not include modern scientific data or research findings that could be used to update the information provided."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 138148,
+        "sha256": "a5cce4b09c44058792e181012eae462e9a79f4a5117b166e37d9d531d91498e9"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42140325986",
+      "checkpointed_at": "2026-11-06T01:18:48Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page about the history of vaccines, specifically focusing on Edward Jenner and the smallpox vaccine.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "to make a harmless part of the germ, which our immune system\nthen learns to fight.",
+          "For example, a tetanus shot, often given after an injury\nprotects against infection by the tetanus-causing bacteria.\nIt contains an inactivated bacterial toxin that helps the immune\nsystem develop protection without causing the disease.",
+          "Do you know when the first vaccine was discovered?",
+          "Edward Jenner and the smallpox vaccine",
+          "Smallpox was a deadly disease that caused blisters and killed\nmillions. A milder disease called cowpox, seen in cows, could also\ninfect humans. In the late 1700s, English doctor Edward Jenner\ndiscovered that people who had cowpox did not get smallpox.\nThis led to the invention of the first vaccine a",
+          "Long before modern vaccines, India had a traditional method called\nvariolation to protect against smallpox. It involved using material\nfrom a smallpox sore to scratch the skin and create a mild infection\nand build immunity. People who performed this practice were known\nas teekedaars.",
+          "Observations\nJenner observed that milkmaids who had\ncowpox did not catch smallpox, likely because\nthe two viruses are related.",
+          "Hypothesis\nContent in the pus of cowpox blisters protected people from smallpox.",
+          "Experimentation\nHe tested this by injecting cowpox sap into a\nboy, who later showed no illness when exposed\nto smallpox.",
+          "Results\nHe found that people who were infected\nwith cowpox sap were now resistant to\nsmallpox.",
+          "Application\nMass vaccination eventually helped\neradicate smallpox worldwide."
+        ],
+        "concepts": [
+          "vaccines",
+          "Edward Jenner",
+          "smallpox",
+          "cowpox",
+          "virology",
+          "immunology",
+          "vaccination",
+          "vaccine development",
+          "vaccine efficacy",
+          "vaccine history"
+        ],
+        "context_relation": "The page provides historical context and scientific reasoning behind the development of the smallpox vaccine, linking it to Edward Jenner's observations and experiments.",
+        "limitations": [
+          "The page does not provide detailed scientific explanations for the mechanisms of action of vaccines or the immune response to vaccines.",
+          "The page does not include modern scientific data or research findings that could be used to update the information provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -57586,7 +57665,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129304656",
+      "run_id": "42140325986",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
