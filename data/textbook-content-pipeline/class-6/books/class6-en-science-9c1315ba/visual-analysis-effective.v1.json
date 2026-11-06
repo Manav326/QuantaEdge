@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "80f0c9f8516d622aa226e6169e44160887f7ff23a280df68be88bc5256dc0c26",
+  "raw_analysis_sha256": "9b9e02cc52b62b1bd541e6489efdde744caa5fbd01a1c69ae4ec650932b7565c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -650,7 +650,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:23:13Z",
+      "checkpointed_at": "2026-11-06T01:26:09Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
@@ -29468,7 +29468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:23:53Z",
+      "checkpointed_at": "2026-11-06T01:26:51Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "page_with_multiple_visuals",
@@ -35145,7 +35145,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:24:26Z",
+      "checkpointed_at": "2026-11-06T01:27:25Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -57627,7 +57627,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42140323966",
-      "checkpointed_at": "2026-11-06T01:24:55Z",
+      "checkpointed_at": "2026-11-06T01:27:54Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -67298,21 +67298,90 @@
     {
       "asset_id": "47bbaaf66932c5ee5e514c6c",
       "asset_sha256": "c07e7115dc8ec8112437477c3dba3c94e6d6244198ba38127dd60a4cb31de9d6",
-      "page_text_context_sha256": "05028d1d8bb54afbeda7c134dd787bec678db6f5981cc9647868c5ab67bee3bd",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 130,
       "asset_path": "page-0130.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "05028d1d8bb54afbeda7c134dd787bec678db6f5981cc9647868c5ab67bee3bd",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42131820196",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about making an Oral Rehydration Solution (ORS) and discussing the properties of liquids and gases in water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Make your own ORS!",
+          "ORS—Oral Rehydration Solution— is used to treat dehydration due to diarrhoea or other illnesses. These ready-made ORS packets are available in primary health centres and also in the market. Each packet is dissolved in a litre of water before use. If these are not available, ORS can be prepared at ho",
+          "Do liquids like oil, vinegar and honey dissolve in water?",
+          "Explore.",
+          "What about the gases present in water?",
+          "Some liquids get completely mixed with water. Some do not mix with water and form a separate layer when left undisturbed for some time. Similarly, some gases are soluble in water whereas others are not. For example, oxygen gas dissolves in water. It is very important for the survival of animals and ",
+          "6.3.5 How heavy or light?",
+          "Activity 6.8: Let us measure",
+          "Let us take three identical paper cups (or bowls). Fill each cup half with the provided materials.",
+          "Fill one with water and mark it as 'A', second with sand and mark it as 'B', and the third with pebbles and mark it as 'C'.",
+          "Predict which one would be heavier and which one would be lighter?"
+        ],
+        "concepts": [
+          "Oral Rehydration Solution (ORS)",
+          "Diarrhoea",
+          "Liquid properties",
+          "Gases in water",
+          "Density",
+          "Solubility"
+        ],
+        "context_relation": "The page discusses the properties of liquids and gases in water, as well as the preparation of an Oral Rehydration Solution (ORS).",
+        "limitations": [
+          "The page does not provide specific instructions for making the ORS, only a general description."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 106421,
+        "sha256": "4ee38b72d0e600072038033b4b8a1c23e5e8b0fec0271ac1c4a9b55601556f82"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42140323966",
+      "checkpointed_at": "2026-11-06T01:28:49Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page about making an Oral Rehydration Solution (ORS) and discussing the properties of liquids and gases in water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Make your own ORS!",
+          "ORS—Oral Rehydration Solution— is used to treat dehydration due to diarrhoea or other illnesses. These ready-made ORS packets are available in primary health centres and also in the market. Each packet is dissolved in a litre of water before use. If these are not available, ORS can be prepared at ho",
+          "Do liquids like oil, vinegar and honey dissolve in water?",
+          "Explore.",
+          "What about the gases present in water?",
+          "Some liquids get completely mixed with water. Some do not mix with water and form a separate layer when left undisturbed for some time. Similarly, some gases are soluble in water whereas others are not. For example, oxygen gas dissolves in water. It is very important for the survival of animals and ",
+          "6.3.5 How heavy or light?",
+          "Activity 6.8: Let us measure",
+          "Let us take three identical paper cups (or bowls). Fill each cup half with the provided materials.",
+          "Fill one with water and mark it as 'A', second with sand and mark it as 'B', and the third with pebbles and mark it as 'C'.",
+          "Predict which one would be heavier and which one would be lighter?"
+        ],
+        "concepts": [
+          "Oral Rehydration Solution (ORS)",
+          "Diarrhoea",
+          "Liquid properties",
+          "Gases in water",
+          "Density",
+          "Solubility"
+        ],
+        "context_relation": "The page discusses the properties of liquids and gases in water, as well as the preparation of an Oral Rehydration Solution (ORS).",
+        "limitations": [
+          "The page does not provide specific instructions for making the ORS, only a general description."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
