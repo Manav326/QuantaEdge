@@ -1155,26 +1155,81 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
     write_json(outdir/"layers-6-8-run-manifest.v1.json",report)
     return report
 
+_RETRYABLE_CHECKPOINT_NETWORK_ERRORS = (
+    "could not resolve host", "connection timed out", "connection reset",
+    "remote end hung up unexpectedly", "rpc failed", "tls handshake",
+    "requested url returned error: 502", "requested url returned error: 503",
+    "requested url returned error: 504", "http 502", "http 503", "http 504",
+)
+_RETRYABLE_CHECKPOINT_PUSH_RACES = (
+    "[rejected]", "non-fast-forward", "fetch first",
+    "failed to push some refs", "updates were rejected",
+    "remote contains work that you do not have",
+)
+
+
 def checkpoint_git(repo:Path,paths:list[Path],message:str)->None:
+    """Safely save generated L6-L8 data despite simultaneous book-worker commits."""
+    repo=repo.resolve()
     items=[]
-    for p in paths:
-        try: items.append(p.resolve().relative_to(repo.resolve()).as_posix())
-        except ValueError as exc: raise ValueError(f"Checkpoint outside repository: {p}") from exc
-    if not items: return
+    for raw_path in paths:
+        try:
+            items.append(Path(raw_path).resolve().relative_to(repo).as_posix())
+        except ValueError as exc:
+            raise ValueError(f"Checkpoint outside repository: {raw_path}") from exc
+    if not items:
+        return
     outside_data=[item for item in items if item!="data" and not item.startswith("data/")]
-    if outside_data: raise ValueError(f"Generated Layers 6-8 checkpoints may only be committed under data/: {outside_data}")
+    if outside_data:
+        raise ValueError(f"Generated Layers 6-8 checkpoints may only be committed under data/: {outside_data}")
+
     subprocess.run(["git","add","--",*items],cwd=repo,check=True)
     rc=subprocess.run(["git","diff","--cached","--quiet","--",*items],cwd=repo).returncode
-    if rc==0: return
-    if rc!=1: raise RuntimeError("Cannot inspect staged checkpoint.")
+    if rc==0:
+        return
+    if rc!=1:
+        raise RuntimeError("Cannot inspect staged checkpoint.")
     subprocess.run(["git","config","user.name","github-actions[bot]"],cwd=repo,check=True)
     subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"],cwd=repo,check=True)
     subprocess.run(["git","commit","-m",message,"--",*items],cwd=repo,check=True)
-    subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-    try: subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
-    except subprocess.CalledProcessError:
-        subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-        subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
+
+    push=["git","push","origin","HEAD:main"]
+    max_attempts=8
+    for attempt in range(1,max_attempts+1):
+        fetch=subprocess.run(["git","fetch","origin","main"],cwd=repo,text=True,capture_output=True)
+        if fetch.returncode!=0:
+            detail=(fetch.stderr or fetch.stdout or f"exit code {fetch.returncode}").strip()
+            retryable=any(token in detail.lower() for token in _RETRYABLE_CHECKPOINT_NETWORK_ERRORS)
+            if not retryable or attempt==max_attempts:
+                raise subprocess.CalledProcessError(fetch.returncode,["git","fetch","origin","main"],output=fetch.stdout,stderr=fetch.stderr)
+            delay=min(2**(attempt-1),8)
+            print(f"[layers-6-8] CHECKPOINT_FETCH_RETRY attempt={attempt}/{max_attempts} delay_seconds={delay} error={detail}",file=sys.stderr,flush=True)
+            time.sleep(delay)
+            continue
+
+        try:
+            subprocess.run(["git","rebase","origin/main"],cwd=repo,check=True)
+        except subprocess.CalledProcessError:
+            subprocess.run(["git","rebase","--abort"],cwd=repo,check=False)
+            raise
+
+        pushed=subprocess.run(push,cwd=repo,text=True,capture_output=True)
+        if pushed.returncode==0:
+            print(f"[layers-6-8] CHECKPOINT_PUSHED attempt={attempt}/{max_attempts} message={message}",flush=True)
+            return
+
+        detail=(pushed.stderr or pushed.stdout or f"exit code {pushed.returncode}").strip()
+        retryable=any(token in detail.lower() for token in (
+            *_RETRYABLE_CHECKPOINT_NETWORK_ERRORS,*_RETRYABLE_CHECKPOINT_PUSH_RACES,
+        ))
+        if not retryable or attempt==max_attempts:
+            print(f"[layers-6-8] CHECKPOINT_PUSH_FAILED attempt={attempt}/{max_attempts} message={message} error={detail}",file=sys.stderr,flush=True)
+            raise subprocess.CalledProcessError(pushed.returncode,push,output=pushed.stdout,stderr=pushed.stderr)
+        delay=min(2**(attempt-1),8)
+        print(f"[layers-6-8] CHECKPOINT_PUSH_RETRY attempt={attempt}/{max_attempts} delay_seconds={delay} error={detail}",file=sys.stderr,flush=True)
+        time.sleep(delay)
+
+    raise RuntimeError(f"Checkpoint push exhausted {max_attempts} attempts: {message}")
 
 def benchmark_report(repo:Path,path:Path|None,model:str)->dict[str,Any]:
     path=path or repo/"data"/"textbook-content-pipeline"/"model-benchmarks"/"class-6-ncert-curiosity.v1.json"
