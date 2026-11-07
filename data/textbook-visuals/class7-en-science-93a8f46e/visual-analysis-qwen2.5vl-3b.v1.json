@@ -14,8 +14,8 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "4b1298747dc1ec978a226ae5",
-      "8604e838b1f1e41398ca72dd",
-      "f5cfd5f0dfcebd60e3212f1b"
+      "f5cfd5f0dfcebd60e3212f1b",
+      "5c16577a15e78e04e26b60ff"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3323,
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42365417249",
-      "checkpointed_at": "2026-11-07T11:14:48Z"
+      "checkpointed_at": "2026-11-07T11:21:57Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13530,7 +13530,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42365417249",
-      "checkpointed_at": "2026-11-07T11:15:24Z"
+      "checkpointed_at": "2026-11-07T11:22:33Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79281,7 +79281,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42365417249",
-      "checkpointed_at": "2026-11-07T11:16:13Z"
+      "checkpointed_at": "2026-11-07T11:23:23Z"
     },
     {
       "asset_id": "42e2bad6ce513928f9ecea9b",
@@ -105478,7 +105478,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
@@ -105496,7 +105496,7 @@
           "bioluminescence",
           "combustible substances"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the role of oxygen in combustion.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -105517,7 +105517,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42365417249",
-      "checkpointed_at": "2026-11-07T11:21:00Z"
+      "checkpointed_at": "2026-11-07T11:24:10Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -115656,7 +115656,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42361571776",
+      "run_id": "42365417249",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
