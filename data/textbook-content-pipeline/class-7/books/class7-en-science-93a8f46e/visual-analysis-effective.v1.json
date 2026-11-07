@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a66163b68fec955a6d940a3fe2a951657e2535feba69df87166c7189c5d1dc64",
+  "raw_analysis_sha256": "8d675c37f6b63079926ad49e3c4fd5433f7f812c1d34bfe965710d08a5545eac",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42329888722",
-      "checkpointed_at": "2026-11-07T03:13:13Z",
+      "checkpointed_at": "2026-11-07T03:16:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -20303,7 +20303,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42329888722",
-      "checkpointed_at": "2026-11-07T03:13:37Z",
+      "checkpointed_at": "2026-11-07T03:16:52Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -124680,7 +124680,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42329888722",
-      "checkpointed_at": "2026-11-07T03:14:11Z",
+      "checkpointed_at": "2026-11-07T03:17:25Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
@@ -165685,7 +165685,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42329888722",
-      "checkpointed_at": "2026-11-07T03:14:44Z",
+      "checkpointed_at": "2026-11-07T03:17:58Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
@@ -191661,7 +191661,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42323620025",
+      "run_id": "42329888722",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
