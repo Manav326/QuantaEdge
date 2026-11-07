@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bdac4e914790acf6168b3b62df73c09ecc99e4832026bb8432bf7ca2662fca82",
+  "raw_analysis_sha256": "06a46e915b433d7c96d7beee805c575d86d0bea36419e534c4571eb6f8425f05",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15061,7 +15061,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of patterns in nature.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15087,9 +15087,9 @@
           "discoveries",
           "questions"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and responsibility.",
+        "context_relation": "The text discusses the nature of science and its exploration of patterns in nature, emphasizing the importance of curiosity, asking questions, and understanding the interconnectedness of scientific ideas.",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or illustrations to support the points made."
         ]
       },
       "vision_input": {
@@ -15106,10 +15106,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42396245405",
-      "checkpointed_at": "2026-11-07T18:10:08Z",
+      "run_id": "42400848748",
+      "checkpointed_at": "2026-11-07T18:26:49Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of patterns in nature.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15135,9 +15135,9 @@
           "discoveries",
           "questions"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and responsibility.",
+        "context_relation": "The text discusses the nature of science and its exploration of patterns in nature, emphasizing the importance of curiosity, asking questions, and understanding the interconnectedness of scientific ideas.",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or illustrations to support the points made."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -20276,16 +20276,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light",
+          "universe",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation, encouraging readers to think like scientists and question their answers.",
+        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages scientific thinking and exploration.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the concepts discussed."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "vision_input": {
@@ -20302,8 +20303,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42396245405",
-      "checkpointed_at": "2026-11-07T18:10:29Z",
+      "run_id": "42400848748",
+      "checkpointed_at": "2026-11-07T18:27:42Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20315,16 +20316,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light",
+          "universe",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation, encouraging readers to think like scientists and question their answers.",
+        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages scientific thinking and exploration.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the concepts discussed."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -78836,7 +78838,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42396245405",
+      "run_id": "42400848748",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -78952,7 +78954,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42396245405",
+      "run_id": "42400848748",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115236,7 +115238,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42396245405",
+      "run_id": "42400848748",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
