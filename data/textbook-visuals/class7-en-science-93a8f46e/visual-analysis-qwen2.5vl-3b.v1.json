@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "9af34fc1b7f333c1847afcdd",
-      "4b1298747dc1ec978a226ae5",
-      "0e143e54e2f709b8a4e5968d"
+      "8604e838b1f1e41398ca72dd",
+      "f5cfd5f0dfcebd60e3212f1b",
+      "5c16577a15e78e04e26b60ff"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3323,
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42371593886",
-      "checkpointed_at": "2026-11-07T12:35:14Z"
+      "checkpointed_at": "2026-11-07T12:46:54Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42371593886",
-      "checkpointed_at": "2026-11-07T12:35:56Z"
+      "checkpointed_at": "2026-11-07T12:47:44Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -86214,7 +86214,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42365417249",
+      "run_id": "42371593886",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -105434,15 +105434,15 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
-          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
-          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon. The component of air that supports combustion is oxygen. This can be confirmed by the presence of carbon dioxide in the glass tumbler inverted on the candle. How can you test the",
-          "You can test the carbon dioxide gas by adding a small amount of lime water in the petri dish. You will notice that it turns milky. This carbon dioxide was formed by the carbon from the wax and the oxygen from the air. In other words, oxygen is required for combustion.",
-          "SCIENCE AND SOCIETY\nIf a person's clothes catch fire, what is the best way to extinguish the fire?\nWrap a blanket or cloth around the person. This cuts off the supply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put out a fire, as these can melt ",
-          "FASCINATING FACTS\nNature's wonders: You might have seen some insects emitting light in a garden or a field in late evenings. These insects are called fireflies, and their light is produced by a chemical change. This type of light production (without heat) in living organisms is called bioluminescenc",
-          "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen are necessary for combustion. We also know that paper is a combustible substance, but we can keep it in the air for any length of time without it catching fire. What else is needed to start combustio"
+          "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?",
+          "Since the candle covered by the glass tumbler does not have\na continuous supply of air, the flame gets extinguished soon.\nThe component of air that supports combustion is oxygen. This\ncan be confirmed by the presence of carbon dioxide in the glass\ntumbler inverted on the candle. How can you test the",
+          "You can test the carbon dioxide gas by adding a small amount\nof lime water in the petri dish. You will notice that it turns milky.\nThis carbon dioxide was formed by the carbon from the wax and\nthe oxygen from the air. In other words, oxygen is required for\ncombustion.",
+          "SCIENCE AND SOCIETY\nIf a person's clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt ",
+          "FASCINATING FACTS\nNature's wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescenc",
+          "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
           "combustion",
@@ -105452,7 +105452,7 @@
           "bioluminescence",
           "combustible substances"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the role of oxygen in combustion.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -105472,8 +105472,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42365417249",
-      "checkpointed_at": "2026-11-07T12:07:50Z"
+      "run_id": "42371593886",
+      "checkpointed_at": "2026-11-07T12:53:16Z"
     },
     {
       "asset_id": "5e873e46c5ce7f802122a075",
@@ -115612,7 +115612,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42365417249",
+      "run_id": "42371593886",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
