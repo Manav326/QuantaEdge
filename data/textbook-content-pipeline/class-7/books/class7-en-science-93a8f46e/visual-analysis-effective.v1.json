@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f5052c0b3c462a6d2d4288beb69e53b834b23eebbf7ee059ddf83c4be87e9dfe",
+  "raw_analysis_sha256": "ecc4fd2712c9de63a1c24e025189111a6210bc3daa8af9e88e7caece535df7c1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15084,10 +15084,10 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and responsibility.",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
           "The text does not provide specific examples or illustrations."
         ]
@@ -15106,8 +15106,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42365417249",
-      "checkpointed_at": "2026-11-07T12:05:35Z",
+      "run_id": "42371593886",
+      "checkpointed_at": "2026-11-07T12:22:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -15132,10 +15132,10 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and responsibility.",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
           "The text does not provide specific examples or illustrations."
         ]
@@ -20276,16 +20276,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light",
+          "universe",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation, encouraging readers to think like scientists and question their answers.",
+        "context_relation": "The page discusses the effects of light and its phenomena, including eclipses, and encourages readers to think like scientists.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the concepts discussed."
+          "The page does not provide specific examples or experiments for the reader to perform."
         ]
       },
       "vision_input": {
@@ -20302,8 +20303,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42365417249",
-      "checkpointed_at": "2026-11-07T12:06:10Z",
+      "run_id": "42371593886",
+      "checkpointed_at": "2026-11-07T12:24:35Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20315,16 +20316,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light",
+          "universe",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation, encouraging readers to think like scientists and question their answers.",
+        "context_relation": "The page discusses the effects of light and its phenomena, including eclipses, and encourages readers to think like scientists.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the concepts discussed."
+          "The page does not provide specific examples or experiments for the reader to perform."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -78836,7 +78838,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42365417249",
+      "run_id": "42371593886",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -78952,7 +78954,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42365417249",
+      "run_id": "42371593886",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115236,7 +115238,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42365417249",
+      "run_id": "42371593886",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
