@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e20a21a76358e8ea59f5656c4c2fb1287e1ca9342708e0dcb7caff63c02abe8c",
+  "raw_analysis_sha256": "5764720b6d550403c7daa6ad265436ced6aab4e68bd809b23d9f7ab4d1397728",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42461489035",
-      "checkpointed_at": "2026-11-08T08:22:32Z",
+      "checkpointed_at": "2026-11-08T08:30:12Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -20303,7 +20303,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42461489035",
-      "checkpointed_at": "2026-11-08T08:23:03Z",
+      "checkpointed_at": "2026-11-08T08:30:41Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -124633,7 +124633,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of different materials and their impact on civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124647,25 +124647,22 @@
           "You might have seen wires of metals like copper or aluminium in electrical fittings. Some ornaments, like bangles, necklaces, earrings, etc., are also made from metal wires. Metal wires play important functions in a variety of stringed musical instruments, such as veena, sitar, violin, and guitar.",
           "This property of materials by which they can be drawn into wires is called ductility.",
           "This property of ductility is mainly possessed by metals.",
-          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!",
-          "The ductile nature of metals enables for the creation of this tea strainer with metal wire."
+          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
         ],
         "concepts": [
+          "brittle",
+          "malleable",
           "ductility",
-          "brittleness",
-          "malleability",
-          "Harappans",
-          "iron",
           "copper",
           "gold",
-          "metallic properties",
-          "cultural impact of metals",
-          "cultural evolution",
-          "historical significance of metals"
+          "iron",
+          "Harappans",
+          "agricultural tools",
+          "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of India's civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
         "limitations": [
-          "The text does not provide specific examples or evidence for the claims made."
+          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
         ]
       },
       "vision_input": {
@@ -124683,9 +124680,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42461489035",
-      "checkpointed_at": "2026-11-08T08:27:07Z",
+      "checkpointed_at": "2026-11-08T08:31:22Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of different materials and their impact on civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124699,25 +124696,22 @@
           "You might have seen wires of metals like copper or aluminium in electrical fittings. Some ornaments, like bangles, necklaces, earrings, etc., are also made from metal wires. Metal wires play important functions in a variety of stringed musical instruments, such as veena, sitar, violin, and guitar.",
           "This property of materials by which they can be drawn into wires is called ductility.",
           "This property of ductility is mainly possessed by metals.",
-          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!",
-          "The ductile nature of metals enables for the creation of this tea strainer with metal wire."
+          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
         ],
         "concepts": [
+          "brittle",
+          "malleable",
           "ductility",
-          "brittleness",
-          "malleability",
-          "Harappans",
-          "iron",
           "copper",
           "gold",
-          "metallic properties",
-          "cultural impact of metals",
-          "cultural evolution",
-          "historical significance of metals"
+          "iron",
+          "Harappans",
+          "agricultural tools",
+          "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of India's civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
         "limitations": [
-          "The text does not provide specific examples or evidence for the claims made."
+          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -135698,7 +135692,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42457655582",
+      "run_id": "42461489035",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -165652,7 +165646,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
@@ -165670,7 +165664,7 @@
           "bioluminescence",
           "combustible substances"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the role of oxygen in combustion.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -165690,10 +165684,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42457655582",
-      "checkpointed_at": "2026-11-08T08:00:55Z",
+      "run_id": "42461489035",
+      "checkpointed_at": "2026-11-08T08:35:17Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
           "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
@@ -165711,7 +165705,7 @@
           "bioluminescence",
           "combustible substances"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the role of oxygen in combustion.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
