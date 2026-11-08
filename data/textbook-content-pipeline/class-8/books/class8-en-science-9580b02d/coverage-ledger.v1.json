@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1447,
-    "successful_visual_analyses": 1429,
+    "successful_visual_analyses": 1430,
     "missing_visual_analyses": 844,
-    "failed_visual_analyses": 18,
+    "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 862,
+    "unresolved_count": 861,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8683,17 +8683,17 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
+          "inclusive education",
+          "safety",
           "peer interactions",
-          "safety precautions",
-          "challenging ideas",
+          "assessing understanding",
+          "analyzing concepts",
           "Ever heard of",
-          "A step further"
+          "step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions."
+          "The page does not provide specific examples or activities for implementing the concepts discussed."
         ]
       },
       "chapter_id": null,
@@ -27039,7 +27039,7 @@
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific visual elements are described.",
+          "No specific limitations are mentioned in the visible text.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -32550,9 +32550,43 @@
       "asset_path": "page-0040.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, focusing on biogas production and its historical significance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Now, think what would have happened if microorganisms did not exist on Earth?",
+          "A step further",
+          "Microbes as a source of biogas",
+          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily composed of ca",
+          "Be a scientist",
+          "Ananda Mohan Chakrabarty (1938-2020) was a scientist who studied bacteria. In 1971, he developed a special bacterium that could break down oil spills, helping to clean the environment. His discovery received a patent in 1980. Patent is a copyright given to a person so that no one else can copy, use ",
+          "How does the diversity of microorganisms help in our kitchen?",
+          "2.4.2 Microorganisms and food",
+          "Let us try to understand by performing activities in the kitchen.",
+          "Activity 2.8: Let us perform",
+          "• Take two bowls A and B.",
+          "• In each, take 200 g of flour (atta or maida) and add a pinch of sugar.",
+          "• Now, in bowl A, add a small amount of yeast powder and mix it well with the flour.",
+          "• In bowl B, do not add any yeast, so that we can compare the results of the two bowls.",
+          "• Knead the flour of the two bowls with warm water to make soft dough (Fig. 2.11)."
+        ],
+        "concepts": [
+          "microorganisms",
+          "biogas",
+          "Ananda Mohan Chakrabarty",
+          "patent",
+          "environmental problems",
+          "microorganisms in the kitchen",
+          "yeast",
+          "dough"
+        ],
+        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical significance. It also includes a historical figure and a scientific activity related to microorganisms in the kitchen.",
+        "limitations": [
+          "The page does not provide specific details about the historical figure's work or the scientific activity's results."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
