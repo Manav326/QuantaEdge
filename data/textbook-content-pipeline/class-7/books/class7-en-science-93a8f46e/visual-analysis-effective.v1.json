@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ddf07cfd9211a3f131d55003f06c75434021a4017b81b89a0dade994a90acb49",
+  "raw_analysis_sha256": "4f81cad866810e5c4d771e585943093c97d027381d3bbf8432835cd789ea4963",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15061,7 +15061,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of patterns in nature.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15084,12 +15084,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "questions"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "The text discusses the nature of science and its exploration of patterns in nature, emphasizing the importance of curiosity, asking questions, and understanding the interconnectedness of scientific ideas.",
         "limitations": [
-          "The text does not provide specific examples or questions for exploration."
+          "The text does not provide specific examples or illustrations to support the points made."
         ]
       },
       "vision_input": {
@@ -15106,10 +15106,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42495000744",
-      "checkpointed_at": "2026-11-08T17:17:52Z",
+      "run_id": "42505209247",
+      "checkpointed_at": "2026-11-08T17:36:10Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of patterns in nature.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15132,12 +15132,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "questions"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "The text discusses the nature of science and its exploration of patterns in nature, emphasizing the importance of curiosity, asking questions, and understanding the interconnectedness of scientific ideas.",
         "limitations": [
-          "The text does not provide specific examples or questions for exploration."
+          "The text does not provide specific examples or illustrations to support the points made."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -20284,7 +20284,7 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages scientific thinking and exploration.",
         "limitations": [
           "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
@@ -20303,8 +20303,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42495000744",
-      "checkpointed_at": "2026-11-08T17:18:34Z",
+      "run_id": "42505209247",
+      "checkpointed_at": "2026-11-08T17:37:36Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20324,7 +20324,7 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages scientific thinking and exploration.",
         "limitations": [
           "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
@@ -78838,7 +78838,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42495000744",
+      "run_id": "42505209247",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -78954,7 +78954,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42495000744",
+      "run_id": "42505209247",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115238,7 +115238,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42495000744",
+      "run_id": "42505209247",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
