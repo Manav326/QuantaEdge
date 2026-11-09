@@ -15,8 +15,30 @@ $DraftRoot = if ($env:QUANTAEDGE_TEXTBOOK_DRAFT_DIR) { $env:QUANTAEDGE_TEXTBOOK_
 
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) { throw "Docker CLI is required to pull textbook images from GHCR." }
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) { throw "Python 3.10+ is required." }
-python -c "import fitz" *> $null
-if ($LASTEXITCODE -ne 0) {
+# Native Python writes an import traceback to stderr when PyMuPDF is absent.
+# Under PowerShell's Stop preference that stderr can terminate the script before
+# $LASTEXITCODE is checked. Temporarily make this probe non-terminating and merge
+# stderr into the success stream so the expected failure stays quiet.
+$previousErrorActionPreference = $ErrorActionPreference
+$nativeCommandPreference = Get-Variable -Name PSNativeCommandUseErrorActionPreference -ErrorAction SilentlyContinue
+try {
+    $ErrorActionPreference = "Continue"
+    if ($nativeCommandPreference) {
+        $PSNativeCommandUseErrorActionPreference = $false
+    }
+
+    python -c "import fitz" 2>&1 | Out-Null
+    $fitzCheckExitCode = $LASTEXITCODE
+}
+finally {
+    $ErrorActionPreference = $previousErrorActionPreference
+    if ($nativeCommandPreference) {
+        Set-Variable -Name PSNativeCommandUseErrorActionPreference -Value $nativeCommandPreference.Value
+    }
+}
+
+if ($fitzCheckExitCode -ne 0) {
+    Write-Host "PyMuPDF is missing; installing it in the active Python environment..."
     python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
     if ($LASTEXITCODE -ne 0) { throw "Could not install PyMuPDF." }
 }
