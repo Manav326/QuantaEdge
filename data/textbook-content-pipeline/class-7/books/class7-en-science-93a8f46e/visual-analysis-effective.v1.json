@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bb13f0ff6ebddd3134a71a822fe9c81babe7c2492d48aabe1afa4761eccd1397",
+  "raw_analysis_sha256": "4e1e8eb1492f734e7e2f9fde4c6d108cb4a3bbd1d5e6a810959fc6aef2b1705f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T00:36:40Z",
+      "checkpointed_at": "2026-11-09T00:46:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -20304,7 +20304,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T00:37:36Z",
+      "checkpointed_at": "2026-11-09T00:47:26Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -124725,98 +124725,21 @@
     {
       "asset_id": "4b1298747dc1ec978a226ae5",
       "asset_sha256": "b7c55edf073a3f38b2df29e21c5a92b8b7e845b9778c6694e6ea5870c786c16c",
+      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 64,
       "asset_path": "page-0064.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "cf67b3959348f0a9ad2af8279f9d53fd2dbef548584569158937f0ac96f456e4",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of different materials and their impact on civilization.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
-          "HOLISTIC LENS",
-          "The impact of iron on the progress of civilisation of India",
-          "In the Grade 6 Social Science textbook Exploring Society India and Beyond, you learnt about the Harappans. They knew how to use metals like copper and gold. They used these metals to make various objects, from utensils to jewellery. However, you would hardly find any evidence of the Harappans using ",
-          "However, once the use of iron gained prominence in the times that followed, it contributed significantly to the progress of civilisation in India. For instance, due to its strength, agricultural tools like ploughs made from iron were much superior to those used previously.",
-          "What could be the potential reason that it is generally considered that copper was discovered earlier as compared to iron?",
-          "4.1.2 Ductility",
-          "Where do you find the use of metal wires?",
-          "You might have seen wires of metals like copper or aluminium in electrical fittings. Some ornaments, like bangles, necklaces, earrings, etc., are also made from metal wires. Metal wires play important functions in a variety of stringed musical instruments, such as veena, sitar, violin, and guitar.",
-          "This property of materials by which they can be drawn into wires is called ductility.",
-          "This property of ductility is mainly possessed by metals.",
-          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
-        ],
-        "concepts": [
-          "ductility",
-          "brittle",
-          "malleable",
-          "copper",
-          "gold",
-          "iron",
-          "Harappans",
-          "agricultural tools",
-          "musical instruments"
-        ],
-        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of civilization.",
-        "limitations": [
-          "The page does not provide specific examples or evidence for the claims made."
-        ]
-      },
-      "vision_input": {
-        "profile": "max-edge-960-jpeg-q82-v1",
-        "source_width": 1186,
-        "source_height": 1568,
-        "inference_width": 726,
-        "inference_height": 960,
-        "media_type": "image/jpeg",
-        "jpeg_quality": 82,
-        "byte_count": 132187,
-        "sha256": "5a86909328e7762fc93859e3f0b20b726f4da261f8c49ac2ee3595bd7aad4666"
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T00:41:37Z",
-      "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of different materials and their impact on civilization.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
-          "HOLISTIC LENS",
-          "The impact of iron on the progress of civilisation of India",
-          "In the Grade 6 Social Science textbook Exploring Society India and Beyond, you learnt about the Harappans. They knew how to use metals like copper and gold. They used these metals to make various objects, from utensils to jewellery. However, you would hardly find any evidence of the Harappans using ",
-          "However, once the use of iron gained prominence in the times that followed, it contributed significantly to the progress of civilisation in India. For instance, due to its strength, agricultural tools like ploughs made from iron were much superior to those used previously.",
-          "What could be the potential reason that it is generally considered that copper was discovered earlier as compared to iron?",
-          "4.1.2 Ductility",
-          "Where do you find the use of metal wires?",
-          "You might have seen wires of metals like copper or aluminium in electrical fittings. Some ornaments, like bangles, necklaces, earrings, etc., are also made from metal wires. Metal wires play important functions in a variety of stringed musical instruments, such as veena, sitar, violin, and guitar.",
-          "This property of materials by which they can be drawn into wires is called ductility.",
-          "This property of ductility is mainly possessed by metals.",
-          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
-        ],
-        "concepts": [
-          "ductility",
-          "brittle",
-          "malleable",
-          "copper",
-          "gold",
-          "iron",
-          "Harappans",
-          "agricultural tools",
-          "musical instruments"
-        ],
-        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of civilization.",
-        "limitations": [
-          "The page does not provide specific examples or evidence for the claims made."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -135794,7 +135717,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
+      "run_id": "42539306993",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -165748,15 +165671,15 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
-          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
-          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon. The component of air that supports combustion is oxygen. This can be confirmed by the presence of carbon dioxide in the glass tumbler inverted on the candle. How can you test the",
-          "You can test the carbon dioxide gas by adding a small amount of lime water in the petri dish. You will notice that it turns milky. This carbon dioxide was formed by the carbon from the wax and the oxygen from the air. In other words, oxygen is required for combustion.",
-          "SCIENCE AND SOCIETY\nIf a person's clothes catch fire, what is the best way to extinguish the fire?\nWrap a blanket or cloth around the person. This cuts off the supply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put out a fire, as these can melt ",
-          "FASCINATING FACTS\nNature's wonders: You might have seen some insects emitting light in a garden or a field in late evenings. These insects are called fireflies, and their light is produced by a chemical change. This type of light production (without heat) in living organisms is called bioluminescenc",
-          "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen are necessary for combustion. We also know that paper is a combustible substance, but we can keep it in the air for any length of time without it catching fire. What else is needed to start combustio"
+          "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame g",
+          "SCIENCE AND SOCIETY",
+          "If a person's clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt and stick to the ski",
+          "FASCINATING FACTS",
+          "Nature's wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescence.",
+          "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
           "combustion",
@@ -165764,9 +165687,11 @@
           "carbon dioxide",
           "fire",
           "bioluminescence",
-          "combustible substances"
+          "combustible substances",
+          "air",
+          "fireflies"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the role of oxygen in combustion.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -165786,18 +165711,18 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
-      "checkpointed_at": "2026-11-09T00:11:21Z",
+      "run_id": "42539306993",
+      "checkpointed_at": "2026-11-09T00:55:33Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
+        "visual_summary": "Page from a textbook discussing the effects of covering a candle with a glass tumbler on its burning.",
         "visual_type": "uncertain",
         "visible_text": [
-          "We observe that the candle that was not covered (Fig. 5.6a) continues to burn, whereas the candle that was covered with a glass tumbler (Fig. 5.6b) stops burning after some time. Why does this happen?",
-          "Since the candle covered by the glass tumbler does not have a continuous supply of air, the flame gets extinguished soon. The component of air that supports combustion is oxygen. This can be confirmed by the presence of carbon dioxide in the glass tumbler inverted on the candle. How can you test the",
-          "You can test the carbon dioxide gas by adding a small amount of lime water in the petri dish. You will notice that it turns milky. This carbon dioxide was formed by the carbon from the wax and the oxygen from the air. In other words, oxygen is required for combustion.",
-          "SCIENCE AND SOCIETY\nIf a person's clothes catch fire, what is the best way to extinguish the fire?\nWrap a blanket or cloth around the person. This cuts off the supply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put out a fire, as these can melt ",
-          "FASCINATING FACTS\nNature's wonders: You might have seen some insects emitting light in a garden or a field in late evenings. These insects are called fireflies, and their light is produced by a chemical change. This type of light production (without heat) in living organisms is called bioluminescenc",
-          "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen are necessary for combustion. We also know that paper is a combustible substance, but we can keep it in the air for any length of time without it catching fire. What else is needed to start combustio"
+          "We observe that the candle that was not covered (Fig. 5.6a)\ncontinues to burn, whereas the candle that was covered with a\nglass tumbler (Fig. 5.6b) stops burning after some time. Why does\nthis happen?\nSince the candle covered by the glass tumbler does not have\na continuous supply of air, the flame g",
+          "SCIENCE AND SOCIETY",
+          "If a person's clothes catch fire, what is the best way to extinguish\nthe fire?\nWrap a blanket or cloth around the person. This cuts off the\nsupply of air, and the fire gets extinguished.\nCaution—Synthetic blanket or cloth should never be used to put\nout a fire, as these can melt and stick to the ski",
+          "FASCINATING FACTS",
+          "Nature's wonders: You might have\nseen some insects emitting light in\na garden or a field in late evenings.\nThese insects are called fireflies, and\ntheir light is produced by a chemical\nchange. This type of light production\n(without heat) in living organisms is\ncalled bioluminescence.",
+          "Is the Presence of Air Enough for Combustion?\nWe learnt above that combustible substances and oxygen\nare necessary for combustion. We also know that paper is a\ncombustible substance, but we can keep it in the air for any\nlength of time without it catching fire. What else is needed to\nstart combustio"
         ],
         "concepts": [
           "combustion",
@@ -165805,9 +165730,11 @@
           "carbon dioxide",
           "fire",
           "bioluminescence",
-          "combustible substances"
+          "combustible substances",
+          "air",
+          "fireflies"
         ],
-        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the role of oxygen in combustion.",
+        "context_relation": "The page discusses the effects of covering a candle with a glass tumbler on its burning, and the presence of oxygen and carbon dioxide in the air.",
         "limitations": [
           "The page does not provide specific instructions on how to test for carbon dioxide gas.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
