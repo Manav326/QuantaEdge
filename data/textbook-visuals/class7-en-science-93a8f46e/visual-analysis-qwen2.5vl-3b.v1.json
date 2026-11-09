@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "4b1298747dc1ec978a226ae5",
-      "f5cfd5f0dfcebd60e3212f1b",
-      "b655021abbc6938bb1728fb8"
+      "c85f41bbf274ff0251ebf3e6",
+      "19182aa83463f523d90ed77b",
+      "617a7eb962b48f65cc1c1ca8"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3323,
-    "assets_remaining": 4165,
+    "assets_analyzed": 3324,
+    "assets_remaining": 4164,
     "assets_completion_percent": 44.4,
-    "assets_failed": 37,
+    "assets_failed": 36,
     "assets_skipped_from_checkpoint": 3323,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9981,7 +9981,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -10004,12 +10004,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and responsibility.",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific details about the textbook or its content."
         ]
       },
       "vision_input": {
@@ -10026,8 +10026,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
-      "checkpointed_at": "2026-11-09T00:09:25Z"
+      "run_id": "42539306993",
+      "checkpointed_at": "2026-11-09T00:25:08Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13503,16 +13503,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light",
+          "universe",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation, encouraging readers to think like scientists and question their answers.",
+        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation, and encourages the reader to think like a scientist.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the concepts discussed."
+          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
         ]
       },
       "vision_input": {
@@ -13529,8 +13530,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
-      "checkpointed_at": "2026-11-09T00:09:56Z"
+      "run_id": "42539306993",
+      "checkpointed_at": "2026-11-09T00:27:04Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50060,19 +50061,47 @@
     {
       "asset_id": "c85f41bbf274ff0251ebf3e6",
       "asset_sha256": "86e1c73478253e0f8cee8335811f63cba6d86a9710c18e3b208c48d189910e56",
-      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 48,
       "asset_path": "assets/86e1c73478253e0f8cee8335811f63cba6d86a9710c18e3b208c48d189910e56.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cylindrical battery with wires attached to it, showing the positive and negative terminals.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "battery",
+          "positive terminal",
+          "negative terminal",
+          "wires",
+          "battery holder"
+        ],
+        "context_relation": "The image is a visual representation of an electric cell holder with wires attached to it, showing the positive and negative terminals.",
+        "limitations": [
+          "The image does not provide specific details about the battery's capacity or voltage."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 254,
+        "source_height": 220,
+        "inference_width": 254,
+        "inference_height": 220,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 4485,
+        "sha256": "82074716ba3687957112c23bc58707a39cbf6e5f54d1dc79b34c5ad8c3ac00b0"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42539306993",
+      "checkpointed_at": "2026-11-09T00:28:21Z"
     },
     {
       "asset_id": "18fdfb539a5761211e6d039f",
@@ -50149,7 +50178,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
+      "run_id": "42539306993",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -73272,7 +73301,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
+      "run_id": "42539306993",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
