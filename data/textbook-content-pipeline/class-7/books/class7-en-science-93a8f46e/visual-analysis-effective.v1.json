@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4e1e8eb1492f734e7e2f9fde4c6d108cb4a3bbd1d5e6a810959fc6aef2b1705f",
+  "raw_analysis_sha256": "753fa731253edce224f624fe11c1cd0141ae4113a4063374f9c18c89933184a8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T00:46:30Z",
+      "checkpointed_at": "2026-11-09T00:57:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -20304,7 +20304,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T00:47:26Z",
+      "checkpointed_at": "2026-11-09T00:57:58Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -181350,7 +181350,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
+      "run_id": "42539306993",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -190282,21 +190282,78 @@
     {
       "asset_id": "120367215f628d2ad64aec29",
       "asset_sha256": "b61fe250c8974e90fba1353d327a7c94c3d34938ac847726575d5a7c6dfe6139",
-      "page_text_context_sha256": "5d114509e3a4235160a41433b160c3183a36bb973cee96aaa0b2e4088c2e1405",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 106,
       "asset_path": "page-0106.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "5d114509e3a4235160a41433b160c3183a36bb973cee96aaa0b2e4088c2e1405",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with questions and illustrations related to adolescent health and nutrition.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2. Which of the following food groups would be a better option\nfor adolescents and why?",
+          "3. Unscramble the underlined word in the following sentences:\n(i) The discharge of blood in adolescent girls which\ngenerally occurs every 28–30 days is nstmnoiaretu.\n(ii) The hoarseness in the voice of adolescent boys is due to\nenlarged icey xob.",
+          "4. Shalu told her friend, \"Adolescence brings only physical\nchanges, like growing taller or developing body hair.\" Is she correct? What would you change in this description of adolescence?",
+          "5. During a discussion in the class, some of the students raised\nthe following points. What questions would you ask them to\ncheck the correctness of these points?\n(i) Adolescents do not need to worry about behavioural\nchanges.\n(ii) If someone tries a harmful substance once, they can stop\nanytime the",
+          "6. Adolescents sometimes experience mood swings. On some\ndays, they feel very energetic and happy, while on other\ndays, they may feel low. What other behavioural changes\nare associated with this age?",
+          "7. While using a toilet, Mohini noticed that used sanitary pads\nwere scattered near the bin. She got upset and shared her\nfeelings with her friends. They discussed the importance"
+        ],
+        "concepts": [
+          "adolescent health",
+          "nutrition",
+          "physical changes",
+          "behavioural changes",
+          "mood swings"
+        ],
+        "context_relation": "The page is part of a textbook discussing adolescent health and nutrition, with questions and illustrations related to these topics.",
+        "limitations": [
+          "The page does not provide specific answers to the questions."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 134598,
+        "sha256": "4219f48da68259f7160e6e71311ab886b2f9a2c8a01322eb432cd3d65e60c2cf"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42539306993",
+      "checkpointed_at": "2026-11-09T01:03:20Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with questions and illustrations related to adolescent health and nutrition.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2. Which of the following food groups would be a better option\nfor adolescents and why?",
+          "3. Unscramble the underlined word in the following sentences:\n(i) The discharge of blood in adolescent girls which\ngenerally occurs every 28–30 days is nstmnoiaretu.\n(ii) The hoarseness in the voice of adolescent boys is due to\nenlarged icey xob.",
+          "4. Shalu told her friend, \"Adolescence brings only physical\nchanges, like growing taller or developing body hair.\" Is she correct? What would you change in this description of adolescence?",
+          "5. During a discussion in the class, some of the students raised\nthe following points. What questions would you ask them to\ncheck the correctness of these points?\n(i) Adolescents do not need to worry about behavioural\nchanges.\n(ii) If someone tries a harmful substance once, they can stop\nanytime the",
+          "6. Adolescents sometimes experience mood swings. On some\ndays, they feel very energetic and happy, while on other\ndays, they may feel low. What other behavioural changes\nare associated with this age?",
+          "7. While using a toilet, Mohini noticed that used sanitary pads\nwere scattered near the bin. She got upset and shared her\nfeelings with her friends. They discussed the importance"
+        ],
+        "concepts": [
+          "adolescent health",
+          "nutrition",
+          "physical changes",
+          "behavioural changes",
+          "mood swings"
+        ],
+        "context_relation": "The page is part of a textbook discussing adolescent health and nutrition, with questions and illustrations related to these topics.",
+        "limitations": [
+          "The page does not provide specific answers to the questions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -191234,7 +191291,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
+      "run_id": "42539306993",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,

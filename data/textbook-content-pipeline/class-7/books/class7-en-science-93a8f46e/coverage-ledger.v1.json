@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 3364,
-    "successful_visual_analyses": 3328,
+    "successful_visual_analyses": 3329,
     "missing_visual_analyses": 4124,
-    "failed_visual_analyses": 36,
+    "failed_visual_analyses": 35,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4160,
+    "unresolved_count": 4159,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -130015,9 +130015,31 @@
       "asset_path": "page-0106.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with questions and illustrations related to adolescent health and nutrition.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2. Which of the following food groups would be a better option\nfor adolescents and why?",
+          "3. Unscramble the underlined word in the following sentences:\n(i) The discharge of blood in adolescent girls which\ngenerally occurs every 28–30 days is nstmnoiaretu.\n(ii) The hoarseness in the voice of adolescent boys is due to\nenlarged icey xob.",
+          "4. Shalu told her friend, \"Adolescence brings only physical\nchanges, like growing taller or developing body hair.\" Is she correct? What would you change in this description of adolescence?",
+          "5. During a discussion in the class, some of the students raised\nthe following points. What questions would you ask them to\ncheck the correctness of these points?\n(i) Adolescents do not need to worry about behavioural\nchanges.\n(ii) If someone tries a harmful substance once, they can stop\nanytime the",
+          "6. Adolescents sometimes experience mood swings. On some\ndays, they feel very energetic and happy, while on other\ndays, they may feel low. What other behavioural changes\nare associated with this age?",
+          "7. While using a toilet, Mohini noticed that used sanitary pads\nwere scattered near the bin. She got upset and shared her\nfeelings with her friends. They discussed the importance"
+        ],
+        "concepts": [
+          "adolescent health",
+          "nutrition",
+          "physical changes",
+          "behavioural changes",
+          "mood swings"
+        ],
+        "context_relation": "The page is part of a textbook discussing adolescent health and nutrition, with questions and illustrations related to these topics.",
+        "limitations": [
+          "The page does not provide specific answers to the questions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
