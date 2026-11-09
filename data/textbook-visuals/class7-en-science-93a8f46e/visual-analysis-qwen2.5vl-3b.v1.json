@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3335,
+    "assets_selected": 3336,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "4b1298747dc1ec978a226ae5",
-      "cb53f25d2aadb5c770561172",
-      "8cf47dd631f05b62a4da4b58"
+      "d00952224136c927b5e98d9f",
+      "10b64ec3cd08882a367aeea6"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3331,
-    "assets_remaining": 4157,
+    "assets_analyzed": 3332,
+    "assets_remaining": 4156,
     "assets_completion_percent": 44.5,
-    "assets_failed": 30,
-    "assets_skipped_from_checkpoint": 3330,
+    "assets_failed": 29,
+    "assets_skipped_from_checkpoint": 3331,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42552778359",
-      "checkpointed_at": "2026-11-09T03:19:40Z"
+      "checkpointed_at": "2026-11-09T03:23:39Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13530,7 +13530,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42552778359",
-      "checkpointed_at": "2026-11-09T03:20:03Z"
+      "checkpointed_at": "2026-11-09T03:24:02Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79344,7 +79344,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42552778359",
-      "checkpointed_at": "2026-11-09T03:20:34Z"
+      "checkpointed_at": "2026-11-09T03:24:34Z"
     },
     {
       "asset_id": "42e2bad6ce513928f9ecea9b",
@@ -123370,19 +123370,60 @@
     {
       "asset_id": "d00952224136c927b5e98d9f",
       "asset_sha256": "2c5fd92844638ebfb7446acdff43c4a4e28bb6348331db0754c74c4930f22564",
-      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/2c5fd92844638ebfb7446acdff43c4a4e28bb6348331db0754c74c4930f22564.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42539306993",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scene of Pema and Palden sitting around a fireplace in Gangtok, discussing the difference in winter weather between Gangtok and Kerala.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and Palden are curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Nature",
+          "Gangtok",
+          "Kerala",
+          "Winter",
+          "Equator",
+          "Coastline",
+          "Weather",
+          "Cold",
+          "Warm",
+          "Humid"
+        ],
+        "context_relation": "The grandfather's explanation about the weather difference between Gangtok and Kerala is based on the geographical and climatic factors.",
+        "limitations": [
+          "The image does not show any visual representation of the geographical or climatic factors.",
+          "The image does not show any visual representation of the weather conditions in Gangtok and Kerala."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1210,
+        "source_height": 86,
+        "inference_width": 960,
+        "inference_height": 68,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 833,
+        "sha256": "3d40bdfe9b7ddd7780aea3c13417f3e8f4fc505e30a9c1216f93a8b21f4c737a"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42552778359",
+      "checkpointed_at": "2026-11-09T03:25:26Z"
     },
     {
       "asset_id": "10b64ec3cd08882a367aeea6",
@@ -123395,7 +123436,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42539306993",
+      "run_id": "42552778359",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
