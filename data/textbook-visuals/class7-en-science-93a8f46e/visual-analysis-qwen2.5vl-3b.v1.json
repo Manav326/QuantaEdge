@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "b6d59640d4c635a0bc9438c9",
-      "b8b16cd29915e5e29cf6e5f0",
-      "b655021abbc6938bb1728fb8"
+      "cb53f25d2aadb5c770561172",
+      "7d8dad96d387d62af0ca7ef5",
+      "8cf47dd631f05b62a4da4b58"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3327,
-    "assets_remaining": 4161,
+    "assets_analyzed": 3328,
+    "assets_remaining": 4160,
     "assets_completion_percent": 44.4,
-    "assets_failed": 35,
+    "assets_failed": 34,
     "assets_skipped_from_checkpoint": 3327,
     "batch_limit": 5,
     "publication_allowed": false
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T01:18:49Z"
+      "checkpointed_at": "2026-11-09T01:31:28Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T01:19:45Z"
+      "checkpointed_at": "2026-11-09T01:32:24Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -122653,7 +122653,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42495000744",
+      "run_id": "42539306993",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -123027,19 +123027,60 @@
     {
       "asset_id": "7d8dad96d387d62af0ca7ef5",
       "asset_sha256": "4c3e4450cd3ebf4f6c484d344b8a0882d3e5785d54f07118b5ae55c86b4d7f6e",
-      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/4c3e4450cd3ebf4f6c484d344b8a0882d3e5785d54f07118b5ae55c86b4d7f6e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42495000744",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing heat transfer in nature, with a focus on the comparison between winter conditions in Gangtok and Kerala.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer temperatures.\"",
+          "The grandfather explains that the equator is the imaginary line around the Earth that divides the Earth into the Northern and Southern Hemispheres. It is located at approximately 0° latitude.",
+          "The grandfather also mentions that the Earth's rotation causes the Sun to shine more directly on the equator, resulting in warmer temperatures.",
+          "The grandfather further explains that the Earth's rotation also causes the Sun to shine more directly on the equator, resulting in warmer temperatures.",
+          "The grandfather concludes that the Earth's rotation causes the Sun to shine more directly on the equator, resulting in warmer temperatures.",
+          "The grandfather concludes that the Earth's rotation causes the Sun to shine more directly on the equator, resulting in warmer temperatures."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Equator",
+          "Latitude",
+          "Rotation",
+          "Sunlight",
+          "Temperature",
+          "Hemispheres"
+        ],
+        "context_relation": "The grandfather's explanation is based on the Earth's rotation and the position of the equator, which affects the amount of sunlight received by different parts of the Earth.",
+        "limitations": [
+          "The explanation does not consider other factors that can affect temperature, such as altitude, ocean currents, and land use.",
+          "The explanation does not consider the impact of human activities on climate, such as deforestation and industrial pollution."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 67,
+        "source_height": 27,
+        "inference_width": 67,
+        "inference_height": 27,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 839,
+        "sha256": "0ed67d242508c1becad33cf0b87fcc07956413b00d74ee3e9e06e4531dc5d6a2"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42539306993",
+      "checkpointed_at": "2026-11-09T01:37:56Z"
     },
     {
       "asset_id": "3488d8dd39995ddc9a824d27",
@@ -123143,7 +123184,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42495000744",
+      "run_id": "42539306993",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
