@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3333,
+    "assets_selected": 3334,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "9bcda30192c2436a7536c236",
-      "1ad04215f8a300ca8e3867f7",
-      "6b2e058e3770746adb380451"
+      "8c7ae514ffb5872ca4fe38b2",
+      "760b8079e92a3046f5aa021a",
+      "0e84e872fabbb51565912b42"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3329,
-    "assets_remaining": 4159,
+    "assets_analyzed": 3330,
+    "assets_remaining": 4158,
     "assets_completion_percent": 44.5,
-    "assets_failed": 33,
-    "assets_skipped_from_checkpoint": 3328,
+    "assets_failed": 32,
+    "assets_skipped_from_checkpoint": 3329,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T02:08:10Z"
+      "checkpointed_at": "2026-11-09T02:19:43Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T02:09:06Z"
+      "checkpointed_at": "2026-11-09T02:20:39Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -123565,9 +123565,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42539306993",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -123629,28 +123629,75 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
+      "run_id": "42539306993",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
     {
       "asset_id": "0e84e872fabbb51565912b42",
       "asset_sha256": "9927abcc000c7608aaa28703c2d71d714aeaec05973063692f7d23a7fa453fb1",
-      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/9927abcc000c7608aaa28703c2d71d714aeaec05973063692f7d23a7fa453fb1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42129297303",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Pillow is required for bounded vision inputs. Install Pillow>=10,<13.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A warm, gradient background with a soft, pastel color scheme transitioning from light yellow to pink.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer",
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer"
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Nature",
+          "Kerala",
+          "Gangtok",
+          "Winter vacation",
+          "Equator",
+          "Long coastline",
+          "Warm",
+          "Humid",
+          "Cold",
+          "Curiosity",
+          "Science teacher",
+          "Retired",
+          "Science",
+          "Geography"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the concept of heat transfer in nature, specifically comparing the weather conditions in different regions like Gangtok and Kerala.",
+        "limitations": [
+          "The image does not contain any specific visual elements or diagrams related to heat transfer or geography."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 430,
+        "source_height": 373,
+        "inference_width": 430,
+        "inference_height": 373,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 2541,
+        "sha256": "d549e10f0e30366d8541bbcae081bfc1e71e6703050fa4d002794bff49b06585"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42539306993",
+      "checkpointed_at": "2026-11-09T02:29:37Z"
     },
     {
       "asset_id": "d13e484a010856fbf0e77aa0",
