@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3340,
+    "assets_selected": 3341,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "de6ff3b053e0befbd07960e7",
-      "ab944d965503bd40aed88ac8",
-      "49cec44504f51757c7cd263f"
+      "f9979838d74392f962cb2258",
+      "399bd5823d0f0dc52a3ebf47",
+      "fddf2a4ce5ce1995dbf5f86f"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3336,
-    "assets_remaining": 4152,
+    "assets_analyzed": 3337,
+    "assets_remaining": 4151,
     "assets_completion_percent": 44.6,
-    "assets_failed": 27,
-    "assets_skipped_from_checkpoint": 3335,
+    "assets_failed": 29,
+    "assets_skipped_from_checkpoint": 3336,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42558419922",
-      "checkpointed_at": "2026-11-09T05:33:23Z"
+      "checkpointed_at": "2026-11-09T05:43:10Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42558419922",
-      "checkpointed_at": "2026-11-09T05:34:02Z"
+      "checkpointed_at": "2026-11-09T05:43:50Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -124060,6 +124060,79 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "f9979838d74392f962cb2258",
+      "asset_sha256": "32df0bfd884f69744bc14620fb51f4763aa2ec37b4ccf6e44cbb6202a289a3be",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/32df0bfd884f69744bc14620fb51f4763aa2ec37b4ccf6e44cbb6202a289a3be.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42558419922",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "399bd5823d0f0dc52a3ebf47",
+      "asset_sha256": "406e793980c8685598dca08de88c68de57734171ce6781eb7b602315e63839d2",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/406e793980c8685598dca08de88c68de57734171ce6781eb7b602315e63839d2.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42558419922",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "fddf2a4ce5ce1995dbf5f86f",
+      "asset_sha256": "fa861422ae3ac286a9b0bb1b5a5c4f948f2d5b7ba2fa1bd2739b563e2789f604",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/fa861422ae3ac286a9b0bb1b5a5c4f948f2d5b7ba2fa1bd2739b563e2789f604.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A warm, gradient background with a faint, indistinct image or text in the center.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover for a page about heat transfer in nature.",
+        "limitations": [
+          "The image is too blurry to discern any specific details or text."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 430,
+        "source_height": 373,
+        "inference_width": 430,
+        "inference_height": 373,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 2263,
+        "sha256": "9e22b2e89ab4bb7e59c730be2f2b8e52fd89907e74aaa21d1b616ab9ae01ba9e"
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42558419922",
+      "checkpointed_at": "2026-11-09T05:51:43Z"
     }
   ]
 }
