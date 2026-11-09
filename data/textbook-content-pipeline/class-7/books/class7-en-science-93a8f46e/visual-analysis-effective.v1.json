@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "205432c8996740b2a3c07efd6b62614857784847f11cb0ce46351a8b03f8cdb0",
+  "raw_analysis_sha256": "4de4ede34d0dcf681389f476b4a9a830495c805eee8e0e0fad4a61ff311108d8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42552778359",
-      "checkpointed_at": "2026-11-09T03:36:50Z",
+      "checkpointed_at": "2026-11-09T03:41:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -20303,7 +20303,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42552778359",
-      "checkpointed_at": "2026-11-09T03:37:16Z",
+      "checkpointed_at": "2026-11-09T03:41:52Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -124780,7 +124780,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42552778359",
-      "checkpointed_at": "2026-11-09T03:37:49Z",
+      "checkpointed_at": "2026-11-09T03:42:23Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
@@ -193386,7 +193386,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42539306993",
+      "run_id": "42552778359",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -193476,21 +193476,94 @@
     {
       "asset_id": "760b8079e92a3046f5aa021a",
       "asset_sha256": "1ee5c2515285dee0fa7c6de4df2c0372752f9f0275b7eca2a96a364499d27868",
-      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/1ee5c2515285dee0fa7c6de4df2c0372752f9f0275b7eca2a96a364499d27868.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42539306993",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing heat transfer in nature, with a focus on the comparison between winter conditions in Gangtok and Kerala.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer temperatures.\"",
+          "The grandfather explains that the Earth's rotation and the tilt of its axis cause different parts of the planet to receive varying amounts of sunlight, leading to different climates.",
+          "He also mentions that the atmosphere plays a role in moderating temperatures, with the ocean acting as a giant heat sink.",
+          "The grandfather concludes by saying that understanding these factors can help us appreciate the diversity of climates around the world.",
+          "The page ends with a question asking the reader to think about the factors that influence climate and how they might affect their own local climate."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Climate",
+          "Equator",
+          "Coastline",
+          "Rotation",
+          "Axis",
+          "Sunlight",
+          "Atmosphere",
+          "Ocean",
+          "Climate Diversity"
+        ],
+        "context_relation": "The page is discussing the factors that influence climate, specifically comparing the climates of Gangtok and Kerala.",
+        "limitations": [
+          "The page does not provide specific details about the climate of Gangtok or Kerala.",
+          "The page does not include any visual aids or diagrams to support the explanation."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 6,
+        "source_height": 6,
+        "inference_width": 6,
+        "inference_height": 6,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 288,
+        "sha256": "30f6ed5f8ce0818ed25be55b1e922b84426e4071055c930afb902d5bf23cdd8d"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42552778359",
+      "checkpointed_at": "2026-11-09T03:44:49Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing heat transfer in nature, with a focus on the comparison between winter conditions in Gangtok and Kerala.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer temperatures.\"",
+          "The grandfather explains that the Earth's rotation and the tilt of its axis cause different parts of the planet to receive varying amounts of sunlight, leading to different climates.",
+          "He also mentions that the atmosphere plays a role in moderating temperatures, with the ocean acting as a giant heat sink.",
+          "The grandfather concludes by saying that understanding these factors can help us appreciate the diversity of climates around the world.",
+          "The page ends with a question asking the reader to think about the factors that influence climate and how they might affect their own local climate."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Climate",
+          "Equator",
+          "Coastline",
+          "Rotation",
+          "Axis",
+          "Sunlight",
+          "Atmosphere",
+          "Ocean",
+          "Climate Diversity"
+        ],
+        "context_relation": "The page is discussing the factors that influence climate, specifically comparing the climates of Gangtok and Kerala.",
+        "limitations": [
+          "The page does not provide specific details about the climate of Gangtok or Kerala.",
+          "The page does not include any visual aids or diagrams to support the explanation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
