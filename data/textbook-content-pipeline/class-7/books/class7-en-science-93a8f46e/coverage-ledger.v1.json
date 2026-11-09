@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 3364,
-    "successful_visual_analyses": 3328,
+    "successful_visual_analyses": 3329,
     "missing_visual_analyses": 4124,
-    "failed_visual_analyses": 36,
+    "failed_visual_analyses": 35,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4160,
+    "unresolved_count": 4159,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -21539,12 +21539,12 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
           "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
-          "But let's get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
+          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
         ],
         "concepts": [
           "exploration",
@@ -21562,12 +21562,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "questions"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and the interconnectedness of scientific ideas.",
         "limitations": [
-          "The text does not provide specific details about the textbook or its content."
+          "The text does not provide specific examples or illustrations to support the discussion."
         ]
       },
       "chapter_id": null,
@@ -24945,9 +24945,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation, and encourages the reader to think like a scientist.",
+        "context_relation": "The page discusses the impact of light on the Earth and Moon, including eclipses, and encourages readers to think like scientists.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
+          "The page does not provide specific examples or experiments for the activities."
         ]
       },
       "chapter_id": null,
@@ -83938,9 +83938,31 @@
       "asset_path": "assets/23c27571e5f95fbb030b8f819eb4b8966e4b8110f61fb08426e6e9075cd277f4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A conversation between Yashwant and Sudarshan about making items of daily use.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "Craftspersons",
+          "Metals",
+          "Daily use items",
+          "Ironsmiths",
+          "Sudarshan uncle"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show the ironsmiths making items.",
+          "The image does not show the ironsmiths' tools or techniques."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -88904,7 +88926,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of different materials and their impact on civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -88921,9 +88943,9 @@
           "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
         ],
         "concepts": [
+          "ductility",
           "brittle",
           "malleable",
-          "ductility",
           "copper",
           "gold",
           "iron",
@@ -88931,9 +88953,9 @@
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
+        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of civilization.",
         "limitations": [
-          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The page does not provide specific examples or evidence for the claims made."
         ]
       },
       "chapter_id": null,

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4c6946205d986212ad23d1838c2b5b0b8cdf11278a31adfce2c22425c0bb3579",
+  "raw_analysis_sha256": "bb13f0ff6ebddd3134a71a822fe9c81babe7c2492d48aabe1afa4761eccd1397",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15061,12 +15061,12 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
           "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
-          "But let's get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
+          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
         ],
         "concepts": [
           "exploration",
@@ -15084,12 +15084,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "questions"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and the interconnectedness of scientific ideas.",
         "limitations": [
-          "The text does not provide specific details about the textbook or its content."
+          "The text does not provide specific examples or illustrations to support the discussion."
         ]
       },
       "vision_input": {
@@ -15107,14 +15107,14 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T00:25:08Z",
+      "checkpointed_at": "2026-11-09T00:36:40Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
           "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
-          "But let's get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
+          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
         ],
         "concepts": [
           "exploration",
@@ -15132,12 +15132,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "questions"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and the interconnectedness of scientific ideas.",
         "limitations": [
-          "The text does not provide specific details about the textbook or its content."
+          "The text does not provide specific examples or illustrations to support the discussion."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -20284,9 +20284,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation, and encourages the reader to think like a scientist.",
+        "context_relation": "The page discusses the impact of light on the Earth and Moon, including eclipses, and encourages readers to think like scientists.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
+          "The page does not provide specific examples or experiments for the activities."
         ]
       },
       "vision_input": {
@@ -20304,7 +20304,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42539306993",
-      "checkpointed_at": "2026-11-09T00:27:04Z",
+      "checkpointed_at": "2026-11-09T00:37:36Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20324,9 +20324,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation, and encourages the reader to think like a scientist.",
+        "context_relation": "The page discusses the impact of light on the Earth and Moon, including eclipses, and encourages readers to think like scientists.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
+          "The page does not provide specific examples or experiments for the activities."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -116601,21 +116601,78 @@
     {
       "asset_id": "9af34fc1b7f333c1847afcdd",
       "asset_sha256": "23c27571e5f95fbb030b8f819eb4b8966e4b8110f61fb08426e6e9075cd277f4",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/23c27571e5f95fbb030b8f819eb4b8966e4b8110f61fb08426e6e9075cd277f4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A conversation between Yashwant and Sudarshan about making items of daily use.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "Craftspersons",
+          "Metals",
+          "Daily use items",
+          "Ironsmiths",
+          "Sudarshan uncle"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show the ironsmiths making items.",
+          "The image does not show the ironsmiths' tools or techniques."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 5,
+        "source_height": 2,
+        "inference_width": 5,
+        "inference_height": 2,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 288,
+        "sha256": "8c8137b698e8bbf97b72fe3e61b8fe41e3884932381a6c4e09bc9e8d75929cb2"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42539306993",
+      "checkpointed_at": "2026-11-09T00:39:22Z",
+      "effective_analysis": {
+        "visual_summary": "A conversation between Yashwant and Sudarshan about making items of daily use.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "Craftspersons",
+          "Metals",
+          "Daily use items",
+          "Ironsmiths",
+          "Sudarshan uncle"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show the ironsmiths making items.",
+          "The image does not show the ironsmiths' tools or techniques."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -124678,7 +124735,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of different materials and their impact on civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124695,9 +124752,9 @@
           "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
         ],
         "concepts": [
+          "ductility",
           "brittle",
           "malleable",
-          "ductility",
           "copper",
           "gold",
           "iron",
@@ -124705,9 +124762,9 @@
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
+        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of civilization.",
         "limitations": [
-          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The page does not provide specific examples or evidence for the claims made."
         ]
       },
       "vision_input": {
@@ -124724,10 +124781,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
-      "checkpointed_at": "2026-11-09T00:10:39Z",
+      "run_id": "42539306993",
+      "checkpointed_at": "2026-11-09T00:41:37Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of different materials and their impact on civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124744,9 +124801,9 @@
           "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
         ],
         "concepts": [
+          "ductility",
           "brittle",
           "malleable",
-          "ductility",
           "copper",
           "gold",
           "iron",
@@ -124754,9 +124811,9 @@
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
+        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of civilization.",
         "limitations": [
-          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The page does not provide specific examples or evidence for the claims made."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -135164,7 +135221,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42533165478",
+      "run_id": "42539306993",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
