@@ -13,13 +13,13 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "49cec44504f51757c7cd263f",
-      "f9979838d74392f962cb2258",
-      "399bd5823d0f0dc52a3ebf47"
+      "0d3c2ec89edcb31b5d90ba13",
+      "cba8e5fbf657e4016f3d3adc",
+      "8beffb59a48ed3f24351a2af"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3338,
-    "assets_remaining": 4150,
+    "assets_analyzed": 3339,
+    "assets_remaining": 4149,
     "assets_completion_percent": 44.6,
     "assets_failed": 31,
     "assets_skipped_from_checkpoint": 3338,
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42580106684",
-      "checkpointed_at": "2026-11-09T09:22:53Z"
+      "checkpointed_at": "2026-11-09T09:34:33Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "42580106684",
-      "checkpointed_at": "2026-11-09T09:23:44Z"
+      "checkpointed_at": "2026-11-09T09:35:25Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -124145,7 +124145,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42558419922",
+      "run_id": "42580106684",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -124212,15 +124212,66 @@
     {
       "asset_id": "cba8e5fbf657e4016f3d3adc",
       "asset_sha256": "c8fbdffcb89e80fbfea7ca062e022b23eb10f49e7557cddde34e344eb9f12959",
-      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/c8fbdffcb89e80fbfea7ca062e022b23eb10f49e7557cddde34e344eb9f12959.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A winter scene with two children, Pema and Palden, sitting around a fireplace in Gangtok, discussing the difference in winter temperatures between Gangtok and Kerala.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer temperatures.\"",
+          "Pema and Palden are curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Winter temperatures",
+          "Equator",
+          "Coastline",
+          "Science teacher"
+        ],
+        "context_relation": "The grandfather's explanation about the difference in winter temperatures between Gangtok and Kerala is based on the geographical and climatic factors.",
+        "limitations": [
+          "The image does not show the actual geographical or climatic factors that influence the temperature difference between the two places."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 26,
+        "source_height": 31,
+        "inference_width": 26,
+        "inference_height": 31,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 289,
+        "sha256": "27a30364dea95394fb24fdc0e1d9b94bf61b3be90eab2de5d757b25040a5975f"
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "42580106684",
+      "checkpointed_at": "2026-11-09T09:40:13Z"
+    },
+    {
+      "asset_id": "8beffb59a48ed3f24351a2af",
+      "asset_sha256": "47e3a24fe5fe8de5099710826d4274408a7a52cb915f6194a0cbd7d26a0f867e",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/47e3a24fe5fe8de5099710826d4274408a7a52cb915f6194a0cbd7d26a0f867e.png",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42558419922",
+      "run_id": "42580106684",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
