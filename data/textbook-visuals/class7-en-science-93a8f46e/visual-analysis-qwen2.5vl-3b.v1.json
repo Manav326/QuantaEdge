@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "19182aa83463f523d90ed77b",
-      "617a7eb962b48f65cc1c1ca8",
-      "4b1298747dc1ec978a226ae5"
+      "0e143e54e2f709b8a4e5968d",
+      "8604e838b1f1e41398ca72dd",
+      "5c16577a15e78e04e26b60ff"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3341,
@@ -10009,7 +10009,7 @@
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or questions for exploration."
         ]
       },
       "vision_input": {
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43033504749",
-      "checkpointed_at": "2026-11-11T14:03:48Z"
+      "checkpointed_at": "2026-11-11T14:16:42Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13511,9 +13511,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, including eclipses, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the reader to perform."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "vision_input": {
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43033504749",
-      "checkpointed_at": "2026-11-11T14:05:53Z"
+      "checkpointed_at": "2026-11-11T14:17:23Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -85922,7 +85922,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43023784319",
+      "run_id": "43033504749",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -86277,7 +86277,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43023784319",
+      "run_id": "43033504749",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115677,7 +115677,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43023784319",
+      "run_id": "43033504749",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
