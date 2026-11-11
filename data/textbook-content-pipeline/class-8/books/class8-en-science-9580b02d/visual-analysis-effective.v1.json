@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f600f588ac01b5a642e3b896ef01abd6c2f5f9c73fef517d4f8f0e87c0cd3a05",
+  "raw_analysis_sha256": "95c43471368914ba688bcb437a543a36c238badccba4769ce1e0d2634765b4ef",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1795,24 +1795,22 @@
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
-          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
-          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
+          ","
         ],
         "concepts": [
           "open-ended questions",
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety precautions",
-          "student engagement",
-          "scientific principles",
-          "real-life applications"
+          "inclusive nature",
+          "visualisation",
+          "peer interactions",
+          "assessing understanding",
+          "analyzing concepts"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching.",
         "limitations": [
-          "The page does not provide specific examples or exercises for implementing the concepts discussed."
+          "The page does not provide specific examples or activities for implementing open-ended questions."
         ]
       },
       "vision_input": {
@@ -1829,32 +1827,30 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42995700861",
-      "checkpointed_at": "2026-11-11T09:50:26Z",
+      "run_id": "43000238049",
+      "checkpointed_at": "2026-11-11T10:09:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
-          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
-          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
+          ","
         ],
         "concepts": [
           "open-ended questions",
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety precautions",
-          "student engagement",
-          "scientific principles",
-          "real-life applications"
+          "inclusive nature",
+          "visualisation",
+          "peer interactions",
+          "assessing understanding",
+          "analyzing concepts"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching.",
         "limitations": [
-          "The page does not provide specific examples or exercises for implementing the concepts discussed."
+          "The page does not provide specific examples or activities for implementing open-ended questions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29439,11 +29435,11 @@
           "Freelance Language Editor",
           "DTP Cell",
           "Publication Division",
-          "Contractual Proofreaders"
+          "Proofreaders"
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific visual elements are described.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -29461,8 +29457,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42995700861",
-      "checkpointed_at": "2026-11-11T09:50:54Z",
+      "run_id": "43000238049",
+      "checkpointed_at": "2026-11-11T10:10:51Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
@@ -29479,11 +29475,11 @@
           "Freelance Language Editor",
           "DTP Cell",
           "Publication Division",
-          "Contractual Proofreaders"
+          "Proofreaders"
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific visual elements are described.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -32513,9 +32509,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42995700861",
+      "run_id": "43000238049",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -38357,7 +38353,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38384,11 +38380,13 @@
           "microorganisms in the kitchen",
           "yeast",
           "flour",
-          "dough"
+          "bowl",
+          "dough",
+          "environmental protection"
         ],
-        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development, as well as how microorganisms can be used to solve environmental problems in the kitchen.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems.",
         "limitations": [
-          "The page does not provide specific examples or data to support the claims made."
+          "The page does not provide specific examples or data to support the claims made about microorganisms and their impact on the environment."
         ]
       },
       "vision_input": {
@@ -38405,10 +38403,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42995700861",
-      "checkpointed_at": "2026-11-11T09:51:40Z",
+      "run_id": "43000238049",
+      "checkpointed_at": "2026-11-11T10:15:36Z",
       "effective_analysis": {
-        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38435,11 +38433,13 @@
           "microorganisms in the kitchen",
           "yeast",
           "flour",
-          "dough"
+          "bowl",
+          "dough",
+          "environmental protection"
         ],
-        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development, as well as how microorganisms can be used to solve environmental problems in the kitchen.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems.",
         "limitations": [
-          "The page does not provide specific examples or data to support the claims made."
+          "The page does not provide specific examples or data to support the claims made about microorganisms and their impact on the environment."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -38728,7 +38728,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42995700861",
+      "run_id": "43000238049",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
