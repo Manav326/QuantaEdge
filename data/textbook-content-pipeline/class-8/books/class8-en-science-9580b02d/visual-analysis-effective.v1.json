@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3e35bd66c1d68ab2d0c8be5bc1e835fc2055defd942b62eb8e38edd4c606b16e",
+  "raw_analysis_sha256": "b9e20fc33441db2adc7218e8e9b6b9bbf50c8d1e2ea9aec6ad1bdf2179b235b6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1790,7 +1790,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1804,17 +1804,17 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
+          "inclusive education",
+          "safety",
           "peer interactions",
-          "safety precautions",
-          "challenging ideas",
+          "assessing understanding",
+          "analyzing concepts",
           "Ever heard of",
-          "A step further"
+          "step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions or the steps further boxes."
+          "The page does not provide specific examples or activities for implementing the concepts discussed."
         ]
       },
       "vision_input": {
@@ -1831,10 +1831,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43000238049",
-      "checkpointed_at": "2026-11-11T10:25:34Z",
+      "run_id": "43005962611",
+      "checkpointed_at": "2026-11-11T10:49:01Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1848,17 +1848,17 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
+          "inclusive education",
+          "safety",
           "peer interactions",
-          "safety precautions",
-          "challenging ideas",
+          "assessing understanding",
+          "analyzing concepts",
           "Ever heard of",
-          "A step further"
+          "step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions or the steps further boxes."
+          "The page does not provide specific examples or activities for implementing the concepts discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29428,7 +29428,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
+        "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -29439,19 +29439,15 @@
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook project",
-          "Contributors",
-          "Roles",
+          "Textbook Publication",
           "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
           "DTP Cell",
+          "Publication Division",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and gratitude for contributions and support in the publication of a textbook.",
+        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific visual elements are described.",
+          "No specific limitations are mentioned in the visible text.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -29469,10 +29465,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43000238049",
-      "checkpointed_at": "2026-11-11T10:26:19Z",
+      "run_id": "43005962611",
+      "checkpointed_at": "2026-11-11T10:49:52Z",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
+        "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -29483,19 +29479,15 @@
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook project",
-          "Contributors",
-          "Roles",
+          "Textbook Publication",
           "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
           "DTP Cell",
+          "Publication Division",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and gratitude for contributions and support in the publication of a textbook.",
+        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific visual elements are described.",
+          "No specific limitations are mentioned in the visible text.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -32525,9 +32517,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43000238049",
+      "run_id": "43005962611",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -38369,7 +38361,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
+        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, focusing on biogas production and its historical significance.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38391,15 +38383,16 @@
         "concepts": [
           "microorganisms",
           "biogas",
+          "Ananda Mohan Chakrabarty",
           "patent",
           "environmental problems",
-          "microorganisms in kitchen",
+          "microorganisms in the kitchen",
           "yeast",
           "dough"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and kitchen activities.",
+        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical significance. It also includes a historical figure and a scientific activity related to microorganisms in the kitchen.",
         "limitations": [
-          "The page does not provide specific examples or details about the activities performed in the kitchen."
+          "The page does not provide specific details about the historical figure's work or the scientific activity's results."
         ]
       },
       "vision_input": {
@@ -38416,10 +38409,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43000238049",
-      "checkpointed_at": "2026-11-11T10:27:27Z",
+      "run_id": "43005962611",
+      "checkpointed_at": "2026-11-11T10:52:02Z",
       "effective_analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
+        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, focusing on biogas production and its historical significance.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38441,15 +38434,16 @@
         "concepts": [
           "microorganisms",
           "biogas",
+          "Ananda Mohan Chakrabarty",
           "patent",
           "environmental problems",
-          "microorganisms in kitchen",
+          "microorganisms in the kitchen",
           "yeast",
           "dough"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and kitchen activities.",
+        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical significance. It also includes a historical figure and a scientific activity related to microorganisms in the kitchen.",
         "limitations": [
-          "The page does not provide specific examples or details about the activities performed in the kitchen."
+          "The page does not provide specific details about the historical figure's work or the scientific activity's results."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -38738,7 +38732,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43000238049",
+      "run_id": "43005962611",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
