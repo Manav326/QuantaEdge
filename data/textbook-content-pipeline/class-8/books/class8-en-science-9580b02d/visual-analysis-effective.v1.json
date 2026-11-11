@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c2a9a3736dbe31b5a6e97498e42f36893d1071b6955a3a69400515e09120ee95",
+  "raw_analysis_sha256": "3e35bd66c1d68ab2d0c8be5bc1e835fc2055defd942b62eb8e38edd4c606b16e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1832,7 +1832,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43000238049",
-      "checkpointed_at": "2026-11-11T10:19:29Z",
+      "checkpointed_at": "2026-11-11T10:25:34Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -29470,7 +29470,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43000238049",
-      "checkpointed_at": "2026-11-11T10:20:15Z",
+      "checkpointed_at": "2026-11-11T10:26:19Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
         "visual_type": "uncertain",
@@ -38417,7 +38417,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43000238049",
-      "checkpointed_at": "2026-11-11T10:21:22Z",
+      "checkpointed_at": "2026-11-11T10:27:27Z",
       "effective_analysis": {
         "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
@@ -58206,7 +58206,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An educational page explaining different types of forces, specifically contact forces and muscular force.",
+        "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -58223,9 +58223,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with an example of muscular force in living beings.",
+        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a diagram or illustration of the muscular force example."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "vision_input": {
@@ -58243,9 +58243,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43000238049",
-      "checkpointed_at": "2026-11-11T10:24:25Z",
+      "checkpointed_at": "2026-11-11T10:28:13Z",
       "effective_analysis": {
-        "visual_summary": "An educational page explaining different types of forces, specifically contact forces and muscular force.",
+        "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -58262,9 +58262,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with an example of muscular force in living beings.",
+        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a diagram or illustration of the muscular force example."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -60934,7 +60934,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "42995700861",
+      "run_id": "43000238049",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
