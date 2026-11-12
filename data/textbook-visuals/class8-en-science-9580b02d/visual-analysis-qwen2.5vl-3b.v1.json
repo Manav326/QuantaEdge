@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "f492c50e9c7d7ef8d140ae06",
-      "1851a22784c9105601dfe039",
-      "2e220d251d13a2e76c57e33b"
+      "fc310253031bd2210d27a7e7",
+      "414a0224c90f14c01c7da9e7",
+      "0037fd56b1a6a076dd9cad41"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1424,
@@ -1188,7 +1188,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1202,17 +1202,14 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
-          "peer interactions",
+          "inclusive education",
           "safety precautions",
-          "challenging ideas",
-          "Ever heard of",
-          "A step further"
+          "ever heard of",
+          "step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The text discusses the educational benefits of open-ended questions and the various activities and resources included in the textbook to promote critical thinking and curiosity.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions."
+          "The text does not provide specific examples or activities from the textbook."
         ]
       },
       "vision_input": {
@@ -1229,8 +1226,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43136188997",
-      "checkpointed_at": "2026-11-12T02:11:55Z"
+      "run_id": "43141548726",
+      "checkpointed_at": "2026-11-12T02:35:22Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20229,7 +20226,7 @@
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific visual elements are described.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20247,8 +20244,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43136188997",
-      "checkpointed_at": "2026-11-12T02:12:31Z"
+      "run_id": "43141548726",
+      "checkpointed_at": "2026-11-12T02:37:24Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22167,7 +22164,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43136188997",
+      "run_id": "43141548726",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -25903,7 +25900,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43136188997",
+      "run_id": "43141548726",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -26088,7 +26085,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43136188997",
+      "run_id": "43141548726",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
