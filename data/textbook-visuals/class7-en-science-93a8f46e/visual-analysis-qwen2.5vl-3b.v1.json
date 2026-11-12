@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3346,
+    "assets_selected": 3347,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "31f371466b7b766223ddf305",
-      "1b17473e8f928d962449e0d1",
-      "b16a21fc7c80af77088d1ee7"
+      "19182aa83463f523d90ed77b",
+      "617a7eb962b48f65cc1c1ca8",
+      "4b1298747dc1ec978a226ae5"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3342,
     "assets_remaining": 4146,
     "assets_completion_percent": 44.6,
     "assets_failed": 35,
-    "assets_skipped_from_checkpoint": 3341,
+    "assets_skipped_from_checkpoint": 3342,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9986,7 +9986,7 @@
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
           "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
-          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
+          "But let's get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
         ],
         "concepts": [
           "exploration",
@@ -10004,12 +10004,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and the interconnectedness of scientific ideas.",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the discussion."
+          "The text does not provide specific examples or illustrations."
         ]
       },
       "vision_input": {
@@ -10026,8 +10026,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43294057749",
-      "checkpointed_at": "2026-11-12T21:53:38Z"
+      "run_id": "43316842122",
+      "checkpointed_at": "2026-11-12T22:15:27Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13511,9 +13511,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the impact of light on the Earth and Moon, including eclipses, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the effects of light and its phenomena, including eclipses, and encourages readers to think like scientists.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the activities."
+          "The page does not provide specific examples or experiments for the reader to perform."
         ]
       },
       "vision_input": {
@@ -13530,8 +13530,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43294057749",
-      "checkpointed_at": "2026-11-12T21:54:27Z"
+      "run_id": "43316842122",
+      "checkpointed_at": "2026-11-12T22:17:28Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50178,7 +50178,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43294057749",
+      "run_id": "43316842122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -73301,7 +73301,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43294057749",
+      "run_id": "43316842122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -79296,7 +79296,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43294057749",
+      "run_id": "43316842122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
