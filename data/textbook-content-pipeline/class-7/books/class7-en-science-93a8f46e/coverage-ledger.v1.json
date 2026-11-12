@@ -21567,7 +21567,7 @@
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or questions for exploration."
         ]
       },
       "chapter_id": null,
@@ -24945,9 +24945,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, including eclipses, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the reader to perform."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "chapter_id": null,
