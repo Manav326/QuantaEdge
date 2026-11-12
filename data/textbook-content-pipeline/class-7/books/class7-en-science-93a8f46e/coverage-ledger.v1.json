@@ -21539,7 +21539,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -21562,12 +21562,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and responsibility.",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific details about the textbook or its content."
         ]
       },
       "chapter_id": null,
@@ -24937,16 +24937,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light",
+          "universe",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation, encouraging readers to think like scientists and question their answers.",
+        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation, and encourages the reader to think like a scientist.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the concepts discussed."
+          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
         ]
       },
       "chapter_id": null,
@@ -88925,7 +88926,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of different materials and their impact on civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -88942,9 +88943,9 @@
           "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
         ],
         "concepts": [
+          "ductility",
           "brittle",
           "malleable",
-          "ductility",
           "copper",
           "gold",
           "iron",
@@ -88952,9 +88953,9 @@
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
+        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of civilization.",
         "limitations": [
-          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The page does not provide specific examples or evidence for the claims made."
         ]
       },
       "chapter_id": null,
