@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
+      "fc310253031bd2210d27a7e7",
       "414a0224c90f14c01c7da9e7",
-      "f492c50e9c7d7ef8d140ae06",
-      "e03a02c3fc37627f873ab044"
+      "0037fd56b1a6a076dd9cad41"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1424,
@@ -1193,24 +1193,22 @@
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
-          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
-          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
+          ","
         ],
         "concepts": [
           "open-ended questions",
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety precautions",
-          "student engagement",
-          "scientific principles",
-          "real-life applications"
+          "inclusive nature",
+          "visualisation",
+          "peer interactions",
+          "assessing understanding",
+          "analyzing concepts"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching.",
         "limitations": [
-          "The page does not provide specific examples or exercises for implementing the concepts discussed."
+          "The page does not provide specific examples or activities for implementing open-ended questions."
         ]
       },
       "vision_input": {
@@ -1227,8 +1225,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43273451165",
-      "checkpointed_at": "2026-11-12T18:09:52Z"
+      "run_id": "43279410008",
+      "checkpointed_at": "2026-11-12T18:31:08Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20223,11 +20221,11 @@
           "Freelance Language Editor",
           "DTP Cell",
           "Publication Division",
-          "Contractual Proofreaders"
+          "Proofreaders"
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific visual elements are described.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20245,8 +20243,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43273451165",
-      "checkpointed_at": "2026-11-12T18:10:20Z"
+      "run_id": "43279410008",
+      "checkpointed_at": "2026-11-12T18:32:37Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22165,9 +22163,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43273451165",
+      "run_id": "43279410008",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -25903,7 +25901,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -25930,11 +25928,13 @@
           "microorganisms in the kitchen",
           "yeast",
           "flour",
-          "dough"
+          "bowl",
+          "dough",
+          "environmental protection"
         ],
-        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development, as well as how microorganisms can be used to solve environmental problems in the kitchen.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems.",
         "limitations": [
-          "The page does not provide specific examples or data to support the claims made."
+          "The page does not provide specific examples or data to support the claims made about microorganisms and their impact on the environment."
         ]
       },
       "vision_input": {
@@ -25951,8 +25951,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43273451165",
-      "checkpointed_at": "2026-11-12T18:11:06Z"
+      "run_id": "43279410008",
+      "checkpointed_at": "2026-11-12T18:37:20Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -26133,7 +26133,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43273451165",
+      "run_id": "43279410008",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
