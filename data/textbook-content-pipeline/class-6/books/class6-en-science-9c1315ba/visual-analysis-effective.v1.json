@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "606634ca64b99d73e6fe8a76f8c31992cd28ac6e72a953f79b9bce57c23a7e24",
+  "raw_analysis_sha256": "80c5a4fc4e6613efde2782f7039c6ea741bbc794bfa24f25f03d32b1d7b2fb61",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -608,10 +608,10 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Foreword of a National Education Policy document.",
+        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -620,7 +620,7 @@
         "concepts": [
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
-          "paichakoshas",
+          "paichakoshlas",
           "Middle Stage",
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
@@ -630,9 +630,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its components, including the National Curriculum Framework for School Education (NCF-SE) 2023, and the role of textbooks in education.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a diverse curriculum and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the implementation strategies."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of implementation of the NCF-SE 2023."
         ]
       },
       "vision_input": {
@@ -649,13 +649,13 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43214262703",
-      "checkpointed_at": "2026-11-12T12:13:42Z",
+      "run_id": "43217774248",
+      "checkpointed_at": "2026-11-12T12:33:19Z",
       "effective_analysis": {
-        "visual_summary": "Foreword of a National Education Policy document.",
+        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -664,7 +664,7 @@
         "concepts": [
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
-          "paichakoshas",
+          "paichakoshlas",
           "Middle Stage",
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
@@ -674,9 +674,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its components, including the National Curriculum Framework for School Education (NCF-SE) 2023, and the role of textbooks in education.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a diverse curriculum and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the implementation strategies."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of implementation of the NCF-SE 2023."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29417,8 +29417,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -29430,27 +29430,22 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Planetarium",
           "Academic support",
           "Administrative support",
           "Consultant",
           "Programme Office",
           "Senior Consultant",
           "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Research Associates",
           "Course Administrator",
-          "Junior Project Fellows",
-          "Freelance Editor",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "vision_input": {
@@ -29467,11 +29462,11 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43214262703",
-      "checkpointed_at": "2026-11-12T12:14:24Z",
+      "run_id": "43217774248",
+      "checkpointed_at": "2026-11-12T12:35:39Z",
       "effective_analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -29483,27 +29478,22 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Planetarium",
           "Academic support",
           "Administrative support",
           "Consultant",
           "Programme Office",
           "Senior Consultant",
           "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Research Associates",
           "Course Administrator",
-          "Junior Project Fellows",
-          "Freelance Editor",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -35195,7 +35185,7 @@
         ],
         "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants.",
+          "The page does not provide specific examples or details for each criterion.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -35213,8 +35203,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43214262703",
-      "checkpointed_at": "2026-11-12T12:14:58Z",
+      "run_id": "43217774248",
+      "checkpointed_at": "2026-11-12T12:37:44Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -35253,7 +35243,7 @@
         ],
         "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants.",
+          "The page does not provide specific examples or details for each criterion.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -56694,7 +56684,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43214262703",
+      "run_id": "43217774248",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -57722,10 +57712,10 @@
           "Handspans",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide a standard unit of measurement for length.",
-          "The text assumes that handspans are a reliable unit of measurement for length."
+          "The table does not provide the actual length of the table in handspans.",
+          "The text does not provide the actual length of the table in handspans."
         ]
       },
       "vision_input": {
@@ -57742,8 +57732,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43214262703",
-      "checkpointed_at": "2026-11-12T12:15:28Z",
+      "run_id": "43217774248",
+      "checkpointed_at": "2026-11-12T12:42:46Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57769,10 +57759,10 @@
           "Handspans",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide a standard unit of measurement for length.",
-          "The text assumes that handspans are a reliable unit of measurement for length."
+          "The table does not provide the actual length of the table in handspans.",
+          "The text does not provide the actual length of the table in handspans."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
