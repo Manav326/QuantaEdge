@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e32cb7ca277f9c6fd7de4ea929f6dbf579eb6c21e7ffe265a1a8bcd48d44cbac",
+  "raw_analysis_sha256": "bc49851dab071d0633d99c16c87b8fc707d97cefa63dbe19a82f6f929fbc11b7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -608,7 +608,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
+        "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Foreword",
@@ -630,9 +630,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of a holistic approach to education and the role of textbooks in achieving this.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its components, including the National Curriculum Framework for School Education (NCF-SE) 2023, and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods used to prepare teachers."
+          "The foreword does not provide specific details about the content of the textbooks or the implementation strategies."
         ]
       },
       "vision_input": {
@@ -650,9 +650,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43457505027",
-      "checkpointed_at": "2026-11-13T16:01:48Z",
+      "checkpointed_at": "2026-11-13T16:07:24Z",
       "effective_analysis": {
-        "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
+        "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Foreword",
@@ -674,9 +674,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of a holistic approach to education and the role of textbooks in achieving this.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its components, including the National Curriculum Framework for School Education (NCF-SE) 2023, and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods used to prepare teachers."
+          "The foreword does not provide specific details about the content of the textbooks or the implementation strategies."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29418,7 +29418,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -29430,18 +29430,27 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Textbook",
-          "NCERT",
-          "DTP Cell",
-          "Publication Division",
+          "Planetarium",
+          "Academic support",
+          "Administrative support",
+          "Consultant",
+          "Programme Office",
+          "Senior Consultant",
+          "Educator",
+          "Development Sector Professional",
+          "Chief Consultant",
+          "Research Associates",
+          "Course Administrator",
+          "Junior Project Fellows",
           "Freelance Editor",
           "Proofreader",
+          "DTP Cell",
+          "Publication Division",
           "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
-          "No specific limitations mentioned.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "No specific limitations mentioned."
         ]
       },
       "vision_input": {
@@ -29459,10 +29468,10 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43457505027",
-      "checkpointed_at": "2026-11-13T16:02:59Z",
+      "checkpointed_at": "2026-11-13T16:08:06Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -29474,18 +29483,27 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Textbook",
-          "NCERT",
-          "DTP Cell",
-          "Publication Division",
+          "Planetarium",
+          "Academic support",
+          "Administrative support",
+          "Consultant",
+          "Programme Office",
+          "Senior Consultant",
+          "Educator",
+          "Development Sector Professional",
+          "Chief Consultant",
+          "Research Associates",
+          "Course Administrator",
+          "Junior Project Fellows",
           "Freelance Editor",
           "Proofreader",
+          "DTP Cell",
+          "Publication Division",
           "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
-          "No specific limitations mentioned.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "No specific limitations mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -35196,7 +35214,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43457505027",
-      "checkpointed_at": "2026-11-13T16:04:04Z",
+      "checkpointed_at": "2026-11-13T16:08:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -57704,10 +57722,10 @@
           "Handspans",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans.",
-          "The text does not provide the actual length of the table in handspans."
+          "The table does not provide a standard unit of measurement for length.",
+          "The text assumes that handspans are a reliable unit of measurement for length."
         ]
       },
       "vision_input": {
@@ -57725,7 +57743,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43457505027",
-      "checkpointed_at": "2026-11-13T16:06:39Z",
+      "checkpointed_at": "2026-11-13T16:09:10Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57751,10 +57769,10 @@
           "Handspans",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans.",
-          "The text does not provide the actual length of the table in handspans."
+          "The table does not provide a standard unit of measurement for length.",
+          "The text assumes that handspans are a reliable unit of measurement for length."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -58939,7 +58957,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43451480265",
+      "run_id": "43457505027",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
