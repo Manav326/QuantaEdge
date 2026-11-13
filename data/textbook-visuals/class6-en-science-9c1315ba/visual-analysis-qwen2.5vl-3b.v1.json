@@ -14,8 +14,8 @@
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
-      "055ba61cf9184b7284850138",
-      "2104ecb647e20f98cb93ca2e"
+      "ac3ef67e4ced1dc1152e7b14",
+      "055ba61cf9184b7284850138"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1610,
@@ -421,7 +421,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Foreword of a National Education Policy document.",
+        "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Foreword",
@@ -443,9 +443,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its components, including the National Curriculum Framework for School Education (NCF-SE) 2023, and the role of textbooks in education.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of a holistic approach to education and the role of textbooks in achieving this.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the implementation strategies."
+          "The foreword does not provide specific details about the content of the textbooks or the methods used to prepare teachers."
         ]
       },
       "vision_input": {
@@ -462,8 +462,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43409944996",
-      "checkpointed_at": "2026-11-13T10:44:57Z"
+      "run_id": "43413092237",
+      "checkpointed_at": "2026-11-13T11:05:14Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20104,7 +20104,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -20116,27 +20116,18 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Planetarium",
-          "Academic support",
-          "Administrative support",
-          "Consultant",
-          "Programme Office",
-          "Senior Consultant",
-          "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Research Associates",
-          "Course Administrator",
-          "Junior Project Fellows",
-          "Freelance Editor",
-          "Proofreader",
+          "Textbook",
+          "NCERT",
           "DTP Cell",
           "Publication Division",
+          "Freelance Editor",
+          "Proofreader",
           "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "vision_input": {
@@ -20153,8 +20144,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43409944996",
-      "checkpointed_at": "2026-11-13T10:45:37Z"
+      "run_id": "43413092237",
+      "checkpointed_at": "2026-11-13T11:07:06Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23893,8 +23884,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43409944996",
-      "checkpointed_at": "2026-11-13T10:46:09Z"
+      "run_id": "43413092237",
+      "checkpointed_at": "2026-11-13T11:08:50Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37563,7 +37554,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43409944996",
+      "run_id": "43413092237",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38233,10 +38224,10 @@
           "Handspans",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide a standard unit of measurement for length.",
-          "The text assumes that handspans are a reliable unit of measurement for length."
+          "The table does not provide the actual length of the table in handspans.",
+          "The text does not provide the actual length of the table in handspans."
         ]
       },
       "vision_input": {
@@ -38253,8 +38244,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43409944996",
-      "checkpointed_at": "2026-11-13T10:46:38Z"
+      "run_id": "43413092237",
+      "checkpointed_at": "2026-11-13T11:12:50Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
