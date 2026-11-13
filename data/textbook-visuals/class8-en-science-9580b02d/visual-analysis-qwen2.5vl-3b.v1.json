@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "fc310253031bd2210d27a7e7",
       "414a0224c90f14c01c7da9e7",
-      "0037fd56b1a6a076dd9cad41"
+      "aa8a149fa698d13f05cfdb3e",
+      "f492c50e9c7d7ef8d140ae06"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1424,
@@ -1193,7 +1193,7 @@
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "In some activities Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
+          "Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
           "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
           "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
         ],
@@ -1203,16 +1203,14 @@
           "curiosity",
           "teamwork",
           "inclusive education",
-          "safety",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "Ever heard of",
-          "step further"
+          "safety precautions",
+          "student engagement",
+          "scientific principles",
+          "real-life applications"
         ],
         "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
         "limitations": [
-          "The page does not provide specific examples or activities for implementing the concepts discussed."
+          "The page does not provide specific examples or exercises for implementing the concepts discussed."
         ]
       },
       "vision_input": {
@@ -1230,7 +1228,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43520280900",
-      "checkpointed_at": "2026-11-13T22:39:40Z"
+      "checkpointed_at": "2026-11-13T22:44:46Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20229,7 +20227,7 @@
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific limitations are mentioned in the visible text.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20248,7 +20246,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43520280900",
-      "checkpointed_at": "2026-11-13T22:40:32Z"
+      "checkpointed_at": "2026-11-13T22:45:07Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25905,7 +25903,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, focusing on biogas production and its historical significance.",
+        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -25927,16 +25925,16 @@
         "concepts": [
           "microorganisms",
           "biogas",
-          "Ananda Mohan Chakrabarty",
           "patent",
           "environmental problems",
           "microorganisms in the kitchen",
           "yeast",
+          "flour",
           "dough"
         ],
-        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical significance. It also includes a historical figure and a scientific activity related to microorganisms in the kitchen.",
+        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development, as well as how microorganisms can be used to solve environmental problems in the kitchen.",
         "limitations": [
-          "The page does not provide specific details about the historical figure's work or the scientific activity's results."
+          "The page does not provide specific examples or data to support the claims made."
         ]
       },
       "vision_input": {
@@ -25954,7 +25952,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43520280900",
-      "checkpointed_at": "2026-11-13T22:42:42Z"
+      "checkpointed_at": "2026-11-13T22:45:41Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -30322,7 +30320,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43516955709",
+      "run_id": "43520280900",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -38639,7 +38637,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
+        "visual_summary": "An educational page about different types of forces, specifically contact forces, with images of animals and humans performing physical activities.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38656,9 +38654,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
+        "context_relation": "The page explains the concept of contact forces and provides an example of muscular force.",
         "limitations": [
-          "The image does not provide specific examples or illustrations for the concepts discussed."
+          "The page does not provide a detailed explanation of the physics behind contact forces or muscular force."
         ]
       },
       "vision_input": {
@@ -38675,8 +38673,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43516955709",
-      "checkpointed_at": "2026-11-13T22:26:18Z"
+      "run_id": "43520280900",
+      "checkpointed_at": "2026-11-13T22:47:30Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
