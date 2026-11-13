@@ -14,8 +14,8 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "414a0224c90f14c01c7da9e7",
-      "aa8a149fa698d13f05cfdb3e",
-      "f492c50e9c7d7ef8d140ae06"
+      "f492c50e9c7d7ef8d140ae06",
+      "e03a02c3fc37627f873ab044"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1424,
@@ -1230,7 +1230,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43428224928",
-      "checkpointed_at": "2026-11-13T13:07:45Z"
+      "checkpointed_at": "2026-11-13T13:15:01Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43428224928",
-      "checkpointed_at": "2026-11-13T13:08:39Z"
+      "checkpointed_at": "2026-11-13T13:15:55Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25957,7 +25957,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43428224928",
-      "checkpointed_at": "2026-11-13T13:10:01Z"
+      "checkpointed_at": "2026-11-13T13:17:16Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -38642,7 +38642,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An educational page explaining different types of forces, specifically contact forces and muscular force.",
+        "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38659,9 +38659,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with an example of muscular force in living beings.",
+        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a diagram or illustration of the muscular force example."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "vision_input": {
@@ -38679,7 +38679,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43428224928",
-      "checkpointed_at": "2026-11-13T13:13:39Z"
+      "checkpointed_at": "2026-11-13T13:18:11Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40408,7 +40408,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43423489180",
+      "run_id": "43428224928",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
