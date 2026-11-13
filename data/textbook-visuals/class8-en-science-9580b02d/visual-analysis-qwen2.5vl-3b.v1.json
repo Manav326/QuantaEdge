@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
+      "fc310253031bd2210d27a7e7",
       "414a0224c90f14c01c7da9e7",
-      "f492c50e9c7d7ef8d140ae06",
-      "e03a02c3fc37627f873ab044"
+      "0037fd56b1a6a076dd9cad41"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1424,
     "assets_remaining": 867,
     "assets_completion_percent": 62.2,
-    "assets_failed": 17,
+    "assets_failed": 18,
     "assets_skipped_from_checkpoint": 1424,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1202,17 +1202,14 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
-          "peer interactions",
+          "inclusive education",
           "safety precautions",
-          "challenging ideas",
-          "Ever heard of",
-          "A step further"
+          "ever heard of",
+          "step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The text discusses the educational benefits of open-ended questions and the various activities and resources included in the textbook to promote critical thinking and curiosity.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions or the steps further boxes."
+          "The text does not provide specific examples or activities from the textbook."
         ]
       },
       "vision_input": {
@@ -1229,8 +1226,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43334288111",
-      "checkpointed_at": "2026-11-13T00:29:44Z"
+      "run_id": "43339484207",
+      "checkpointed_at": "2026-11-13T00:53:09Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20210,7 +20207,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
+        "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -20221,19 +20218,15 @@
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook project",
-          "Contributors",
-          "Roles",
+          "Textbook Publication",
           "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
           "DTP Cell",
+          "Publication Division",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and gratitude for contributions and support in the publication of a textbook.",
+        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific visual elements are described.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20251,8 +20244,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43334288111",
-      "checkpointed_at": "2026-11-13T00:30:32Z"
+      "run_id": "43339484207",
+      "checkpointed_at": "2026-11-13T00:55:11Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22171,7 +22164,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43334288111",
+      "run_id": "43339484207",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -25899,65 +25892,19 @@
     {
       "asset_id": "414a0224c90f14c01c7da9e7",
       "asset_sha256": "1761250e3638b8d78afcfeb39f22e48c7a9779867144f2a78a883846e69523e6",
+      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 40,
       "asset_path": "page-0040.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Now, think what would have happened if microorganisms did not exist on Earth?",
-          "A step further",
-          "Microbes as a source of biogas",
-          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily composed of ca",
-          "Be a scientist",
-          "Ananda Mohan Chakrabarty (1938-2020) was a scientist who studied bacteria. In 1971, he developed a special bacterium that could break down oil spills, helping to clean the environment. His discovery received a patent in 1980. Patent is a copyright given to a person so that no one else can copy, use ",
-          "How does the diversity of microorganisms help in our kitchen?",
-          "2.4.2 Microorganisms and food",
-          "Let us try to understand by performing activities in the kitchen.",
-          "Activity 2.8: Let us perform",
-          "• Take two bowls A and B.",
-          "• In each, take 200 g of flour (atta or maida) and add a pinch of sugar.",
-          "• Now, in bowl A, add a small amount of yeast powder and mix it well with the flour.",
-          "• In bowl B, do not add any yeast, so that we can compare the results of the two bowls.",
-          "• Knead the flour of the two bowls with warm water to make soft dough (Fig. 2.11)."
-        ],
-        "concepts": [
-          "microorganisms",
-          "biogas",
-          "patent",
-          "environmental problems",
-          "microorganisms in kitchen",
-          "yeast",
-          "dough"
-        ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and kitchen activities.",
-        "limitations": [
-          "The page does not provide specific examples or details about the activities performed in the kitchen."
-        ]
-      },
-      "vision_input": {
-        "profile": "max-edge-960-jpeg-q82-v1",
-        "source_width": 1186,
-        "source_height": 1568,
-        "inference_width": 726,
-        "inference_height": 960,
-        "media_type": "image/jpeg",
-        "jpeg_quality": 82,
-        "byte_count": 151206,
-        "sha256": "911d43ce1a7583a5b2a7452e938692da194e29a83b23941d5cf3959fecb76a66"
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43334288111",
-      "checkpointed_at": "2026-11-13T00:31:43Z"
+      "run_id": "43339484207",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -26138,7 +26085,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43334288111",
+      "run_id": "43339484207",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
