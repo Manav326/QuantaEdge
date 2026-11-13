@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c5037958c377ce595e74e52ce6afc0c6871174289a26ae3ccc7c26eae9dcd01d",
+  "raw_analysis_sha256": "4aa7fb15225b0518e80ccae4eb048807624cf883444aea356cb01168330c94fc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1830,7 +1830,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43434522600",
-      "checkpointed_at": "2026-11-13T13:47:59Z",
+      "checkpointed_at": "2026-11-13T13:53:07Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -29462,7 +29462,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43434522600",
-      "checkpointed_at": "2026-11-13T13:48:27Z",
+      "checkpointed_at": "2026-11-13T13:53:35Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
@@ -38406,7 +38406,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43434522600",
-      "checkpointed_at": "2026-11-13T13:49:14Z",
+      "checkpointed_at": "2026-11-13T13:54:22Z",
       "effective_analysis": {
         "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, specifically focusing on biogas production and its historical development.",
         "visual_type": "page_with_multiple_visuals",
@@ -58196,7 +58196,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An educational page about different types of forces, specifically contact forces, with images of animals and humans performing physical activities.",
+        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -58213,9 +58213,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of contact forces and provides an example of muscular force.",
+        "context_relation": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
         "limitations": [
-          "The page does not provide a detailed explanation of the physics behind contact forces or muscular force."
+          "The image does not provide specific examples or illustrations for the concepts discussed."
         ]
       },
       "vision_input": {
@@ -58233,9 +58233,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43434522600",
-      "checkpointed_at": "2026-11-13T13:52:21Z",
+      "checkpointed_at": "2026-11-13T13:54:54Z",
       "effective_analysis": {
-        "visual_summary": "An educational page about different types of forces, specifically contact forces, with images of animals and humans performing physical activities.",
+        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -58252,9 +58252,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of contact forces and provides an example of muscular force.",
+        "context_relation": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
         "limitations": [
-          "The page does not provide a detailed explanation of the physics behind contact forces or muscular force."
+          "The image does not provide specific examples or illustrations for the concepts discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -60924,7 +60924,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43428224928",
+      "run_id": "43434522600",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
