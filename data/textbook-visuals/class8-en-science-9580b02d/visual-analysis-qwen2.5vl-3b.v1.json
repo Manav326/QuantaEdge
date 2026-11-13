@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
+      "fc310253031bd2210d27a7e7",
       "414a0224c90f14c01c7da9e7",
-      "f492c50e9c7d7ef8d140ae06",
-      "e03a02c3fc37627f873ab044"
+      "0037fd56b1a6a076dd9cad41"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1424,
@@ -1188,7 +1188,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1202,17 +1202,17 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
+          "inclusive education",
+          "safety",
           "peer interactions",
-          "safety precautions",
-          "challenging ideas",
+          "assessing understanding",
+          "analyzing concepts",
           "Ever heard of",
-          "A step further"
+          "step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions or the steps further boxes."
+          "The page does not provide specific examples or activities for implementing the concepts discussed."
         ]
       },
       "vision_input": {
@@ -1229,8 +1229,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43428224928",
-      "checkpointed_at": "2026-11-13T13:15:01Z"
+      "run_id": "43434522600",
+      "checkpointed_at": "2026-11-13T13:39:46Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20210,7 +20210,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
+        "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -20221,19 +20221,15 @@
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook project",
-          "Contributors",
-          "Roles",
+          "Textbook Publication",
           "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
           "DTP Cell",
+          "Publication Division",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and gratitude for contributions and support in the publication of a textbook.",
+        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific visual elements are described.",
+          "No specific limitations are mentioned in the visible text.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20251,8 +20247,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43428224928",
-      "checkpointed_at": "2026-11-13T13:15:55Z"
+      "run_id": "43434522600",
+      "checkpointed_at": "2026-11-13T13:41:16Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22171,9 +22167,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43428224928",
+      "run_id": "43434522600",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -25909,7 +25905,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
+        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, focusing on biogas production and its historical significance.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -25931,15 +25927,16 @@
         "concepts": [
           "microorganisms",
           "biogas",
+          "Ananda Mohan Chakrabarty",
           "patent",
           "environmental problems",
-          "microorganisms in kitchen",
+          "microorganisms in the kitchen",
           "yeast",
           "dough"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and kitchen activities.",
+        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical significance. It also includes a historical figure and a scientific activity related to microorganisms in the kitchen.",
         "limitations": [
-          "The page does not provide specific examples or details about the activities performed in the kitchen."
+          "The page does not provide specific details about the historical figure's work or the scientific activity's results."
         ]
       },
       "vision_input": {
@@ -25956,8 +25953,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43428224928",
-      "checkpointed_at": "2026-11-13T13:17:16Z"
+      "run_id": "43434522600",
+      "checkpointed_at": "2026-11-13T13:44:50Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -26138,7 +26135,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43428224928",
+      "run_id": "43434522600",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
