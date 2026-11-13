@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "91f56344a7cb6d224c5b346a5ccc6f0f58db5c88c98bdeabfe88a06adc79bf5f",
+  "raw_analysis_sha256": "ec8d0f2dec843ba5719e7530ff42793720e4df5b8ba8f5efd6d84bb4eea0e664",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1804,17 +1804,17 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
+          "inclusive education",
+          "safety",
           "peer interactions",
-          "safety precautions",
-          "challenging ideas",
+          "assessing understanding",
+          "analyzing concepts",
           "Ever heard of",
-          "A step further"
+          "step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions."
+          "The page does not provide specific examples or activities for implementing the concepts discussed."
         ]
       },
       "vision_input": {
@@ -1831,8 +1831,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43417219485",
-      "checkpointed_at": "2026-11-13T11:57:55Z",
+      "run_id": "43423489180",
+      "checkpointed_at": "2026-11-13T12:22:07Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -1848,17 +1848,17 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
+          "inclusive education",
+          "safety",
           "peer interactions",
-          "safety precautions",
-          "challenging ideas",
+          "assessing understanding",
+          "analyzing concepts",
           "Ever heard of",
-          "A step further"
+          "step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions."
+          "The page does not provide specific examples or activities for implementing the concepts discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29447,7 +29447,7 @@
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific visual elements are described.",
+          "No specific limitations are mentioned in the visible text.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -29465,8 +29465,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43417219485",
-      "checkpointed_at": "2026-11-13T11:58:32Z",
+      "run_id": "43423489180",
+      "checkpointed_at": "2026-11-13T12:23:35Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
@@ -29487,7 +29487,7 @@
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific visual elements are described.",
+          "No specific limitations are mentioned in the visible text.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -32517,9 +32517,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43417219485",
+      "run_id": "43423489180",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -38351,21 +38351,102 @@
     {
       "asset_id": "414a0224c90f14c01c7da9e7",
       "asset_sha256": "1761250e3638b8d78afcfeb39f22e48c7a9779867144f2a78a883846e69523e6",
-      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 40,
       "asset_path": "page-0040.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43417219485",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, focusing on biogas production and its historical significance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Now, think what would have happened if microorganisms did not exist on Earth?",
+          "A step further",
+          "Microbes as a source of biogas",
+          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily composed of ca",
+          "Be a scientist",
+          "Ananda Mohan Chakrabarty (1938-2020) was a scientist who studied bacteria. In 1971, he developed a special bacterium that could break down oil spills, helping to clean the environment. His discovery received a patent in 1980. Patent is a copyright given to a person so that no one else can copy, use ",
+          "How does the diversity of microorganisms help in our kitchen?",
+          "2.4.2 Microorganisms and food",
+          "Let us try to understand by performing activities in the kitchen.",
+          "Activity 2.8: Let us perform",
+          "• Take two bowls A and B.",
+          "• In each, take 200 g of flour (atta or maida) and add a pinch of sugar.",
+          "• Now, in bowl A, add a small amount of yeast powder and mix it well with the flour.",
+          "• In bowl B, do not add any yeast, so that we can compare the results of the two bowls.",
+          "• Knead the flour of the two bowls with warm water to make soft dough (Fig. 2.11)."
+        ],
+        "concepts": [
+          "microorganisms",
+          "biogas",
+          "Ananda Mohan Chakrabarty",
+          "patent",
+          "environmental problems",
+          "microorganisms in the kitchen",
+          "yeast",
+          "dough"
+        ],
+        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical significance. It also includes a historical figure and a scientific activity related to microorganisms in the kitchen.",
+        "limitations": [
+          "The page does not provide specific details about the historical figure's work or the scientific activity's results."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 151206,
+        "sha256": "911d43ce1a7583a5b2a7452e938692da194e29a83b23941d5cf3959fecb76a66"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "43423489180",
+      "checkpointed_at": "2026-11-13T12:27:08Z",
+      "effective_analysis": {
+        "visual_summary": "Page from a science textbook discussing the impact of microorganisms on Earth, focusing on biogas production and its historical significance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Now, think what would have happened if microorganisms did not exist on Earth?",
+          "A step further",
+          "Microbes as a source of biogas",
+          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily composed of ca",
+          "Be a scientist",
+          "Ananda Mohan Chakrabarty (1938-2020) was a scientist who studied bacteria. In 1971, he developed a special bacterium that could break down oil spills, helping to clean the environment. His discovery received a patent in 1980. Patent is a copyright given to a person so that no one else can copy, use ",
+          "How does the diversity of microorganisms help in our kitchen?",
+          "2.4.2 Microorganisms and food",
+          "Let us try to understand by performing activities in the kitchen.",
+          "Activity 2.8: Let us perform",
+          "• Take two bowls A and B.",
+          "• In each, take 200 g of flour (atta or maida) and add a pinch of sugar.",
+          "• Now, in bowl A, add a small amount of yeast powder and mix it well with the flour.",
+          "• In bowl B, do not add any yeast, so that we can compare the results of the two bowls.",
+          "• Knead the flour of the two bowls with warm water to make soft dough (Fig. 2.11)."
+        ],
+        "concepts": [
+          "microorganisms",
+          "biogas",
+          "Ananda Mohan Chakrabarty",
+          "patent",
+          "environmental problems",
+          "microorganisms in the kitchen",
+          "yeast",
+          "dough"
+        ],
+        "context_relation": "The page discusses the impact of microorganisms on Earth, specifically focusing on biogas production and its historical significance. It also includes a historical figure and a scientific activity related to microorganisms in the kitchen.",
+        "limitations": [
+          "The page does not provide specific details about the historical figure's work or the scientific activity's results."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -38651,7 +38732,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43417219485",
+      "run_id": "43423489180",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
