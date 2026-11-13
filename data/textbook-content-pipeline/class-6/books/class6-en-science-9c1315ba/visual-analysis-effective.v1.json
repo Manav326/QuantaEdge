@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "648e10ab31f019c86a2b5dbab53ebc43a66b39f99a439b80aca2fd8dea9f10ab",
+  "raw_analysis_sha256": "70c977bb59dd8be4e4bca414330172df083ccdaa4cf8c7c622fb7243c0c95d01",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -608,10 +608,10 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
+        "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "FOREWORD",
+          "Foreword",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -630,9 +630,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a diverse curriculum and the role of textbooks in education.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of a holistic approach to education and the role of textbooks in achieving this.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the textbooks."
+          "The foreword does not provide specific details about the content of the textbooks or the methods used to prepare teachers."
         ]
       },
       "vision_input": {
@@ -649,13 +649,13 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43377891036",
-      "checkpointed_at": "2026-11-13T06:39:14Z",
+      "run_id": "43382073985",
+      "checkpointed_at": "2026-11-13T07:03:15Z",
       "effective_analysis": {
-        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
+        "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "FOREWORD",
+          "Foreword",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -674,9 +674,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a diverse curriculum and the role of textbooks in education.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of a holistic approach to education and the role of textbooks in achieving this.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the textbooks."
+          "The foreword does not provide specific details about the content of the textbooks or the methods used to prepare teachers."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29418,32 +29418,30 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
           "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
           "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhirgara, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrati",
-          "Acknowledgements are due to Ankeeta Bezborua, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contrib"
+          "Acknowledgements are due to Ankeeta Bezboruah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contri"
         ],
         "concepts": [
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Academic support",
-          "Administrative support",
-          "Consultant",
-          "Programme Office",
-          "Senior Consultant",
-          "Course Administrator",
-          "Proofreader",
+          "Textbook",
+          "NCERT",
           "DTP Cell",
           "Publication Division",
+          "Freelance Editor",
+          "Proofreader",
           "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "vision_input": {
@@ -29460,36 +29458,34 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43377891036",
-      "checkpointed_at": "2026-11-13T06:40:22Z",
+      "run_id": "43382073985",
+      "checkpointed_at": "2026-11-13T07:05:03Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
           "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
           "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhirgara, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrati",
-          "Acknowledgements are due to Ankeeta Bezborua, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contrib"
+          "Acknowledgements are due to Ankeeta Bezboruah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contri"
         ],
         "concepts": [
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Academic support",
-          "Administrative support",
-          "Consultant",
-          "Programme Office",
-          "Senior Consultant",
-          "Course Administrator",
-          "Proofreader",
+          "Textbook",
+          "NCERT",
           "DTP Cell",
           "Publication Division",
+          "Freelance Editor",
+          "Proofreader",
           "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -35179,9 +35175,9 @@
           "eating habits",
           "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants based on the criteria mentioned.",
+          "The page does not provide specific examples or instructions for grouping plants.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -35199,8 +35195,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43377891036",
-      "checkpointed_at": "2026-11-13T06:41:25Z",
+      "run_id": "43382073985",
+      "checkpointed_at": "2026-11-13T07:06:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -35237,9 +35233,9 @@
           "eating habits",
           "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants based on the criteria mentioned.",
+          "The page does not provide specific examples or instructions for grouping plants.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -56680,7 +56676,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43377891036",
+      "run_id": "43382073985",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -57708,9 +57704,10 @@
           "Handspans",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The text does not provide specific measurements or units for the table's length."
+          "The table does not provide the actual length of the table in handspans.",
+          "The text does not provide the actual length of the table in handspans."
         ]
       },
       "vision_input": {
@@ -57727,8 +57724,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43377891036",
-      "checkpointed_at": "2026-11-13T06:42:15Z",
+      "run_id": "43382073985",
+      "checkpointed_at": "2026-11-13T07:10:40Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57754,9 +57751,10 @@
           "Handspans",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The text does not provide specific measurements or units for the table's length."
+          "The table does not provide the actual length of the table in handspans.",
+          "The text does not provide the actual length of the table in handspans."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
