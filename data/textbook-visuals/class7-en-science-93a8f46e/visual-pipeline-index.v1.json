@@ -9,8 +9,8 @@
     "1": "COMPLETE",
     "2": "COMPLETE",
     "3": "COMPLETE",
-    "4": "CHECKPOINTED",
-    "5": "INCOMPLETE",
+    "4": "RUNNING",
+    "5": "RUNNING",
     "6": "NOT_STARTED",
     "7": "NOT_STARTED",
     "8": "NOT_STARTED"
