@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "fc310253031bd2210d27a7e7",
-      "414a0224c90f14c01c7da9e7",
-      "0037fd56b1a6a076dd9cad41"
+      "aa8a149fa698d13f05cfdb3e",
+      "f492c50e9c7d7ef8d140ae06",
+      "e03a02c3fc37627f873ab044"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1424,
@@ -1188,7 +1188,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1202,14 +1202,17 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
+          "inclusive nature",
+          "visualisation",
+          "peer interactions",
           "safety precautions",
-          "ever heard of",
-          "step further"
+          "challenging ideas",
+          "Ever heard of",
+          "A step further"
         ],
-        "context_relation": "The text discusses the educational benefits of open-ended questions and the various activities and resources included in the textbook to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
         "limitations": [
-          "The text does not provide specific examples or activities from the textbook."
+          "The page does not provide specific examples or activities for the open-ended questions."
         ]
       },
       "vision_input": {
@@ -1227,7 +1230,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43563617879",
-      "checkpointed_at": "2026-11-14T06:00:38Z"
+      "checkpointed_at": "2026-11-14T06:12:26Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20226,7 +20229,7 @@
         ],
         "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific visual elements are described.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20245,7 +20248,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43563617879",
-      "checkpointed_at": "2026-11-14T06:02:39Z"
+      "checkpointed_at": "2026-11-14T06:12:58Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -30272,9 +30275,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43561004467",
+      "run_id": "43563617879",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -38589,7 +38592,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
+        "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38606,9 +38609,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
+        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The image does not provide specific examples or illustrations for the concepts discussed."
+          "The page does not provide a detailed explanation of non-contact forces."
         ]
       },
       "vision_input": {
@@ -38625,8 +38628,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43561004467",
-      "checkpointed_at": "2026-11-14T05:41:59Z"
+      "run_id": "43563617879",
+      "checkpointed_at": "2026-11-14T06:17:58Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40355,7 +40358,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43561004467",
+      "run_id": "43563617879",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
