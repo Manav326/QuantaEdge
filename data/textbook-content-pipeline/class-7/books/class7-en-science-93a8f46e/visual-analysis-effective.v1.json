@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f6b4d7c1f15c8ffd1c17eeceb0c9a804ec7986e84dc6722d945f2b2b521351ba",
+  "raw_analysis_sha256": "4ee467eb05865078c46b2738d59941c857298604a114adb65e72fa4fa9e1ba46",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15089,7 +15089,7 @@
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or questions for exploration."
         ]
       },
       "vision_input": {
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43569812147",
-      "checkpointed_at": "2026-11-14T07:18:58Z",
+      "checkpointed_at": "2026-11-14T07:31:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -15137,7 +15137,7 @@
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or questions for exploration."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -20284,9 +20284,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, including eclipses, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the reader to perform."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "vision_input": {
@@ -20304,7 +20304,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43569812147",
-      "checkpointed_at": "2026-11-14T07:21:00Z",
+      "checkpointed_at": "2026-11-14T07:31:46Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20324,9 +20324,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, including eclipses, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the reader to perform."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -135144,7 +135144,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43562475939",
+      "run_id": "43569812147",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -135717,7 +135717,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43562475939",
+      "run_id": "43569812147",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -181350,7 +181350,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43562475939",
+      "run_id": "43569812147",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
