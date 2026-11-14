@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "fc310253031bd2210d27a7e7",
       "414a0224c90f14c01c7da9e7",
-      "0037fd56b1a6a076dd9cad41"
+      "aa8a149fa698d13f05cfdb3e",
+      "f492c50e9c7d7ef8d140ae06"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1424,
@@ -1188,12 +1188,14 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          ","
+          "In some activities Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
+          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
+          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
         ],
         "concepts": [
           "open-ended questions",
@@ -1203,12 +1205,14 @@
           "inclusive nature",
           "visualisation",
           "peer interactions",
-          "assessing understanding",
-          "analyzing concepts"
+          "safety precautions",
+          "challenging ideas",
+          "Ever heard of",
+          "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
         "limitations": [
-          "The page does not provide specific examples or activities for implementing open-ended questions."
+          "The page does not provide specific examples or activities for the open-ended questions or the steps further boxes."
         ]
       },
       "vision_input": {
@@ -1226,7 +1230,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43537820016",
-      "checkpointed_at": "2026-11-14T01:07:26Z"
+      "checkpointed_at": "2026-11-14T01:17:40Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20206,7 +20210,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook publication.",
+        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -20217,13 +20221,17 @@
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook Publication",
+          "Textbook project",
+          "Contributors",
+          "Roles",
           "Freelance Language Editor",
-          "DTP Cell",
+          "APC office",
+          "Administrative staff",
           "Publication Division",
-          "Proofreaders"
+          "DTP Cell",
+          "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
+        "context_relation": "Acknowledgment and gratitude for contributions and support in the publication of a textbook.",
         "limitations": [
           "No specific visual elements are described.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -20244,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43537820016",
-      "checkpointed_at": "2026-11-14T01:08:56Z"
+      "checkpointed_at": "2026-11-14T01:18:27Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25901,7 +25909,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -25925,16 +25933,13 @@
           "biogas",
           "patent",
           "environmental problems",
-          "microorganisms in the kitchen",
+          "microorganisms in kitchen",
           "yeast",
-          "flour",
-          "bowl",
-          "dough",
-          "environmental protection"
+          "dough"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and kitchen activities.",
         "limitations": [
-          "The page does not provide specific examples or data to support the claims made about microorganisms and their impact on the environment."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "vision_input": {
@@ -25952,7 +25957,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43537820016",
-      "checkpointed_at": "2026-11-14T01:13:41Z"
+      "checkpointed_at": "2026-11-14T01:19:37Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -30320,7 +30325,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43535276489",
+      "run_id": "43537820016",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -38637,7 +38642,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
+        "visual_summary": "An educational page explaining different types of forces, specifically contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38654,9 +38659,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with an example of muscular force in living beings.",
         "limitations": [
-          "The image does not provide specific examples or illustrations for the concepts discussed."
+          "The page does not provide a diagram or illustration of the muscular force example."
         ]
       },
       "vision_input": {
@@ -38673,8 +38678,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43535276489",
-      "checkpointed_at": "2026-11-14T00:52:05Z"
+      "run_id": "43537820016",
+      "checkpointed_at": "2026-11-14T01:22:40Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
