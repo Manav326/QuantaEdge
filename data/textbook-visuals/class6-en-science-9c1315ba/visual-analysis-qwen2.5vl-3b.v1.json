@@ -14,8 +14,8 @@
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
-      "055ba61cf9184b7284850138",
-      "2104ecb647e20f98cb93ca2e"
+      "ac3ef67e4ced1dc1152e7b14",
+      "055ba61cf9184b7284850138"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1610,
@@ -443,9 +443,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a diverse curriculum and appropriate textbooks for holistic development.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a diverse curriculum and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the implementation of the framework."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of implementation of the NCF-SE 2023."
         ]
       },
       "vision_input": {
@@ -462,8 +462,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43610527935",
-      "checkpointed_at": "2026-11-14T15:48:04Z"
+      "run_id": "43613603791",
+      "checkpointed_at": "2026-11-14T16:12:45Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20103,14 +20103,14 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
           "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
           "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhirgara, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrati",
-          "Acknowledgements are due to Ankeeta Bezborua, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contrib"
+          "Acknowledgements are due to Ankeeta Bezboruah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contri"
         ],
         "concepts": [
           "Acknowledgements",
@@ -20121,15 +20121,17 @@
           "Consultant",
           "Programme Office",
           "Senior Consultant",
+          "Educator",
           "Course Administrator",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
-        "context_relation": "Acknowledgements and contributions",
+        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "vision_input": {
@@ -20146,8 +20148,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43610527935",
-      "checkpointed_at": "2026-11-14T15:49:26Z"
+      "run_id": "43613603791",
+      "checkpointed_at": "2026-11-14T16:14:56Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23855,12 +23857,20 @@
           "grouping plants",
           "criteria for grouping",
           "features of plants",
-          "height and types of stem",
-          "herbs, shrubs, and trees"
+          "stems",
+          "leaves",
+          "flowers",
+          "height",
+          "types of stem",
+          "herbs",
+          "shrubs",
+          "trees",
+          "eating habits",
+          "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and where they live.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants.",
+          "The page does not provide specific examples or details for each criterion.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -23878,8 +23888,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43610527935",
-      "checkpointed_at": "2026-11-14T15:50:32Z"
+      "run_id": "43613603791",
+      "checkpointed_at": "2026-11-14T16:16:52Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37548,7 +37558,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43610527935",
+      "run_id": "43613603791",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38214,14 +38224,14 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement",
+          "Measurement of Length and Motion",
           "Handspans",
-          "Length",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measurement using handspans as a unit.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The text does not provide specific measurements or units of measurement."
+          "The table does not provide the actual length of the table in handspans.",
+          "The text does not provide the actual length of the table in handspans."
         ]
       },
       "vision_input": {
@@ -38238,8 +38248,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43610527935",
-      "checkpointed_at": "2026-11-14T15:51:30Z"
+      "run_id": "43613603791",
+      "checkpointed_at": "2026-11-14T16:21:37Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
