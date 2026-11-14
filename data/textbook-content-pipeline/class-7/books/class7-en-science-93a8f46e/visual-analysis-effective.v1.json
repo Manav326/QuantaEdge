@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f900bf683acd9294478cdfb3da2f2574c066ad43503444e2df20508165177f41",
+  "raw_analysis_sha256": "e37600097b482b33a7d4685ed072d95785700b0bcfc7f1c23fd66d7370ff20fd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15061,7 +15061,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of patterns in nature.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15087,9 +15087,9 @@
           "discoveries",
           "questions"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and responsibility.",
+        "context_relation": "The text discusses the nature of science and its exploration of patterns in nature, emphasizing the importance of curiosity, asking questions, and understanding the interconnectedness of scientific ideas.",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or illustrations to support the points made."
         ]
       },
       "vision_input": {
@@ -15106,10 +15106,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43606603258",
-      "checkpointed_at": "2026-11-14T16:06:02Z",
+      "run_id": "43614652594",
+      "checkpointed_at": "2026-11-14T16:22:25Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of patterns in nature.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15135,9 +15135,9 @@
           "discoveries",
           "questions"
         ],
-        "context_relation": "The text discusses the nature of science and its exploration of natural phenomena, emphasizing curiosity, questions, and responsibility.",
+        "context_relation": "The text discusses the nature of science and its exploration of patterns in nature, emphasizing the importance of curiosity, asking questions, and understanding the interconnectedness of scientific ideas.",
         "limitations": [
-          "The text does not provide specific examples or illustrations."
+          "The text does not provide specific examples or illustrations to support the points made."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -20276,16 +20276,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light",
+          "universe",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation, encouraging readers to think like scientists and question their answers.",
+        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages scientific thinking and exploration.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the concepts discussed."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "vision_input": {
@@ -20302,8 +20303,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43606603258",
-      "checkpointed_at": "2026-11-14T16:06:32Z",
+      "run_id": "43614652594",
+      "checkpointed_at": "2026-11-14T16:23:16Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20315,16 +20316,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light",
+          "universe",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation, encouraging readers to think like scientists and question their answers.",
+        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages scientific thinking and exploration.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the concepts discussed."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -78995,7 +78997,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43606603258",
+      "run_id": "43614652594",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115279,7 +115281,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43606603258",
+      "run_id": "43614652594",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -124733,7 +124735,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "A page from a textbook discussing the properties of different materials and their impact on civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124747,22 +124749,25 @@
           "You might have seen wires of metals like copper or aluminium in electrical fittings. Some ornaments, like bangles, necklaces, earrings, etc., are also made from metal wires. Metal wires play important functions in a variety of stringed musical instruments, such as veena, sitar, violin, and guitar.",
           "This property of materials by which they can be drawn into wires is called ductility.",
           "This property of ductility is mainly possessed by metals.",
-          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
+          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!",
+          "The ductile nature of metals enables for the creation of this tea strainer with metal wire."
         ],
         "concepts": [
-          "brittle",
-          "malleable",
           "ductility",
+          "brittleness",
+          "malleability",
+          "Harappans",
+          "iron",
           "copper",
           "gold",
-          "iron",
-          "Harappans",
-          "agricultural tools",
-          "musical instruments"
+          "metallic properties",
+          "cultural impact of metals",
+          "cultural evolution",
+          "historical significance of metals"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
+        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of India's civilization.",
         "limitations": [
-          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The text does not provide specific examples or evidence for the claims made."
         ]
       },
       "vision_input": {
@@ -124779,10 +124784,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43606603258",
-      "checkpointed_at": "2026-11-14T16:07:13Z",
+      "run_id": "43614652594",
+      "checkpointed_at": "2026-11-14T16:27:18Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "A page from a textbook discussing the properties of different materials and their impact on civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124796,22 +124801,25 @@
           "You might have seen wires of metals like copper or aluminium in electrical fittings. Some ornaments, like bangles, necklaces, earrings, etc., are also made from metal wires. Metal wires play important functions in a variety of stringed musical instruments, such as veena, sitar, violin, and guitar.",
           "This property of materials by which they can be drawn into wires is called ductility.",
           "This property of ductility is mainly possessed by metals.",
-          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!"
+          "Gold is so ductile that one gram of it can be drawn into a 2 kilometre-long wire!",
+          "The ductile nature of metals enables for the creation of this tea strainer with metal wire."
         ],
         "concepts": [
-          "brittle",
-          "malleable",
           "ductility",
+          "brittleness",
+          "malleability",
+          "Harappans",
+          "iron",
           "copper",
           "gold",
-          "iron",
-          "Harappans",
-          "agricultural tools",
-          "musical instruments"
+          "metallic properties",
+          "cultural impact of metals",
+          "cultural evolution",
+          "historical significance of metals"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
+        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of India's civilization.",
         "limitations": [
-          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The text does not provide specific examples or evidence for the claims made."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
