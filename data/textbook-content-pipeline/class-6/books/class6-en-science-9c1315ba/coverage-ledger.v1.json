@@ -8215,7 +8215,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
+        "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Foreword",
@@ -8237,9 +8237,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of a holistic approach to education and the role of textbooks in achieving this.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its components, including the National Curriculum Framework for School Education (NCF-SE) 2023, and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods used to prepare teachers."
+          "The foreword does not provide specific details about the content of the textbooks or the implementation strategies."
         ]
       },
       "chapter_id": null,
@@ -27228,7 +27228,7 @@
       "correction_status": "NONE",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -27240,18 +27240,27 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Textbook",
-          "NCERT",
-          "DTP Cell",
-          "Publication Division",
+          "Planetarium",
+          "Academic support",
+          "Administrative support",
+          "Consultant",
+          "Programme Office",
+          "Senior Consultant",
+          "Educator",
+          "Development Sector Professional",
+          "Chief Consultant",
+          "Research Associates",
+          "Course Administrator",
+          "Junior Project Fellows",
           "Freelance Editor",
           "Proofreader",
+          "DTP Cell",
+          "Publication Division",
           "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
-          "No specific limitations mentioned.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "No specific limitations mentioned."
         ]
       },
       "chapter_id": null,
@@ -44782,10 +44791,10 @@
           "Handspans",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans.",
-          "The text does not provide the actual length of the table in handspans."
+          "The table does not provide a standard unit of measurement for length.",
+          "The text assumes that handspans are a reliable unit of measurement for length."
         ]
       },
       "chapter_id": null,
