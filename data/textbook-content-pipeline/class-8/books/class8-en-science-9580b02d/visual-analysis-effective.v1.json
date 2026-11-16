@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8cc3f0c28c25cedb5131c3e327d4a28a55dc096b8fcc35362f012661ce9f390c",
+  "raw_analysis_sha256": "06fb2176b0f1326d21fa0a5d8f536dc9f290bb1bd11742e698f7fcb63c10e5f1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1832,7 +1832,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43927938201",
-      "checkpointed_at": "2026-11-16T18:42:56Z",
+      "checkpointed_at": "2026-11-16T18:53:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -29466,7 +29466,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43927938201",
-      "checkpointed_at": "2026-11-16T18:43:36Z",
+      "checkpointed_at": "2026-11-16T18:54:09Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
@@ -58136,9 +58136,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a detailed explanation of non-contact forces."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "vision_input": {
@@ -58156,7 +58156,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "43927938201",
-      "checkpointed_at": "2026-11-16T18:49:03Z",
+      "checkpointed_at": "2026-11-16T18:54:54Z",
       "effective_analysis": {
         "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
@@ -58175,9 +58175,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide a detailed explanation of non-contact forces."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -65920,8 +65920,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43895429866",
-      "checkpointed_at": "2026-11-16T15:55:54Z",
+      "run_id": "43927938201",
+      "checkpointed_at": "2026-11-16T18:57:32Z",
       "effective_analysis": {
         "visual_summary": "A student is demonstrating an experiment involving an inverted paper plate and a folded chart paper sheet.",
         "visual_type": "diagram",
@@ -66238,7 +66238,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "43895429866",
+      "run_id": "43927938201",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
