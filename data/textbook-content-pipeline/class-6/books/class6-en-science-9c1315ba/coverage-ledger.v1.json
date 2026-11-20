@@ -8237,9 +8237,9 @@
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a diverse curriculum and the role of textbooks in education.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a diverse curriculum and appropriate textbooks for holistic development.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of implementation of the NCF-SE 2023."
+          "The foreword does not provide specific details about the content of the textbooks or the implementation of the framework."
         ]
       },
       "chapter_id": null,
@@ -27227,14 +27227,14 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgements page from a textbook.",
-        "visual_type": "uncertain",
+        "visual_summary": "Acknowledgements section of a textbook.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
           "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
           "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhirgara, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrati",
-          "Acknowledgements are due to Ankeeta Bezboruah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contri"
+          "Acknowledgements are due to Ankeeta Bezborua, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contrib"
         ],
         "concepts": [
           "Acknowledgements",
@@ -27245,17 +27245,15 @@
           "Consultant",
           "Programme Office",
           "Senior Consultant",
-          "Educator",
           "Course Administrator",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
-        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
+        "context_relation": "Acknowledgements and contributions",
         "limitations": [
-          "No specific limitations mentioned.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "No specific limitations mentioned."
         ]
       },
       "chapter_id": null,
@@ -30842,20 +30840,12 @@
           "grouping plants",
           "criteria for grouping",
           "features of plants",
-          "stems",
-          "leaves",
-          "flowers",
-          "height",
-          "types of stem",
-          "herbs",
-          "shrubs",
-          "trees",
-          "eating habits",
-          "living places"
+          "height and types of stem",
+          "herbs, shrubs, and trees"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and where they live.",
         "limitations": [
-          "The page does not provide specific examples or details for each criterion.",
+          "The page does not provide specific examples or instructions for grouping plants.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -44782,14 +44772,14 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement of Length and Motion",
+          "Measurement",
           "Handspans",
+          "Length",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "context_relation": "The table and the text discuss the concept of measurement using handspans as a unit.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans.",
-          "The text does not provide the actual length of the table in handspans."
+          "The text does not provide specific measurements or units of measurement."
         ]
       },
       "chapter_id": null,
