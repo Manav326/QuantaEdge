@@ -8215,12 +8215,12 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
+        "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "FOREWORD",
+          "Foreword",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
-          "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
+          "The framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse ",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
           "The National Council of Educational Research and Training, on its part, is committed to providing students with such high-quality textbooks. Various Curricular Area Groups, which have been constituted for this purpose, comprising notable subject-experts, pedagogues, and practising teachers as their "
         ],
@@ -8232,14 +8232,14 @@
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
           "Holistic development",
-          "Transformative learning culture",
           "Classroom arrangement",
           "Teacher preparation",
+          "High-quality textbooks",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023.",
+        "context_relation": "Introduction to the National Education Policy 2020 and its curriculum framework",
         "limitations": [
-          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the textbooks."
+          "The text does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
       },
       "chapter_id": null,
@@ -27240,17 +27240,21 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
+          "Planetarium",
           "Academic support",
           "Administrative support",
           "Consultant",
           "Programme Office",
           "Senior Consultant",
+          "Educator",
+          "Development Sector Professional",
+          "Chief Consultant",
+          "Research Associates",
           "Course Administrator",
           "Junior Project Fellows",
-          "Freelance Editor",
-          "Proofreader",
           "DTP Cell",
           "Publication Division",
+          "Proofreader",
           "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
@@ -30853,7 +30857,7 @@
           "eating habits",
           "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features of plants such as stems, leaves, flowers, and their eating habits and living places.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
         "limitations": [
           "The page does not provide specific examples or instructions for grouping plants.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -44787,10 +44791,9 @@
           "Length",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "context_relation": "The table and the text discuss the concept of measurement using handspans as a unit.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans.",
-          "The text does not provide the actual length of the table in handspans."
+          "The text does not provide specific measurements or units for the table's length."
         ]
       },
       "chapter_id": null,
