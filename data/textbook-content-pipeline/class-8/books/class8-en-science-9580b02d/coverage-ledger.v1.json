@@ -8669,12 +8669,12 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "In some activities Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
+          "Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
           "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
           "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
         ],
@@ -8683,17 +8683,26 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety",
+          "inclusive nature",
+          "visualisation",
           "peer interactions",
           "assessing understanding",
+          "reflecting on ideas",
           "analyzing concepts",
-          "Ever heard of",
-          "A step further"
+          "safety precautions",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "Ever heard of...",
+          "A step further",
+          "advanced concepts",
+          "scientific principles",
+          "real-life applications"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
         "limitations": [
-          "The page does not provide specific examples or activities for implementing the concepts discussed.",
+          "The page does not provide specific examples or activities.",
+          "The page does not include images or diagrams.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -27021,7 +27030,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
+        "visual_summary": "Acknowledgment page for a textbook publication.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -27032,20 +27041,15 @@
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook",
-          "Contributors",
-          "Roles",
+          "Textbook Publication",
           "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
           "DTP Cell",
-          "Contractual",
+          "Publication Division",
           "Proofreaders"
         ],
-        "context_relation": "Acknowledgment of contributions and support in the publication of a textbook",
+        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific limitations mentioned",
+          "No specific visual elements are described.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
