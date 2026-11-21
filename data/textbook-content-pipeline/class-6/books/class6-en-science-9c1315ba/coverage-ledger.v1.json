@@ -8215,7 +8215,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
+        "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "FOREWORD",
@@ -8235,13 +8235,11 @@
           "Transformative learning culture",
           "Classroom arrangement",
           "Teacher preparation",
-          "High-quality textbooks",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of holistic development and the role of textbooks in education.",
+        "context_relation": "Foreword of a National Education Policy document",
         "limitations": [
-          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the specific subjects covered in the curriculum.",
-          "The foreword does not mention the timeline or the scope of the NCF-SE 2023."
+          "The text is a foreword and does not provide specific details about the curriculum or its implementation."
         ]
       },
       "chapter_id": null,
@@ -27229,8 +27227,8 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -27247,17 +27245,17 @@
           "Consultant",
           "Programme Office",
           "Senior Consultant",
+          "Educator",
           "Course Administrator",
-          "Junior Project Fellows",
-          "Freelance Editor",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned in the image.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "chapter_id": null,
@@ -30841,23 +30839,27 @@
           "Also, observe from where the branches of the plants arise—whether they arise close to the ground or higher up on the stem. Fill in your observations in Table 2.3. A few examples are already given."
         ],
         "concepts": [
-          "grouping plants",
-          "criteria for grouping",
-          "features of plants",
+          "grouping",
+          "criteria",
+          "plants",
+          "animals",
+          "features",
           "stems",
           "leaves",
           "flowers",
-          "height",
-          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "eating habits",
-          "living places"
+          "height",
+          "types of stem",
+          "observations",
+          "bending stems",
+          "branching",
+          "table"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features such as stems, leaves, flowers, and their places of living.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants based on the criteria mentioned.",
+          "The page does not provide specific examples or instructions for grouping plants and animals.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -44764,7 +44766,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_summary": "Table showing the number of handspans for different students.",
         "visual_type": "table",
         "visible_text": [
           "Table 5.1: Measuring the length of the table",
@@ -44784,13 +44786,14 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement of Length and Motion",
           "Handspans",
+          "Length",
+          "Measurement",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The table does not provide the actual length of the table."
         ]
       },
       "chapter_id": null,

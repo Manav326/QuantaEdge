@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1615,
+    "assets_selected": 1616,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
-      "055ba61cf9184b7284850138",
-      "2104ecb647e20f98cb93ca2e"
+      "ac3ef67e4ced1dc1152e7b14",
+      "055ba61cf9184b7284850138"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1611,
     "assets_remaining": 467,
     "assets_completion_percent": 77.5,
     "assets_failed": 39,
-    "assets_skipped_from_checkpoint": 1610,
+    "assets_skipped_from_checkpoint": 1611,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -421,7 +421,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
+        "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "FOREWORD",
@@ -441,13 +441,11 @@
           "Transformative learning culture",
           "Classroom arrangement",
           "Teacher preparation",
-          "High-quality textbooks",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of holistic development and the role of textbooks in education.",
+        "context_relation": "Foreword of a National Education Policy document",
         "limitations": [
-          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the specific subjects covered in the curriculum.",
-          "The foreword does not mention the timeline or the scope of the NCF-SE 2023."
+          "The text is a foreword and does not provide specific details about the curriculum or its implementation."
         ]
       },
       "vision_input": {
@@ -464,8 +462,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44873863710",
-      "checkpointed_at": "2026-11-21T06:23:59Z"
+      "run_id": "44876592797",
+      "checkpointed_at": "2026-11-21T06:48:51Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20105,8 +20103,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -20123,17 +20121,17 @@
           "Consultant",
           "Programme Office",
           "Senior Consultant",
+          "Educator",
           "Course Administrator",
-          "Junior Project Fellows",
-          "Freelance Editor",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned in the image.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "vision_input": {
@@ -20150,8 +20148,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44873863710",
-      "checkpointed_at": "2026-11-21T06:25:27Z"
+      "run_id": "44876592797",
+      "checkpointed_at": "2026-11-21T06:51:26Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23856,23 +23854,27 @@
           "Also, observe from where the branches of the plants arise—whether they arise close to the ground or higher up on the stem. Fill in your observations in Table 2.3. A few examples are already given."
         ],
         "concepts": [
-          "grouping plants",
-          "criteria for grouping",
-          "features of plants",
+          "grouping",
+          "criteria",
+          "plants",
+          "animals",
+          "features",
           "stems",
           "leaves",
           "flowers",
-          "height",
-          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "eating habits",
-          "living places"
+          "height",
+          "types of stem",
+          "observations",
+          "bending stems",
+          "branching",
+          "table"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features such as stems, leaves, flowers, and their places of living.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants based on the criteria mentioned.",
+          "The page does not provide specific examples or instructions for grouping plants and animals.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -23890,8 +23892,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44873863710",
-      "checkpointed_at": "2026-11-21T06:26:44Z"
+      "run_id": "44876592797",
+      "checkpointed_at": "2026-11-21T06:53:51Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37560,7 +37562,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44873863710",
+      "run_id": "44876592797",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38206,7 +38208,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_summary": "Table showing the number of handspans for different students.",
         "visual_type": "table",
         "visible_text": [
           "Table 5.1: Measuring the length of the table",
@@ -38226,13 +38228,14 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement of Length and Motion",
           "Handspans",
+          "Length",
+          "Measurement",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The table does not provide the actual length of the table."
         ]
       },
       "vision_input": {
@@ -38249,8 +38252,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44873863710",
-      "checkpointed_at": "2026-11-21T06:27:47Z"
+      "run_id": "44876592797",
+      "checkpointed_at": "2026-11-21T06:59:12Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
