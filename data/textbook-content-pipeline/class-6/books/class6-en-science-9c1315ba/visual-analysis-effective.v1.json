@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d5d64755363c5ed61cad7c98025431ebc6f1ddfa33ff4804c89596fe02822594",
+  "raw_analysis_sha256": "146c87f36dd8c46f2272b92ab52514ec2e7e72b3477744951b2ba1069ba7dc6b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -608,10 +608,10 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Foreword of a National Education Policy document discussing the integration of Indian ethos and civilizational achievements in education, emphasizing the role of the National Curriculum Framework for School Education (NCF-SE) 2023 in preparing students for the 21st century.",
+        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -619,9 +619,8 @@
         ],
         "concepts": [
           "National Education Policy 2020",
-          "Indian ethos",
-          "Civilisational accomplishments",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
+          "paichakoshas",
           "Middle Stage",
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
@@ -629,14 +628,11 @@
           "Transformative learning culture",
           "Classroom arrangement",
           "Teacher preparation",
-          "High-quality textbooks",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the integration of Indian ethos and civilizational achievements in education, emphasizing the role of the National Curriculum Framework for School Education (NCF-SE) 2023 in preparing students for the 21st century.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "limitations": [
-          "The foreword does not provide specific details about the content or structure of the NCF-SE 2023 curriculum.",
-          "The foreword does not mention the specific subjects covered in the NCF-SE 2023 curriculum.",
-          "The foreword does not provide information about the implementation or evaluation of the NCF-SE 2023 curriculum."
+          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the textbooks."
         ]
       },
       "vision_input": {
@@ -654,12 +650,12 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44871479777",
-      "checkpointed_at": "2026-11-21T05:42:22Z",
+      "checkpointed_at": "2026-11-21T05:50:40Z",
       "effective_analysis": {
-        "visual_summary": "Foreword of a National Education Policy document discussing the integration of Indian ethos and civilizational achievements in education, emphasizing the role of the National Curriculum Framework for School Education (NCF-SE) 2023 in preparing students for the 21st century.",
+        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -667,9 +663,8 @@
         ],
         "concepts": [
           "National Education Policy 2020",
-          "Indian ethos",
-          "Civilisational accomplishments",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
+          "paichakoshas",
           "Middle Stage",
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
@@ -677,14 +672,11 @@
           "Transformative learning culture",
           "Classroom arrangement",
           "Teacher preparation",
-          "High-quality textbooks",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the integration of Indian ethos and civilizational achievements in education, emphasizing the role of the National Curriculum Framework for School Education (NCF-SE) 2023 in preparing students for the 21st century.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "limitations": [
-          "The foreword does not provide specific details about the content or structure of the NCF-SE 2023 curriculum.",
-          "The foreword does not mention the specific subjects covered in the NCF-SE 2023 curriculum.",
-          "The foreword does not provide information about the implementation or evaluation of the NCF-SE 2023 curriculum."
+          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the textbooks."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29426,7 +29418,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -29443,20 +29435,17 @@
           "Consultant",
           "Programme Office",
           "Senior Consultant",
-          "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
+          "Course Administrator",
+          "Junior Project Fellows",
           "Freelance Editor",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Contractual",
-          "NCERT"
+          "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
-          "No specific limitations mentioned.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "No specific limitations mentioned."
         ]
       },
       "vision_input": {
@@ -29474,10 +29463,10 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44871479777",
-      "checkpointed_at": "2026-11-21T05:44:12Z",
+      "checkpointed_at": "2026-11-21T05:51:32Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -29494,20 +29483,17 @@
           "Consultant",
           "Programme Office",
           "Senior Consultant",
-          "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
+          "Course Administrator",
+          "Junior Project Fellows",
           "Freelance Editor",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Contractual",
-          "NCERT"
+          "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
-          "No specific limitations mentioned.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "No specific limitations mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -35197,9 +35183,9 @@
           "eating habits",
           "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features of plants such as stems, leaves, flowers, and their eating habits and living places.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants based on the features mentioned.",
+          "The page does not provide specific examples or instructions for grouping plants.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -35218,7 +35204,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44871479777",
-      "checkpointed_at": "2026-11-21T05:45:55Z",
+      "checkpointed_at": "2026-11-21T05:52:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -35255,9 +35241,9 @@
           "eating habits",
           "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features of plants such as stems, leaves, flowers, and their eating habits and living places.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants based on the features mentioned.",
+          "The page does not provide specific examples or instructions for grouping plants.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -57722,14 +57708,15 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
+          "Measurement",
           "Handspans",
           "Length",
-          "Measurement",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide a specific length for the table."
+          "The table does not provide the actual length of the table in handspans.",
+          "The text does not provide the actual length of the table in handspans."
         ]
       },
       "vision_input": {
@@ -57747,7 +57734,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44871479777",
-      "checkpointed_at": "2026-11-21T05:49:44Z",
+      "checkpointed_at": "2026-11-21T05:52:54Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57769,14 +57756,15 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
+          "Measurement",
           "Handspans",
           "Length",
-          "Measurement",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide a specific length for the table."
+          "The table does not provide the actual length of the table in handspans.",
+          "The text does not provide the actual length of the table in handspans."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -58961,7 +58949,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44869342278",
+      "run_id": "44871479777",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
