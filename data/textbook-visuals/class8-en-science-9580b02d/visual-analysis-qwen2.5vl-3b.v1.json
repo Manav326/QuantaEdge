@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "aa8a149fa698d13f05cfdb3e",
       "f492c50e9c7d7ef8d140ae06",
-      "e03a02c3fc37627f873ab044"
+      "1851a22784c9105601dfe039",
+      "2e220d251d13a2e76c57e33b"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1425,
     "assets_remaining": 866,
     "assets_completion_percent": 62.2,
-    "assets_failed": 17,
+    "assets_failed": 16,
     "assets_skipped_from_checkpoint": 1425,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1231,7 +1231,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44881971436",
-      "checkpointed_at": "2026-11-21T08:04:44Z"
+      "checkpointed_at": "2026-11-21T08:12:17Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20254,7 +20254,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44881971436",
-      "checkpointed_at": "2026-11-21T08:05:30Z"
+      "checkpointed_at": "2026-11-21T08:13:02Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38633,7 +38633,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An educational page explaining different types of forces, specifically contact forces and muscular force.",
+        "visual_summary": "An educational page about different types of forces, specifically contact forces, with examples and illustrations.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38650,9 +38650,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with an example of muscular force in living beings.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The page does not provide specific examples or explanations for each type of force."
+          "The page does not provide a detailed explanation of the physics behind contact forces or muscular force."
         ]
       },
       "vision_input": {
@@ -38670,7 +38670,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44881971436",
-      "checkpointed_at": "2026-11-21T08:08:29Z"
+      "checkpointed_at": "2026-11-21T08:13:49Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43623,6 +43623,7 @@
         "visual_type": "diagram",
         "visible_text": [
           "Fig. 6.9: (b) Inverted paper plate with two folds of chart paper",
+          "Fig. 6.9: (c) Inverted paper plate with unfolded chart paper",
           "the folded chart paper sheet — big enough for the stick to come out. Place the folded sheet on top of the inverted paper plate as shown in Fig. 6.9b.",
           "Now, try to lift the paper plate covered with a folded sheet using the stick.",
           "Observe how much effort is needed to lift it.",
@@ -43636,20 +43637,19 @@
           "inverted paper plate",
           "folded chart paper sheet",
           "unfolded chart paper sheet",
-          "effort to lift",
+          "lifting effort",
           "area of covering sheet",
-          "force on covering sheet",
+          "force",
+          "pressure",
           "atmospheric pressure",
-          "pressure on paper sheet",
-          "pressure exerted by air",
-          "inflation of balloon",
-          "pressure in all directions",
-          "escaping air from balloon"
+          "inflation",
+          "pressure on walls",
+          "expansion",
+          "air escaping"
         ],
         "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
         "limitations": [
-          "The image does not show the actual experiment being conducted.",
-          "The image does not show the results of the experiment."
+          "The image does not show the actual experiment being conducted."
         ]
       },
       "vision_input": {
@@ -43666,8 +43666,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44851929362",
-      "checkpointed_at": "2026-11-21T02:19:34Z"
+      "run_id": "44881971436",
+      "checkpointed_at": "2026-11-21T08:15:48Z"
     },
     {
       "asset_id": "46c9d5f38c6da536fdee0c3d",
@@ -43838,19 +43838,71 @@
     {
       "asset_id": "2e220d251d13a2e76c57e33b",
       "asset_sha256": "8365e4fa376ae0bf20050b6aad49cdd232cf9ca81ea7ca9a7d4fc7845600696e",
-      "page_text_context_sha256": "c837b29b08feb77ea963de909a5c33550b2e7ee7d30222c8fc6f62c5142c08d8",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 107,
       "asset_path": "page-0107.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c837b29b08feb77ea963de909a5c33550b2e7ee7d30222c8fc6f62c5142c08d8",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44851929362",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An activity involving a rubber sucker to demonstrate atmospheric pressure.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "87",
+          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
+          "Activity 6.4: Let us perform",
+          "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
+          "Do you realise that it sticks to the surface?",
+          "Now, try to pull it off. Do you find it difficult to pull it off?",
+          "When we press the sucker, most of the air between its cup and the surface on which it is placed is pushed out and the air pressure inside it is reduced. The sucker sticks to the surface because the pressure of air surrounding the sucker is higher than the pressure exerted by the air inside the sucke",
+          "Do you know how large the atmospheric pressure is? The force exerted by the atmospheric air column over an area 15 cm × 15 cm is nearly equal to the force of gravity on an object of mass 225 kg (2250 N). The reason we are not crushed under this weight is that the pressure inside our bodies is also e",
+          "A step further",
+          "The SI unit of pressure is N/m², also known as pascal (Pa). However, the practical unit of air pressure is millibar (mb), which is equal to 100 Pa. Air pressure is also expressed in hectopascal (hPa), which is equal to 100 Pa.",
+          "6.3 Formation of Wind",
+          "You must have noticed that on some days, the wind blows strongly, whereas on other days, it is calm. Sometimes, wind becomes so strong that it causes damage to life and property.",
+          "You must have seen that when an inflated balloon is kept without closing its mouth, the air from the balloon escapes. Recall that when there is a puncture in the bicycle tube, the air escapes and the tube collapses. In both of these cases, does air move from a high pressure region to a low pressure "
+        ],
+        "concepts": [
+          "atmospheric pressure",
+          "rubber sucker",
+          "pressure difference",
+          "SI unit of pressure",
+          "millibar",
+          "hectopascal",
+          "wind formation",
+          "pressure balance",
+          "atmospheric force",
+          "fluid pressure",
+          "atmospheric pressure force",
+          "wind strength",
+          "pressure difference in balloons and tubes"
+        ],
+        "context_relation": "The image is a page from a textbook discussing atmospheric pressure and its effects, including an activity involving a rubber sucker to demonstrate the concept.",
+        "limitations": [
+          "The image does not provide specific numerical values or calculations.",
+          "The image does not show the actual experiment being performed."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 1186,
+        "source_height": 1568,
+        "inference_width": 726,
+        "inference_height": 960,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 154835,
+        "sha256": "987be6acae5891adc5d4e0793b3961ce08311e4f6cbd84647346845cb916131b"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "44881971436",
+      "checkpointed_at": "2026-11-21T08:17:50Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
