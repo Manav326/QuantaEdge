@@ -8691,17 +8691,12 @@
           "analyzing concepts",
           "safety precautions",
           "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "Ever heard of",
-          "A step further",
-          "advanced concepts",
-          "scientific principles",
-          "real-life applications"
+          "Ever heard of...",
+          "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions mentioned."
+          "The page does not provide specific examples or exercises for implementing the concepts discussed."
         ]
       },
       "chapter_id": null,
@@ -27049,10 +27044,9 @@
           "DTP Cell",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
+        "context_relation": "Acknowledgment of contributions and support in the publication of a textbook",
         "limitations": [
-          "The page does not contain any visual elements.",
-          "The text is a list of acknowledgments and contributions, without any diagrams, charts, or illustrations.",
+          "No specific visual elements are described, only text content is provided.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -32566,7 +32560,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -32590,11 +32584,13 @@
           "biogas",
           "patent",
           "environmental problems",
-          "microorganisms in the kitchen"
+          "microorganisms in the kitchen",
+          "yeast",
+          "dough"
         ],
         "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The text does not provide specific details about the activities or results of the experiment described in Activity 2.8."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "chapter_id": null,
@@ -44918,7 +44914,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
+        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces. It includes text and illustrations related to the concept of muscular force and its application in various living beings.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -44933,11 +44929,12 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces and muscular force.",
+        "context_relation": "The image provides an educational context about different types of forces, specifically focusing on contact forces and their application in living beings.",
         "limitations": [
-          "The image does not provide specific examples or illustrations for the concepts discussed."
+          "The image does not provide specific examples or illustrations of contact forces beyond the general explanation."
         ]
       },
       "chapter_id": null,
