@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c0072abe8cbd07454729b7b0c6f36831d5e46ea4a443cb20fea5ac001a143e87",
+  "raw_analysis_sha256": "e3f42b1be95cf310eb6ae41f374ea6e52f9936e1915d3612828edb6c0f74431d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1835,7 +1835,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44872250382",
-      "checkpointed_at": "2026-11-21T05:55:50Z",
+      "checkpointed_at": "2026-11-21T05:59:13Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -29476,7 +29476,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44872250382",
-      "checkpointed_at": "2026-11-21T05:56:12Z",
+      "checkpointed_at": "2026-11-21T05:59:35Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
         "visual_type": "uncertain",
@@ -38423,7 +38423,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44872250382",
-      "checkpointed_at": "2026-11-21T05:56:44Z",
+      "checkpointed_at": "2026-11-21T06:00:08Z",
       "effective_analysis": {
         "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
@@ -58212,7 +58212,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces. It includes text and illustrations related to the concept of muscular force and its application in various living beings.",
+        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces. It includes text and illustrations related to the concepts of force and its application in various scenarios.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -58227,12 +58227,11 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
-        "context_relation": "The image provides an educational context about different types of forces, specifically focusing on contact forces and their application in living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces. It includes text and illustrations related to the concepts of force and its application in various scenarios.",
         "limitations": [
-          "The image does not provide specific examples or illustrations of contact forces beyond the general explanation."
+          "The image does not provide specific examples or illustrations of muscular force."
         ]
       },
       "vision_input": {
@@ -58250,9 +58249,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44872250382",
-      "checkpointed_at": "2026-11-21T05:58:38Z",
+      "checkpointed_at": "2026-11-21T06:00:32Z",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces. It includes text and illustrations related to the concept of muscular force and its application in various living beings.",
+        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces. It includes text and illustrations related to the concepts of force and its application in various scenarios.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -58267,12 +58266,11 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
-        "context_relation": "The image provides an educational context about different types of forces, specifically focusing on contact forces and their application in living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces. It includes text and illustrations related to the concepts of force and its application in various scenarios.",
         "limitations": [
-          "The image does not provide specific examples or illustrations of contact forces beyond the general explanation."
+          "The image does not provide specific examples or illustrations of muscular force."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -60942,7 +60940,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44870284188",
+      "run_id": "44872250382",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
