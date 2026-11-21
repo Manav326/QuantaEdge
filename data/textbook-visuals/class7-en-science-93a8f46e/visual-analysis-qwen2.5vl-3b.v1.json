@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "19182aa83463f523d90ed77b",
-      "617a7eb962b48f65cc1c1ca8",
-      "4b1298747dc1ec978a226ae5"
+      "4b1298747dc1ec978a226ae5",
+      "5c16577a15e78e04e26b60ff",
+      "3b984cadc98f93c6d948c2a1"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3347,
@@ -9981,7 +9981,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of deeper questions.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -9990,11 +9990,11 @@
         ],
         "concepts": [
           "exploration",
-          "science",
           "curiosity",
           "questions",
-          "unknown",
+          "openness",
           "process",
+          "science",
           "environment",
           "responsibility",
           "human activities",
@@ -10007,7 +10007,7 @@
           "discovery",
           "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of science",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
           "The text does not provide specific examples or questions for exploration."
         ]
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44888063022",
-      "checkpointed_at": "2026-11-21T09:15:15Z"
+      "checkpointed_at": "2026-11-21T09:23:45Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13511,9 +13511,10 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "exploring and understanding the universe through light and its effects",
+        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages the reader to think like a scientist.",
         "limitations": [
-          "The text does not provide specific images or diagrams."
+          "The page does not provide specific examples or experiments to follow.",
+          "The page does not include any visual aids beyond the text and the image of a paper airplane."
         ]
       },
       "vision_input": {
@@ -13531,7 +13532,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44888063022",
-      "checkpointed_at": "2026-11-21T09:16:39Z"
+      "checkpointed_at": "2026-11-21T09:24:17Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79298,7 +79299,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -79327,7 +79328,7 @@
         ],
         "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization.",
         "limitations": [
-          "The page does not provide specific examples or evidence for the claims made."
+          "The page does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
         ]
       },
       "vision_input": {
@@ -79345,7 +79346,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44888063022",
-      "checkpointed_at": "2026-11-21T09:22:54Z"
+      "checkpointed_at": "2026-11-21T09:24:58Z"
     },
     {
       "asset_id": "42e2bad6ce513928f9ecea9b",
@@ -115827,7 +115828,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44879540810",
+      "run_id": "44888063022",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -122434,7 +122435,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44879540810",
+      "run_id": "44888063022",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
