@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "50eb0d67e400cb7b3724752dde50cb826c6eeec59fe12b90622d93cf429cdd05",
+  "raw_analysis_sha256": "c1ba3453e160f165ba6306f7c4883c67cae60a1009576e359a3f83845893cd40",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15073,7 +15073,7 @@
           "science",
           "curiosity",
           "questions",
-          "unknown",
+          "openness",
           "process",
           "environment",
           "responsibility",
@@ -15084,8 +15084,8 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "questions"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
@@ -15106,8 +15106,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44941030666",
-      "checkpointed_at": "2026-11-21T21:09:52Z",
+      "run_id": "44951227739",
+      "checkpointed_at": "2026-11-21T21:30:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -15121,7 +15121,7 @@
           "science",
           "curiosity",
           "questions",
-          "unknown",
+          "openness",
           "process",
           "environment",
           "responsibility",
@@ -15132,8 +15132,8 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "questions"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
@@ -20266,7 +20266,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "visual_summary": "Page from a textbook discussing the understanding of the universe through light and shadows, and the importance of understanding Earth's movements for eclipses and day-night cycles.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -20276,17 +20276,20 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light",
-          "universe",
+          "light and shadows",
           "eclipses",
+          "day and night",
+          "Earth's movements",
+          "day-night cycles",
           "Earth's rotation",
           "Moon's orbit",
-          "day and night",
-          "scientific thinking"
+          "experiments",
+          "thinking like a scientist"
         ],
-        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the importance of understanding Earth's movements for eclipses and day-night cycles, and encourages readers to think like scientists by asking questions and doing experiments.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
+          "The page does not provide specific examples or experiments to follow.",
+          "The page does not include any visual aids or diagrams."
         ]
       },
       "vision_input": {
@@ -20303,10 +20306,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44941030666",
-      "checkpointed_at": "2026-11-21T21:10:41Z",
+      "run_id": "44951227739",
+      "checkpointed_at": "2026-11-21T21:32:18Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "visual_summary": "Page from a textbook discussing the understanding of the universe through light and shadows, and the importance of understanding Earth's movements for eclipses and day-night cycles.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -20316,17 +20319,20 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light",
-          "universe",
+          "light and shadows",
           "eclipses",
+          "day and night",
+          "Earth's movements",
+          "day-night cycles",
           "Earth's rotation",
           "Moon's orbit",
-          "day and night",
-          "scientific thinking"
+          "experiments",
+          "thinking like a scientist"
         ],
-        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the importance of understanding Earth's movements for eclipses and day-night cycles, and encourages readers to think like scientists by asking questions and doing experiments.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
+          "The page does not provide specific examples or experiments to follow.",
+          "The page does not include any visual aids or diagrams."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -78997,7 +79003,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44941030666",
+      "run_id": "44951227739",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115281,7 +115287,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44941030666",
+      "run_id": "44951227739",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -124755,16 +124761,14 @@
           "ductility",
           "brittle",
           "malleable",
-          "Harappans",
           "iron",
           "copper",
           "gold",
-          "metallic properties",
-          "civiliation",
+          "Harappans",
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of agriculture and musical instruments.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
         "limitations": [
           "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
         ]
@@ -124783,8 +124787,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44941030666",
-      "checkpointed_at": "2026-11-21T21:11:51Z",
+      "run_id": "44951227739",
+      "checkpointed_at": "2026-11-21T21:39:36Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
@@ -124806,16 +124810,14 @@
           "ductility",
           "brittle",
           "malleable",
-          "Harappans",
           "iron",
           "copper",
           "gold",
-          "metallic properties",
-          "civiliation",
+          "Harappans",
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of agriculture and musical instruments.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
         "limitations": [
           "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
         ]
