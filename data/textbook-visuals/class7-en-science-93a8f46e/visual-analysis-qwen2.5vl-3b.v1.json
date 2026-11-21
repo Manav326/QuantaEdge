@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3359,
+    "assets_selected": 3360,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "4b1298747dc1ec978a226ae5",
-      "24ea5817469100364c076e42",
-      "128a691320fb8519205c55ee"
+      "19182aa83463f523d90ed77b",
+      "617a7eb962b48f65cc1c1ca8",
+      "4b1298747dc1ec978a226ae5"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3355,
     "assets_remaining": 4133,
     "assets_completion_percent": 44.8,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 3354,
+    "assets_skipped_from_checkpoint": 3355,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9981,7 +9981,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of deeper questions.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -10007,7 +10007,7 @@
           "discovery",
           "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "exploration and understanding of science",
         "limitations": [
           "The text does not provide specific examples or questions for exploration."
         ]
@@ -10026,8 +10026,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44909628597",
-      "checkpointed_at": "2026-11-21T15:26:31Z"
+      "run_id": "44920648375",
+      "checkpointed_at": "2026-11-21T15:50:21Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13511,10 +13511,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its relationship to the Earth and Moon, including eclipses and the Earth's rotation, and encourages readers to think like scientists.",
+        "context_relation": "exploring and understanding the universe through light and its effects",
         "limitations": [
-          "The page does not provide specific examples or experiments to follow.",
-          "The page does not include any visual aids beyond the text and the image of a glass with a red line."
+          "The text does not provide specific images or diagrams."
         ]
       },
       "vision_input": {
@@ -13531,8 +13530,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44909628597",
-      "checkpointed_at": "2026-11-21T15:27:17Z"
+      "run_id": "44920648375",
+      "checkpointed_at": "2026-11-21T15:51:16Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50179,7 +50178,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44909628597",
+      "run_id": "44920648375",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -73302,7 +73301,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44909628597",
+      "run_id": "44920648375",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -79299,7 +79298,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -79319,10 +79318,10 @@
           "ductility",
           "brittle",
           "malleable",
-          "iron",
+          "Harappans",
           "copper",
           "gold",
-          "Harappans",
+          "iron",
           "agricultural tools",
           "musical instruments"
         ],
@@ -79345,8 +79344,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44909628597",
-      "checkpointed_at": "2026-11-21T15:28:15Z"
+      "run_id": "44920648375",
+      "checkpointed_at": "2026-11-21T15:55:37Z"
     },
     {
       "asset_id": "42e2bad6ce513928f9ecea9b",
