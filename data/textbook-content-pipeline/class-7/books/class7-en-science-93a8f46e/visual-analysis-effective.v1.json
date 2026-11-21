@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "80b187e91e7147bca606d16640c56a06e70932dd9669d7b2f4456c1735140bb7",
+  "raw_analysis_sha256": "7b170bfa79695506e82e951d9c82af992762cd8712cd951b978e2806c312c12d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15061,7 +15061,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of deeper questions.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15070,11 +15070,11 @@
         ],
         "concepts": [
           "exploration",
+          "science",
           "curiosity",
           "questions",
-          "openness",
+          "unknown",
           "process",
-          "science",
           "environment",
           "responsibility",
           "human activities",
@@ -15087,7 +15087,7 @@
           "discovery",
           "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "exploration and understanding of science",
         "limitations": [
           "The text does not provide specific examples or questions for exploration."
         ]
@@ -15106,10 +15106,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44926863818",
-      "checkpointed_at": "2026-11-21T18:10:23Z",
+      "run_id": "44935047984",
+      "checkpointed_at": "2026-11-21T18:28:11Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of deeper questions.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15118,11 +15118,11 @@
         ],
         "concepts": [
           "exploration",
+          "science",
           "curiosity",
           "questions",
-          "openness",
+          "unknown",
           "process",
-          "science",
           "environment",
           "responsibility",
           "human activities",
@@ -15135,7 +15135,7 @@
           "discovery",
           "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "exploration and understanding of science",
         "limitations": [
           "The text does not provide specific examples or questions for exploration."
         ]
@@ -20284,10 +20284,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages the reader to think like a scientist.",
+        "context_relation": "exploring and understanding the universe through light and its effects",
         "limitations": [
-          "The page does not provide specific examples or experiments to follow.",
-          "The page does not include any visual aids beyond the text and the image of a paper airplane."
+          "The text does not provide specific images or diagrams."
         ]
       },
       "vision_input": {
@@ -20304,8 +20303,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44926863818",
-      "checkpointed_at": "2026-11-21T18:10:54Z",
+      "run_id": "44935047984",
+      "checkpointed_at": "2026-11-21T18:29:03Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20325,10 +20324,9 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages the reader to think like a scientist.",
+        "context_relation": "exploring and understanding the universe through light and its effects",
         "limitations": [
-          "The page does not provide specific examples or experiments to follow.",
-          "The page does not include any visual aids beyond the text and the image of a paper airplane."
+          "The text does not provide specific images or diagrams."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -78999,7 +78997,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44926863818",
+      "run_id": "44935047984",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115283,7 +115281,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44926863818",
+      "run_id": "44935047984",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -124737,7 +124735,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124766,7 +124764,7 @@
         ],
         "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization.",
         "limitations": [
-          "The page does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The page does not provide specific examples or evidence for the claims made."
         ]
       },
       "vision_input": {
@@ -124783,10 +124781,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44926863818",
-      "checkpointed_at": "2026-11-21T18:11:34Z",
+      "run_id": "44935047984",
+      "checkpointed_at": "2026-11-21T18:33:05Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124815,7 +124813,7 @@
         ],
         "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization.",
         "limitations": [
-          "The page does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The page does not provide specific examples or evidence for the claims made."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
