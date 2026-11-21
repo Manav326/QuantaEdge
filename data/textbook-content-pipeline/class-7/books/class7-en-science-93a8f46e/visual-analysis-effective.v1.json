@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9268e7594e440322d900dc5ea221401be3e67997e6874ae2414b97c38971bfeb",
+  "raw_analysis_sha256": "262ef57dcdbd1439f89d44fa87c276119393000950f73def4ad72c7b3fb2fa53",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15084,8 +15084,8 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44909628597",
-      "checkpointed_at": "2026-11-21T13:44:31Z",
+      "checkpointed_at": "2026-11-21T13:56:38Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -15132,8 +15132,8 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
@@ -20284,9 +20284,10 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "Introduction to scientific concepts and experiments",
+        "context_relation": "The page discusses the effects of light and its relationship to the Earth and Moon, including eclipses and the Earth's rotation, and encourages readers to think like scientists.",
         "limitations": [
-          "No specific limitations mentioned"
+          "The page does not provide specific examples or experiments to follow.",
+          "The page does not include any visual aids beyond the text and the image of a glass with a red line."
         ]
       },
       "vision_input": {
@@ -20304,7 +20305,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44909628597",
-      "checkpointed_at": "2026-11-21T13:46:32Z",
+      "checkpointed_at": "2026-11-21T13:57:24Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20324,9 +20325,10 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "Introduction to scientific concepts and experiments",
+        "context_relation": "The page discusses the effects of light and its relationship to the Earth and Moon, including eclipses and the Earth's rotation, and encourages readers to think like scientists.",
         "limitations": [
-          "No specific limitations mentioned"
+          "The page does not provide specific examples or experiments to follow.",
+          "The page does not include any visual aids beyond the text and the image of a glass with a red line."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -124735,7 +124737,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of different materials and their impact on civilization.",
+        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124762,9 +124764,9 @@
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization.",
         "limitations": [
-          "The text does not provide specific examples or evidence for the claims made."
+          "The page does not provide specific examples or evidence for the claims made."
         ]
       },
       "vision_input": {
@@ -124782,9 +124784,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44909628597",
-      "checkpointed_at": "2026-11-21T13:55:30Z",
+      "checkpointed_at": "2026-11-21T13:58:21Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of different materials and their impact on civilization.",
+        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124811,9 +124813,9 @@
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization.",
         "limitations": [
-          "The text does not provide specific examples or evidence for the claims made."
+          "The page does not provide specific examples or evidence for the claims made."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -181611,7 +181613,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44900303621",
+      "run_id": "44909628597",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -191552,7 +191554,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44900303621",
+      "run_id": "44909628597",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
