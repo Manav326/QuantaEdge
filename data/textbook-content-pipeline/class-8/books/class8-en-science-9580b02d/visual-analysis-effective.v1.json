@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "623049de701c77de44befb9a264190c183596becf6008edb4f327bd575a53b4d",
+  "raw_analysis_sha256": "b3a13bd038eb14bc408732cddc90d07f9e0d91dfeb0f7e3fcd035ca357be6652",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1812,17 +1812,12 @@
           "analyzing concepts",
           "safety precautions",
           "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "Ever heard of",
-          "A step further",
-          "advanced concepts",
-          "scientific principles",
-          "real-life applications"
+          "Ever heard of...",
+          "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions mentioned."
+          "The page does not provide specific examples or exercises for implementing the concepts discussed."
         ]
       },
       "vision_input": {
@@ -1840,7 +1835,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44952057277",
-      "checkpointed_at": "2026-11-21T21:39:05Z",
+      "checkpointed_at": "2026-11-21T21:43:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -1864,17 +1859,12 @@
           "analyzing concepts",
           "safety precautions",
           "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "Ever heard of",
-          "A step further",
-          "advanced concepts",
-          "scientific principles",
-          "real-life applications"
+          "Ever heard of...",
+          "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions mentioned."
+          "The page does not provide specific examples or exercises for implementing the concepts discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29465,10 +29455,9 @@
           "DTP Cell",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
+        "context_relation": "Acknowledgment of contributions and support in the publication of a textbook",
         "limitations": [
-          "The page does not contain any visual elements.",
-          "The text is a list of acknowledgments and contributions, without any diagrams, charts, or illustrations.",
+          "No specific visual elements are described, only text content is provided.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -29487,7 +29476,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44952057277",
-      "checkpointed_at": "2026-11-21T21:40:03Z",
+      "checkpointed_at": "2026-11-21T21:44:22Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
         "visual_type": "uncertain",
@@ -29510,10 +29499,9 @@
           "DTP Cell",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
+        "context_relation": "Acknowledgment of contributions and support in the publication of a textbook",
         "limitations": [
-          "The page does not contain any visual elements.",
-          "The text is a list of acknowledgments and contributions, without any diagrams, charts, or illustrations.",
+          "No specific visual elements are described, only text content is provided.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -38387,7 +38375,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38411,11 +38399,13 @@
           "biogas",
           "patent",
           "environmental problems",
-          "microorganisms in the kitchen"
+          "microorganisms in the kitchen",
+          "yeast",
+          "dough"
         ],
         "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The text does not provide specific details about the activities or results of the experiment described in Activity 2.8."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "vision_input": {
@@ -38433,9 +38423,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44952057277",
-      "checkpointed_at": "2026-11-21T21:42:16Z",
+      "checkpointed_at": "2026-11-21T21:44:56Z",
       "effective_analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38459,11 +38449,13 @@
           "biogas",
           "patent",
           "environmental problems",
-          "microorganisms in the kitchen"
+          "microorganisms in the kitchen",
+          "yeast",
+          "dough"
         ],
         "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The text does not provide specific details about the activities or results of the experiment described in Activity 2.8."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -58314,8 +58306,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44950124751",
-      "checkpointed_at": "2026-11-21T21:23:29Z",
+      "run_id": "44952057277",
+      "checkpointed_at": "2026-11-21T21:45:51Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces. It includes text and illustrations related to the concept of muscular force and its application in various living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -61007,7 +60999,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44950124751",
+      "run_id": "44952057277",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
