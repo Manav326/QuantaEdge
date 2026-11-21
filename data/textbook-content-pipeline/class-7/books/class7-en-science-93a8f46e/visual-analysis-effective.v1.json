@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "49a1d6493e0d32881346aef38a5534064b5227007ae41253d26272bdbfb8587c",
+  "raw_analysis_sha256": "658112c1c36c600a236d708a2bfd916c481ca1a4ef3eb81870a0dc5037dc0317",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15070,11 +15070,11 @@
         ],
         "concepts": [
           "exploration",
+          "science",
           "curiosity",
           "questions",
           "openness",
           "process",
-          "science",
           "environment",
           "responsibility",
           "human activities",
@@ -15084,8 +15084,8 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "questions"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
@@ -15106,8 +15106,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44872438639",
-      "checkpointed_at": "2026-11-21T07:06:14Z",
+      "run_id": "44879540810",
+      "checkpointed_at": "2026-11-21T07:25:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -15118,11 +15118,11 @@
         ],
         "concepts": [
           "exploration",
+          "science",
           "curiosity",
           "questions",
           "openness",
           "process",
-          "science",
           "environment",
           "responsibility",
           "human activities",
@@ -15132,8 +15132,8 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "questions"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
@@ -20266,7 +20266,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "visual_summary": "Page from a textbook discussing the understanding of the universe through light and shadows, and the importance of understanding Earth's movements for eclipses and day-night cycles.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -20276,18 +20276,20 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light",
-          "universe",
+          "light and shadows",
           "eclipses",
+          "day and night",
+          "Earth's movements",
+          "day-night cycles",
           "Earth's rotation",
           "Moon's orbit",
-          "day and night",
-          "scientific thinking"
+          "experiments",
+          "thinking like a scientist"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages the reader to think like a scientist.",
+        "context_relation": "The page discusses the importance of understanding Earth's movements for eclipses and day-night cycles, and encourages readers to think like scientists by asking questions and doing experiments.",
         "limitations": [
           "The page does not provide specific examples or experiments to follow.",
-          "The page does not include any visual aids beyond the text and the image of a paper airplane."
+          "The page does not include any visual aids or diagrams."
         ]
       },
       "vision_input": {
@@ -20304,10 +20306,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44872438639",
-      "checkpointed_at": "2026-11-21T07:06:45Z",
+      "run_id": "44879540810",
+      "checkpointed_at": "2026-11-21T07:27:02Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "visual_summary": "Page from a textbook discussing the understanding of the universe through light and shadows, and the importance of understanding Earth's movements for eclipses and day-night cycles.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -20317,18 +20319,20 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light",
-          "universe",
+          "light and shadows",
           "eclipses",
+          "day and night",
+          "Earth's movements",
+          "day-night cycles",
           "Earth's rotation",
           "Moon's orbit",
-          "day and night",
-          "scientific thinking"
+          "experiments",
+          "thinking like a scientist"
         ],
-        "context_relation": "The page discusses the effects of light and its phenomena, such as eclipses, and encourages the reader to think like a scientist.",
+        "context_relation": "The page discusses the importance of understanding Earth's movements for eclipses and day-night cycles, and encourages readers to think like scientists by asking questions and doing experiments.",
         "limitations": [
           "The page does not provide specific examples or experiments to follow.",
-          "The page does not include any visual aids beyond the text and the image of a paper airplane."
+          "The page does not include any visual aids or diagrams."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -78999,7 +79003,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44872438639",
+      "run_id": "44879540810",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115283,7 +115287,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44872438639",
+      "run_id": "44879540810",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -124737,7 +124741,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124757,16 +124761,16 @@
           "ductility",
           "brittle",
           "malleable",
-          "Harappans",
+          "iron",
           "copper",
           "gold",
-          "iron",
+          "Harappans",
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
         "limitations": [
-          "The page does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
         ]
       },
       "vision_input": {
@@ -124783,10 +124787,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44872438639",
-      "checkpointed_at": "2026-11-21T07:07:26Z",
+      "run_id": "44879540810",
+      "checkpointed_at": "2026-11-21T07:34:18Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124806,16 +124810,16 @@
           "ductility",
           "brittle",
           "malleable",
-          "Harappans",
+          "iron",
           "copper",
           "gold",
-          "iron",
+          "Harappans",
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of society.",
         "limitations": [
-          "The page does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
