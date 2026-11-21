@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2396c981cfae8cff1e7b2e2e96d576e02217b76851f7473df31353d693af5f23",
+  "raw_analysis_sha256": "718e7e053433b0cd033f175b670bc741dbeb527ea428d0c2b0ca6d74a4fe9de2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -608,12 +608,12 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Foreword of a National Education Policy document.",
+        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
-          "The framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse ",
+          "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
           "The National Council of Educational Research and Training, on its part, is committed to providing students with such high-quality textbooks. Various Curricular Area Groups, which have been constituted for this purpose, comprising notable subject-experts, pedagogues, and practising teachers as their "
         ],
@@ -625,14 +625,16 @@
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
           "Holistic development",
+          "Transformative learning culture",
           "Classroom arrangement",
           "Teacher preparation",
           "High-quality textbooks",
           "Curricular Area Groups"
         ],
-        "context_relation": "Introduction to the National Education Policy 2020 and its curriculum framework",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of holistic development and the role of textbooks in education.",
         "limitations": [
-          "The text does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the specific subjects covered in the curriculum.",
+          "The foreword does not mention the timeline or the scope of the NCF-SE 2023."
         ]
       },
       "vision_input": {
@@ -650,14 +652,14 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44873863710",
-      "checkpointed_at": "2026-11-21T06:13:50Z",
+      "checkpointed_at": "2026-11-21T06:23:59Z",
       "effective_analysis": {
-        "visual_summary": "Foreword of a National Education Policy document.",
+        "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
-          "The framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse ",
+          "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
           "The National Council of Educational Research and Training, on its part, is committed to providing students with such high-quality textbooks. Various Curricular Area Groups, which have been constituted for this purpose, comprising notable subject-experts, pedagogues, and practising teachers as their "
         ],
@@ -669,14 +671,16 @@
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
           "Holistic development",
+          "Transformative learning culture",
           "Classroom arrangement",
           "Teacher preparation",
           "High-quality textbooks",
           "Curricular Area Groups"
         ],
-        "context_relation": "Introduction to the National Education Policy 2020 and its curriculum framework",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of holistic development and the role of textbooks in education.",
         "limitations": [
-          "The text does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the specific subjects covered in the curriculum.",
+          "The foreword does not mention the timeline or the scope of the NCF-SE 2023."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29430,21 +29434,17 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Planetarium",
           "Academic support",
           "Administrative support",
           "Consultant",
           "Programme Office",
           "Senior Consultant",
-          "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Research Associates",
           "Course Administrator",
           "Junior Project Fellows",
+          "Freelance Editor",
+          "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Proofreader",
           "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
@@ -29467,7 +29467,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44873863710",
-      "checkpointed_at": "2026-11-21T06:15:59Z",
+      "checkpointed_at": "2026-11-21T06:25:27Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "page_with_multiple_visuals",
@@ -29482,21 +29482,17 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Planetarium",
           "Academic support",
           "Administrative support",
           "Consultant",
           "Programme Office",
           "Senior Consultant",
-          "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Research Associates",
           "Course Administrator",
           "Junior Project Fellows",
+          "Freelance Editor",
+          "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Proofreader",
           "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
@@ -35191,9 +35187,9 @@
           "eating habits",
           "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants.",
+          "The page does not provide specific examples or instructions for grouping plants based on the criteria mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -35212,7 +35208,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44873863710",
-      "checkpointed_at": "2026-11-21T06:17:51Z",
+      "checkpointed_at": "2026-11-21T06:26:44Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -35249,9 +35245,9 @@
           "eating habits",
           "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants.",
+          "The page does not provide specific examples or instructions for grouping plants based on the criteria mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -57716,14 +57712,13 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement",
+          "Measurement of Length and Motion",
           "Handspans",
-          "Length",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measurement using handspans as a unit.",
+        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
         "limitations": [
-          "The text does not provide specific measurements or units for the table's length."
+          "The table does not provide the actual length of the table in handspans."
         ]
       },
       "vision_input": {
@@ -57741,7 +57736,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "44873863710",
-      "checkpointed_at": "2026-11-21T06:22:20Z",
+      "checkpointed_at": "2026-11-21T06:27:47Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57763,14 +57758,13 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement",
+          "Measurement of Length and Motion",
           "Handspans",
-          "Length",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measurement using handspans as a unit.",
+        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
         "limitations": [
-          "The text does not provide specific measurements or units for the table's length."
+          "The table does not provide the actual length of the table in handspans."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -58947,21 +58941,116 @@
     {
       "asset_id": "2104ecb647e20f98cb93ca2e",
       "asset_sha256": "78927ddd33b53c3132bd1125fcb4c6e47c14bc96a142353245ad1e81074ee454",
-      "page_text_context_sha256": "91a27cf9698830bfcaca9e87bc4a5ef3c8b54db0f2de2368821828f560e969bc",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 103,
       "asset_path": "assets/78927ddd33b53c3132bd1125fcb4c6e47c14bc96a142353245ad1e81074ee454.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "91a27cf9698830bfcaca9e87bc4a5ef3c8b54db0f2de2368821828f560e969bc",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "44871479777",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow ruler with measurements in centimeters and meters.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1 cm",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "10",
+          "9",
+          "8",
+          "7",
+          "6",
+          "5",
+          "4",
+          "3",
+          "2",
+          "1 km",
+          "0"
+        ],
+        "concepts": [
+          "Measurement",
+          "Ruler",
+          "Centimeters",
+          "Meters"
+        ],
+        "context_relation": "The image is a visual aid for explaining how to measure length when the ends of a scale are broken.",
+        "limitations": [
+          "The ruler is only shown in a single position, not in use."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 680,
+        "source_height": 262,
+        "inference_width": 680,
+        "inference_height": 262,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 19480,
+        "sha256": "2fd991a47833dd8aebf97e18b263999a8c48bc981ceccca8c82e39cf5c836623"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "44873863710",
+      "checkpointed_at": "2026-11-21T06:28:59Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow ruler with measurements in centimeters and meters.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1 cm",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "10",
+          "9",
+          "8",
+          "7",
+          "6",
+          "5",
+          "4",
+          "3",
+          "2",
+          "1 km",
+          "0"
+        ],
+        "concepts": [
+          "Measurement",
+          "Ruler",
+          "Centimeters",
+          "Meters"
+        ],
+        "context_relation": "The image is a visual aid for explaining how to measure length when the ends of a scale are broken.",
+        "limitations": [
+          "The ruler is only shown in a single position, not in use."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
