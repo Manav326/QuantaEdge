@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b7e2b480af42494dfc5f22e79f2535ac4c22752dd76ce9c8de42ecb0298cc49d",
+  "raw_analysis_sha256": "5f0b01fe73a7dc6263e67c1d5b711a2ed958033318883d2c0f5950b5dc8b19ac",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1812,12 +1812,17 @@
           "analyzing concepts",
           "safety precautions",
           "challenging ideas",
-          "Ever heard of...",
-          "A step further"
+          "additional information",
+          "interesting facts",
+          "Ever heard of",
+          "A step further",
+          "advanced concepts",
+          "scientific principles",
+          "real-life applications"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
         "limitations": [
-          "The page does not provide specific examples or exercises for implementing the concepts discussed."
+          "The page does not provide specific examples or activities for the open-ended questions mentioned."
         ]
       },
       "vision_input": {
@@ -1834,8 +1839,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45003592804",
-      "checkpointed_at": "2026-11-22T08:51:42Z",
+      "run_id": "45005767818",
+      "checkpointed_at": "2026-11-22T09:11:38Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -1859,12 +1864,17 @@
           "analyzing concepts",
           "safety precautions",
           "challenging ideas",
-          "Ever heard of...",
-          "A step further"
+          "additional information",
+          "interesting facts",
+          "Ever heard of",
+          "A step further",
+          "advanced concepts",
+          "scientific principles",
+          "real-life applications"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
         "limitations": [
-          "The page does not provide specific examples or exercises for implementing the concepts discussed."
+          "The page does not provide specific examples or activities for the open-ended questions mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29455,9 +29465,10 @@
           "DTP Cell",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment of contributions and support in the publication of a textbook",
+        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described, only text content is provided.",
+          "The page does not contain any visual elements.",
+          "The text is a list of acknowledgments and contributions, without any diagrams, charts, or illustrations.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -29475,8 +29486,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45003592804",
-      "checkpointed_at": "2026-11-22T08:52:11Z",
+      "run_id": "45005767818",
+      "checkpointed_at": "2026-11-22T09:12:37Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
         "visual_type": "uncertain",
@@ -29499,9 +29510,10 @@
           "DTP Cell",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment of contributions and support in the publication of a textbook",
+        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described, only text content is provided.",
+          "The page does not contain any visual elements.",
+          "The text is a list of acknowledgments and contributions, without any diagrams, charts, or illustrations.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -32531,7 +32543,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45003592804",
+      "run_id": "45005767818",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -38375,7 +38387,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38399,13 +38411,11 @@
           "biogas",
           "patent",
           "environmental problems",
-          "microorganisms in the kitchen",
-          "yeast",
-          "dough"
+          "microorganisms in the kitchen"
         ],
         "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The page does not provide specific examples or details about the activities performed in the kitchen."
+          "The text does not provide specific details about the activities or results of the experiment described in Activity 2.8."
         ]
       },
       "vision_input": {
@@ -38422,10 +38432,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45003592804",
-      "checkpointed_at": "2026-11-22T08:52:55Z",
+      "run_id": "45005767818",
+      "checkpointed_at": "2026-11-22T09:14:54Z",
       "effective_analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38449,13 +38459,11 @@
           "biogas",
           "patent",
           "environmental problems",
-          "microorganisms in the kitchen",
-          "yeast",
-          "dough"
+          "microorganisms in the kitchen"
         ],
         "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The page does not provide specific examples or details about the activities performed in the kitchen."
+          "The text does not provide specific details about the activities or results of the experiment described in Activity 2.8."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -45337,7 +45345,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45003592804",
+      "run_id": "45005767818",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
