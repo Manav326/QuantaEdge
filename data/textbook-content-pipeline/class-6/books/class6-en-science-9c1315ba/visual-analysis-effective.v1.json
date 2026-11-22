@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fc13852d5caea1637b866f2cc07c00f01d306bfe8017414ad61eaf6124866947",
+  "raw_analysis_sha256": "859fc35cdcefb8ce330f1a05e044bf8c5b11896386d1fab8cba0631685778534",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -611,9 +611,9 @@
         "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
-          "The framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse ",
+          "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
           "The National Council of Educational Research and Training, on its part, is committed to providing students with such high-quality textbooks. Various Curricular Area Groups, which have been constituted for this purpose, comprising notable subject-experts, pedagogues, and practising teachers as their "
         ],
@@ -625,14 +625,14 @@
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
           "Holistic development",
+          "Transformative learning culture",
           "Classroom arrangement",
           "Teacher preparation",
-          "High-quality textbooks",
           "Curricular Area Groups"
         ],
-        "context_relation": "Introduction to the National Education Policy 2020 and its curriculum framework",
+        "context_relation": "Foreword of a National Education Policy document",
         "limitations": [
-          "The text does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The text is a foreword and does not provide specific details about the curriculum or its implementation."
         ]
       },
       "vision_input": {
@@ -649,15 +649,15 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45067125649",
-      "checkpointed_at": "2026-11-22T20:41:56Z",
+      "run_id": "45069649951",
+      "checkpointed_at": "2026-11-22T21:09:58Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
-          "The framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse ",
+          "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
           "The National Council of Educational Research and Training, on its part, is committed to providing students with such high-quality textbooks. Various Curricular Area Groups, which have been constituted for this purpose, comprising notable subject-experts, pedagogues, and practising teachers as their "
         ],
@@ -669,14 +669,14 @@
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
           "Holistic development",
+          "Transformative learning culture",
           "Classroom arrangement",
           "Teacher preparation",
-          "High-quality textbooks",
           "Curricular Area Groups"
         ],
-        "context_relation": "Introduction to the National Education Policy 2020 and its curriculum framework",
+        "context_relation": "Foreword of a National Education Policy document",
         "limitations": [
-          "The text does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The text is a foreword and does not provide specific details about the curriculum or its implementation."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29417,8 +29417,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -29430,26 +29430,22 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Planetarium",
           "Academic support",
           "Administrative support",
           "Consultant",
           "Programme Office",
           "Senior Consultant",
           "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Research Associates",
           "Course Administrator",
-          "Junior Project Fellows",
+          "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Proofreader",
           "Contractual"
         ],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned in the image.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "vision_input": {
@@ -29466,11 +29462,11 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45067125649",
-      "checkpointed_at": "2026-11-22T20:44:03Z",
+      "run_id": "45069649951",
+      "checkpointed_at": "2026-11-22T21:12:35Z",
       "effective_analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
@@ -29482,26 +29478,22 @@
           "Acknowledgements",
           "Photographs",
           "Illustrations",
-          "Planetarium",
           "Academic support",
           "Administrative support",
           "Consultant",
           "Programme Office",
           "Senior Consultant",
           "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Research Associates",
           "Course Administrator",
-          "Junior Project Fellows",
+          "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Proofreader",
           "Contractual"
         ],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
         "limitations": [
-          "No specific limitations mentioned."
+          "No specific limitations mentioned in the image.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -35177,23 +35169,27 @@
           "Also, observe from where the branches of the plants arise—whether they arise close to the ground or higher up on the stem. Fill in your observations in Table 2.3. A few examples are already given."
         ],
         "concepts": [
-          "grouping plants",
-          "criteria for grouping",
-          "features of plants",
+          "grouping",
+          "criteria",
+          "plants",
+          "animals",
+          "features",
           "stems",
           "leaves",
           "flowers",
-          "height",
-          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "eating habits",
-          "living places"
+          "height",
+          "types of stem",
+          "observations",
+          "bending stems",
+          "branching",
+          "table"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features such as stems, leaves, flowers, and their places of living.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants.",
+          "The page does not provide specific examples or instructions for grouping plants and animals.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -35211,8 +35207,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45067125649",
-      "checkpointed_at": "2026-11-22T20:45:52Z",
+      "run_id": "45069649951",
+      "checkpointed_at": "2026-11-22T21:15:00Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -35235,23 +35231,27 @@
           "Also, observe from where the branches of the plants arise—whether they arise close to the ground or higher up on the stem. Fill in your observations in Table 2.3. A few examples are already given."
         ],
         "concepts": [
-          "grouping plants",
-          "criteria for grouping",
-          "features of plants",
+          "grouping",
+          "criteria",
+          "plants",
+          "animals",
+          "features",
           "stems",
           "leaves",
           "flowers",
-          "height",
-          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "eating habits",
-          "living places"
+          "height",
+          "types of stem",
+          "observations",
+          "bending stems",
+          "branching",
+          "table"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features such as stems, leaves, flowers, and their places of living.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants.",
+          "The page does not provide specific examples or instructions for grouping plants and animals.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -56692,7 +56692,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45067125649",
+      "run_id": "45069649951",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -57696,7 +57696,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_summary": "Table showing the number of handspans for different students.",
         "visual_type": "table",
         "visible_text": [
           "Table 5.1: Measuring the length of the table",
@@ -57716,14 +57716,14 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement",
           "Handspans",
           "Length",
+          "Measurement",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measurement using handspans as a unit.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The text does not provide specific measurements or units for the table's length."
+          "The table does not provide the actual length of the table."
         ]
       },
       "vision_input": {
@@ -57740,10 +57740,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45067125649",
-      "checkpointed_at": "2026-11-22T20:50:18Z",
+      "run_id": "45069649951",
+      "checkpointed_at": "2026-11-22T21:20:26Z",
       "effective_analysis": {
-        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_summary": "Table showing the number of handspans for different students.",
         "visual_type": "table",
         "visible_text": [
           "Table 5.1: Measuring the length of the table",
@@ -57763,14 +57763,14 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement",
           "Handspans",
           "Length",
+          "Measurement",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measurement using handspans as a unit.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The text does not provide specific measurements or units for the table's length."
+          "The table does not provide the actual length of the table."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
