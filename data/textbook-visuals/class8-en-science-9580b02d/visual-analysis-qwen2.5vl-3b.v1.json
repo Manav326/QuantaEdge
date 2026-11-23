@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "fc310253031bd2210d27a7e7",
       "414a0224c90f14c01c7da9e7",
-      "aa8a149fa698d13f05cfdb3e"
+      "f492c50e9c7d7ef8d140ae06",
+      "e03a02c3fc37627f873ab044"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1425,
@@ -1210,17 +1210,12 @@
           "analyzing concepts",
           "safety precautions",
           "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "Ever heard of",
-          "A step further",
-          "advanced concepts",
-          "scientific principles",
-          "real-life applications"
+          "Ever heard of...",
+          "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
         "limitations": [
-          "The page does not provide specific examples or activities for the open-ended questions mentioned."
+          "The page does not provide specific examples or exercises for implementing the concepts discussed."
         ]
       },
       "vision_input": {
@@ -1238,7 +1233,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45121441073",
-      "checkpointed_at": "2026-11-23T06:08:32Z"
+      "checkpointed_at": "2026-11-23T06:13:33Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20239,10 +20234,9 @@
           "DTP Cell",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
+        "context_relation": "Acknowledgment of contributions and support in the publication of a textbook",
         "limitations": [
-          "The page does not contain any visual elements.",
-          "The text is a list of acknowledgments and contributions, without any diagrams, charts, or illustrations.",
+          "No specific visual elements are described, only text content is provided.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20261,7 +20255,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45121441073",
-      "checkpointed_at": "2026-11-23T06:09:32Z"
+      "checkpointed_at": "2026-11-23T06:13:56Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25918,7 +25912,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -25942,11 +25936,13 @@
           "biogas",
           "patent",
           "environmental problems",
-          "microorganisms in the kitchen"
+          "microorganisms in the kitchen",
+          "yeast",
+          "dough"
         ],
         "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The text does not provide specific details about the activities or results of the experiment described in Activity 2.8."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "vision_input": {
@@ -25964,7 +25960,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45121441073",
-      "checkpointed_at": "2026-11-23T06:11:49Z"
+      "checkpointed_at": "2026-11-23T06:14:32Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -38684,7 +38680,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An educational page explaining different types of forces, specifically contact forces and muscular force.",
+        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces. It includes text and illustrations related to the concept of muscular force and its application in various living beings.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38699,11 +38695,12 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with an example of muscular force in living beings.",
+        "context_relation": "The image provides an educational context about different types of forces, specifically focusing on contact forces and their application in living beings.",
         "limitations": [
-          "The page does not provide specific examples or explanations for each type of force."
+          "The image does not provide specific examples or illustrations of contact forces beyond the general explanation."
         ]
       },
       "vision_input": {
@@ -38720,8 +38717,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45117750929",
-      "checkpointed_at": "2026-11-23T05:47:05Z"
+      "run_id": "45121441073",
+      "checkpointed_at": "2026-11-23T06:15:32Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40450,7 +40447,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45117750929",
+      "run_id": "45121441073",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
