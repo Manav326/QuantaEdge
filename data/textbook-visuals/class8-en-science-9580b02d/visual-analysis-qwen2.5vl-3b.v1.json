@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "fc310253031bd2210d27a7e7",
-      "414a0224c90f14c01c7da9e7",
-      "aa8a149fa698d13f05cfdb3e"
+      "f492c50e9c7d7ef8d140ae06",
+      "e03a02c3fc37627f873ab044",
+      "1851a22784c9105601dfe039"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1425,
@@ -1188,12 +1188,12 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
+          "In some activities Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
           "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
           "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
         ],
@@ -1202,26 +1202,17 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "visualisation",
+          "inclusive education",
+          "safety",
           "peer interactions",
           "assessing understanding",
-          "reflecting on ideas",
           "analyzing concepts",
-          "safety precautions",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "Ever heard of...",
-          "A step further",
-          "advanced concepts",
-          "scientific principles",
-          "real-life applications"
+          "Ever heard of",
+          "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
         "limitations": [
-          "The page does not provide specific examples or activities.",
-          "The page does not include images or diagrams.",
+          "The page does not provide specific examples or activities for implementing the concepts discussed.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -1240,7 +1231,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45134073286",
-      "checkpointed_at": "2026-11-23T07:58:58Z"
+      "checkpointed_at": "2026-11-23T08:07:49Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20220,7 +20211,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook publication.",
+        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -20231,15 +20222,20 @@
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook Publication",
+          "Textbook",
+          "Contributors",
+          "Roles",
           "Freelance Language Editor",
-          "DTP Cell",
+          "APC office",
+          "Administrative staff",
           "Publication Division",
+          "DTP Cell",
+          "Contractual",
           "Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
+        "context_relation": "Acknowledgment of contributions and support in the publication of a textbook",
         "limitations": [
-          "No specific visual elements are described.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20258,7 +20254,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45134073286",
-      "checkpointed_at": "2026-11-23T08:00:24Z"
+      "checkpointed_at": "2026-11-23T08:08:37Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38637,7 +38633,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook explaining different types of forces, specifically focusing on contact forces. It includes text and illustrations related to the concept of muscular force and its application in various living beings.",
+        "visual_summary": "An educational page explaining different types of forces, specifically contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38652,12 +38648,11 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
-        "context_relation": "The image provides an educational context about different types of forces, specifically focusing on contact forces and their application in living beings.",
+        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with an example of muscular force in living beings.",
         "limitations": [
-          "The image does not provide specific examples or illustrations of contact forces beyond the general explanation."
+          "The page does not provide specific examples or explanations for each type of force."
         ]
       },
       "vision_input": {
@@ -38674,8 +38669,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45131161040",
-      "checkpointed_at": "2026-11-23T07:41:29Z"
+      "run_id": "45134073286",
+      "checkpointed_at": "2026-11-23T08:10:07Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40404,7 +40399,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45131161040",
+      "run_id": "45134073286",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -43671,8 +43666,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45124287358",
-      "checkpointed_at": "2026-11-23T06:52:07Z"
+      "run_id": "45134073286",
+      "checkpointed_at": "2026-11-23T08:14:51Z"
     },
     {
       "asset_id": "46c9d5f38c6da536fdee0c3d",
