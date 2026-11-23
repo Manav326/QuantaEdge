@@ -421,10 +421,10 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Foreword of a National Education Policy document discussing the integration of Indian ethos and civilizational achievements in education, emphasizing the role of the National Curriculum Framework for School Education (NCF-SE) 2023 in preparing students for the 21st century.",
+        "visual_summary": "Foreword of a National Education Policy document.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -432,9 +432,8 @@
         ],
         "concepts": [
           "National Education Policy 2020",
-          "Indian ethos",
-          "Civilisational accomplishments",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
+          "paichakoshas",
           "Middle Stage",
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
@@ -442,14 +441,11 @@
           "Transformative learning culture",
           "Classroom arrangement",
           "Teacher preparation",
-          "High-quality textbooks",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the integration of Indian ethos and civilizational achievements in education, emphasizing the role of the National Curriculum Framework for School Education (NCF-SE) 2023 in preparing students for the 21st century.",
+        "context_relation": "Foreword of a National Education Policy document",
         "limitations": [
-          "The foreword does not provide specific details about the content or structure of the NCF-SE 2023 curriculum.",
-          "The foreword does not mention the specific subjects covered in the NCF-SE 2023 curriculum.",
-          "The foreword does not provide information about the implementation or evaluation of the NCF-SE 2023 curriculum."
+          "The text is a foreword and does not provide specific details about the curriculum or its implementation."
         ]
       },
       "vision_input": {
@@ -466,8 +462,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45118367142",
-      "checkpointed_at": "2026-11-23T05:38:37Z"
+      "run_id": "45120567693",
+      "checkpointed_at": "2026-11-23T06:02:08Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20107,7 +20103,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
+        "visual_summary": "Acknowledgements page from a textbook.",
         "visual_type": "uncertain",
         "visible_text": [
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
@@ -20126,18 +20122,15 @@
           "Programme Office",
           "Senior Consultant",
           "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Freelance Editor",
+          "Course Administrator",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Contractual",
-          "NCERT"
+          "Contractual"
         ],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "Acknowledgements and contributions from various individuals and organizations in the field of education and science.",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific limitations mentioned in the image.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20155,8 +20148,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45118367142",
-      "checkpointed_at": "2026-11-23T05:39:46Z"
+      "run_id": "45120567693",
+      "checkpointed_at": "2026-11-23T06:04:44Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23861,23 +23854,27 @@
           "Also, observe from where the branches of the plants arise—whether they arise close to the ground or higher up on the stem. Fill in your observations in Table 2.3. A few examples are already given."
         ],
         "concepts": [
-          "grouping plants",
-          "criteria for grouping",
-          "features of plants",
+          "grouping",
+          "criteria",
+          "plants",
+          "animals",
+          "features",
           "stems",
           "leaves",
           "flowers",
-          "height",
-          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "eating habits",
-          "living places"
+          "height",
+          "types of stem",
+          "observations",
+          "bending stems",
+          "branching",
+          "table"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, focusing on the features that can be used to group them, such as presence/absence of flowers, hard/soft stems, eating habits, and place of living.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features such as stems, leaves, flowers, and their places of living.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants based on the features mentioned.",
+          "The page does not provide specific examples or instructions for grouping plants and animals.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -23895,8 +23892,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45118367142",
-      "checkpointed_at": "2026-11-23T05:40:53Z"
+      "run_id": "45120567693",
+      "checkpointed_at": "2026-11-23T06:07:09Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37565,7 +37562,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45118367142",
+      "run_id": "45120567693",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38211,7 +38208,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_summary": "Table showing the number of handspans for different students.",
         "visual_type": "table",
         "visible_text": [
           "Table 5.1: Measuring the length of the table",
@@ -38236,9 +38233,9 @@
           "Measurement",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit of measurement.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide a specific length for the table."
+          "The table does not provide the actual length of the table."
         ]
       },
       "vision_input": {
@@ -38255,8 +38252,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45118367142",
-      "checkpointed_at": "2026-11-23T05:43:18Z"
+      "run_id": "45120567693",
+      "checkpointed_at": "2026-11-23T06:12:33Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
