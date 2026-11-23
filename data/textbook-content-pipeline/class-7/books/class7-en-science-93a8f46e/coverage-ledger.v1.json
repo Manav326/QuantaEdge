@@ -21562,8 +21562,8 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
@@ -24945,9 +24945,10 @@
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "Introduction to scientific concepts and experiments",
+        "context_relation": "The page discusses the effects of light and its relationship to the Earth and Moon, including eclipses and the Earth's rotation, and encourages readers to think like scientists.",
         "limitations": [
-          "No specific limitations mentioned"
+          "The page does not provide specific examples or experiments to follow.",
+          "The page does not include any visual aids beyond the text and the image of a glass with a red line."
         ]
       },
       "chapter_id": null,
@@ -88926,7 +88927,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of different materials and their impact on civilization.",
+        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -88953,9 +88954,9 @@
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on civilization, specifically focusing on the role of iron in the development of civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization.",
         "limitations": [
-          "The text does not provide specific examples or evidence for the claims made."
+          "The page does not provide specific examples or evidence for the claims made."
         ]
       },
       "chapter_id": null,
