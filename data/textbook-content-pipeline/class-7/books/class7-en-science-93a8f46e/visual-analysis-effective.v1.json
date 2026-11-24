@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d4bd5f9692213b2aa3d31024da0336c0cda6b8cc534bbcc54b4a7b2853f9c9f6",
+  "raw_analysis_sha256": "17325c5f13b3f8e881216ff29bbb6347fb45ec90b67329a93d00c5f29b5560fb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15061,7 +15061,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of deeper questions.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15073,7 +15073,6 @@
           "science",
           "curiosity",
           "questions",
-          "unknown",
           "process",
           "environment",
           "responsibility",
@@ -15087,7 +15086,7 @@
           "discovery",
           "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "exploration and understanding of science",
         "limitations": [
           "The text does not provide specific examples or questions for exploration."
         ]
@@ -15107,9 +15106,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45430539879",
-      "checkpointed_at": "2026-11-24T16:02:06Z",
+      "checkpointed_at": "2026-11-24T16:14:08Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of deeper questions.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -15121,7 +15120,6 @@
           "science",
           "curiosity",
           "questions",
-          "unknown",
           "process",
           "environment",
           "responsibility",
@@ -15135,7 +15133,7 @@
           "discovery",
           "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "exploration and understanding of science",
         "limitations": [
           "The text does not provide specific examples or questions for exploration."
         ]
@@ -20266,7 +20264,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "visual_summary": "Page from a textbook discussing the understanding of the universe through light and shadows, and the importance of understanding Earth's rotation and the Moon's orbit for phenomena like eclipses and day-night cycles.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -20276,16 +20274,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light and shadows",
           "eclipses",
+          "day and night",
           "Earth's rotation",
           "Moon's orbit",
-          "day and night",
+          "day-night cycle",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "context_relation": "The page discusses the importance of understanding the Earth's rotation and the Moon's orbit to comprehend phenomena like eclipses and day-night cycles, and encourages readers to think like scientists.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts."
+          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
         ]
       },
       "vision_input": {
@@ -20303,9 +20302,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45430539879",
-      "checkpointed_at": "2026-11-24T16:04:09Z",
+      "checkpointed_at": "2026-11-24T16:14:50Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "visual_summary": "Page from a textbook discussing the understanding of the universe through light and shadows, and the importance of understanding Earth's rotation and the Moon's orbit for phenomena like eclipses and day-night cycles.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -20315,16 +20314,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light and shadows",
           "eclipses",
+          "day and night",
           "Earth's rotation",
           "Moon's orbit",
-          "day and night",
+          "day-night cycle",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "context_relation": "The page discusses the importance of understanding the Earth's rotation and the Moon's orbit to comprehend phenomena like eclipses and day-night cycles, and encourages readers to think like scientists.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts."
+          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -124733,7 +124733,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124760,10 +124760,9 @@
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of India's civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of civilization.",
         "limitations": [
-          "The page does not provide specific examples or evidence for the claims made about the impact of iron on the progress of civilization.",
-          "The page does not provide a detailed explanation of the properties of ductility or the reasons why copper was discovered earlier than iron."
+          "The text does not provide specific examples or evidence for the claims made."
         ]
       },
       "vision_input": {
@@ -124781,9 +124780,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45430539879",
-      "checkpointed_at": "2026-11-24T16:13:01Z",
+      "checkpointed_at": "2026-11-24T16:15:46Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124810,10 +124809,9 @@
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of India's civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of civilization.",
         "limitations": [
-          "The page does not provide specific examples or evidence for the claims made about the impact of iron on the progress of civilization.",
-          "The page does not provide a detailed explanation of the properties of ductility or the reasons why copper was discovered earlier than iron."
+          "The text does not provide specific examples or evidence for the claims made."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -181611,7 +181609,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45409661983",
+      "run_id": "45430539879",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -191552,7 +191550,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45409661983",
+      "run_id": "45430539879",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
