@@ -8669,7 +8669,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -8684,13 +8684,18 @@
           "curiosity",
           "teamwork",
           "inclusive education",
+          "special needs",
+          "peer interactions",
+          "assessing understanding",
+          "analyzing concepts",
           "safety precautions",
-          "ever heard of",
-          "step further"
+          "challenging ideas",
+          "Ever heard of",
+          "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
         "limitations": [
-          "The page does not provide specific examples or activities for implementing the concepts discussed."
+          "The page does not provide specific examples or activities for the open-ended questions mentioned."
         ]
       },
       "chapter_id": null,
@@ -27018,7 +27023,7 @@
       "correction_status": "NONE",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
           "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
@@ -27031,14 +27036,17 @@
           "Textbook",
           "Contributors",
           "Roles",
-          "Support",
+          "Freelance Language Editor",
           "APC office",
           "Administrative staff",
-          "Publication process"
+          "Publication Division",
+          "DTP Cell",
+          "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
+        "context_relation": "Acknowledgment",
         "limitations": [
-          "The page does not contain any visual elements, only text."
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "chapter_id": null,
@@ -32551,7 +32559,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -32577,15 +32585,11 @@
           "environmental problems",
           "microorganisms in the kitchen",
           "yeast",
-          "flour",
-          "bowl",
-          "dough",
-          "environmental protection"
+          "dough"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The page does not provide specific examples of microorganisms used in biogas production or their specific roles in the process.",
-          "The page does not provide specific examples of microorganisms used in environmental protection or their specific roles in the process."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "chapter_id": null,
