@@ -21539,7 +21539,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of deeper questions.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -21548,10 +21548,11 @@
         ],
         "concepts": [
           "exploration",
-          "science",
           "curiosity",
           "questions",
+          "unknown",
           "process",
+          "science",
           "environment",
           "responsibility",
           "human activities",
@@ -21561,12 +21562,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "questions"
         ],
-        "context_relation": "exploration and understanding of science",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or questions for exploration."
+          "The text does not provide specific examples or illustrations of the questions or experiments mentioned."
         ]
       },
       "chapter_id": null,
@@ -24926,7 +24927,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the understanding of the universe through light and shadows, and the importance of understanding Earth's rotation and the Moon's orbit for phenomena like eclipses and day-night cycles.",
+        "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -24936,17 +24937,19 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and shadows",
+          "light",
+          "universe",
           "eclipses",
-          "day and night",
           "Earth's rotation",
           "Moon's orbit",
-          "day-night cycle",
+          "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the importance of understanding the Earth's rotation and the Moon's orbit to comprehend phenomena like eclipses and day-night cycles, and encourages readers to think like scientists.",
+        "context_relation": "educational",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
+          "The page does not provide specific equations or formulas.",
+          "The page does not show any specific diagrams or charts.",
+          "The page does not include any specific data or statistics."
         ]
       },
       "chapter_id": null,
@@ -88946,15 +88949,18 @@
           "brittle",
           "malleable",
           "Harappans",
+          "iron",
           "copper",
           "gold",
-          "iron",
+          "metal",
+          "civlisation",
           "agricultural tools",
           "musical instruments"
         ],
         "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of civilization.",
         "limitations": [
-          "The text does not provide specific examples or evidence for the claims made."
+          "The page does not provide specific examples or evidence for the claims made.",
+          "The page does not include any visual aids or diagrams to support the text."
         ]
       },
       "chapter_id": null,
