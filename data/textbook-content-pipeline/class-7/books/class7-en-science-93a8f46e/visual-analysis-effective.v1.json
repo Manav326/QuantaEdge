@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "909da89f0d762c4fd4cccb4003bfec5e86dd6ae2fb87e0428429c01f9efaa1ae",
+  "raw_analysis_sha256": "3d6a827cb5d450e72f3e2b2104565a98e474e9f038158f877719fa953951c28f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15106,7 +15106,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45430539879",
-      "checkpointed_at": "2026-11-24T17:32:53Z",
+      "checkpointed_at": "2026-11-24T17:40:39Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of deeper questions.",
         "visual_type": "page_with_multiple_visuals",
@@ -20302,7 +20302,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45430539879",
-      "checkpointed_at": "2026-11-24T17:33:35Z",
+      "checkpointed_at": "2026-11-24T17:41:21Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of the universe through light and shadows, and the importance of understanding Earth's rotation and the Moon's orbit for phenomena like eclipses and day-night cycles.",
         "visual_type": "page_with_multiple_visuals",
@@ -124780,7 +124780,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45430539879",
-      "checkpointed_at": "2026-11-24T17:34:31Z",
+      "checkpointed_at": "2026-11-24T17:42:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
@@ -197292,6 +197292,77 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d279526d50d8f55b5ecaea65",
+      "asset_sha256": "4eb897d4d1a098a46311da61f7f99e620f39cf6420d7bc1fbdf89cb1a6f62543",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/4eb897d4d1a098a46311da61f7f99e620f39cf6420d7bc1fbdf89cb1a6f62543.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45430539879",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "143d7ed2ddf64612660c7ca3",
+      "asset_sha256": "7233cbcc1227ec054e2aef0bfc90b169fd76dd83671bc3e01db1112c4b2ea53d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/7233cbcc1227ec054e2aef0bfc90b169fd76dd83671bc3e01db1112c4b2ea53d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a train roof with lights on it, set against a pink and orange sky.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a train roof with lights, possibly used to illustrate a concept related to train design or lighting.",
+        "limitations": [
+          "The image does not provide specific details about the train or its surroundings, making it difficult to determine the exact context or purpose of the illustration."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 430,
+        "source_height": 373,
+        "inference_width": 430,
+        "inference_height": 373,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 9785,
+        "sha256": "ea07dd2add656b67e25606f16ae8f2a7c3f0a4d32a07da887283d56686107336"
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45430539879",
+      "checkpointed_at": "2026-11-24T17:47:09Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a train roof with lights on it, set against a pink and orange sky.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a train roof with lights, possibly used to illustrate a concept related to train design or lighting.",
+        "limitations": [
+          "The image does not provide specific details about the train or its surroundings, making it difficult to determine the exact context or purpose of the illustration."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
