@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3382,
+    "assets_selected": 3383,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "d279526d50d8f55b5ecaea65",
-      "c65aae76e6d57cf1bb7cf5f1",
-      "04e560156d13c10d0ab226fc"
+      "858d6c65d46ed9125df541fa",
+      "ec6abe70db8807113e08a6b2",
+      "b06f7c67ba380033e081074b"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3378,
     "assets_remaining": 4110,
     "assets_completion_percent": 45.1,
-    "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 3377,
+    "assets_failed": 26,
+    "assets_skipped_from_checkpoint": 3378,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45453867178",
-      "checkpointed_at": "2026-11-24T18:40:09Z"
+      "checkpointed_at": "2026-11-24T18:44:58Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45453867178",
-      "checkpointed_at": "2026-11-24T18:40:32Z"
+      "checkpointed_at": "2026-11-24T18:45:20Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -126329,6 +126329,57 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/bd84f06a304ef7124b78e24beb15e1d54f041085725224738dd30665518cf09a.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45453867178",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "858d6c65d46ed9125df541fa",
+      "asset_sha256": "ce82296fe55c8f6f41d98e5fdc9be88b73084851210f48f2f6236ec14c6e8a30",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/ce82296fe55c8f6f41d98e5fdc9be88b73084851210f48f2f6236ec14c6e8a30.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45453867178",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "ec6abe70db8807113e08a6b2",
+      "asset_sha256": "0bbff4a538f79d64f2da4837a87866173ee40cbfd9ee2c21be4948e4dec1a6df",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/0bbff4a538f79d64f2da4837a87866173ee40cbfd9ee2c21be4948e4dec1a6df.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45453867178",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "b06f7c67ba380033e081074b",
+      "asset_sha256": "d91d540468cf507ee1ed12c266578681df6d924503ed3ff6bac479f8076c9b74",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/d91d540468cf507ee1ed12c266578681df6d924503ed3ff6bac479f8076c9b74.png",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
