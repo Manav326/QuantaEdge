@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "048c216ad74920dbc732f0c0431ee0178b1b4d4e3c867e824fea4bb78383e68e",
+  "raw_analysis_sha256": "e32ab6ad20a25748854d1d7a0edd501561591dbd454661b7bfc70f1ea9ca13e7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1790,7 +1790,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1805,16 +1805,18 @@
           "curiosity",
           "teamwork",
           "inclusive education",
-          "safety",
+          "special needs",
           "peer interactions",
           "assessing understanding",
           "analyzing concepts",
+          "safety precautions",
+          "challenging ideas",
           "Ever heard of",
           "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
         "limitations": [
-          "The page does not provide specific examples or exercises for implementing the concepts discussed."
+          "The page does not provide specific examples or activities for the open-ended questions mentioned."
         ]
       },
       "vision_input": {
@@ -1831,10 +1833,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45405936784",
-      "checkpointed_at": "2026-11-24T13:58:57Z",
+      "run_id": "45412459130",
+      "checkpointed_at": "2026-11-24T14:26:23Z",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their educational benefits.",
+        "visual_summary": "Page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1849,16 +1851,18 @@
           "curiosity",
           "teamwork",
           "inclusive education",
-          "safety",
+          "special needs",
           "peer interactions",
           "assessing understanding",
           "analyzing concepts",
+          "safety precautions",
+          "challenging ideas",
           "Ever heard of",
           "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and the activities designed to promote critical thinking and curiosity in students.",
         "limitations": [
-          "The page does not provide specific examples or exercises for implementing the concepts discussed."
+          "The page does not provide specific examples or activities for the open-ended questions mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29428,7 +29432,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook publication.",
+        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -29439,15 +29443,19 @@
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook Publication",
+          "Textbook",
+          "Contributors",
+          "Roles",
           "Freelance Language Editor",
-          "DTP Cell",
+          "APC office",
+          "Administrative staff",
           "Publication Division",
+          "DTP Cell",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
+        "context_relation": "Acknowledgment",
         "limitations": [
-          "No specific limitations are mentioned in the visible text.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -29465,10 +29473,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45405936784",
-      "checkpointed_at": "2026-11-24T13:59:46Z",
+      "run_id": "45412459130",
+      "checkpointed_at": "2026-11-24T14:27:51Z",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook publication.",
+        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -29479,15 +29487,19 @@
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook Publication",
+          "Textbook",
+          "Contributors",
+          "Roles",
           "Freelance Language Editor",
-          "DTP Cell",
+          "APC office",
+          "Administrative staff",
           "Publication Division",
+          "DTP Cell",
           "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
+        "context_relation": "Acknowledgment",
         "limitations": [
-          "No specific limitations are mentioned in the visible text.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -32517,7 +32529,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45405936784",
+      "run_id": "45412459130",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -38361,7 +38373,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38387,12 +38399,11 @@
           "environmental problems",
           "microorganisms in the kitchen",
           "yeast",
-          "flour",
           "dough"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems. It also includes an activity related to the kitchen, involving the use of yeast and flour.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The page does not provide specific solutions to environmental problems that can be solved with the help of microorganisms."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "vision_input": {
@@ -38409,10 +38420,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45405936784",
-      "checkpointed_at": "2026-11-24T14:01:09Z",
+      "run_id": "45412459130",
+      "checkpointed_at": "2026-11-24T14:31:34Z",
       "effective_analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38438,12 +38449,11 @@
           "environmental problems",
           "microorganisms in the kitchen",
           "yeast",
-          "flour",
           "dough"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems. It also includes an activity related to the kitchen, involving the use of yeast and flour.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The page does not provide specific solutions to environmental problems that can be solved with the help of microorganisms."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -45325,7 +45335,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45405936784",
+      "run_id": "45412459130",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
