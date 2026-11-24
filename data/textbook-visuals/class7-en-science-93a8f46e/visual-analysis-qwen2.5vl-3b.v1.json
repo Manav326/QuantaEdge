@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 3391,
+    "assets_selected": 3392,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "810b5ea397a42d7ba61fa741",
-      "d73321c6147415c2d11d261e",
-      "e08e4d7c4badd0c8a50c23eb"
+      "19182aa83463f523d90ed77b",
+      "617a7eb962b48f65cc1c1ca8",
+      "4b1298747dc1ec978a226ae5"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3387,
     "assets_remaining": 4101,
     "assets_completion_percent": 45.2,
     "assets_failed": 30,
-    "assets_skipped_from_checkpoint": 3386,
+    "assets_skipped_from_checkpoint": 3387,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -10004,8 +10004,8 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
@@ -10026,8 +10026,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45486214309",
-      "checkpointed_at": "2026-11-24T22:50:02Z"
+      "run_id": "45506601882",
+      "checkpointed_at": "2026-11-24T23:10:32Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13513,8 +13513,7 @@
         ],
         "context_relation": "The page discusses the impact of light on the Earth and Moon, including eclipses, and encourages readers to think like scientists.",
         "limitations": [
-          "The page does not provide specific examples or experiments for the reader to perform.",
-          "The page does not include any visual aids beyond the text and the image of a glass with a red line."
+          "The page does not provide specific examples or experiments for the reader to perform."
         ]
       },
       "vision_input": {
@@ -13531,8 +13530,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45486214309",
-      "checkpointed_at": "2026-11-24T22:50:53Z"
+      "run_id": "45506601882",
+      "checkpointed_at": "2026-11-24T23:11:28Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50179,7 +50178,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45486214309",
+      "run_id": "45506601882",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -73302,7 +73301,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45486214309",
+      "run_id": "45506601882",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -79297,7 +79296,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45486214309",
+      "run_id": "45506601882",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
