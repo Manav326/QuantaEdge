@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d0cd2ac23aa506858e445b943105098fe826d47dbc6d982b0fee008dee11a5cd",
+  "raw_analysis_sha256": "fada25f0f726fa3f7a38f2e10daa7fe8f71d2e39b4d5fd2cdabf585f68fd0d2f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15106,8 +15106,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45343827294",
-      "checkpointed_at": "2026-11-24T08:36:14Z",
+      "run_id": "45359454135",
+      "checkpointed_at": "2026-11-24T08:58:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -20276,17 +20276,16 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light",
-          "universe",
+          "light and its effects",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "vision_input": {
@@ -20303,8 +20302,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45343827294",
-      "checkpointed_at": "2026-11-24T08:37:02Z",
+      "run_id": "45359454135",
+      "checkpointed_at": "2026-11-24T09:00:22Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -20316,17 +20315,16 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light",
-          "universe",
+          "light and its effects",
           "eclipses",
           "Earth's rotation",
           "Moon's orbit",
           "day and night",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the effects of light and its influence on the Earth and Moon, including eclipses and the Earth's rotation, and encourages readers to think like scientists.",
+        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
+          "The page does not provide specific examples or experiments to illustrate the concepts."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -78997,7 +78995,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45343827294",
+      "run_id": "45359454135",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115281,7 +115279,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45343827294",
+      "run_id": "45359454135",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -124735,7 +124733,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124756,17 +124754,16 @@
           "brittle",
           "malleable",
           "Harappans",
-          "iron",
           "copper",
           "gold",
-          "metallic properties",
-          "civiliation",
+          "iron",
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of agriculture and musical instruments.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of India's civilization.",
         "limitations": [
-          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The page does not provide specific examples or evidence for the claims made about the impact of iron on the progress of civilization.",
+          "The page does not provide a detailed explanation of the properties of ductility or the reasons why copper was discovered earlier than iron."
         ]
       },
       "vision_input": {
@@ -124783,10 +124780,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45343827294",
-      "checkpointed_at": "2026-11-24T08:38:11Z",
+      "run_id": "45359454135",
+      "checkpointed_at": "2026-11-24T09:08:58Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of materials like coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "Page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -124807,17 +124804,16 @@
           "brittle",
           "malleable",
           "Harappans",
-          "iron",
           "copper",
           "gold",
-          "metallic properties",
-          "civiliation",
+          "iron",
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of agriculture and musical instruments.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of India's civilization.",
         "limitations": [
-          "The text does not provide specific examples or explanations for the properties of coal, sulfur, and wood."
+          "The page does not provide specific examples or evidence for the claims made about the impact of iron on the progress of civilization.",
+          "The page does not provide a detailed explanation of the properties of ductility or the reasons why copper was discovered earlier than iron."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
