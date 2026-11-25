@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
+      "fc310253031bd2210d27a7e7",
       "414a0224c90f14c01c7da9e7",
-      "f492c50e9c7d7ef8d140ae06",
-      "e03a02c3fc37627f873ab044"
+      "aa8a149fa698d13f05cfdb3e"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1425,
@@ -1210,7 +1210,7 @@
           "Ever heard of",
           "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
         "limitations": [
           "The page does not provide specific examples or exercises for implementing the concepts discussed."
         ]
@@ -1229,8 +1229,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45654665548",
-      "checkpointed_at": "2026-11-25T16:47:54Z"
+      "run_id": "45660794952",
+      "checkpointed_at": "2026-11-25T17:12:37Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20214,14 +20214,12 @@
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
-          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
-          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book.",
-          "Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saed, and Manoj Kumar, DTP Operators (Contractual); and Rajat Subhra Roy, Keshav Kumar, and Jatinder Kumar, Proofreaders (Contractual), Publication Division, NCERT, New Delhi, for "
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript. The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saed, and Manoj Kumar, DTP Operators (Contractual); "
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook Publication",
+          "Textbook publication",
           "Freelance Language Editor",
           "DTP Cell",
           "Publication Division",
@@ -20247,8 +20245,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45654665548",
-      "checkpointed_at": "2026-11-25T16:48:37Z"
+      "run_id": "45660794952",
+      "checkpointed_at": "2026-11-25T17:14:01Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22167,7 +22165,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45654665548",
+      "run_id": "45660794952",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -25905,7 +25903,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -25931,12 +25929,11 @@
           "environmental problems",
           "microorganisms in the kitchen",
           "yeast",
-          "flour",
           "dough"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems. It also includes an activity related to the kitchen, involving the use of yeast and flour.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The page does not provide specific solutions to environmental problems that can be solved with the help of microorganisms."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "vision_input": {
@@ -25953,8 +25950,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45654665548",
-      "checkpointed_at": "2026-11-25T16:49:49Z"
+      "run_id": "45660794952",
+      "checkpointed_at": "2026-11-25T17:17:23Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -30357,9 +30354,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45654665548",
+      "run_id": "45660794952",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
