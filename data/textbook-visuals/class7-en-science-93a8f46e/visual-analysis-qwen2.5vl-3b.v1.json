@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "5081d9e4423963f28b9e7110",
-      "0edc5ede4082f584f84008f0",
-      "fa322b728b5c4720de4d0118"
+      "3652e68c4089809f00fe60e5",
+      "990c24858c05e42da3cf33e0",
+      "0d2db9554a82f7bd599c5483"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3397,
     "assets_remaining": 4091,
     "assets_completion_percent": 45.4,
-    "assets_failed": 34,
+    "assets_failed": 35,
     "assets_skipped_from_checkpoint": 3397,
     "batch_limit": 5,
     "publication_allowed": false
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45550267470",
-      "checkpointed_at": "2026-11-25T06:51:24Z"
+      "checkpointed_at": "2026-11-25T07:01:28Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13532,7 +13532,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45550267470",
-      "checkpointed_at": "2026-11-25T06:52:16Z"
+      "checkpointed_at": "2026-11-25T07:02:19Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -127451,7 +127451,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45533046290",
+      "run_id": "45550267470",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -127511,7 +127511,24 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45533046290",
+      "run_id": "45550267470",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "0d2db9554a82f7bd599c5483",
+      "asset_sha256": "bd432b50ffcc52dc6bd2bfbc22a0e10a1d982898e95ce84f085ea9058bf3105c",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/bd432b50ffcc52dc6bd2bfbc22a0e10a1d982898e95ce84f085ea9058bf3105c.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45550267470",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
