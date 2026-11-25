@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7b6b9e2c8ff18a23b00a57b540e2be8ce510e42033059eacab6da6b434f3ed92",
+  "raw_analysis_sha256": "b7792cbe5caec66813c90665b0857131d516483a9204d78ad3153efcaadc38f2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45533046290",
-      "checkpointed_at": "2026-11-25T04:30:13Z",
+      "checkpointed_at": "2026-11-25T04:41:10Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -20305,7 +20305,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45533046290",
-      "checkpointed_at": "2026-11-25T04:31:11Z",
+      "checkpointed_at": "2026-11-25T04:42:08Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -198973,6 +198973,105 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/5e1ebc4a997d31323b5f243493cb28fc976d94d951ca560fb9439cddcf99bb71.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45533046290",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3652e68c4089809f00fe60e5",
+      "asset_sha256": "e318301f7ead9c944331272b6e20e970814fde1134b6707bb635cf991683fcca",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/e318301f7ead9c944331272b6e20e970814fde1134b6707bb635cf991683fcca.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45533046290",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "68fd5c3fa6e03cf24419c368",
+      "asset_sha256": "7cfb905802de0f3b379924586f6d768c115d540e96d38d8c003891d577bf71d7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/7cfb905802de0f3b379924586f6d768c115d540e96d38d8c003891d577bf71d7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A mountain peak with a gradient sky transitioning from yellow to pink, suggesting either sunrise or sunset.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "mountain peak",
+          "gradient sky",
+          "sunrise or sunset"
+        ],
+        "context_relation": "The image is likely used to illustrate the concept of temperature differences between different regions, possibly in relation to the geographical factors mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the geographical factors mentioned in the text."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 430,
+        "source_height": 373,
+        "inference_width": 430,
+        "inference_height": 373,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 7701,
+        "sha256": "2710cdbdbcda42c5f037428c92e95631bfab14e0a8248d6b58b74720e6f79f11"
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45533046290",
+      "checkpointed_at": "2026-11-25T04:46:21Z",
+      "effective_analysis": {
+        "visual_summary": "A mountain peak with a gradient sky transitioning from yellow to pink, suggesting either sunrise or sunset.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "mountain peak",
+          "gradient sky",
+          "sunrise or sunset"
+        ],
+        "context_relation": "The image is likely used to illustrate the concept of temperature differences between different regions, possibly in relation to the geographical factors mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the geographical factors mentioned in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "990c24858c05e42da3cf33e0",
+      "asset_sha256": "becbffce3b2bed9cee661fc81ca8eff44dc1b8c5ebfcb2be7e5ded5729d58aa3",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/becbffce3b2bed9cee661fc81ca8eff44dc1b8c5ebfcb2be7e5ded5729d58aa3.png",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
