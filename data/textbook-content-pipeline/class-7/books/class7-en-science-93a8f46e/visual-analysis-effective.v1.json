@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2c05090604a14c5a2e22aba06b4df7db91ce9803cdd372b98f2f5a45330e55b2",
+  "raw_analysis_sha256": "472dc5730541971fc37c4238d1ee0529dc5112b68692001cd94d20af6ea95892",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15107,7 +15107,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45516749811",
-      "checkpointed_at": "2026-11-25T01:55:07Z",
+      "checkpointed_at": "2026-11-25T02:04:55Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -20305,7 +20305,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45516749811",
-      "checkpointed_at": "2026-11-25T01:55:59Z",
+      "checkpointed_at": "2026-11-25T02:05:47Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -198377,21 +198377,78 @@
     {
       "asset_id": "8eb81c9390ef3fa21f387dbc",
       "asset_sha256": "4547cdbfb598d61b022d39205601c9ce0d44ccb04166320a0231f7d41068f163",
-      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/4547cdbfb598d61b022d39205601c9ce0d44ccb04166320a0231f7d41068f163.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45506601882",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A winter scene with two children, Pema and Palden, sitting around a fireplace in Gangtok, discussing the difference in winter temperatures between their home and Kerala.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and Palden are curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Winter temperatures",
+          "Equator",
+          "Coastline",
+          "Weather",
+          "Science"
+        ],
+        "context_relation": "The grandfather explains the difference in weather between Gangtok and Kerala based on their geographical location.",
+        "limitations": [
+          "The image does not show any visual representation of heat transfer or weather patterns."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 3,
+        "source_height": 4,
+        "inference_width": 3,
+        "inference_height": 4,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 287,
+        "sha256": "20f1cb08017e7868a502fc5da253c6ee7373e585e705b73fece7adc7a8eb5ef5"
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45516749811",
+      "checkpointed_at": "2026-11-25T02:07:04Z",
+      "effective_analysis": {
+        "visual_summary": "A winter scene with two children, Pema and Palden, sitting around a fireplace in Gangtok, discussing the difference in winter temperatures between their home and Kerala.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and Palden are curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Winter temperatures",
+          "Equator",
+          "Coastline",
+          "Weather",
+          "Science"
+        ],
+        "context_relation": "The grandfather explains the difference in weather between Gangtok and Kerala based on their geographical location.",
+        "limitations": [
+          "The image does not show any visual representation of heat transfer or weather patterns."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -198764,6 +198821,105 @@
         "context_relation": "The grandfather explains the difference in climate between Kerala and Sikkim based on their geographical location.",
         "limitations": [
           "The image does not show any visual representation of the climate difference between Kerala and Sikkim."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "020e31fca2ebdb20cf5e2048",
+      "asset_sha256": "e30eca3897201f0bfd8ccd6ee797e054049de38d78282eb7aa50386ef715479f",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/e30eca3897201f0bfd8ccd6ee797e054049de38d78282eb7aa50386ef715479f.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45516749811",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8fb12a63d48f0fe289d9e5c0",
+      "asset_sha256": "06c84acb28ba317e296b681eca11e18155d1b1d920ac9019700b50a43c71467f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/06c84acb28ba317e296b681eca11e18155d1b1d920ac9019700b50a43c71467f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A winter scene with two children, Pema and Palden, sitting around a fireplace in Gangtok, discussing the difference in winter temperatures between Gangtok and Kerala.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer temperatures.\"",
+          "Pema and Palden are curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Winter temperatures",
+          "Gangtok",
+          "Kerala",
+          "Equator",
+          "Long coastline",
+          "Warm temperatures"
+        ],
+        "context_relation": "The grandfather's explanation about the difference in temperatures between Gangtok and Kerala is based on geographical factors.",
+        "limitations": [
+          "The image does not show any visual representation of the geographical factors mentioned by the grandfather."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 3,
+        "source_height": 4,
+        "inference_width": 3,
+        "inference_height": 4,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 286,
+        "sha256": "ce1865a46d157ce90539569b490ade0d2344bad53a63923eb08b1a4e5b7b3d10"
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45516749811",
+      "checkpointed_at": "2026-11-25T02:11:13Z",
+      "effective_analysis": {
+        "visual_summary": "A winter scene with two children, Pema and Palden, sitting around a fireplace in Gangtok, discussing the difference in winter temperatures between Gangtok and Kerala.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer temperatures.\"",
+          "Pema and Palden are curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Winter temperatures",
+          "Gangtok",
+          "Kerala",
+          "Equator",
+          "Long coastline",
+          "Warm temperatures"
+        ],
+        "context_relation": "The grandfather's explanation about the difference in temperatures between Gangtok and Kerala is based on geographical factors.",
+        "limitations": [
+          "The image does not show any visual representation of the geographical factors mentioned by the grandfather."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
