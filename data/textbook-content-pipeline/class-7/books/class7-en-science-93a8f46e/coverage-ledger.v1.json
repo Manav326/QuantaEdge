@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 3422,
-    "successful_visual_analyses": 3392,
-    "missing_visual_analyses": 4066,
+    "raw_analysis_result_rows": 3425,
+    "successful_visual_analyses": 3395,
+    "missing_visual_analyses": 4063,
     "failed_visual_analyses": 30,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4096,
+    "unresolved_count": 4093,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -134641,9 +134641,29 @@
       "asset_path": "assets/dbc1d8886c6835ba4ef3b36507c714bb6202c655ba8ea9e042748293e1e100e9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Grandfather explaining the difference in climate between Kerala and Sikkim.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and Palden are curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Climate",
+          "Equator",
+          "Coastline",
+          "Heat Transfer"
+        ],
+        "context_relation": "Explanation of climate differences between Kerala and Sikkim",
+        "limitations": [
+          "The image does not show a diagram, chart, graph, table, map, cartoon, or equation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -134659,9 +134679,29 @@
       "asset_path": "assets/dbc1d8886c6835ba4ef3b36507c714bb6202c655ba8ea9e042748293e1e100e9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Grandfather explaining the difference in climate between Kerala and Sikkim.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and Palden are curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Climate",
+          "Equator",
+          "Coastline",
+          "Heat Transfer"
+        ],
+        "context_relation": "The grandfather explains the difference in climate between Kerala and Sikkim based on their geographical location.",
+        "limitations": [
+          "The image does not show any visual representation of the climate difference between Kerala and Sikkim."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -134677,9 +134717,29 @@
       "asset_path": "assets/dbc1d8886c6835ba4ef3b36507c714bb6202c655ba8ea9e042748293e1e100e9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Grandfather explaining the difference in climate between Kerala and Sikkim.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "Pema and Palden are curious about why some places are so cold and others quite hot."
+        ],
+        "concepts": [
+          "Climate",
+          "Equator",
+          "Coastline",
+          "Heat Transfer"
+        ],
+        "context_relation": "The grandfather explains the difference in climate between Kerala and Sikkim based on their geographical location.",
+        "limitations": [
+          "The image does not show any visual representation of the climate difference between Kerala and Sikkim."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
