@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "990c24858c05e42da3cf33e0",
-      "0d2db9554a82f7bd599c5483",
-      "5b3a4e785ff36dd6c859a212"
+      "7584dbed909ecc1785d067d7",
+      "97178e07f16489df9c134046",
+      "d1dc814ab60d6579d95a9f91"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3400,
-    "assets_remaining": 4088,
+    "assets_analyzed": 3401,
+    "assets_remaining": 4087,
     "assets_completion_percent": 45.4,
-    "assets_failed": 33,
+    "assets_failed": 35,
     "assets_skipped_from_checkpoint": 3400,
     "batch_limit": 5,
     "publication_allowed": false
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45599068312",
-      "checkpointed_at": "2026-11-25T11:55:50Z"
+      "checkpointed_at": "2026-11-25T12:01:36Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45599068312",
-      "checkpointed_at": "2026-11-25T11:56:14Z"
+      "checkpointed_at": "2026-11-25T12:01:59Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -127646,6 +127646,77 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/6eb4a00635cab40168d2f2bc77476131bf3b2a8a06a851339d28b4b96fd280cd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45599068312",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "7584dbed909ecc1785d067d7",
+      "asset_sha256": "2a0c2145fb935b58887057a75ddac487f526b5f65babe91f383358a84a6167e7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/2a0c2145fb935b58887057a75ddac487f526b5f65babe91f383358a84a6167e7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page with a gray background.",
+        "limitations": []
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 18,
+        "source_height": 12,
+        "inference_width": 18,
+        "inference_height": 12,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 288,
+        "sha256": "5c3e09eb1a60df0969f588d7f2b88e57e95e7e26e3e2fa65250ded5c1c95150e"
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45599068312",
+      "checkpointed_at": "2026-11-25T12:02:37Z"
+    },
+    {
+      "asset_id": "97178e07f16489df9c134046",
+      "asset_sha256": "deca85b4c061a4ad0dd0337889956298e9335ed9f57d7b794b6e721b3cc137cc",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/deca85b4c061a4ad0dd0337889956298e9335ed9f57d7b794b6e721b3cc137cc.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45599068312",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "d1dc814ab60d6579d95a9f91",
+      "asset_sha256": "897d85c45f65e0607a7c84c885a100084a6f676c39eb149f735fa52af8284d17",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/897d85c45f65e0607a7c84c885a100084a6f676c39eb149f735fa52af8284d17.png",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
