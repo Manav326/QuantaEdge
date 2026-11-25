@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "fc310253031bd2210d27a7e7",
       "414a0224c90f14c01c7da9e7",
-      "aa8a149fa698d13f05cfdb3e"
+      "f492c50e9c7d7ef8d140ae06",
+      "e03a02c3fc37627f873ab044"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1425,
@@ -1203,16 +1203,13 @@
           "curiosity",
           "teamwork",
           "inclusive education",
-          "safety",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "Ever heard of",
-          "A step further"
+          "safety precautions",
+          "ever heard of",
+          "step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
         "limitations": [
-          "The page does not provide specific examples or exercises for implementing the concepts discussed."
+          "The page does not provide specific examples or activities for implementing the concepts discussed."
         ]
       },
       "vision_input": {
@@ -1230,7 +1227,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45672865481",
-      "checkpointed_at": "2026-11-25T18:21:51Z"
+      "checkpointed_at": "2026-11-25T18:28:57Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20210,25 +20207,28 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook publication.",
-        "visual_type": "uncertain",
+        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript. The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
-          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saed, and Manoj Kumar, DTP Operators (Contractual); "
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
+          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book.",
+          "Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saed, and Manoj Kumar, DTP Operators (Contractual); and Rajat Subhra Roy, Keshav Kumar, and Jatinder Kumar, Proofreaders (Contractual), Publication Division, NCERT, New Delhi, for "
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook publication",
-          "Freelance Language Editor",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual Proofreaders"
+          "Textbook",
+          "Contributors",
+          "Roles",
+          "Support",
+          "APC office",
+          "Administrative staff",
+          "Publication process"
         ],
-        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
+        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
         "limitations": [
-          "No specific limitations are mentioned in the visible text.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not contain any visual elements, only text."
         ]
       },
       "vision_input": {
@@ -20246,7 +20246,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45672865481",
-      "checkpointed_at": "2026-11-25T18:23:16Z"
+      "checkpointed_at": "2026-11-25T18:29:25Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25903,7 +25903,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -25929,11 +25929,15 @@
           "environmental problems",
           "microorganisms in the kitchen",
           "yeast",
-          "dough"
+          "flour",
+          "bowl",
+          "dough",
+          "environmental protection"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems.",
         "limitations": [
-          "The page does not provide specific examples or details about the activities performed in the kitchen."
+          "The page does not provide specific examples of microorganisms used in biogas production or their specific roles in the process.",
+          "The page does not provide specific examples of microorganisms used in environmental protection or their specific roles in the process."
         ]
       },
       "vision_input": {
@@ -25951,7 +25955,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45672865481",
-      "checkpointed_at": "2026-11-25T18:26:39Z"
+      "checkpointed_at": "2026-11-25T18:30:12Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -38671,7 +38675,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An educational page about different types of forces, specifically contact forces, with examples and illustrations.",
+        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces. It includes text explaining the concept of contact forces and examples of muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38688,9 +38692,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page explains different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and examples of muscular force.",
         "limitations": [
-          "The page does not provide a detailed explanation of the physics behind these forces."
+          "The image does not provide specific examples or illustrations of contact forces beyond the text."
         ]
       },
       "vision_input": {
@@ -38707,8 +38711,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45666275070",
-      "checkpointed_at": "2026-11-25T17:59:03Z"
+      "run_id": "45672865481",
+      "checkpointed_at": "2026-11-25T18:31:40Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40437,7 +40441,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45666275070",
+      "run_id": "45672865481",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
