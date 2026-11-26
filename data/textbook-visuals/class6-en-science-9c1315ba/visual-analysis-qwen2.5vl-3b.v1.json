@@ -424,7 +424,7 @@
         "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Foreword",
+          "FOREWORD",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -439,13 +439,14 @@
           "Analytical, descriptive, and narrative capabilities",
           "Holistic development",
           "Transformative learning culture",
+          "Appropriate textbooks",
           "Classroom arrangement",
           "Teacher preparation",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of a holistic and transformative learning culture.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of holistic development and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the textbooks."
         ]
       },
       "vision_input": {
@@ -462,8 +463,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45899273823",
-      "checkpointed_at": "2026-11-26T21:45:53Z"
+      "run_id": "45902818523",
+      "checkpointed_at": "2026-11-26T22:17:03Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20110,7 +20111,7 @@
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
           "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
           "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhirgara, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrati",
-          "Acknowledgements are due to Ankeeta Bezboruah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contri"
+          "Acknowledgements are due to Ankeeta Bezboruaah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contr"
         ],
         "concepts": [
           "Acknowledgements",
@@ -20122,10 +20123,8 @@
           "Programme Office",
           "Senior Consultant",
           "Course Administrator",
-          "Proofreader",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual"
+          "Junior Project Fellows",
+          "Proofreading"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
@@ -20146,8 +20145,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45899273823",
-      "checkpointed_at": "2026-11-26T21:48:29Z"
+      "run_id": "45902818523",
+      "checkpointed_at": "2026-11-26T22:19:04Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23852,25 +23851,23 @@
           "Also, observe from where the branches of the plants arise—whether they arise close to the ground or higher up on the stem. Fill in your observations in Table 2.3. A few examples are already given."
         ],
         "concepts": [
-          "grouping",
-          "criteria",
-          "plants",
-          "animals",
-          "features",
+          "grouping plants",
+          "criteria for grouping",
+          "features of plants",
           "stems",
           "leaves",
           "flowers",
+          "height",
+          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "height",
-          "types of stem",
-          "observations",
-          "nature walk"
+          "eating habits",
+          "living places"
         ],
-        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features such as stems, leaves, flowers, and the places they live.",
+        "context_relation": "The page discusses the criteria for grouping plants and animals, including their features and living places.",
         "limitations": [
-          "The page does not provide specific examples or instructions for grouping plants and animals based on the criteria mentioned.",
+          "The page does not provide specific examples or instructions for grouping plants.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -23888,8 +23885,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45899273823",
-      "checkpointed_at": "2026-11-26T21:50:55Z"
+      "run_id": "45902818523",
+      "checkpointed_at": "2026-11-26T22:20:55Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37558,7 +37555,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45899273823",
+      "run_id": "45902818523",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38229,9 +38226,9 @@
           "Length",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit.",
+        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The table only includes data for five students."
         ]
       },
       "vision_input": {
@@ -38248,8 +38245,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45899273823",
-      "checkpointed_at": "2026-11-26T21:56:18Z"
+      "run_id": "45902818523",
+      "checkpointed_at": "2026-11-26T22:25:18Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
