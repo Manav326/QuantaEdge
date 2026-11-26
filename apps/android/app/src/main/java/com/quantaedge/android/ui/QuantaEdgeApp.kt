@@ -227,7 +227,17 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     val preferences = remember { context.getSharedPreferences("qe_preferences", 0) }
     val scope = rememberCoroutineScope()
     var auth by remember { mutableStateOf(JSONObject()) }
-    var language by rememberSaveable { mutableStateOf(initialInterfaceLanguage(preferences.getString("language", null), null)) }
+    // Keep the script-specific locale separate from the legacy en/hi screen flag.
+    // Older "hi" / "hindi" preferences continue to resolve to Hinglish.
+    var uiLocale by rememberSaveable {
+        mutableStateOf(initialInterfaceLocale(
+            preferences.getString("uiLocale", null) ?: preferences.getString("language", null),
+            null
+        ))
+    }
+    var language by rememberSaveable {
+        mutableStateOf(resolveInterfaceLanguage(uiLocale) ?: "hi")
+    }
     val configuredTenantCode = remember { InstitutionBrandingRepository.normalizeCode(BuildConfig.INSTITUTION_CODE) }
     val launchTenantCode = remember(launchIntent, configuredTenantCode) {
         val linkedCode = InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent)
@@ -1422,10 +1432,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             ApiClient.putObject("/api/v1/account/me/profile", JSONObject()
                 .put("displayName", displayName.trim())
                 .put("preferredLocale", preferredLocale))
-            val nextInterfaceLanguage = resolveInterfaceLanguage(preferredLocale)
+            val nextUiLocale = resolveInterfaceLocale(preferredLocale)
                 ?: throw IllegalArgumentException("Select a supported interface language.")
+            val nextInterfaceLanguage = resolveInterfaceLanguage(nextUiLocale)
+                ?: throw IllegalArgumentException("Select a supported interface language.")
+            uiLocale = nextUiLocale
             language = nextInterfaceLanguage
-            preferences.edit().putString("language", nextInterfaceLanguage).apply()
+            preferences.edit()
+                .putString("uiLocale", nextUiLocale)
+                .putString("language", nextInterfaceLanguage)
+                .apply()
             accountIdentityProfile = ApiClient.getObject("/api/v1/account/me/profile")
             if (auth.textAny("role").contains("PARENT", true)) {
                 parentAccount = runCatching { ApiClient.getObject("/api/v1/guardians/account") }.getOrDefault(parentAccount)
@@ -4270,16 +4286,27 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     val parentRole = role.contains("PARENT", true) || role.contains("GUARDIAN", true)
     val signedIn = role.isNotBlank() && route !in setOf(AppRoute.WELCOME, AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)
     LaunchedEffect(signedIn) {
-        if (!signedIn || resolveInterfaceLanguage(preferences.getString("language", null).orEmpty()) != null) {
-            return@LaunchedEffect
-        }
+        val storedUiLocale = resolveInterfaceLocale(
+            preferences.getString("uiLocale", null)
+                ?: preferences.getString("language", null).orEmpty()
+        )
+        if (!signedIn || storedUiLocale != null) return@LaunchedEffect
+
         val accountProfile = runCatching {
             withContext(Dispatchers.IO) { ApiClient.getObject("/api/v1/account/me/profile") }
         }.getOrNull() ?: return@LaunchedEffect
-        val preferredLocale = resolveInterfaceLanguage(accountProfile.optString("preferredLocale")) ?: return@LaunchedEffect
-        if (resolveInterfaceLanguage(preferences.getString("language", null).orEmpty()) == null) {
-            language = preferredLocale
-            preferences.edit().putString("language", preferredLocale).apply()
+        val preferredLocale = resolveInterfaceLocale(accountProfile.optString("preferredLocale")) ?: return@LaunchedEffect
+        if (resolveInterfaceLocale(
+                preferences.getString("uiLocale", null)
+                    ?: preferences.getString("language", null).orEmpty()
+            ) == null
+        ) {
+            uiLocale = preferredLocale
+            language = resolveInterfaceLanguage(preferredLocale) ?: "hi"
+            preferences.edit()
+                .putString("uiLocale", preferredLocale)
+                .putString("language", language)
+                .apply()
         }
     }
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
@@ -4391,7 +4418,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
         color = MaterialTheme.colorScheme.background
     ) {
-        CompositionLocalProvider(LocalQuantaLanguage provides language, LocalInstitutionBrandIdentity provides displayedInstitutionBrandIdentity, LocalInstitutionBrandResolutionPending provides institutionBrandResolutionPending) {
+        CompositionLocalProvider(LocalQuantaLanguage provides language, LocalQuantaUiLocale provides uiLocale, LocalInstitutionBrandIdentity provides displayedInstitutionBrandIdentity, LocalInstitutionBrandResolutionPending provides institutionBrandResolutionPending) {
         Row(modifier = Modifier.fillMaxSize()) {
             if (signedIn && landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail {
                 navItems.forEach { item ->
