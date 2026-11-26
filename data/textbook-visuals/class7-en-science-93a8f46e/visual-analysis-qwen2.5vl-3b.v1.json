@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "3652e68c4089809f00fe60e5",
-      "990c24858c05e42da3cf33e0",
-      "0d2db9554a82f7bd599c5483"
+      "5b3a4e785ff36dd6c859a212",
+      "97178e07f16489df9c134046",
+      "d1dc814ab60d6579d95a9f91"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 3401,
-    "assets_remaining": 4087,
+    "assets_analyzed": 3402,
+    "assets_remaining": 4086,
     "assets_completion_percent": 45.4,
-    "assets_failed": 36,
+    "assets_failed": 35,
     "assets_skipped_from_checkpoint": 3401,
     "batch_limit": 5,
     "publication_allowed": false
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45847785455",
-      "checkpointed_at": "2026-11-26T17:08:17Z"
+      "checkpointed_at": "2026-11-26T17:18:53Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13532,7 +13532,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "45847785455",
-      "checkpointed_at": "2026-11-26T17:09:09Z"
+      "checkpointed_at": "2026-11-26T17:19:45Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -127650,7 +127650,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45828746356",
+      "run_id": "45847785455",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -127696,19 +127696,61 @@
     {
       "asset_id": "97178e07f16489df9c134046",
       "asset_sha256": "deca85b4c061a4ad0dd0337889956298e9335ed9f57d7b794b6e721b3cc137cc",
-      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 109,
       "asset_path": "assets/deca85b4c061a4ad0dd0337889956298e9335ed9f57d7b794b6e721b3cc137cc.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45828746356",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing heat transfer in nature, with a focus on the comparison between winter conditions in Gangtok and Kerala.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Heat Transfer",
+          "7            in Nature",
+          "Pema and her brother Palden reside in Gangtok. On a cold winter evening, they are sitting around a fireplace. Palden shares his experiences of visiting Kerala during the winter vacation. He says that compared to Gangtok, winter in Kerala is comparatively warm and humid. Both Pema and Palden are curi",
+          "Hearing them express their curiosity, their grandfather, a retired science teacher, says, \"Kerala is closer to the equator than Sikkim and it also has a long coastline, which results in warmer weather.\"",
+          "The grandfather explains that the equator is the imaginary line that divides the Earth into the Northern and Southern Hemispheres. It is located at approximately 0 degrees latitude.",
+          "The grandfather also mentions that the Earth's rotation causes the sun to shine more directly on the equator, resulting in warmer temperatures.",
+          "The grandfather then explains that the Earth's rotation also causes the sun to shine more directly on the poles, resulting in colder temperatures.",
+          "The grandfather concludes by saying that the Earth's rotation and its position relative to the sun are the main factors that determine the temperature of different places on Earth.",
+          "The grandfather also mentions that the Earth's rotation and its position relative to the sun are the main factors that determine the temperature of different places on Earth.",
+          "The grandfather concludes by saying that the Earth's rotation and its position relative to the sun are the main factors that determine the temperature of different places on Earth."
+        ],
+        "concepts": [
+          "Heat Transfer",
+          "Equator",
+          "Pole",
+          "Rotation",
+          "Latitude",
+          "Sunlight",
+          "Temperature",
+          "Geography"
+        ],
+        "context_relation": "The grandfather's explanation of the Earth's rotation and its position relative to the sun is used to explain the difference in temperature between Gangtok and Kerala.",
+        "limitations": [
+          "The grandfather's explanation is based on general knowledge and may not be entirely accurate or up-to-date."
+        ]
+      },
+      "vision_input": {
+        "profile": "max-edge-960-jpeg-q82-v1",
+        "source_width": 8,
+        "source_height": 7,
+        "inference_width": 8,
+        "inference_height": 7,
+        "media_type": "image/jpeg",
+        "jpeg_quality": 82,
+        "byte_count": 289,
+        "sha256": "898cbcba6d2701e5bfe8a84a7cb4b4d56f1114e097348cbe926d5012d03df35c"
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "45847785455",
+      "checkpointed_at": "2026-11-26T17:24:16Z"
     },
     {
       "asset_id": "d1dc814ab60d6579d95a9f91",
@@ -127721,7 +127763,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45828746356",
+      "run_id": "45847785455",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
