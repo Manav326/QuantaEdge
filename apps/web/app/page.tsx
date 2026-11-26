@@ -220,6 +220,7 @@ export default function Home() {
         <div className="footer-links">
           <Link href="/privacy"><UiText message="legacy.web.privacy.323f3a35" /></Link>
           <Link href="/terms"><UiText message="legacy.web.terms.c9f30225" /></Link>
+          <a href="https://smartprint.quantaedge.in/">SmartPrint by QuantaEdge</a>
         </div>
         <span>© 2026 QuantaEdge</span>
       </footer>
