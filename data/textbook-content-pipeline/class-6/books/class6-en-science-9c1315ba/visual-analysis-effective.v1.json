@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4a1694651d0532ef277fa9a5624932475cf453af8087eb2a35432bd0f81a1786",
+  "raw_analysis_sha256": "2f27f5e36fc07fe8dd043da6d10ab946af6cc74d0bfec8dc6b50b93d898e5f78",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -628,12 +628,12 @@
           "Transformative learning culture",
           "Appropriate textbooks",
           "Classroom arrangement",
-          "Teacher preparation",
-          "Curricular Area Groups"
+          "Teacher preparation"
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of holistic development and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the textbooks."
+          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the specific subjects covered in the curriculum.",
+          "The foreword does not mention the role of the National Council of Educational Research and Training in providing textbooks."
         ]
       },
       "vision_input": {
@@ -650,8 +650,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45820486079",
-      "checkpointed_at": "2026-11-26T12:40:16Z",
+      "run_id": "45824977504",
+      "checkpointed_at": "2026-11-26T13:09:31Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a National Education Policy document discussing the National Curriculum Framework for School Education (NCF-SE) 2023.",
         "visual_type": "page_with_multiple_visuals",
@@ -673,12 +673,12 @@
           "Transformative learning culture",
           "Appropriate textbooks",
           "Classroom arrangement",
-          "Teacher preparation",
-          "Curricular Area Groups"
+          "Teacher preparation"
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its basis in the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of holistic development and the role of textbooks in education.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the textbooks."
+          "The foreword does not provide specific details about the content of the NCF-SE 2023 or the specific subjects covered in the curriculum.",
+          "The foreword does not mention the role of the National Council of Educational Research and Training in providing textbooks."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29426,7 +29426,7 @@
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
           "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
           "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhirgara, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrati",
-          "Acknowledgements are due to Ankeeta Bezboruaah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contr"
+          "Acknowledgements are due to Ankeeta Bezborua, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contrib"
         ],
         "concepts": [
           "Acknowledgements",
@@ -29437,9 +29437,14 @@
           "Consultant",
           "Programme Office",
           "Senior Consultant",
-          "Course Administrator",
-          "Junior Project Fellows",
-          "Proofreading"
+          "Educator",
+          "Development Sector Professional",
+          "Chief Consultant",
+          "Freelance Editor",
+          "Proofreader",
+          "DTP Cell",
+          "Publication Division",
+          "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
@@ -29460,8 +29465,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45820486079",
-      "checkpointed_at": "2026-11-26T12:42:19Z",
+      "run_id": "45824977504",
+      "checkpointed_at": "2026-11-26T13:11:23Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "page_with_multiple_visuals",
@@ -29470,7 +29475,7 @@
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
           "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
           "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhirgara, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrati",
-          "Acknowledgements are due to Ankeeta Bezboruaah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contr"
+          "Acknowledgements are due to Ankeeta Bezborua, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contrib"
         ],
         "concepts": [
           "Acknowledgements",
@@ -29481,9 +29486,14 @@
           "Consultant",
           "Programme Office",
           "Senior Consultant",
-          "Course Administrator",
-          "Junior Project Fellows",
-          "Proofreading"
+          "Educator",
+          "Development Sector Professional",
+          "Chief Consultant",
+          "Freelance Editor",
+          "Proofreader",
+          "DTP Cell",
+          "Publication Division",
+          "Contractual"
         ],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
@@ -35197,8 +35207,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45820486079",
-      "checkpointed_at": "2026-11-26T12:44:12Z",
+      "run_id": "45824977504",
+      "checkpointed_at": "2026-11-26T13:13:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the criteria for grouping plants and animals, including presence/absence of flowers, hard/soft stem, eating habits, and place of living.",
         "visual_type": "uncertain",
@@ -56678,7 +56688,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45820486079",
+      "run_id": "45824977504",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -57702,14 +57712,14 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement",
           "Handspans",
           "Length",
+          "Measurement",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
+        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit.",
         "limitations": [
-          "The table only includes data for five students."
+          "The table does not provide the actual length of the table in handspans."
         ]
       },
       "vision_input": {
@@ -57726,8 +57736,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45820486079",
-      "checkpointed_at": "2026-11-26T12:48:34Z",
+      "run_id": "45824977504",
+      "checkpointed_at": "2026-11-26T13:16:58Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57749,14 +57759,14 @@
           "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
         ],
         "concepts": [
-          "Measurement",
           "Handspans",
           "Length",
+          "Measurement",
           "Units of Measurement"
         ],
-        "context_relation": "The table and the text discuss the measurement of length using handspans as a unit.",
+        "context_relation": "The table and the text discuss the concept of measuring length using handspans as a unit.",
         "limitations": [
-          "The table only includes data for five students."
+          "The table does not provide the actual length of the table in handspans."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
