@@ -253,6 +253,15 @@ def main() -> int:
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes(expected_bytes)
 
+        # Retire the former generic Hindi resource directory. Keeping it could silently
+        # serve Hinglish strings when a device resolves a broader "hi" configuration.
+        legacy_android_catalog = ROOT / "apps/android/app/src/main/res/values-hi/qe_ui_catalog.xml"
+        if args.check:
+            if legacy_android_catalog.exists():
+                differences.append(str(legacy_android_catalog.relative_to(ROOT)) + " (obsolete generic Hindi catalog)")
+        elif legacy_android_catalog.exists():
+            legacy_android_catalog.unlink()
+
         if differences:
             print("Out-of-sync generated localization files:\n- " + "\n- ".join(differences), file=sys.stderr)
             return 1
