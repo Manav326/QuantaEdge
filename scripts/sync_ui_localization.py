@@ -165,7 +165,7 @@ def render_android_catalog_resources(
         if not value.strip() or value != value.strip():
             return False
         # Newlines and whitespace fragments require explicit Android context review.
-        return not any(marker in value for marker in ("\\n", "\\r", "\\\\n", "\\\\r", "\\t"))
+        return not any(marker in value for marker in ("\n", "\r", "\\n", "\\r", "\t", "\\t"))
 
     source_values = sorted(set(english.values()))
     resource_names: dict[str, str] = {}
@@ -203,7 +203,7 @@ def render_android_catalog_resources(
                 f'    <string name="{name}" formatted="false">{_xml_resource_text(value)}</string>'
             )
         lines.append("</resources>")
-        return ("\\n".join(lines) + "\\n").encode("utf-8")
+        return ("\n".join(lines) + "\n").encode("utf-8")
 
     generated: dict[str, bytes] = {}
     for locale, metadata in locales.items():
