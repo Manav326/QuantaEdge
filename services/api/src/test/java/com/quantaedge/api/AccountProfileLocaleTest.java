@@ -38,9 +38,16 @@ class AccountProfileLocaleTest {
   }
 
   @Test
-  void preferredLocaleAcceptsOnlyRegisteredUiLocales() {
+  void preferredLocaleAcceptsThreeRegisteredUiLocalesAndNormalizesLegacyAliases() {
     assertEquals("english", AccountProfileController.normalizePreferredLocale(" ENGLISH "));
+    assertEquals("english", AccountProfileController.normalizePreferredLocale("en"));
     assertEquals("hinglish", AccountProfileController.normalizePreferredLocale("Hinglish"));
+    assertEquals("hinglish", AccountProfileController.normalizePreferredLocale("hi"));
+    assertEquals("hinglish", AccountProfileController.normalizePreferredLocale("hindi"));
+    assertEquals("hinglish", AccountProfileController.normalizePreferredLocale("hi-Latn"));
+    assertEquals("pure-hindi", AccountProfileController.normalizePreferredLocale("pure-hindi"));
+    assertEquals("pure-hindi", AccountProfileController.normalizePreferredLocale("hi-Deva"));
+    assertEquals("pure-hindi", AccountProfileController.normalizePreferredLocale("hindi-deva"));
     assertThrows(IllegalArgumentException.class,
         () -> AccountProfileController.normalizePreferredLocale("bhojpuri"));
     assertThrows(IllegalArgumentException.class,
