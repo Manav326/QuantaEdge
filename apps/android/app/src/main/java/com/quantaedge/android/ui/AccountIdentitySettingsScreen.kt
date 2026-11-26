@@ -73,7 +73,7 @@ fun AccountIdentitySettingsScreen(
     val context = LocalContext.current
     val displayNameFromApi = profile.optString("displayName", "")
     val usernameFromApi = profile.optString("username", "")
-    val preferredLocaleFromApi = if (profile.optString("preferredLocale", "hinglish").equals("english", ignoreCase = true)) "english" else "hinglish"
+    val preferredLocaleFromApi = resolveInterfaceLocale(profile.optString("preferredLocale")) ?: "hinglish"
     var displayName by rememberSaveable(displayNameFromApi) { mutableStateOf(displayNameFromApi) }
     var username by rememberSaveable(usernameFromApi) { mutableStateOf(usernameFromApi) }
     var preferredLocale by rememberSaveable(preferredLocaleFromApi) { mutableStateOf(preferredLocaleFromApi) }
@@ -208,7 +208,11 @@ fun AccountIdentitySettingsScreen(
                         modifier = Modifier.fillMaxWidth())
                     Text(t("Interface language", "इंटरफ़ेस भाषा"), style = MaterialTheme.typography.labelMedium)
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-                        listOf("hinglish" to "Hinglish", "english" to "English").forEach { (id, label) ->
+                        listOf(
+                            "english" to "English",
+                            "hinglish" to "Hinglish",
+                            "pure-hindi" to "हिंदी"
+                        ).forEach { (id, label) ->
                             if (preferredLocale.equals(id, true)) Button(onClick = { preferredLocale = id }, enabled = !busy,
                                 modifier = Modifier.weight(1f)) { Text(label) }
                             else OutlinedButton(onClick = { preferredLocale = id }, enabled = !busy,
