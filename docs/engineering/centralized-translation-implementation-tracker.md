@@ -17,6 +17,17 @@ Implementation branch: [`feature/contextual-language-responsiveness`](https://gi
 - **Validation pending:** full CI, emulator/browser acceptance, and route-level translation coverage are not complete. Overall localization remains in progress and not production-complete.
 
 
+## Three-locale UI extension — 2026-11-26
+
+- Added **Pure Hindi** as the third pre-translated UI catalog alongside English and Hinglish. The locale ID is `pure-hindi`; its HTML language tag is `hi-Deva`. Hinglish is `hinglish` / `hi-Latn`.
+- Preserved legacy preference semantics: saved/API values `hi` and `hindi` continue to resolve to Hinglish. They are not silently reinterpreted as Pure Hindi. New Pure Hindi selections persist as `pure-hindi`; explicit aliases are `hi-deva` and `hindi-deva`.
+- All three catalogs contain **4,113 keys**. Source-level parity check found **0 missing keys** and **0 interpolation-placeholder mismatches**. Pure Hindi has 4,081 translated values; the remaining 32 are unchanged names, acronyms, URLs, technical identifiers/examples or templated values that should not be guessed at. Review this exception set as part of route acceptance.
+- Generated locale metadata and registries are synchronized to Web, Admin and People Operations. Their selectors read registered options rather than maintaining separate hardcoded language lists.
+- Android now carries the exact UI locale separately from its legacy English/Hindi screen flag. Its resource output uses script-specific `values-b+hi+Latn` and `values-b+hi+Deva` directories; the old generic `values-hi` resource was removed to prevent script ambiguity.
+- The account profile API accepts only the three registered locale IDs and normalizes legacy aliases to the historical Hinglish locale. Learning-content language and certificate language remain separate preferences.
+- The synchronization script now validates locale/catalog parity and placeholders, generates all browser copies and script-aware Android resources, and removes the retired generic Hindi resource directory.
+- **Not yet verified:** the updated generator/unit tests, API tests, Android tests, full CI, build and runtime/emulator/browser acceptance have not yet been confirmed on the follow-up changes. This is a locale foundation and catalog extension, not a claim that every screen or dynamic server message is production-complete.
+
 **Baseline reviewed before the route-inventory continuation:** [`8ba4f10c6f60c05da77719039d3a7700822fefae`](https://github.com/Manav326/QuantaEdge/commit/8ba4f10c6f60c05da77719039d3a7700822fefae). Latest successful full localization-code build remains [Actions #3021](https://github.com/Manav326/QuantaEdge/actions/runs/38996750050) for commit `66a2c3d0b0a9b9685210b199b536cbdb145f30f3`; it validates that older localization-code commit, not the new inventory changes.
 
 **Overall status: IN PROGRESS — NOT PRODUCTION-COMPLETE.** A shared static UI catalog, shared translation APIs/hooks, cross-app language preference bridge, and extensive first-wave route migrations are implemented. The complete admin/People page-body migration, comprehensive route coverage proof, and a central server-side AI translation service for arbitrary runtime dynamic content are not yet complete. Do not describe the entire site as fully translated until the remaining checklists and CI gates are green.
@@ -25,11 +36,12 @@ Implementation branch: [`feature/contextual-language-responsiveness`](https://gi
 
 - Canonical English catalog: `localization/catalogs/english.json`.
 - Canonical Hinglish catalog: `localization/catalogs/hinglish.json`.
+- Canonical Pure Hindi catalog: `localization/catalogs/pure-hindi.json`.
 - Shared runtime and synchronization contract: `localization/runtime.ts`, `scripts/sync_ui_localization.py`.
-- Generated copies are stored under each independent Next.js Docker context: `apps/{web,admin,people}/app/i18n/catalogs/{english,hinglish}.json` and app-local `catalog.ts` files.
+- Generated copies are stored under each independent Next.js Docker context: `apps/{web,admin,people}/app/i18n/catalogs/{english,hinglish,pure-hindi}.json` and app-local `catalog.ts` files.
 - At current `main` head `7c57daccaa2a4f6c6cf8e2cf76cc3b5a6d13d458`, the canonical catalogs have **2,217 keys each**, identical key sets, 0 blank messages, and 0 interpolation-placeholder mismatches. All six generated JSON copies are byte-for-byte equal to the canonical files. This direct file verification is a source-level check; the latest full build of the localization code is [Actions run #3021](https://github.com/Manav326/QuantaEdge/actions/runs/38996750050), which passed all required jobs on commit `66a2c3d0b0a9b9685210b199b536cbdb145f30f3`. Newer main commits are content-pipeline checkpoints. Re-run `python3 scripts/sync_ui_localization.py --check` after catalog changes; never hand-edit only one generated copy.
 - CI invokes the synchronization/parity validator in `.github/workflows/ci.yml`. The check validates catalog parity, placeholder sets, and generated copies.
-- Static interface locale and learning-content locale are separate preferences. The web app keeps the existing `qe-learning-language` and `qe-certificate-language` behavior. The shared UI choice uses `qe-locale`, with `english` and `hinglish` as normalized cross-app values and backward compatibility for the older `hindi` value.
+- Static interface locale and learning-content locale are separate preferences. The web app keeps the existing `qe-learning-language` and `qe-certificate-language` behavior. The shared UI choice uses `qe-locale`, with `english`, `hinglish` and `pure-hindi` as normalized cross-app values. Legacy `hi`/`hindi` aliases continue to mean Hinglish; Pure Hindi has a distinct Devanagari locale ID.
 - Hinglish means Hindi in Devanagari with commonly used English/Roman-script terms retained; it does not mean phonetic Hindi written in Roman letters.
 
 ## Architecture implemented
