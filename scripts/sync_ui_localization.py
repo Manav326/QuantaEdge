@@ -27,7 +27,7 @@ def load_locales() -> dict[str, dict[str, Any]]:
     payload = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict) or not payload:
         raise ValueError(f"{path}: expected a non-empty locale metadata object")
-    required = {"label", "nativeLabel", "lang", "aliases", "fallback", "default"}
+    required = {"label", "nativeLabel", "lang", "aliases", "fallback", "default", "androidQualifier"}
     for locale, metadata in payload.items():
         if not isinstance(locale, str) or not re.fullmatch(r"[a-z][a-z0-9-]*", locale):
             raise ValueError(f"{path}: invalid locale ID {locale!r}")
@@ -40,6 +40,21 @@ def load_locales() -> dict[str, dict[str, Any]]:
             raise ValueError(f"{path}: {locale}.aliases must be an array of non-empty strings")
         if not isinstance(metadata["default"], bool):
             raise ValueError(f"{path}: {locale}.default must be boolean")
+    android_qualifiers: set[str] = set()
+    for locale, metadata in payload.items():
+        qualifier = metadata["androidQualifier"]
+        if not isinstance(qualifier, str):
+            raise ValueError(f"{path}: {locale}.androidQualifier must be a string")
+        if locale == "english":
+            if qualifier:
+                raise ValueError(f"{path}: English must use the default Android values/ directory")
+        else:
+            if not re.fullmatch(r"b\+[a-z]{2,3}\+[A-Z][a-z]{3}(?:\+[A-Z]{2})?", qualifier):
+                raise ValueError(f"{path}: {locale}.androidQualifier must be a unique BCP-47 Android qualifier")
+            if qualifier in android_qualifiers:
+                raise ValueError(f"{path}: duplicate Android locale qualifier {qualifier!r}")
+            android_qualifiers.add(qualifier)
+
     defaults = [locale for locale, metadata in payload.items() if metadata["default"]]
     if len(defaults) != 1:
         raise ValueError(f"{path}: exactly one locale must set default=true")
@@ -124,57 +139,78 @@ def _xml_resource_text(value: str) -> str:
     return html.escape(escaped, quote=False)
 
 
-def render_android_catalog_resources(catalogs: dict[str, dict[str, str]]) -> dict[str, bytes]:
+def render_android_catalog_resources(
+    catalogs: dict[str, dict[str, str]],
+    locales: dict[str, dict[str, Any]],
+) -> dict[str, bytes]:
     """
-    Generate Android string resources from unambiguous English -> Hinglish pairs.
+    Generate one Android string-resource set per registered UI locale.
 
-    Exact English phrases that have multiple Hinglish translations are intentionally omitted:
-    those need a semantic key/context-specific migration instead of guessing at runtime.
-    Existing Android-specific phrase mappings remain as a compatibility fallback.
+    English phrases become deterministic resource names. A locale is emitted only
+    when every catalog key using the same English phrase agrees on one translation.
+    Ambiguous phrases fall back to the default English resource instead of guessing.
     """
     english = catalogs["english"]
-    hinglish = catalogs["hinglish"]
-    translations_by_source: dict[str, set[str]] = {}
-    for key, source in english.items():
-        translations_by_source.setdefault(source, set()).add(hinglish[key])
+    if set(catalogs) != set(locales):
+        raise ValueError("Android catalog generation requires matching locale metadata and catalogs")
 
-    entries: list[tuple[str, str, str]] = []
-    seen_names: dict[str, str] = {}
-    for source in sorted(translations_by_source):
-        translated = translations_by_source[source]
-        if len(translated) != 1:
+    translations_by_locale: dict[str, dict[str, set[str]]] = {}
+    for locale, catalog in catalogs.items():
+        grouped: dict[str, set[str]] = {}
+        for key, source in english.items():
+            grouped.setdefault(source, set()).add(catalog[key])
+        translations_by_locale[locale] = grouped
+
+    def valid_text(value: str) -> bool:
+        if not value.strip() or value != value.strip():
+            return False
+        # Newlines and whitespace fragments require explicit Android context review.
+        return not any(marker in value for marker in ("\\n", "\\r", "\\\\n", "\\\\r", "\\t"))
+
+    source_values = sorted(set(english.values()))
+    resource_names: dict[str, str] = {}
+    translated_sources: list[str] = []
+    for source in source_values:
+        if not valid_text(source):
             continue
-        target = next(iter(translated))
-        if not source.strip() or not target.strip() or source == target:
-            continue
-        # Whitespace fragments must not become standalone resources; Android trims their edges.
-        if source != source.strip() or target != target.strip():
-            continue
-        # Newlines in UI copy need explicit context review and must not be silently normalized.
-        if any(marker in value for value in (source, target) for marker in ("\n", "\r", "\\n", "\\r")):
-            continue
-        resource_name = "qe_ui_" + hashlib.sha256(source.encode("utf-8")).hexdigest()[:16]
-        previous = seen_names.get(resource_name)
+        name = "qe_ui_" + hashlib.sha256(source.encode("utf-8")).hexdigest()[:16]
+        previous = resource_names.get(name)
         if previous is not None and previous != source:
             raise ValueError(f"Android UI resource hash collision: {previous!r} and {source!r}")
-        seen_names[resource_name] = source
-        entries.append((resource_name, source, target))
+        resource_names[name] = source
+        if any(
+            len(translations_by_locale[locale].get(source, set())) == 1
+            and next(iter(translations_by_locale[locale][source])) != source
+            and valid_text(next(iter(translations_by_locale[locale][source])))
+            for locale in catalogs if locale != "english"
+        ):
+            translated_sources.append(source)
 
-    def render(values: bool) -> bytes:
+    def render(locale: str) -> bytes:
         lines = ['<?xml version="1.0" encoding="utf-8"?>', "<resources>"]
-        for resource_name, source, target in entries:
-            value = source if values else target
+        for source in translated_sources:
+            name = resource_names[source]
+            if locale == "english":
+                value = source
+            else:
+                candidates = translations_by_locale[locale].get(source, set())
+                if len(candidates) != 1:
+                    continue
+                value = next(iter(candidates))
+                if value == source or not valid_text(value):
+                    continue
             lines.append(
-                f'    <string name="{resource_name}" formatted="false">{_xml_resource_text(value)}</string>'
+                f'    <string name="{name}" formatted="false">{_xml_resource_text(value)}</string>'
             )
         lines.append("</resources>")
-        return ("\n".join(lines) + "\n").encode("utf-8")
+        return ("\\n".join(lines) + "\\n").encode("utf-8")
 
-    return {
-        "apps/android/app/src/main/res/values/qe_ui_catalog.xml": render(True),
-        "apps/android/app/src/main/res/values-hi/qe_ui_catalog.xml": render(False),
-    }
-
+    generated: dict[str, bytes] = {}
+    for locale, metadata in locales.items():
+        qualifier = metadata["androidQualifier"]
+        directory = "values" if not qualifier else f"values-{qualifier}"
+        generated[f"apps/android/app/src/main/res/{directory}/qe_ui_catalog.xml"] = render(locale)
+    return generated
 
 
 def main() -> int:
@@ -207,7 +243,7 @@ def main() -> int:
                     target.parent.mkdir(parents=True, exist_ok=True)
                     target.write_bytes(source.read_bytes())
 
-        android_resources = render_android_catalog_resources(catalogs)
+        android_resources = render_android_catalog_resources(catalogs, locales)
         for relative_path, expected_bytes in android_resources.items():
             target = ROOT / relative_path
             if args.check:
