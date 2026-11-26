@@ -10,6 +10,7 @@ import java.util.Locale
 import java.security.MessageDigest
 
 internal val LocalQuantaLanguage = staticCompositionLocalOf { "hi" }
+internal val LocalQuantaUiLocale = staticCompositionLocalOf { "hinglish" }
 
 /** Resource names are generated from canonical catalog text; ambiguous phrases are omitted. */
 private fun sharedCatalogResourceName(source: String): String {
@@ -19,19 +20,39 @@ private fun sharedCatalogResourceName(source: String): String {
     }
 }
 
-/** Resolves account locale IDs to the two UI locales currently supported by Android. */
-internal fun resolveInterfaceLanguage(preferredLocale: String): String? =
+/** Resolves persisted values to a registered locale ID. Legacy hi/hindi always mean Hinglish. */
+internal fun resolveInterfaceLocale(preferredLocale: String): String? =
     when (preferredLocale.trim().lowercase(Locale.ROOT)) {
-        "english", "en" -> "en"
-        "hinglish", "hindi", "hi" -> "hi"
+        "english", "en" -> "english"
+        "hinglish", "hindi", "hi", "hi-latn" -> "hinglish"
+        "pure-hindi", "hi-deva", "hindi-deva" -> "pure-hindi"
         else -> null
     }
 
+/** Existing screens use a two-script flag; the exact UI locale is carried separately. */
+internal fun resolveInterfaceLanguage(preferredLocale: String): String? =
+    when (resolveInterfaceLocale(preferredLocale)) {
+        "english" -> "en"
+        "hinglish", "pure-hindi" -> "hi"
+        else -> null
+    }
+
+internal fun interfaceLocaleLanguageTag(locale: String): String =
+    when (resolveInterfaceLocale(locale)) {
+        "english" -> "en"
+        "pure-hindi" -> "hi-Deva"
+        else -> "hi-Latn"
+    }
+
 /** Explicit device choice wins; account preference seeds the UI locale only on first use. */
+internal fun initialInterfaceLocale(localPreference: String?, accountPreference: String?): String =
+    resolveInterfaceLocale(localPreference.orEmpty())
+        ?: resolveInterfaceLocale(accountPreference.orEmpty())
+        ?: "hinglish"
+
+/** Compatibility helper for existing two-language callers. */
 internal fun initialInterfaceLanguage(localPreference: String?, accountPreference: String?): String =
-    resolveInterfaceLanguage(localPreference.orEmpty())
-        ?: resolveInterfaceLanguage(accountPreference.orEmpty())
-        ?: "hi"
+    resolveInterfaceLanguage(initialInterfaceLocale(localPreference, accountPreference)) ?: "hi"
 
 private data class UiPhrase(val key: String, val english: String, val hindi: String)
 private val uiPhrases = listOf(
@@ -508,7 +529,24 @@ private val uiPhraseBySource: Map<String, UiPhrase> = buildMap {
     }
 }
 
-internal fun localizedUiTextForLanguage(source: String, language: String): String {
+internal fun localizedUiTextForLanguage(
+    source: String,
+    language: String,
+    uiLocale: String = if (language == "en") "english" else "hinglish",
+    context: Context? = null
+): String {
+    val resolvedLocale = resolveInterfaceLocale(uiLocale) ?: "hinglish"
+    if (context != null) {
+        val resourceId = context.resources.getIdentifier(
+            sharedCatalogResourceName(source), "string", context.packageName
+        )
+        if (resourceId != 0) {
+            val configuration = Configuration(context.resources.configuration).apply {
+                setLocale(Locale.forLanguageTag(interfaceLocaleLanguageTag(resolvedLocale)))
+            }
+            return context.createConfigurationContext(configuration).getString(resourceId)
+        }
+    }
     val phrase = uiPhraseBySource[source] ?: uiPhrases
         .filter { it.hindi.endsWith(" ") || it.english.endsWith(" ") }
         .sortedByDescending { maxOf(it.hindi.length, it.english.length) }
@@ -520,7 +558,12 @@ internal fun localizedUiTextForLanguage(source: String, language: String): Strin
         source.startsWith(phrase.english) -> source.removePrefix(phrase.english)
         else -> ""
     }
-    return (if (language == "hi") phrase.hindi else phrase.english) + suffix
+    val fallbackTranslation = when (resolvedLocale) {
+        "hinglish" -> phrase.hindi
+        "pure-hindi" -> phrase.english // Avoid showing Hinglish copy in pure Hindi when no Hindi catalog entry exists.
+        else -> phrase.english
+    }
+    return fallbackTranslation + suffix
 }
 
 /** Select a translated resource using the locale chosen inside the app, independently of Android device locale. */
@@ -550,7 +593,7 @@ internal fun localizedUiText(source: String): String {
         // The generated catalog is authoritative for phrases with one unambiguous translation.
         // Keep the legacy phrase map as a compatibility fallback for entries not exported.
         val sharedConfiguration = Configuration(context.resources.configuration).apply {
-            setLocale(Locale.forLanguageTag(if (language == "hi") "hi" else "en"))
+            setLocale(Locale.forLanguageTag(interfaceLocaleLanguageTag(uiLocale)))
         }
         val sharedContext: Context = context.createConfigurationContext(sharedConfiguration)
         return brandText(sharedContext.getString(sharedResourceId))
@@ -567,7 +610,7 @@ internal fun localizedUiText(source: String): String {
         else -> ""
     }
     val resourceId = context.resources.getIdentifier("qe_" + phrase.key, "string", context.packageName)
-    if (resourceId == 0) return brandText((if (language == "hi") phrase.hindi else phrase.english) + suffix)
+    if (resourceId == 0) return brandText((if (uiLocale == "hinglish") phrase.hindi else phrase.english) + suffix)
     val configuration = Configuration(context.resources.configuration).apply {
         setLocale(Locale.forLanguageTag(if (language == "hi") "hi" else "en"))
     }
