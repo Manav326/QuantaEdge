@@ -7,17 +7,31 @@
       "en"
     ],
     "fallback": "english",
-    "default": false
+    "default": false,
+    "androidQualifier": ""
   },
   "hinglish": {
     "label": "Hinglish",
     "nativeLabel": "Hinglish",
-    "lang": "hi",
+    "lang": "hi-Latn",
     "aliases": [
       "hindi",
       "hi"
     ],
     "fallback": "english",
-    "default": true
+    "default": true,
+    "androidQualifier": "b+hi+Latn"
+  },
+  "pure-hindi": {
+    "label": "Hindi",
+    "nativeLabel": "हिंदी",
+    "lang": "hi-Deva",
+    "aliases": [
+      "hi-deva",
+      "hindi-deva"
+    ],
+    "fallback": "english",
+    "default": false,
+    "androidQualifier": "b+hi+Deva"
   }
 }
