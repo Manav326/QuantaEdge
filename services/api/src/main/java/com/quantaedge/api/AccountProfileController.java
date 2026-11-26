@@ -24,10 +24,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/account/me")
 public class AccountProfileController {
   private static final Pattern USERNAME = Pattern.compile("^[a-z0-9][a-z0-9._-]{2,31}$");
-  private static final Set<String> SUPPORTED_PREFERRED_LOCALES = Set.of("english", "hinglish");
+  private static final Set<String> SUPPORTED_PREFERRED_LOCALES = Set.of("english", "hinglish", "pure-hindi");
 
   static String normalizePreferredLocale(Object value) {
     String locale = String.valueOf(value == null ? "" : value).trim().toLowerCase(Locale.ROOT);
+    // Historical "hi"/"hindi" values meant Hinglish in the existing product.
+    // Keep those aliases stable; pure Hindi has an explicit, separate locale ID.
+    if (locale.equals("hi") || locale.equals("hindi") || locale.equals("hi-latn")) {
+      locale = "hinglish";
+    } else if (locale.equals("en")) {
+      locale = "english";
+    } else if (locale.equals("hi-deva") || locale.equals("hindi-deva")) {
+      locale = "pure-hindi";
+    }
     if (!SUPPORTED_PREFERRED_LOCALES.contains(locale)) {
       throw new IllegalArgumentException("Select a supported interface language.");
     }
