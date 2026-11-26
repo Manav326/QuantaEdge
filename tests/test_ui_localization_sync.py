@@ -119,7 +119,7 @@ class AndroidUiCatalogGenerationTests(unittest.TestCase):
             for key in english_keys:
                 self.assertEqual(
                     sorted(re.findall(r"\{([a-zA-Z][a-zA-Z0-9_]*)\}", catalogs["english"][key])),
-                    sorted(re.findall(r"\{([a-zA-Z][a-zA-Z0-9_]*)\}", catalogs["english"][key])),
+                    sorted(re.findall(r"\{([a-zA-Z][a-zA-Z0-9_]*)\}", catalog[key])),
                     f"placeholder mismatch: {locale}.{key}",
                 )
 
