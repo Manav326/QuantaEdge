@@ -1,4 +1,5 @@
 import hashlib
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -81,9 +82,9 @@ class AndroidUiCatalogGenerationTests(unittest.TestCase):
 
     def test_skips_actual_multiline_messages_for_context_review(self):
         generated = render_android_catalog_resources({
-            "english": {"multiline": "First line\\nSecond line"},
-            "hinglish": {"multiline": "पहली पंक्ति\\nदूसरी पंक्ति"},
-            "pure-hindi": {"multiline": "पहली पंक्ति\\nदूसरी पंक्ति"},
+            "english": {"multiline": "First line\nSecond line"},
+            "hinglish": {"multiline": "पहली पंक्ति\nदूसरी पंक्ति"},
+            "pure-hindi": {"multiline": "पहली पंक्ति\nदूसरी पंक्ति"},
         }, sample_locales())
         for path, data in generated.items():
             if path.endswith("qe_ui_catalog.xml"):
@@ -117,8 +118,8 @@ class AndroidUiCatalogGenerationTests(unittest.TestCase):
             self.assertEqual(english_keys, set(catalog), locale)
             for key in english_keys:
                 self.assertEqual(
-                    sorted(__import__("re").findall(r"\\{([a-zA-Z][a-zA-Z0-9_]*)\\}", catalogs["english"][key])),
-                    sorted(__import__("re").findall(r"\\{([a-zA-Z][a-zA-Z0-9_]*)\\}", catalog[key])),
+                    sorted(re.findall(r"\{([a-zA-Z][a-zA-Z0-9_]*)\}", catalogs["english"][key])),
+                    sorted(re.findall(r"\{([a-zA-Z][a-zA-Z0-9_]*)\}", catalogs["english"][key])),
                     f"placeholder mismatch: {locale}.{key}",
                 )
 
