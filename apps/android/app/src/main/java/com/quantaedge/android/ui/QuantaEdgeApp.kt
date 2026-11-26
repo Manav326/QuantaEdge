@@ -1326,7 +1326,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             accountDeletionOtpDevCode = response.optString("devCode")
             accountDeletionVerificationId = ""
             status = localizedUiTextForLanguage(
-                "A verification code was requested for the mobile ending in ", language
+                "A verification code was requested for the mobile ending in ", language, uiLocale, context
             ) + response.optString("mobileLastFour")
         }
     }
@@ -1339,7 +1339,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 .takeIf { it.isNotBlank() }
                 ?: throw IOException("Identity verification could not be confirmed. Request a new code.")
             accountDeletionOtpDevCode = ""
-            status = localizedUiTextForLanguage("Identity verification complete.", language)
+            status = localizedUiTextForLanguage("Identity verification complete.", language, uiLocale, context)
         }
     }
 
@@ -1361,7 +1361,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 accountDeletionRequest = response
                 status = localizedUiTextForLanguage(
                     "Resolve linked child accounts first. The parent account cannot be deleted while a linked child remains unresolved.",
-                    language
+                    language, uiLocale, context
                 )
             } else if (response.optBoolean("accepted")) {
                 accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
@@ -1369,7 +1369,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 accountDeletionOtpDevCode = ""
                 status = localizedUiTextForLanguage(
                     "Deletion request recorded. This does not mean deletion is complete.",
-                    language
+                    language, uiLocale, context
                 )
             } else {
                 throw IOException("The deletion request was not accepted. Refresh and try again.")
@@ -1398,18 +1398,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 response.optBoolean("requiresIndependentAccountConversion") -> status =
                     localizedUiTextForLanguage(
                         "This child must sign in to their own learner session and complete independent-account conversion.",
-                        language)
+                        language, uiLocale, context)
                 response.optBoolean("requiresAdultVerificationReview") -> status =
                     localizedUiTextForLanguage(
                         "A reviewer must confirm that this child is under 18 before a guardian-requested deletion can be submitted.",
-                        language)
+                        language, uiLocale, context)
                 response.optBoolean("accepted") -> {
                     accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
                     accountDeletionVerificationId = ""
                     accountDeletionOtpDevCode = ""
                     status = localizedUiTextForLanguage(
                         "The child deletion request was recorded. The parent account remains blocked until the child account is resolved.",
-                        language)
+                        language, uiLocale, context)
                 }
                 else -> throw IOException("The child deletion request was not accepted. Refresh and try again.")
             }
@@ -1422,7 +1422,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
             status = localizedUiTextForLanguage(
                 if (result.optBoolean("cancelled")) "Deletion request cancelled." else "No open deletion request was found.",
-                language
+                language, uiLocale, context
             )
         }
     }
