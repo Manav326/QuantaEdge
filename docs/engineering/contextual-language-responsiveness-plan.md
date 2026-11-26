@@ -8,7 +8,7 @@
 
 Translations must express the intended meaning in the screen's context, not translate isolated words. Copy must be crisp, simple, and immediately clear. Prefer one short sentence; avoid redundant helper text. Do not shorten legal, safety, assessment, payment, or consent text if doing so changes meaning.
 
-Hinglish is Hindi in Devanagari with familiar English terms retained naturally. Do not use phonetic Roman Hindi. English and Hinglish are the supported UI locales for this implementation. Keep locale architecture registry-driven so Pure Hindi can be added deliberately later; never advertise an unavailable locale.
+Hinglish is Hindi in Devanagari with familiar English terms retained naturally. Do not use phonetic Roman Hindi. The supported UI locales are English, Hinglish and Pure Hindi, each backed by pre-translated key/value pairs. Legacy `hi` and `hindi` preferences continue to resolve to Hinglish; Pure Hindi uses the distinct `pure-hindi` locale ID and `hi-Deva` script tag. Keep locale architecture registry-driven so future languages can be added by supplying a catalog and metadata; never advertise an unregistered locale.
 
 ## Architecture boundaries
 
@@ -23,10 +23,10 @@ Hinglish is Hindi in Devanagari with familiar English terms retained naturally. 
 ## Phases and acceptance gates
 
 ### P0 — Locale contract and preference consistency
-- [x] Register only supported UI locales and keep selectors aligned with runtime capabilities.
-- [x] Align Android's account interface-language options and save behavior with the app's active UI locale.
+- [x] Register English, Hinglish and Pure Hindi as explicit UI locales and keep selectors aligned with runtime capabilities.
+- [x] Align Android's account interface-language options and save behavior with the app's active UI locale, preserving Hinglish vs Devanagari Hindi script selection.
 - [~] Local browser/Android UI choices win; saved account `preferredLocale` seeds first use when no local choice exists. Full logout/offline persistence acceptance remains open.
-- [ ] Verify changing UI locale never changes the learning-content or certificate locale.
+- [x] Keep UI locale independent from learning-content and certificate locale preferences; [ ] complete browser/device acceptance proving no preference leakage.
 - **Accept:** selected, saved and displayed locale agree across app navigation and reload; unsupported choices cannot be saved or offered.
 
 ### P0 — Complete visible-copy inventory
@@ -37,10 +37,10 @@ Hinglish is Hindi in Devanagari with familiar English terms retained naturally. 
 
 ### P0 — Single translation path
 - [ ] Replace remaining inline locale pairs, duplicated dictionaries and hardcoded binary-locale helpers progressively with typed catalog keys.
-- [ ] Keep the shared registry/metadata, catalogs and generated app copies synchronized.
+- [x] Keep the shared registry/metadata, all three catalogs and generated Web/Admin/People copies synchronized.
 - [ ] Replace legacy-generated key names with semantic names in small, tested batches.
-- [~] Connect Android to generated, validated locale resources for unambiguous shared messages. Keep the existing phrase map as a compatibility fallback while remaining call sites move to semantic keys.
-- **Accept:** catalog drift, missing keys and invalid locale IDs fail CI; a new locale cannot silently render as Hinglish.
+- [x] Connect Android to generated, validated, script-specific locale resources for unambiguous shared messages. Keep the existing phrase map as a compatibility fallback while remaining call sites move to semantic keys.
+- **Accept:** catalog drift, missing keys and invalid locale IDs fail CI; a new locale cannot silently render as Hinglish. Missing translations fall back to English, never to another Hindi script.
 
 ### P1 — Contextual, concise writing
 - [ ] Review existing copy in context, starting with authentication, course access, payments/refunds, permissions, assessments and publishing.
@@ -93,6 +93,18 @@ Implemented on this branch:
 - Added a central-sync generator for Android locale resources. It exports only phrases with one unambiguous Hinglish equivalent; Android uses those entries before its existing fallback map.
 
 **Validation still required:** Android/API tests and full CI have not yet been confirmed on this branch. Full route coverage, browser/device acceptance, the complete Android/catalog integration, dynamic-message coverage, and the broader contextual copy review remain open.
+
+## Three-locale implementation checkpoint — 2026-11-26
+
+Implemented on the existing localization work branch:
+- Added a canonical `pure-hindi` key/value catalog for all 4,113 English message keys. Every catalog is structurally complete and uses the same interpolation placeholders.
+- Kept the current Hinglish locale and its default behavior intact. Legacy `hi` / `hindi` aliases remain Hinglish; Pure Hindi has a separate canonical ID.
+- Added `hi-Latn` and `hi-Deva` script metadata. Locale menus across Web, Admin and People Operations are generated from the central registry.
+- Updated the account-profile API to validate the registered values and normalize old aliases. Children’s learning-language preference does not seed an unrelated UI locale.
+- Updated Android to store an exact UI locale independently from the two-way legacy screen flag, provide all three settings choices, and select script-specific generated resource directories.
+- Extended the central sync generator and tests to validate locale metadata, key parity, placeholders, Android XML escaping, deterministic resource names and script-specific output. Removed the old generic `values-hi` resource to prevent ambiguous matching.
+
+**Verification still pending:** source-level key/placeholder parity is clean, but the updated Python generator tests, API/Android tests, all CI jobs, builds and real browser/emulator acceptance have not yet been confirmed. Existing route-coverage and contextual human review work remains open. Static pre-translated UI key/value localization is not a runtime AI translation service.
 
 ## Existing authoritative records
 
