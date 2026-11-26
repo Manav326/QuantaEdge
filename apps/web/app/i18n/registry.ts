@@ -1,10 +1,12 @@
 import english from './catalogs/english.json';
 import hinglish from './catalogs/hinglish.json';
+import pure_hindi from './catalogs/pure-hindi.json';
 import locales from './locales.json';
 
 export const uiCatalogs = {
   'english': english,
   'hinglish': hinglish,
+  'pure-hindi': pure_hindi,
 } as const;
 
 export const uiLocaleMetadata = locales as {
