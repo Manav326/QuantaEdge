@@ -570,7 +570,7 @@ internal fun localizedUiTextForLanguage(
 @Composable
 internal fun localizedUiText(source: String): String {
     val context = LocalContext.current
-    val language = LocalQuantaLanguage.current
+    val uiLocale = resolveInterfaceLocale(LocalQuantaUiLocale.current) ?: "hinglish"
     val institutionName = LocalInstitutionBrandIdentity.current?.displayName?.takeIf { it.isNotBlank() }
         ?: if (LocalInstitutionBrandResolutionPending.current) "Your school" else null
     val sharedResourceId = remember(source) {
@@ -612,7 +612,7 @@ internal fun localizedUiText(source: String): String {
     val resourceId = context.resources.getIdentifier("qe_" + phrase.key, "string", context.packageName)
     if (resourceId == 0) return brandText((if (uiLocale == "hinglish") phrase.hindi else phrase.english) + suffix)
     val configuration = Configuration(context.resources.configuration).apply {
-        setLocale(Locale.forLanguageTag(if (language == "hi") "hi" else "en"))
+        setLocale(Locale.forLanguageTag(interfaceLocaleLanguageTag(uiLocale)))
     }
     val localizedContext: Context = context.createConfigurationContext(configuration)
     return brandText(localizedContext.getString(resourceId) + suffix)
