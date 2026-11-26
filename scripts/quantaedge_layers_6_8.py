@@ -5,7 +5,7 @@ import argparse, hashlib, json, re, subprocess, sys, time, urllib.error, urllib.
 from pathlib import Path
 from typing import Any
 
-PROMPT_VERSION = "qe-l6-l8-ollama-v7-exact-visual-asset-crosswalk"
+PROMPT_VERSION = "qe-l6-l8-ollama-v8-explicit-bilingual-object-contract"
 LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-contextual-questions-runtime-schema.v5"
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
@@ -570,7 +570,7 @@ def prompt_for(source: dict[str,Any], segment: dict[str,Any], visuals: list[dict
     return f"""Create one compact, review-only bilingual NCERT learning unit grounded only in this excerpt. Use original wording; never copy textbook text or exercise questions. Never guess facts, chapter identity, page numbers or visual contents.
 Layer 5 same-PDF visual-analysis evidence (unapproved machine observations, for curriculum-mapping hints only): {layer5_text}
 Layer 5 summaries/concepts/visible text are hypotheses, not verified facts. Cross-check them against the supplied source text and retain uncertainty and limitations. For a visual question, use only the exact V3 candidate's same-asset Layer 5 analysis listed with it; both its candidate ID and source inventory asset IDs must remain traceable. Never substitute a different asset's analysis. Layer 5 asset IDs are provenance references, not visual question IDs. Visual questions may cite only the separately allow-listed V3 candidate IDs above; those candidates remain blocked until human approval.
-There is NO question-type quota. The structured types below are a supported catalogue, not a checklist. Generate only questions that the source context and learning objectives justify; do not rotate through types, do not pad the output, and do not omit a core assessable idea just to keep the set short. Return 1 to 6 distinct, useful questions; fewer high-quality questions are better than redundant questions.
+There is NO question-type quota. The structured types below are a supported catalogue, not a checklist. Generate only questions that the source context and learning objectives justify; do not rotate through types, do not pad the output, and do not omit a core assessable idea just to keep the set short. Return 1 to 3 distinct, useful questions; usually 1 or 2 are sufficient, and a third is allowed only for a distinct source-supported objective.
 Supported types and purpose:
 - multiple_choice: one best choice for an important concept or misconception;
 - multiple_select: select all independently correct statements when there are genuinely multiple answers;
@@ -582,7 +582,14 @@ Supported types and purpose:
 - scenario_based: apply the concept to a distinct realistic scenario with a choice response.
 The only eligible image candidates for this excerpt are: {visual_text}. Do not use image_observation if no relevant candidate exists in this allowlist. Never invent visual IDs. A visual candidate is still unapproved; all visual-dependent output remains non-publishable and blocked from student rendering.
 Every generated question must assess a stated learning objective, cite one or more exact allowed source PDF pages {allowed}, remain within the mapped chapter, and add information not already asked redundantly by another question. Source sections, tables, activities and examples may be accounted for through explanation or worked example; do not force every item to become a question.
-Keep all learner-facing content semantically aligned in natural English and Hindi. Use one concise bilingual learning objective, at most two concepts per locale, concise explanations and one worked example when supported. Create exactly two tutor examples: one English and one Hindi; each must cite allowed pages.
+Keep all learner-facing content semantically aligned in natural English and natural Hindi. Use exactly one concise bilingual learning objective, at most two distinct concepts per locale, one short explanation of 1–2 paragraphs per locale, and one worked example of 1–2 steps/paragraphs per locale when supported. Usually create 1–2 distinct questions; create a third only when it tests a genuinely different source-supported objective. Avoid long lists and repeated wording. Every Hindi field must be an actual Hindi rendering, not copied English, invented transliteration, or a generic placeholder. Never repeat one generic Hindi phrase across concepts or paragraphs to fill space. Preserve correct scientific terms (for example, Celsius, Fahrenheit, kelvin) within grammatical Hindi sentences.
+
+IMPORTANT: "worked_example_by_locale" and "tutor_examples" are two different fields and MUST NOT be mixed:
+- worked_example_by_locale.en and .hi are each an object with exactly this shape: {{"heading":"Convert 25 °C to kelvin","paragraphs":["Add 273.15 to the Celsius value.","25 + 273.15 = 298.15 K."]}}. The Hindi object has the same heading + paragraphs shape in natural Hindi. Do NOT put student_message, assistant_message, language, or source_pages inside worked_example_by_locale.
+- tutor_examples is a separate array containing exactly two dialogue objects: one {{"language":"en","student_message":"...","assistant_message":"...","source_pages":[PAGE]}} and one corresponding Hindi object with "language":"hi". Do NOT put heading or paragraphs in tutor_examples.
+- For every choice question, every option id MUST be a JSON string such as "a" or "b" (never a number), and correct_answer_ids MUST contain those exact string IDs. Include 2–4 options, all bilingual. Check that every correct answer actually matches the explanation. For arithmetic, calculate each result independently before writing options and feedback.
+- The worked example must use the schema above; do not substitute a chat transcript or question object.
+- Keep each explanation locale to at most 2 short paragraphs, each worked example locale to at most 2 short steps/paragraphs, each recap to one sentence, and each tutor dialogue to one concise exchange.
 Return JSON only:
 {{
   "chapter_number": 1,
@@ -672,6 +679,16 @@ def _bilingual_items(items: Any) -> bool:
         seen.add(item["id"])
     return True
 
+def _has_repeated_fill_content(values: Any) -> bool:
+    """Detect repeated filler strings used to pad Hindi concepts or paragraphs."""
+    if not isinstance(values, list) or len(values) < 3:
+        return False
+    normalized = [" ".join(value.split()).strip().casefold() for value in values if isinstance(value, str) and value.strip()]
+    if len(normalized) < 3:
+        return False
+    return len(set(normalized)) <= max(1, len(normalized) // 2)
+
+
 def validate_output(v: Any, allowed: set[int], visuals: list[dict[str,Any]]|None=None) -> list[str]:
     errors=[]
     if not isinstance(v,dict): return ["not an object"]
@@ -759,6 +776,18 @@ def validate_output(v: Any, allowed: set[int], visuals: list[dict[str,Any]]|None
             found.add(e["language"]); refs=e.get("source_pages")
             if not isinstance(refs,list) or not refs or any(not isinstance(p,int) or isinstance(p,bool) or p not in allowed for p in refs): errors.append(f"tutor example {i} page citations invalid")
         if found!={"en","hi"}: errors.append("tutor examples must cover English and Hindi")
+
+    # Reject obvious low-quality placeholder repetition before a draft can be
+    # counted as a complete L6-L8 segment. Human review remains mandatory.
+    hi_concepts = concepts.get("hi") if isinstance(concepts, dict) else None
+    if _has_repeated_fill_content(hi_concepts):
+        errors.append("Hindi concepts contain repeated filler instead of distinct concepts")
+    for field in ("explanation_by_locale", "worked_example_by_locale"):
+        locale_block = v.get(field)
+        hi_block = locale_block.get("hi") if isinstance(locale_block, dict) else None
+        paragraphs = hi_block.get("paragraphs") if isinstance(hi_block, dict) else None
+        if _has_repeated_fill_content(paragraphs):
+            errors.append(f"{field}.hi contains repeated filler paragraphs")
     return errors
 
 def tutor_citations_valid(value: Any, allowed_pages: set[int]) -> bool:
@@ -1126,26 +1155,81 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
     write_json(outdir/"layers-6-8-run-manifest.v1.json",report)
     return report
 
+_RETRYABLE_CHECKPOINT_NETWORK_ERRORS = (
+    "could not resolve host", "connection timed out", "connection reset",
+    "remote end hung up unexpectedly", "rpc failed", "tls handshake",
+    "requested url returned error: 502", "requested url returned error: 503",
+    "requested url returned error: 504", "http 502", "http 503", "http 504",
+)
+_RETRYABLE_CHECKPOINT_PUSH_RACES = (
+    "[rejected]", "non-fast-forward", "fetch first",
+    "failed to push some refs", "updates were rejected",
+    "remote contains work that you do not have",
+)
+
+
 def checkpoint_git(repo:Path,paths:list[Path],message:str)->None:
+    """Safely save generated L6-L8 data despite simultaneous book-worker commits."""
+    repo=repo.resolve()
     items=[]
-    for p in paths:
-        try: items.append(p.resolve().relative_to(repo.resolve()).as_posix())
-        except ValueError as exc: raise ValueError(f"Checkpoint outside repository: {p}") from exc
-    if not items: return
+    for raw_path in paths:
+        try:
+            items.append(Path(raw_path).resolve().relative_to(repo).as_posix())
+        except ValueError as exc:
+            raise ValueError(f"Checkpoint outside repository: {raw_path}") from exc
+    if not items:
+        return
     outside_data=[item for item in items if item!="data" and not item.startswith("data/")]
-    if outside_data: raise ValueError(f"Generated Layers 6-8 checkpoints may only be committed under data/: {outside_data}")
+    if outside_data:
+        raise ValueError(f"Generated Layers 6-8 checkpoints may only be committed under data/: {outside_data}")
+
     subprocess.run(["git","add","--",*items],cwd=repo,check=True)
     rc=subprocess.run(["git","diff","--cached","--quiet","--",*items],cwd=repo).returncode
-    if rc==0: return
-    if rc!=1: raise RuntimeError("Cannot inspect staged checkpoint.")
+    if rc==0:
+        return
+    if rc!=1:
+        raise RuntimeError("Cannot inspect staged checkpoint.")
     subprocess.run(["git","config","user.name","github-actions[bot]"],cwd=repo,check=True)
     subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"],cwd=repo,check=True)
     subprocess.run(["git","commit","-m",message,"--",*items],cwd=repo,check=True)
-    subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-    try: subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
-    except subprocess.CalledProcessError:
-        subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-        subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
+
+    push=["git","push","origin","HEAD:main"]
+    max_attempts=8
+    for attempt in range(1,max_attempts+1):
+        fetch=subprocess.run(["git","fetch","origin","main"],cwd=repo,text=True,capture_output=True)
+        if fetch.returncode!=0:
+            detail=(fetch.stderr or fetch.stdout or f"exit code {fetch.returncode}").strip()
+            retryable=any(token in detail.lower() for token in _RETRYABLE_CHECKPOINT_NETWORK_ERRORS)
+            if not retryable or attempt==max_attempts:
+                raise subprocess.CalledProcessError(fetch.returncode,["git","fetch","origin","main"],output=fetch.stdout,stderr=fetch.stderr)
+            delay=min(2**(attempt-1),8)
+            print(f"[layers-6-8] CHECKPOINT_FETCH_RETRY attempt={attempt}/{max_attempts} delay_seconds={delay} error={detail}",file=sys.stderr,flush=True)
+            time.sleep(delay)
+            continue
+
+        try:
+            subprocess.run(["git","rebase","origin/main"],cwd=repo,check=True)
+        except subprocess.CalledProcessError:
+            subprocess.run(["git","rebase","--abort"],cwd=repo,check=False)
+            raise
+
+        pushed=subprocess.run(push,cwd=repo,text=True,capture_output=True)
+        if pushed.returncode==0:
+            print(f"[layers-6-8] CHECKPOINT_PUSHED attempt={attempt}/{max_attempts} message={message}",flush=True)
+            return
+
+        detail=(pushed.stderr or pushed.stdout or f"exit code {pushed.returncode}").strip()
+        retryable=any(token in detail.lower() for token in (
+            *_RETRYABLE_CHECKPOINT_NETWORK_ERRORS,*_RETRYABLE_CHECKPOINT_PUSH_RACES,
+        ))
+        if not retryable or attempt==max_attempts:
+            print(f"[layers-6-8] CHECKPOINT_PUSH_FAILED attempt={attempt}/{max_attempts} message={message} error={detail}",file=sys.stderr,flush=True)
+            raise subprocess.CalledProcessError(pushed.returncode,push,output=pushed.stdout,stderr=pushed.stderr)
+        delay=min(2**(attempt-1),8)
+        print(f"[layers-6-8] CHECKPOINT_PUSH_RETRY attempt={attempt}/{max_attempts} delay_seconds={delay} error={detail}",file=sys.stderr,flush=True)
+        time.sleep(delay)
+
+    raise RuntimeError(f"Checkpoint push exhausted {max_attempts} attempts: {message}")
 
 def benchmark_report(repo:Path,path:Path|None,model:str)->dict[str,Any]:
     path=path or repo/"data"/"textbook-content-pipeline"/"model-benchmarks"/"class-6-ncert-curiosity.v1.json"

@@ -1,4 +1,5 @@
 'use client';
+import { RouteLoadingSkeleton } from '../../components/RouteLoadingSkeleton';
 
 
 import { apiFetch } from '../../components/apiClient';
@@ -591,9 +592,7 @@ function StudentCertificatesContent() {
 
 export default function StudentCertificatesPage() {
   const { locale } = useLocale();
-  return <Suspense fallback={<main className="app-shell"><section className={styles.page}><div className={styles.panel}>
-    <div className={styles.viewerLoading}>{locale === 'english' ? 'Loading certificates…' : 'प्रमाणपत्र लोड हो रहे हैं…'}</div>
-  </div></section></main>}>
+  return <Suspense fallback={<RouteLoadingSkeleton description={locale === 'english' ? 'Loading certificates…' : 'प्रमाणपत्र लोड हो रहे हैं…'} variant="list" />}>
     <StudentCertificatesContent />
   </Suspense>;
 }

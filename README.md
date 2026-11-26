@@ -99,6 +99,17 @@ This is a controlled QA fixture, not production customer data. The production co
 
 The default is to pull the published application images from GHCR and run them locally. Docker Compose still uses the local-development configuration for ports, demo seed, environment, and persistent database/cache volumes.
 
+For the shared local Cloudflare Tunnel deployment, first start the central ingress from the sibling `QuantaEdge-Production` checkout. It creates/reuses the external Docker network `cloudflare-edge` and owns the only Tunnel connector:
+
+Windows PowerShell:
+
+```powershell
+# From D:\Projects\QuantaEdge-Production
+.\scripts\local-ingress.ps1 up
+```
+
+Then start QuantaEdge Learning as usual. Its public web/admin/people/API containers join the shared edge network; PostgreSQL and Redis remain private to the QuantaEdge project.
+
 Linux / macOS / Git Bash / WSL:
 
 ```bash

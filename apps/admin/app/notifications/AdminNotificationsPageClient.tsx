@@ -9,7 +9,7 @@ export default function AdminNotificationsPageClient() {
   const { identityType } = useContext(AdminWorkspaceContext);
   if (identityType === 'INSTITUTION') {
     return (
-      <div className="admin-shell">
+      <div>
         <main className="admin-main">
           <NotificationStudio surface="institution" />
           <section style={{ marginTop: 18 }}>

@@ -788,6 +788,7 @@
     <string name="qe_ui_0b533fe7956842ac" formatted="false">रिक्त स्थान भरें</string>
     <string name="qe_ui_99f25263dc609a99" formatted="false">Review status se questions filter karein</string>
     <string name="qe_ui_963307a85cb68594" formatted="false">विषय के अनुसार पाठ्यपुस्तक फ़िल्टर करें</string>
+    <string name="qe_ui_785fe365de2b07fb" formatted="false">Finance aur payouts</string>
     <string name="qe_ui_a7167d0c37eab941" formatted="false">Chapter या micro-topic खोजें</string>
     <string name="qe_ui_5facc17a93d99cbd" formatted="false">Chapter, concept या lesson खोजें…</string>
     <string name="qe_ui_8be37e195d472144" formatted="false">Marketplace में course खोजें। Enrolment confirm होने पर lessons, practice, tests और progress यहाँ दिखेंगे।</string>
@@ -923,6 +924,7 @@
     <string name="qe_ui_a4bf5f68510d2e7a" formatted="false">Institution management, learner reports, roster, course releases aur source approval ab Education Admin workspace mein hote hain. Learner website learning content explore aur consume karne ke liye hai.</string>
     <string name="qe_ui_d1897304645be73d" formatted="false">Institution notifications ab Admin mein hain</string>
     <string name="qe_ui_8685b7e8091524d2" formatted="false">Institutions और enrollments</string>
+    <string name="qe_ui_fb0f9f8197c4acae" formatted="false">Institutions aur course management</string>
     <string name="qe_ui_ad6734a0953a05ae" formatted="false">गलत certificate ID।</string>
     <string name="qe_ui_8c999050eebfc10b" formatted="false">Subject सही नहीं है।</string>
     <string name="qe_ui_83dd70c839b26232" formatted="false">Translation JSON सही नहीं है।</string>
@@ -1479,7 +1481,7 @@
     <string name="qe_ui_9f36a2c2cfaee532" formatted="false">Payslips approved payroll runs से बनती हैं और immutable, SHA-256-checksummed snapshots के रूप में रखी जाती हैं।</string>
     <string name="qe_ui_19c4e83b27f638a6" formatted="false">Pending assignment proposal update हो गया; इसे अभी भी approval चाहिए।</string>
     <string name="qe_ui_7db20897053bb278" formatted="false">लोग</string>
-    <string name="qe_ui_40199f6082ed3b77" formatted="false">People और organization</string>
+    <string name="qe_ui_75c6dbf05d0b57f8" formatted="false">People aur organisation</string>
     <string name="qe_ui_bba86d33faae1c4e" formatted="false">लोग और संगठन, सुव्यवस्थित।</string>
     <string name="qe_ui_d9c32278863c9d17" formatted="false">Period और तारीखें</string>
     <string name="qe_ui_cfd81f182d1e5e97" formatted="false">Permissions के आधार पर access</string>

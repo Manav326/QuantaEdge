@@ -60,16 +60,11 @@ fun StudentAllCoursesScreen(
         }
         if (owned.isEmpty()) {
             if (!programsLoaded && !programsLoadFailed) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    androidx.compose.material3.CircularProgressIndicator()
-                    Text(localizedUiText("Loading your courses…"),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
+                CourseListSkeleton(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    rows = 3,
+                    loadingDescription = if (hi) "आपके courses लोड हो रहे हैं" else "Loading your courses",
+                )
             } else if (programsLoadFailed) {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {

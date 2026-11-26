@@ -95,6 +95,11 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    networks:
+      default: {}
+      cloudflare-edge:
+        aliases:
+          - quantaedge-api
 
   web:
     image: ghcr.io/${QUANTAEDGE_GHCR_OWNER}/quantaedge-web:${QUANTAEDGE_IMAGE_TAG}
@@ -102,6 +107,11 @@ services:
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${WEB_PORT:-3000}:3000"
+    networks:
+      default: {}
+      cloudflare-edge:
+        aliases:
+          - quantaedge-web
     restart: unless-stopped
     depends_on:
       - api
@@ -112,6 +122,11 @@ services:
       NEXT_PUBLIC_API_BASE_URL: ${PUBLIC_API_BASE_URL}
     ports:
       - "${ADMIN_PORT:-3001}:3000"
+    networks:
+      default: {}
+      cloudflare-edge:
+        aliases:
+          - quantaedge-admin
     restart: unless-stopped
     depends_on:
       - api
@@ -122,6 +137,11 @@ services:
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${PEOPLE_PORT:-3002}:3000"
+    networks:
+      default: {}
+      cloudflare-edge:
+        aliases:
+          - quantaedge-people
     restart: unless-stopped
     depends_on:
       - api
@@ -130,3 +150,8 @@ volumes:
   quantaedge_postgres:
   quantaedge_redis:
   quantaedge_media:
+
+networks:
+  cloudflare-edge:
+    external: true
+    name: cloudflare-edge

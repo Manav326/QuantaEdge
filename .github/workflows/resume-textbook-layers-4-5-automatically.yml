@@ -20,6 +20,8 @@ permissions:
   actions: write
   contents: write
 
+# Manual wake-up pushes intentionally run the existing recovery coordinator; the
+# coordinator remains the only dispatcher and always verifies source-bound ledgers.
 concurrency:
   group: textbook-layer45-resume-coordinator
   cancel-in-progress: false

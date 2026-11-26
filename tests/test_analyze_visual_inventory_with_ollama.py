@@ -6,6 +6,8 @@ import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
+
+from PIL import Image
 from unittest.mock import patch
 
 from scripts.analyze_visual_inventory_with_ollama import analyze_one, run_analysis, _json_object_from_response, main
@@ -26,11 +28,14 @@ class FakeResponse:
 
 
 class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
+    def _write_image(self, path, size=(320, 240)):
+        Image.new("RGB", size, (245, 245, 245)).save(path, format="JPEG", quality=90)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
         self.asset_path = self.root / "page-0001.jpg"
-        self.asset_path.write_bytes(b"not-real-jpeg-but-fake-transport-fixture")
+        self._write_image(self.asset_path, (1200, 1600))
         self.asset_hash = hashlib.sha256(self.asset_path.read_bytes()).hexdigest()
         self.inventory_path = self.root / "visual-inventory.v1.json"
         self.inventory_path.write_text(json.dumps({
@@ -53,7 +58,10 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual(8192, payload["options"]["num_ctx"])
         self.assertEqual(1024, payload["options"]["num_predict"])
         self.assertEqual("Water cycle", payload["messages"][0]["content"].split("Nearby extracted page text")[1].splitlines()[1])
-        self.assertEqual(base64.b64encode(self.asset_path.read_bytes()).decode("ascii"), payload["messages"][0]["images"][0])
+        sent_bytes = base64.b64decode(payload["messages"][0]["images"][0])
+        with Image.open(io.BytesIO(sent_bytes)) as sent_image:
+            self.assertEqual("JPEG", sent_image.format)
+            self.assertLessEqual(max(sent_image.size), 960)
         return FakeResponse({"message": {"content": json.dumps({
             "visual_summary": "A water-cycle diagram.",
             "visual_type": "diagram",
@@ -79,6 +87,12 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual(1, result["summary"]["assets_analyzed"])
         self.assertFalse(result["summary"]["publication_allowed"])
         self.assertEqual("diagram", result["results"][0]["analysis"]["visual_type"])
+        vision_input = result["results"][0]["vision_input"]
+        self.assertEqual("max-edge-960-jpeg-q82-v1", vision_input["profile"])
+        self.assertEqual([1200, 1600], [vision_input["source_width"], vision_input["source_height"]])
+        self.assertEqual([720, 960], [vision_input["inference_width"], vision_input["inference_height"]])
+        self.assertEqual(64, len(vision_input["sha256"]))
+        self.assertGreater(vision_input["byte_count"], 0)
         self.assertEqual(original, self.inventory_path.read_bytes())
 
 
@@ -168,7 +182,7 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
             opener=self._opener, output_path=output,
         )
         replacement_path = self.root / "page-0002.jpg"
-        replacement_path.write_bytes(b"replacement visual bytes")
+        self._write_image(replacement_path, (800, 800))
         replacement_hash = hashlib.sha256(replacement_path.read_bytes()).hexdigest()
         inventory = json.loads(self.inventory_path.read_text(encoding="utf-8"))
         inventory["assets"] = [{
@@ -201,7 +215,7 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
     def test_progress_excludes_stale_context_successes_until_reanalyzed(self):
         inventory = json.loads(self.inventory_path.read_text(encoding="utf-8"))
         second_path = self.root / "page-0002.jpg"
-        second_path.write_bytes(b"second fake image")
+        self._write_image(second_path, (640, 480))
         second = dict(inventory["assets"][0])
         second.update({
             "asset_id": "asset-2",
@@ -299,7 +313,7 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
     def test_same_runner_run_skips_failed_asset_to_reach_next_batch(self):
         inventory = json.loads(self.inventory_path.read_text(encoding="utf-8"))
         second_path = self.root / "page-0002.jpg"
-        second_path.write_bytes(b"second fake image")
+        self._write_image(second_path, (640, 480))
         inventory["assets"].append({
             "asset_id": "asset-2", "kind": "page_preview", "source_book_id": "book-c6-science",
             "source_pdf_sha256": "a" * 64, "source_pdf_page_number": 2,

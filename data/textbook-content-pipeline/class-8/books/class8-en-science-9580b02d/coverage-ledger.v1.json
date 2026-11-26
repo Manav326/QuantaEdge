@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1363,
-    "successful_visual_analyses": 1348,
-    "missing_visual_analyses": 928,
+    "raw_analysis_result_rows": 1447,
+    "successful_visual_analyses": 1432,
+    "missing_visual_analyses": 844,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 943,
+    "unresolved_count": 859,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8669,36 +8669,31 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
+          "In some activities Safety first has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
           "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
           "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
         ],
         "concepts": [
           "open-ended questions",
-          "thought-provoking questions",
           "critical thinking",
           "curiosity",
-          "science",
           "teamwork",
-          "inclusive nature",
-          "special needs",
+          "inclusive education",
+          "safety",
           "peer interactions",
           "assessing understanding",
           "analyzing concepts",
-          "safety precautions",
-          "fascinating facts",
-          "interesting observations",
-          "scientific principles",
-          "real-life applications"
+          "Ever heard of",
+          "A step further"
         ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
+          "The page does not provide specific examples or exercises for implementing the concepts discussed."
         ]
       },
       "chapter_id": null,
@@ -26680,9 +26675,61 @@
       "asset_path": "page-0014.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "List of reviewers for a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reviewers",
+          "Shekhar C. Mande, FNA, FASc, FNASc, Former Director General, CSIR, Distinguished Professor, Bioinformatics Centre, Savitribai Phule Pune University, Honorary Distinguished Scientist, National Centre for Cell Science, Pune (Chairperson, Curricular Area Group: Science)",
+          "Manjul Bhargava, Professor, Princeton University and Co-Chairperson, NSTC",
+          "Anurag Behar, CEO, Azim Premji Foundation, Member, National Curriculum Framework Oversight Committee",
+          "Gajanan Londhe, Head, Programme Office, NSTC",
+          "Ankush Gupta, Associate Professor, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "B.K. Sharma, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "K.K. Arora, Former Professor, Zakir Husain Delhi College, University of Delhi, Delhi",
+          "K.V. Sridevi, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Lakshmy Ravishankar, Former Professor, KET's V.G. Vaze College of Arts, Science and Commerce, Mumbai",
+          "Manoj Yadav, Professor, Government College, Ajmer",
+          "Monika Koul, Professor, Hansraj College, University of Delhi, Delhi",
+          "Mridula Arora, Principal, Navyug School, Sarojini Nagar, New Delhi",
+          "M.S. Sriram, Former Professor and Head, Department of Theoretical Physics, University of Madras, Chennai and President, K.V. Sarma Research Foundation, Chennai",
+          "Paramananda Barman, Scientist and Associate Editor, NIScPR, CSIR, New Delhi",
+          "Pooja Gokhale Sinha, Assistant Professor, Sri Venkateswara College, University of Delhi, New Delhi",
+          "Pushpanjali Bhagat, Principal, Sarvodaya Kanya Vidyalaya, Pushp Vihar, New Delhi",
+          "Pushpa Tyagi, Former Head of Department (Physics), Sanskriti School, Chanakyapuri, New Delhi and Former PGT (Physics), Kendriya Vidyalaya, Delhi",
+          "Saket Bahuguna, Assistant Professor (Linguistics), Central Institute of Hindi, Delhi Centre, Ministry of Education, Government of India",
+          "Sanjay P. Sane, Professor, National Centre for Biological Sciences, TIFR, Bengaluru",
+          "Sanjeev Kumar, Professor, School of Sciences, Indira Gandhi National Open University, New Delhi"
+        ],
+        "concepts": [
+          "Reviewers",
+          "CSIR",
+          "Bioinformatics Centre",
+          "National Centre for Cell Science",
+          "Princeton University",
+          "NSTC",
+          "Azim Premji Foundation",
+          "National Curriculum Framework Oversight Committee",
+          "Homi Bhabha Centre for Science Education",
+          "TIFR",
+          "NCERT",
+          "Zakir Husain Delhi College",
+          "Regional Institute of Education",
+          "KET's V.G. Vaze College of Arts, Science and Commerce",
+          "Government College",
+          "Hansraj College",
+          "Navyug School",
+          "K.V. Sarma Research Foundation",
+          "NIScPR",
+          "Sri Venkateswara College"
+        ],
+        "context_relation": "The list of reviewers for a textbook.",
+        "limitations": [
+          "No specific limitations are mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26973,29 +27020,27 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgment page for a textbook publication.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
           "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
           "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
-          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
+          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book.",
+          "Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saed, and Manoj Kumar, DTP Operators (Contractual); and Rajat Subhra Roy, Keshav Kumar, and Jatinder Kumar, Proofreaders (Contractual), Publication Division, NCERT, New Delhi, for "
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook",
-          "Contributors",
-          "Roles",
+          "Textbook Publication",
           "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
+          "DTP Cell",
           "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
+        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "No specific visual elements are described."
+          "No specific limitations are mentioned in the visible text.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "chapter_id": null,
@@ -32505,9 +32550,43 @@
       "asset_path": "page-0040.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Now, think what would have happened if microorganisms did not exist on Earth?",
+          "A step further",
+          "Microbes as a source of biogas",
+          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily composed of ca",
+          "Be a scientist",
+          "Ananda Mohan Chakrabarty (1938-2020) was a scientist who studied bacteria. In 1971, he developed a special bacterium that could break down oil spills, helping to clean the environment. His discovery received a patent in 1980. Patent is a copyright given to a person so that no one else can copy, use ",
+          "How does the diversity of microorganisms help in our kitchen?",
+          "2.4.2 Microorganisms and food",
+          "Let us try to understand by performing activities in the kitchen.",
+          "Activity 2.8: Let us perform",
+          "• Take two bowls A and B.",
+          "• In each, take 200 g of flour (atta or maida) and add a pinch of sugar.",
+          "• Now, in bowl A, add a small amount of yeast powder and mix it well with the flour.",
+          "• In bowl B, do not add any yeast, so that we can compare the results of the two bowls.",
+          "• Knead the flour of the two bowls with warm water to make soft dough (Fig. 2.11)."
+        ],
+        "concepts": [
+          "microorganisms",
+          "biogas",
+          "patent",
+          "environmental problems",
+          "microorganisms in the kitchen",
+          "yeast",
+          "flour",
+          "dough"
+        ],
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems. It also includes an activity related to the kitchen, involving the use of yeast and flour.",
+        "limitations": [
+          "The page does not provide specific solutions to environmental problems that can be solved with the help of microorganisms."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32687,9 +32766,31 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A comparison between two bowls of milk, one curdled and one not, to explain the difference in sourness.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You will observe that in bowl",
+          "A, the milk has turned into curd",
+          "after a few hours and has become",
+          "little sour. Whereas in bowl B, the",
+          "milk has not curdled, but it might",
+          "be a little sour. Do you know why",
+          "this happens? The curd contains",
+          "little sourness."
+        ],
+        "concepts": [
+          "curdling",
+          "sourness",
+          "milk"
+        ],
+        "context_relation": "Comparison between curdled and uncurdled milk",
+        "limitations": [
+          "No specific image provided, only text description."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37194,9 +37295,42 @@
       "asset_path": "page-0058.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page about the history of vaccines, specifically focusing on Edward Jenner and the smallpox vaccine.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "to make a harmless part of the germ, which our immune system\nthen learns to fight.",
+          "For example, a tetanus shot, often given after an injury\nprotects against infection by the tetanus-causing bacteria.\nIt contains an inactivated bacterial toxin that helps the immune\nsystem develop protection without causing the disease.",
+          "Do you know when the first vaccine was discovered?",
+          "Edward Jenner and the smallpox vaccine",
+          "Smallpox was a deadly disease that caused blisters and killed\nmillions. A milder disease called cowpox, seen in cows, could also\ninfect humans. In the late 1700s, English doctor Edward Jenner\ndiscovered that people who had cowpox did not get smallpox.\nThis led to the invention of the first vaccine a",
+          "Long before modern vaccines, India had a traditional method called\nvariolation to protect against smallpox. It involved using material\nfrom a smallpox sore to scratch the skin and create a mild infection\nand build immunity. People who performed this practice were known\nas teekedaars.",
+          "Observations\nJenner observed that milkmaids who had\ncowpox did not catch smallpox, likely because\nthe two viruses are related.",
+          "Hypothesis\nContent in the pus of cowpox blisters protected people from smallpox.",
+          "Experimentation\nHe tested this by injecting cowpox sap into a\nboy, who later showed no illness when exposed\nto smallpox.",
+          "Results\nHe found that people who were infected\nwith cowpox sap were now resistant to\nsmallpox.",
+          "Application\nMass vaccination eventually helped\neradicate smallpox worldwide."
+        ],
+        "concepts": [
+          "vaccines",
+          "Edward Jenner",
+          "smallpox",
+          "cowpox",
+          "virology",
+          "immunology",
+          "vaccination",
+          "vaccine development",
+          "vaccine efficacy",
+          "vaccine history"
+        ],
+        "context_relation": "The page provides historical context and scientific reasoning behind the development of the smallpox vaccine, linking it to Edward Jenner's observations and experiments.",
+        "limitations": [
+          "The page does not provide detailed scientific explanations for the mechanisms of action of vaccines or the immune response to vaccines.",
+          "The page does not include modern scientific data or research findings that could be used to update the information provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -44464,9 +44598,42 @@
       "asset_path": "page-0085.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the effects of forces on objects in everyday life, including examples and questions about the application of force.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "In everyday life, we come across many situations where a force is applied (Fig. 5.2), for example, opening a drawer, stretching a rubber band, a fielder stopping a ball, kicking a football, applying brakes on a moving bicycle, rolling a chapati, or turning the steering handle of an autorickshaw. Wha",
+          "The force applied on an object may",
+          "- make an object move from rest.",
+          "- change the speed of an object if it is moving.",
+          "- change the direction of motion of an object.",
+          "- bring about a change in the shape of an object.",
+          "A step further",
+          "Suppose an object is at rest. Does it mean that no force is acting on this object? It means that the forces acting on the object are balancing one another. You will learn about balanced forces in higher grades.",
+          "5.3 Are Forces an Interaction Between Two or More Objects?",
+          "When you push a table, your hand is one object applying force on another object—the table. Here, we say that your hand and the table are two objects interacting with each other.",
+          "Think of all the actions listed in Table 5.1. How many objects are involved in each of the actions? Do you notice that forces result only when two objects are interacting in some way or the other? From these examples, we can infer that at least two objects must interact for a force to come into play",
+          "A force is a push or pull on an object resulting from the object's interaction with another object. The SI unit of force is newton (written with a small 'n') and its symbol is N."
+        ],
+        "concepts": [
+          "force",
+          "object",
+          "speed",
+          "direction",
+          "shape",
+          "rest",
+          "balance",
+          "interaction",
+          "SI unit of force"
+        ],
+        "context_relation": "exploring the effects of forces on objects in everyday life",
+        "limitations": [
+          "The text does not provide specific examples or illustrations of the effects of forces on objects.",
+          "The text does not provide a detailed explanation of balanced forces or the SI unit of force."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -44763,8 +44930,8 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
+        "visual_summary": "An educational page explaining different types of forces, specifically contact forces, with examples and illustrations.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -44780,9 +44947,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "context_relation": "The page explains the concept of different types of forces, focusing on contact forces and muscular force, with examples and illustrations.",
         "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
+          "The page does not provide a detailed explanation of the physics behind these forces."
         ]
       },
       "chapter_id": null,
@@ -45390,9 +45557,43 @@
       "asset_path": "page-0089.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook explaining non-contact forces, specifically magnetic force, and an activity to test the interaction between magnets.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "69",
+          "Is it essential for an object applying force on another object to always be in contact with it?",
+          "5.4.2 Non-contact forces",
+          "There are forces whose effect can be experienced even if the objects are not in contact. These forces are called non-contact forces. Let us learn about non-contact forces.",
+          "Magnetic force",
+          "Do you remember learning about magnets in the chapter 'Exploring Magnets' in Curiosity, Grade 6? We learnt that a magnet attracts objects made of magnetic materials. When two magnets are brought close to each other, like poles (North–North, South–South) repel each other while unlike poles (North–Sou",
+          "Activity 5.5: Let us test",
+          "• Take two ring magnets and a wooden stick.",
+          "• While holding the stick in a vertical position over a wooden table, insert one ring magnet onto the stick (Fig. 5.7).",
+          "• Now insert the second ring magnet above it such that the like poles of the two magnets face each other. Does the second magnet stay floating above the first magnet?",
+          "• Try pushing the second magnet down gently. Do you feel a force on it?",
+          "• Now, reverse the poles of both the magnets. Does the second magnet still remain floating?",
+          "We find that a magnet can exert force on another magnet or a magnetic material is called magnetic force. Since a magnet can exert a force from a distance without being in contact it is called a non-contact force.",
+          "Are there more such forces which act from a distance?"
+        ],
+        "concepts": [
+          "non-contact forces",
+          "magnetic force",
+          "magnets",
+          "electromagnets",
+          "magnetic materials",
+          "magnetic force",
+          "non-contact force"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "The page does not provide specific examples or illustrations of non-contact forces beyond the magnetic force.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -48575,9 +48776,24 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a black and white illustration of a water-filled bucket with broad and narrow handles, demonstrating the difference in comfort when carrying a bag with broad straps compared to narrow straps.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 6.2: Buckets with broad and narrow handles"
+        ],
+        "concepts": [
+          "comfort",
+          "straps",
+          "pressure"
+        ],
+        "context_relation": "The image is used to explain the concept of comfort in carrying bags with different types of straps.",
+        "limitations": [
+          "The image does not provide specific measurements or data to support the explanation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -48629,9 +48845,41 @@
       "asset_path": "page-0102.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a page from a textbook explaining the concept of pressure and its application in everyday life, using examples like buckets with broad and narrow handles and people carrying loads.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 6.2: Buckets with broad and narrow handles",
+          "Broad straps reduce the pressure exerted by the bag on our shoulders as compared to narrow straps. Therefore, we feel more comfortable carrying a bag with broad straps.",
+          "Can you now understand why it feels easier to lift a water-filled bucket with a broad handle than with a narrow handle (Fig. 6.2)? Similarly, we have seen that when people carry loads like pots or vegetable baskets on their heads, they often place a round piece of cloth under the loads (Fig. 6.3). I",
+          "Pressure is defined as the force per unit area. The SI unit of force is newton and that of area is metre². Therefore, the SI unit of pressure is newton/metre² (N/m²). This unit is also called a pascal, denoted by Pa.",
+          "If a force of 100 N is applied on a cardboard of area 2 m², then the pressure applied on the cardboard will be:",
+          "Pressure = Force / Area = 100 N / 2 m² = 50 N/m²",
+          "There are many situations in daily life where pressure plays a role. Conduct the activities given in Table 6.1 and record your observations. Explain how pressure influences the mode of action undertaken for each activity.",
+          "Safety first",
+          "The activities listed in Table 6.1 should be conducted under the supervision of an adult.",
+          "Table 6.1: Record your observations",
+          "Activity | Modes of action | Easy or difficult to perform? Give reasons.",
+          "Driving an iron nail | By the head of the nail | By the pointed end of the nail |",
+          "Cutting an apple with a knife | Using the sharp edge of the knife | Using the blunt edge of the knife |"
+        ],
+        "concepts": [
+          "Pressure",
+          "SI units",
+          "Force",
+          "Area",
+          "Pascal",
+          "Safety",
+          "Observations",
+          "Modes of action"
+        ],
+        "context_relation": "The image is a page from a textbook explaining the concept of pressure and its application in everyday life, using examples like buckets with broad and narrow handles and people carrying loads.",
+        "limitations": [
+          "The image does not provide specific details about the activities in Table 6.1, only the general instructions to conduct them under adult supervision."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -49487,9 +49735,42 @@
       "asset_path": "page-0106.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A student is demonstrating an experiment involving an inverted paper plate and a folded chart paper sheet.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.9: (b) Inverted paper plate with two folds of chart paper",
+          "Fig. 6.9: (c) Inverted paper plate with unfolded chart paper",
+          "the folded chart paper sheet — big enough for the stick to come out. Place the folded sheet on top of the inverted paper plate as shown in Fig. 6.9b.",
+          "Now, try to lift the paper plate covered with a folded sheet using the stick.",
+          "Observe how much effort is needed to lift it.",
+          "Now, place the second unfolded chart paper sheet in place of the folded sheet. Make a hole at the centre of this chart paper for the stick to pass through. Cover the paper plate with the unfolded chart paper as shown in Fig. 6.9c.",
+          "Lift the paper plate again and feel the effort needed in doing so.",
+          "In which case is the lifting easier, with the folded or the unfolded chart paper covering the paper plate?",
+          "You would have observed that more effort is needed to lift the paper plate when it is covered with the unfolded chart paper, than with the folded chart paper. When we cover the paper plate with unfolded chart paper, the area of the covering sheet increases. The effort needed to lift the paper plate ",
+          "You must have experienced that when you blow air into a balloon, it gets inflated. Why? This is because the air being filled inside the balloon exerts pressure on the walls of the balloon (Fig. 6.10). Can we say that air exerts pressure in all directions? Yes, that is why the balloon expands in all "
+        ],
+        "concepts": [
+          "inverted paper plate",
+          "folded chart paper sheet",
+          "unfolded chart paper sheet",
+          "lifting effort",
+          "area of covering sheet",
+          "force",
+          "pressure",
+          "atmospheric pressure",
+          "inflation",
+          "pressure on walls",
+          "expansion",
+          "air escaping"
+        ],
+        "context_relation": "The image is a part of a textbook page explaining an experiment involving an inverted paper plate and chart paper sheets.",
+        "limitations": [
+          "The image does not show the actual experiment being conducted."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -49670,10 +49951,11 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "An activity involving a rubber sucker to demonstrate atmospheric pressure.",
         "visual_type": "diagram",
         "visible_text": [
           "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "87",
           "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
@@ -49690,23 +49972,22 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "air pressure",
+          "pressure difference",
           "SI unit of pressure",
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
+          "pressure balance",
           "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
+          "fluid pressure",
+          "atmospheric pressure force",
           "wind strength",
-          "wind damage"
+          "pressure difference in balloons and tubes"
         ],
-        "context_relation": "educational",
+        "context_relation": "The image is a page from a textbook discussing atmospheric pressure and its effects, including an activity involving a rubber sucker to demonstrate the concept.",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not provide specific numerical values or calculations.",
+          "The image does not show the actual experiment being performed."
         ]
       },
       "chapter_id": null,
@@ -50351,9 +50632,27 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An explanation of how high-speed winds create low-pressure areas over houses, leading to potential roof damage.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th",
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th"
+        ],
+        "concepts": [
+          "high-speed winds",
+          "low-pressure areas",
+          "air pressure",
+          "roof damage"
+        ],
+        "context_relation": "Explanation of roof damage due to high-speed winds",
+        "limitations": [
+          "The image does not show any visual representation of the described phenomenon.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50611,9 +50910,33 @@
       "asset_path": "page-0111.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a thunderstorm with lightning and clouds, explaining the formation of static electric charges in clouds.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation within the cloud takes place. Also, when the negatively charged lower part of the cloud move",
+          "Lightning can occur when opposite charges collide within a cloud, between clouds, or between clouds and the ground. Lightning rapidly heats up the air around it, causing the air to expand and produce a loud sound known as thunder. A storm accompanied by lightning and thunder is called a thunderstorm",
+          "Isolated and localised thunderstorms can sometimes occur in various regions of India. These thunderstorms are known by various names such as Kalboishakhi in West Bengal, Bihar, and Jharkhand and Bordoisila in Assam. They occur before the arrival of the monsoon, thereby helping kharif crops to grow. ",
+          "Lightning can be dangerous! It can ignite fires, damage buildings, and cause severe burns or death in humans and animals. We must take necessary precautions and protect ourselves from lightning. During lightning, stay away from tall objects, find a low-lying open area and crouch down, and minimise c"
+        ],
+        "concepts": [
+          "Static electric charges",
+          "Thunderstorm",
+          "Lightning",
+          "Thunder",
+          "Monsoon",
+          "Kharif crops",
+          "Mango showers",
+          "Coffee plants",
+          "Precautions during lightning"
+        ],
+        "context_relation": "The image explains the formation of static electric charges in clouds and the subsequent phenomena of thunderstorms and lightning.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of ice particles and water droplets."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50932,9 +51255,31 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page of a textbook discussing the destructive effects of a cyclone, including its peak wind speeds and the resulting flooding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "93",
+          "Even as a cyclone loses its strength while travelling over land, it leaves behind a trail of destruction that can take months or even years to repair. Cyclones can be extremely destructive. For example, the Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc",
+          "The Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc"
+        ],
+        "concepts": [
+          "Cyclone",
+          "Peak wind speeds",
+          "Flooding",
+          "Heavy rainfall",
+          "Coastal areas"
+        ],
+        "context_relation": "The text discusses the destructive effects of a cyclone, including its peak wind speeds and the resulting flooding.",
+        "limitations": [
+          "The text does not provide specific details about the Amphan cyclone in 2020, such as its location or the extent of the damage it caused."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50995,7 +51340,7 @@
       "asset_path": "page-0113.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -51013,7 +51358,7 @@
       "asset_path": "assets/509990b1d09f583c78c939b2b41282df2dad763f87f1bb476e8b5ae127b9d04a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -51031,9 +51376,25 @@
       "asset_path": "assets/7375ed860f1bf6a9672ecee476d8e4bf5ec4dc63e8c497609609fc9dc96b5eeb.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand pouring liquid from a jug into a container.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A hand pouring liquid from a jug into a container."
+        ],
+        "concepts": [
+          "Pouring liquid",
+          "Hand",
+          "Jug",
+          "Container"
+        ],
+        "context_relation": "The image is related to the concept of pouring liquid into a container.",
+        "limitations": [
+          "The image does not provide specific details about the liquid or the container."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51049,9 +51410,28 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "Pressure",
+          "SI unit of pressure",
+          "Newton/metre2",
+          "Pascal",
+          "Liquids and gases",
+          "Atmospheric pressure",
+          "Winds",
+          "Warm air",
+          "Cooler air"
+        ],
+        "context_relation": "The image is a black page with no visible content.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51067,9 +51447,16 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51085,9 +51472,41 @@
       "asset_path": "page-0114.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining pressure and its effects, including atmospheric pressure, wind formation, and lightning.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Snapshots",
+          "Pressure is defined as force per unit area.",
+          "The SI unit of pressure is newton/metre2 (N/m2) and is also called pascal denoted by Pa.",
+          "Liquids and gases exert pressure on the walls of a container.",
+          "The pressure exerted by the air around us is known as atmospheric pressure.",
+          "Differences in air pressure cause winds to blow.",
+          "Warm air rises, creating a low-pressure area. Cooler air from surrounding higher-pressure regions moves in to take its place.",
+          "Important requirements for the formation of thunderstorms are moisture and strong winds.",
+          "Strong winds moving upwards and downwards facilitate rubbing of ice particles with water droplets, causing electric charges to develop in clouds.",
+          "Collision of electric charges within a clouds, or between clouds, or between a cloud and the ground causes lightning.",
+          "Lightning strikes can cause destruction to life and property.",
+          "Lightning conductors protect buildings from the effects of lightning.",
+          "The India Meteorological Department (IMD) constantly monitors cyclones and thunderstorms in India."
+        ],
+        "concepts": [
+          "pressure",
+          "atmospheric pressure",
+          "wind formation",
+          "thunderstorms",
+          "lightning",
+          "electric charges",
+          "collision",
+          "conductors"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51103,9 +51522,24 @@
       "asset_path": "assets/d636f93c2b516006ab2b2c472f3fec6f0c301290e7bdf2e0a019a287b6804f96.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A water tank with a height 'H' and a water level.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "pressure",
+          "height",
+          "water level",
+          "tank"
+        ],
+        "context_relation": "The image represents a scenario related to the physics concept of pressure in a water tank.",
+        "limitations": [
+          "The image does not provide numerical values or specific measurements.",
+          "The image does not show the actual water level or the height 'H' in relation to the tank."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51121,9 +51555,22 @@
       "asset_path": "assets/6297b52654d2dc85a0c254c55b84b0950705c4bb8665e3d1887a9ab0aa686448.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A water tank filled with water, with a height 'H' indicated.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "pressure",
+          "water tank",
+          "height 'H'"
+        ],
+        "context_relation": "The image is related to the question about increasing water pressure in a building.",
+        "limitations": [
+          "The image does not provide specific numerical values for 'H'."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51139,9 +51586,20 @@
       "asset_path": "assets/1afd3a3fd4f6601f7c496bc8381ee03cc90aefd19ca69b1a94dcde8d4f9e0a33.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person lying on the ground in a dry, arid landscape with a tree and some bushes in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or question related to the textbook content.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context for the question.",
+          "The image is a static illustration and does not depict any dynamic actions or changes.",
+          "The image does not show any specific educational content or question related to the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51157,9 +51615,22 @@
       "asset_path": "assets/adf52aec33e4fe531611aff7f5c9d5bc4bff5ea02e1bbf728c1a0637d348ab0d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person standing in a flooded area with a dry tree and hills in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "flooded area",
+          "dry tree",
+          "hills"
+        ],
+        "context_relation": "The image does not provide information related to the textbook content.",
+        "limitations": [
+          "The image does not show any text or labels related to the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51175,9 +51646,16 @@
       "asset_path": "assets/720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a notebook and pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51193,9 +51671,18 @@
       "asset_path": "assets/71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a pen and a tablet.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the textbook text.",
+        "limitations": [
+          "The image does not provide any information about the textbook text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51211,9 +51698,16 @@
       "asset_path": "assets/591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl holding a book and a pencil.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51229,9 +51723,20 @@
       "asset_path": "assets/d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl raising her hand in a classroom, with a boy in a wheelchair beside her.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the textbook content.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook content.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not show any specific formulas or quantities from the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51247,9 +51752,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about increasing water pressure in a water tank placed on a building roof.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(iii) A water tank is placed on the roof of a building at a height 'H'. To get water with more pressure on the ground floor, one has to",
+          "(a) increase the height 'H' at which the tank is placed.",
+          "(b) decrease the height 'H' at which the tank is placed.",
+          "(c) replace the tank with another tank of the same height that can hold more water.",
+          "(d) replace the tank with another tank of the same height that can hold less water."
+        ],
+        "concepts": [
+          "Pressure",
+          "Water tank",
+          "Building roof",
+          "Ground floor"
+        ],
+        "context_relation": "The question is about the relationship between the height of the water tank on the roof and the pressure of the water on the ground floor.",
+        "limitations": [
+          "The question does not provide a diagram or illustration."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51265,9 +51790,29 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about increasing water pressure in a water tank.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(iii) A water tank is placed on the roof of a building at a height 'H'. To get water with more pressure on the ground floor, one has to",
+          "(a) increase the height 'H' at which the tank is placed.",
+          "(b) decrease the height 'H' at which the tank is placed.",
+          "(c) replace the tank with another tank of the same height that can hold more water.",
+          "(d) replace the tank with another tank of the same height that can hold less water."
+        ],
+        "concepts": [
+          "Pressure",
+          "Water tank",
+          "Height",
+          "Ground floor"
+        ],
+        "context_relation": "The question is about increasing water pressure in a water tank, which is a concept related to physics and fluid dynamics.",
+        "limitations": [
+          "The question does not provide a diagram or illustration."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51283,7 +51828,7 @@
       "asset_path": "page-0115.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -51301,9 +51846,16 @@
       "asset_path": "assets/47b847044bc8606fd28b4165a723ba47823f39a2ba7f2712a4df586a898ee523.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three palm trees with green grass in the foreground.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the given text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51319,9 +51871,16 @@
       "asset_path": "assets/ed3b03221bc82bf9d3f48b0e1b198f4de478036cdab3713641f08aa3e4d6f7e7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand pouring liquid from a container into a bottle using a funnel.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a scientific experiment or demonstration involving the transfer of liquid from one container to another using a funnel.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51337,9 +51896,18 @@
       "asset_path": "assets/3b537a9d3310de67dc825c7be29787e0b0bd769d0472fdb64e3308559b5a9a11.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of five people standing in a line, with one person pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or question related to the visible elements.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51355,9 +51923,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51373,9 +51950,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51391,9 +51977,26 @@
       "asset_path": "page-0116.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Question about pressure on boats and lightning occurrence.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "5. There are two boats, A and B. Boat A has a base area of 7 m2, and 5 persons are seated in it. Boat B has a base area of 3.5 m2, and 3 persons are seating in it. If each person has a weight of 700 N, find out which boat will experience more pressure on its base and by how much?",
+          "6. Would lightning occur if air and clouds were good conductors of electricity? Give reasons for your answer.",
+          "7. What will happen to the two identical balloons A and B as shown in Fig. 6.24 when water is filled into the bottle up to a certain height. Will both the balloons bulge? If yes, will they bulge equally? Explain your answer."
+        ],
+        "concepts": [
+          "pressure on boats",
+          "lightning occurrence",
+          "balloons and water"
+        ],
+        "context_relation": "Question about pressure on boats and lightning occurrence",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51409,9 +52012,16 @@
       "asset_path": "assets/2883c77bb3e9731875d72b983b5a2242af720266838e1f2e8109282e3abebc59.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a large pink sheet of paper.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the activity of holding a strip of paper and observing its behavior when blown over.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51427,9 +52037,16 @@
       "asset_path": "assets/ae82cec7c570e3af1aacb1cc25e3c54351057d5fbaf2cc371091e02fe4ca620c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large, light green octagonal object.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of Chapter 6 in a textbook about pressure, winds, storms, and cyclones.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51445,9 +52062,16 @@
       "asset_path": "assets/fd5e6a9ec18097580bda821e9c535c648c654e321b31f875b1e290cd930e0155.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon of a boy holding a large yellow signboard.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of Chapter 6 in the NCERT textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51463,9 +52087,19 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or content"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51481,9 +52115,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51499,9 +52142,26 @@
       "asset_path": "page-0117.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for a science experiment involving a strip of paper and a diagram of a science society.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Hold a strip of paper, 18 cm long and 2 cm wide, between your thumb and forefinger so that it hangs freely. Predict what you will observe if you blow over the paper. Perform the activity now. Note down your observations and interpret your results.",
+          "List three major cyclones which have occured in India in the last 20 years. List two major destruction caused by each of the cyclones. What measures were taken by the local government and communities to reduce the loss of life and destruction of property? Mention two suggestions you would like to pr",
+          "Collect data on the strength of thunderstorms for various regions of India. Compare your findings and identify which regions are more prone to thunderstorms. Can you give reasons for your findings?"
+        ],
+        "concepts": [
+          "Science Society",
+          "Cyclones",
+          "Thunderstorms"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The instructions are specific to the content of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51517,9 +52177,29 @@
       "asset_path": "assets/8783560055ab363f7eb8b40353828f434644c526a1fee4e513ee5c18e4cca51b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students in red uniforms are engaged in an outdoor science activity, examining rocks and water in a rocky landscape.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why is it possible to pile up stones or sand, but not a liquid like water?",
+          "Why does water take the shape of folded hands but lose that shape when released?",
+          "We cannot see air, so how does it add weight to an inflated balloon?",
+          "Is the air we breathe today the same that existed thousands of years ago?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Nature of Matter",
+          "Properties of Water",
+          "Properties of Air",
+          "Curiosity"
+        ],
+        "context_relation": "The image is related to the textbook content about the nature of matter and its properties.",
+        "limitations": [
+          "The image does not provide specific answers to the questions listed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51535,9 +52215,20 @@
       "asset_path": "assets/cdf64d08af83c84e2b7979a3279a58134255fa4e8f817c56537a5eff54181c39.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a book and waving.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the content of the textbook about the nature of matter and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content.",
+          "The image does not show any equations or formulas.",
+          "The image does not depict any specific scientific phenomena or experiments."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51553,9 +52244,30 @@
       "asset_path": "assets/95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character pointing with one finger and holding up the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why is it possible to pile up stones or sand, but not a liquid like water?",
+          "Why does water take the shape of folded hands but lose that shape when released?",
+          "We cannot see air, so how does it add weight to an inflated balloon?",
+          "Is the air we breathe today the same that existed thousands of years ago?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Properties of matter",
+          "Density",
+          "Viscosity",
+          "Air pressure",
+          "Conservation of mass"
+        ],
+        "context_relation": "The image is related to the text in the source PDF page.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51571,9 +52283,41 @@
       "asset_path": "assets/006e4a34051675f3322dbaa86e8fb2b64ea802029a7190bd2f6cf7ea32b76c37.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a notebook and pen, possibly taking notes.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Book ID: ncert-c8-english-hecu1",
+          "Source PDF page: 118",
+          "Asset kind: embedded_image",
+          "Nearby extracted page text (possibly incomplete):",
+          "Particulate Natureof Matter 7",
+          "Probe and ponder",
+          "z Why is it possible to pile up stones or sand, but not a liquid like water?",
+          "z Why does water take the shape of folded hands but lose that shape when released?",
+          "z We cannot see air, so how does it add weight to an inflated balloon?",
+          "z Is the air we breathe today the same that existed thousands of years ago?",
+          "z Share your questions",
+          "Curiosity— Textbook of Science for Grade 8",
+          "118"
+        ],
+        "concepts": [
+          "Particulate Nature of Matter",
+          "Probing and pondering",
+          "Why stones and sand can be piled up but not water",
+          "Why water takes the shape of folded hands and loses it when released",
+          "Why air cannot be seen but adds weight to an inflated balloon",
+          "Why air composition changes over time",
+          "Curiosity in science"
+        ],
+        "context_relation": "The image is a visual representation of a question from the textbook, encouraging curiosity and scientific inquiry.",
+        "limitations": [
+          "The image does not provide specific answers to the questions in the textbook.",
+          "The image is a cartoon, which may not accurately represent the complexity of the scientific concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51589,9 +52333,20 @@
       "asset_path": "assets/c3bb6d50f0829d39288046910911ba6bf1b25872a844a177a6a7413f0bf45eb4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0877CH07' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877CH07"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific content or questions from the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51607,9 +52362,34 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with a question asking about the nature of matter and its properties.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Particulate Natureof Matter",
+          "7",
+          "Probe and ponder",
+          "z Why is it possible to pile up stones or sand, but not a liquid like water?",
+          "z Why does water take the shape of folded hands but lose that shape when released?",
+          "z We cannot see air, so how does it add weight to an inflated balloon?",
+          "z Is the air we breathe today the same that existed thousands of years ago?",
+          "z Share your questions"
+        ],
+        "concepts": [
+          "Nature of Matter",
+          "Properties of Matter",
+          "Air",
+          "Water",
+          "Stones",
+          "Sand"
+        ],
+        "context_relation": "The image is related to the textbook content about the nature of matter and its properties.",
+        "limitations": [
+          "The image does not provide any visual representation of the concepts discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51625,9 +52405,30 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with a question asking about the nature of matter and its properties.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Why is it possible to pile up stones or sand, but not a liquid like water?",
+          "Why does water take the shape of folded hands but lose that shape when released?",
+          "We cannot see air, so how does it add weight to an inflated balloon?",
+          "Is the air we breathe today the same that existed thousands of years ago?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Nature of Matter",
+          "Properties of Matter",
+          "Air",
+          "Water",
+          "Curiosity"
+        ],
+        "context_relation": "The page is a part of a textbook discussing the nature of matter and its properties.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51643,9 +52444,32 @@
       "asset_path": "page-0118.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page about the particulate nature of matter, featuring a question section and a QR code.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Particulate Nature of Matter",
+          "7",
+          "Probe and ponder",
+          "Why is it possible to pile up stones or sand, but not a liquid like water?",
+          "Why does water take the shape of folded hands but lose that shape when released?",
+          "We cannot see air, so how does it add weight to an inflated balloon?",
+          "Is the air we breathe today the same that existed thousands of years ago?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Particulate nature of matter",
+          "Properties of water",
+          "Properties of air",
+          "Curiosity"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51661,9 +52485,18 @@
       "asset_path": "assets/069862c06283538ba17bef6537dc1c4847ad2b190e992468be92548ad879848a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing at themselves.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about pebbles, stones, and sand.",
+        "limitations": [
+          "The image does not provide any specific information about the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51679,9 +52512,35 @@
       "asset_path": "assets/6958edabfb0d21aba270544224b08b0bc1a36c26f4a9a41c6544c63f7bb63ac3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a magnifying glass over a pebble, highlighting its texture.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "99",
+          "Where do these pebbles, stones, and sand come from?",
+          "In the mountains, rocks gradually break down due to erosion.",
+          "Rivers flowing through these regions carry along the eroded rock pieces.",
+          "As the rivers flow, they continue to break down the rocks further into pebbles, stones, sand;",
+          "and transport large quantities of them to the plains.",
+          "The bigger rocks are eventually broken down into finer grains"
+        ],
+        "concepts": [
+          "erosion",
+          "particulate nature of matter",
+          "pebbles",
+          "stones",
+          "sand",
+          "rivers",
+          "rocks"
+        ],
+        "context_relation": "The image is a visual representation of the process of erosion and the breakdown of rocks into smaller particles, which is a part of the educational content about the particulate nature of matter.",
+        "limitations": [
+          "The image does not provide specific details about the breakdown process or the types of particles formed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51697,9 +52556,38 @@
       "asset_path": "assets/4d9a5e2201d118b702921c718016368ee3df875cef84895846248b864988a943.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a cylindrical object, possibly a rock or a piece of sand.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "99",
+          "Where do these pebbles, stones, and sand come from?",
+          "In the mountains, rocks gradually break down due to erosion.",
+          "Rivers flowing through these regions carry along the eroded rock pieces.",
+          "As the rivers flow, they continue to break down the rocks further into pebbles, stones, sand;",
+          "and transport large quantities of them to the plains.",
+          "The bigger rocks are eventually broken down into finer grains"
+        ],
+        "concepts": [
+          "erosion",
+          "particulate nature of matter",
+          "pebbles",
+          "stones",
+          "sand",
+          "mountains",
+          "rivers",
+          "erosion",
+          "transportation",
+          "fine grains"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the breakdown and transportation of rocks and sand.",
+        "limitations": [
+          "The image does not provide specific details about the breakdown process or the types of rocks involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51715,9 +52603,35 @@
       "asset_path": "assets/b570d800dc84bf060a887bce71645341f8b013600e884446da3a15ee258ce614.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two cylindrical objects on a solid surface, possibly representing pebbles or stones.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "99",
+          "Where do these pebbles, stones, and sand come from?",
+          "In the mountains, rocks gradually break down due to erosion.",
+          "Rivers flowing through these regions carry along the eroded rock pieces.",
+          "As the rivers flow, they continue to break down the rocks further into pebbles, stones, sand;",
+          "and transport large quantities of them to the plains.",
+          "The bigger rocks are eventually broken down into finer grains"
+        ],
+        "concepts": [
+          "erosion",
+          "rivers",
+          "pebbles",
+          "stones",
+          "sand",
+          "transportation",
+          "decomposition"
+        ],
+        "context_relation": "The image is an illustration related to the text discussing the breakdown and transportation of rocks and minerals.",
+        "limitations": [
+          "The image does not provide specific details about the size or type of pebbles and stones."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51733,9 +52647,36 @@
       "asset_path": "assets/5a683d3b7da9db12fd3102fbcfedf6173ad7bb2085844360ac489e6cd348886e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white circular object on an orange background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "99",
+          "Where do these pebbles, stones, and sand come from?",
+          "In the mountains, rocks gradually break down due to erosion.",
+          "Rivers flowing through these regions carry along the eroded rock pieces.",
+          "As the rivers flow, they continue to break down the rocks further into pebbles, stones, sand;",
+          "and transport large quantities of them to the plains.",
+          "The bigger rocks are eventually broken down into finer grains"
+        ],
+        "concepts": [
+          "erosion",
+          "rock breakdown",
+          "river transport",
+          "pebbles",
+          "stones",
+          "sand",
+          "mountains",
+          "plains"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the textbook.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is stated in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51751,9 +52692,35 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the breakdown of rocks into pebbles, stones, and sand due to erosion.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "99",
+          "Where do these pebbles, stones, and sand come from?",
+          "In the mountains, rocks gradually break down due to erosion.",
+          "Rivers flowing through these regions carry along the eroded rock pieces.",
+          "As the rivers flow, they continue to break down the rocks further into pebbles, stones, sand;",
+          "and transport large quantities of them to the plains.",
+          "The bigger rocks are eventually broken down into finer grains"
+        ],
+        "concepts": [
+          "erosion",
+          "rock breakdown",
+          "pebbles",
+          "stones",
+          "sand",
+          "transportation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the natural process of erosion and the breakdown of rocks into smaller particles.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is in English."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51769,9 +52736,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51787,9 +52763,57 @@
       "asset_path": "page-0119.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the particulate nature of matter, specifically focusing on the breakdown of rocks into smaller particles.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "You might have collected pebbles and stones from the sand while",
+          "playing on a riverbank or a beach. Where do these pebbles,",
+          "stones, and sand come from?",
+          "In the mountains, rocks gradually break down due to erosion.",
+          "Rivers flowing through these regions carry along the eroded rock",
+          "pieces. As the rivers flow, they continue to break down the rocks",
+          "further into pebbles, stones, sand; and transport large quantities",
+          "of them to the plains.",
+          "The bigger rocks are eventually broken down into finer grains",
+          "of sand and clay. Is this grain the smallest unit of a bigger rock",
+          "or can these grains of sand and clay be broken down further?",
+          "Let us find out!",
+          "7.1 What Is Matter Composed of?",
+          "Activity 7.1: Let us explore",
+          "- Take a stick of chalk (Fig. 7.1a) and break it into two",
+          "pieces (Fig. 7.1b).",
+          "- Continue breaking the chalk till it becomes difficult",
+          "to break it further by hand.",
+          "- Grind the small pieces of chalk thus obtained",
+          "(Fig. 7.1c) using mortar and pestle.",
+          "- Observe the fine powder of chalk with a magnifying",
+          "glass (Fig. 7.1d).",
+          "- What do you observe?",
+          "- Each tiny grain you observe is still a speck of chalk.",
+          "Is every speck of this fine",
+          "chalk powder still composed",
+          "of the same substance,",
+          "or has it changed into",
+          "something else on breaking"
+        ],
+        "concepts": [
+          "particulate nature of matter",
+          "erosion",
+          "rock breakdown",
+          "sand and clay",
+          "physical change",
+          "chemical change"
+        ],
+        "context_relation": "exploration of the particulate nature of matter",
+        "limitations": [
+          "limited to the text provided in the image",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51805,9 +52829,18 @@
       "asset_path": "assets/d323da4d08cecdbff9637cdb16d1e2965c537fe16cbfe3e01ba6b21d40dc446a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person wearing traditional attire, possibly a saree, with a braid in their hair and a bracelet on their wrist.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51823,9 +52856,20 @@
       "asset_path": "assets/bbce0d8a4b6940c3c2ad010990f665419911e0b8c150f89de37fe2267f8045b8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a spoon, stirring a glass of water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "stirring",
+          "glass of water",
+          "spoon"
+        ],
+        "context_relation": "The image shows a hand stirring a glass of water with a spoon.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51841,9 +52885,21 @@
       "asset_path": "assets/76826fdd766fe03d77e6bc5e938d06c6073952527174c92918b12ee631395396.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist wearing goggles and a lab coat, giving a thumbs-up.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "goggles",
+          "lab coat",
+          "thumbs-up"
+        ],
+        "context_relation": "The image is related to the educational content about the smallest units of chalk.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51859,9 +52915,16 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51877,9 +52940,16 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51895,7 +52965,7 @@
       "asset_path": "page-0120.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -51913,9 +52983,19 @@
       "asset_path": "assets/47260830355595f97b79f97e42a48cfef72c1047d7e4ef8e3c9dd8037892f84a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a cigarette, with a thoughtful expression.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is a cartoon illustration and not a diagram or chart."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51931,9 +53011,18 @@
       "asset_path": "assets/a73b7c3700f05706abbfb7402a16a49f2e414146e7ba198708eefdcf5ed80c38.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person with braided hair, wearing an orange shirt and a red choker, with one hand on their chin and the other hand on their hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the particulate nature of matter, specifically discussing the separation of sugar particles in water.",
+        "limitations": [
+          "The image does not provide specific details about the educational content, but it visually represents the concept of particles being so small that they cannot be seen even through an ordinary microscope."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51949,9 +53038,29 @@
       "asset_path": "assets/0b6d52ad7447167ab56b0d08290556848b7aa9b9ae05054122051ab59986829b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is standing on a ladder, reaching for a book on a tall bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "bookshelf",
+          "ladder",
+          "character",
+          "book",
+          "tall",
+          "tall bookshelf",
+          "standing",
+          "reaching",
+          "tall ladder"
+        ],
+        "context_relation": "The image is related to the educational content about the particulate nature of matter.",
+        "limitations": [
+          "The visible text is incomplete and does not provide specific information about the educational content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51967,9 +53076,35 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with a question asking where the sugar went.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "101",
+          "Activities 7.1 and 7.2 support the idea that matter is composed",
+          "of a large number of extremely small particles. These particles",
+          "are so small that they cannot be seen even through an ordinary",
+          "microscope.",
+          "But, where did",
+          "the sugar go?",
+          "The tiny sugar particles separate and occupy the available",
+          "spaces between the water particles. These spaces between the",
+          "particles are known as interparticle spaces.",
+          "Chalk and s"
+        ],
+        "concepts": [
+          "Particulate Nature of Matter",
+          "Microscopy",
+          "Interparticle Spaces"
+        ],
+        "context_relation": "The image is a continuation of the text from the previous page, discussing the concept of particulate nature of matter and the separation of sugar particles in water.",
+        "limitations": [
+          "The image does not provide any visual representation of the concept discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -51985,9 +53120,37 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An image of a black page with a question asking where the sugar went.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "101",
+          "Activities 7.1 and 7.2 support the idea that matter is composed",
+          "of a large number of extremely small particles. These particles",
+          "are so small that they cannot be seen even through an ordinary",
+          "microscope.",
+          "But, where did",
+          "the sugar go?",
+          "The tiny sugar particles separate and occupy the available",
+          "spaces between the water particles. These spaces between the",
+          "particles are known as interparticle spaces.",
+          "Chalk and s"
+        ],
+        "concepts": [
+          "Particulate Nature of Matter",
+          "Microscopy",
+          "Interparticle Spaces",
+          "Sugar",
+          "Water"
+        ],
+        "context_relation": "The image is related to the concepts of particulate nature of matter and the separation of sugar particles in water.",
+        "limitations": [
+          "The image does not provide specific details about the separation process or the properties of sugar and water."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52003,9 +53166,43 @@
       "asset_path": "page-0121.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Question about the composition of matter and its particles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 7 — Particulate Nature of Matter",
+          "101",
+          "Activities 7.1 and 7.2 support the idea that matter is composed",
+          "of a large number of extremely small particles. These particles",
+          "are so small that they cannot be seen even through an ordinary",
+          "microscope.",
+          "But, where  did",
+          "the sugar go?",
+          "The tiny sugar particles separate and occupy the available",
+          "spaces between the water particles. These spaces between the",
+          "particles are known as interparticle spaces.",
+          "Chalk and sugar can both",
+          "be broken down into their",
+          "constituent particles. But how",
+          "are the constituent particles",
+          "held together to form the solid",
+          "pieces we see?"
+        ],
+        "concepts": [
+          "particulate nature of matter",
+          "extremely small particles",
+          "ordinary microscope",
+          "interparticle spaces",
+          "constituent particles",
+          "solid pieces"
+        ],
+        "context_relation": "explaining the composition of matter",
+        "limitations": [
+          "the image does not provide specific details about the particles or their composition"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52021,9 +53218,37 @@
       "asset_path": "assets/1c5741c95f616d8a2cc5d38227ceff2adb0c0866ca20e6e6c2638b92545e2056.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A collection of solid objects including an iron nail, rock salt, a stone, a piece of wood, a key, and a piece of aluminium.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Let us explore how these attractions vary in different states.",
+          "7.2.1 Solid state",
+          "How are constituent particles held together in solids?",
+          "Activity 7.3 : Let us find out",
+          "z Collect a few solid objects, such as a piece",
+          "of iron or an iron nail, a piece of rock salt,",
+          "a stone, a piece of wood, a key, and a piece",
+          "of aluminium (Fig. 7.3).",
+          "Iron nail",
+          "Rock salt",
+          "Stone",
+          "Piece of wood",
+          "Key",
+          "Piece of aluminium"
+        ],
+        "concepts": [
+          "Solid state",
+          "Constituent particles",
+          "Holding together"
+        ],
+        "context_relation": "The image is related to the educational content about the solid state and the properties of different solid objects.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the objects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52039,9 +53264,16 @@
       "asset_path": "assets/559a9aabc22052ef0dba281dd7f3b6b2da3cbdbc319a332212f8eb5aae2f349b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a folded piece of paper or cloth.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "activity",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52057,9 +53289,37 @@
       "asset_path": "assets/5477cc7fbc0822cc1f79c5941173d56322321b76b1825b5575e7bec376b915ff.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A collection of solid objects including an iron nail, rock salt, a stone, a piece of wood, a key, and a piece of aluminium.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Let us explore how these attractions vary in different states.",
+          "7.2.1 Solid state",
+          "How are constituent particles held together in solids?",
+          "Activity 7.3 : Let us find out",
+          "z Collect a few solid objects, such as a piece",
+          "of iron or an iron nail, a piece of rock salt,",
+          "a stone, a piece of wood, a key, and a piece",
+          "of aluminium (Fig. 7.3).",
+          "Iron nail",
+          "Rock salt",
+          "Stone",
+          "Piece of wood",
+          "Key",
+          "Piece of aluminium"
+        ],
+        "concepts": [
+          "Solid state",
+          "Constituent particles",
+          "Holding together"
+        ],
+        "context_relation": "The image is related to the educational content about the solid state of matter.",
+        "limitations": [
+          "The image does not show the actual objects but their names."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52075,9 +53335,30 @@
       "asset_path": "assets/5e8e76205cb13f8ca531ec43f95ee3f55a99fd044b73090e94ac0189a7ef3cbc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A key is shown in the image.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "7.2.1 Solid state",
+          "How are constituent particles held together in solids?",
+          "Activity 7.3 : Let us find out",
+          "z Collect a few solid objects, such as a piece",
+          "of iron or an iron nail, a piece of rock salt",
+          "a stone, a piece of wood, a key, and a piece",
+          "of aluminium (Fig. 7.3)."
+        ],
+        "concepts": [
+          "Solid state",
+          "Constituent particles",
+          "Holding together"
+        ],
+        "context_relation": "The image is related to the activity where students are asked to collect solid objects to understand the concept of solid state.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the objects collected."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52093,9 +53374,23 @@
       "asset_path": "assets/0970b95cc615d693872962334f099f5ab7e6bcc7ee9e7c2fc56595b6dbbc6935.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a metal nail with a shiny, metallic surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "metal",
+          "nail",
+          "shiny",
+          "metallic surface"
+        ],
+        "context_relation": "The image is related to the activity where students are collecting solid objects to explore how constituent particles are held together in solids.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the nail or the objects being collected."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52111,9 +53406,30 @@
       "asset_path": "assets/3b2d9d7fc8b2a7d708ca2f43750522e317c52bab31ad3cb66fa8b23c321de7ac.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cube with a textured surface, possibly representing a solid object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "solid state",
+          "constituent particles",
+          "holding together",
+          "activity",
+          "solid objects",
+          "iron nail",
+          "rock salt",
+          "stone",
+          "wood",
+          "key",
+          "aluminium"
+        ],
+        "context_relation": "The image is related to the educational content about the solid state and its components.",
+        "limitations": [
+          "The image does not provide specific details about the properties or characteristics of the solid objects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52129,9 +53445,16 @@
       "asset_path": "assets/bcb7031ac04eaeff0a58b0a7c401182f564b9cafe7e20da9997d236f6fbc6313.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person pointing at themselves.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "exploring the properties of solids",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52147,9 +53470,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure, and the content is not visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52165,9 +53497,16 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52183,9 +53522,49 @@
       "asset_path": "page-0122.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Activity involving solid objects to explore particle attraction in solids.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 7.3 : Let us find out",
+          "Fig. 7.3: Some solid objects",
+          "You must have noticed that all these",
+          "objects are solids. They have a definite shape",
+          "and volume. This is due to the fact that in solids, the particles",
+          "are tightly packed and the interparticle attractions are very",
+          "strong. These strong forces of attraction hold the particles in",
+          "fixed positions, preventing them from moving freely (Fig. 7.4a).",
+          "The particles can only move to and fro about their",
+          "positions (vibrate or oscillate) but cannot move",
+          "past each other.",
+          "When solids are heated, their particles vibrate",
+          "more vigorously (Fig. 7.4b). A stage is reached",
+          "when these vibrations become so vigorous that the",
+          "particles start leaving their respective positions. The interparticle",
+          "forces of attraction get weakened and the solid gets converted",
+          "into the liquid state (Fig. 7.4c). The temperature at which this",
+          "happens is the melting point of the solid.",
+          "Fig. 7.4: Magnified schematic pictures of melting of a solid"
+        ],
+        "concepts": [
+          "Solid state",
+          "Particle attraction",
+          "Definite shape",
+          "Volume",
+          "Tightly packed particles",
+          "Interparticle attractions",
+          "Fixed positions",
+          "Vibrations",
+          "Liquid state",
+          "Melting point"
+        ],
+        "context_relation": "Exploring the properties of solids and their transition to liquids",
+        "limitations": [
+          "No specific limitations mentioned in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52201,9 +53580,30 @@
       "asset_path": "assets/76e0343d2e48251a169e6cc12d41ccf0e85e5d12974844c8d597887c126fd9be.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of four ice cubes stacked on top of each other.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "melting point",
+          "solid",
+          "liquid",
+          "particles",
+          "atmospheric pressure",
+          "interparticle forces",
+          "solid state",
+          "liquid state",
+          "melting",
+          "stacked cubes"
+        ],
+        "context_relation": "The image is related to the discussion of the melting point of solids and the arrangement of particles in different states.",
+        "limitations": [
+          "The image does not provide specific numerical values or measurements.",
+          "The image does not depict any specific experiment or process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52219,7 +53619,7 @@
       "asset_path": "assets/4c9c45cb3c7289e4d863eb98d4cd544cece8f02901809e62087d911c773e51f4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -52237,9 +53637,32 @@
       "asset_path": "assets/b715f4c9ec6f764b441d957776f4df9610e878bbc6301d8b8c55397ed1a0a744.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pile of nails.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "solid",
+          "liquid",
+          "melting point",
+          "interparticle forces",
+          "melting",
+          "particles",
+          "atmospheric pressure",
+          "exception",
+          "water",
+          "force",
+          "attraction",
+          "high melting points",
+          "low melting points"
+        ],
+        "context_relation": "The image is not directly related to the text about melting points and particle distances in solids and liquids.",
+        "limitations": [
+          "The image does not provide specific details about the particles or forces mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52255,9 +53678,25 @@
       "asset_path": "assets/3540474d378207f7981be4620e36b2e72e924ddc5d76eeb585c92af825244f2b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person with a braid and a red bracelet, wearing a light orange shirt.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Melting point",
+          "Solid",
+          "Liquid",
+          "Interparticle forces",
+          "High melting points",
+          "Low melting points"
+        ],
+        "context_relation": "The image does not directly relate to the text provided.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52273,9 +53712,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "melting point",
+          "solid",
+          "liquid",
+          "particles",
+          "atmospheric pressure",
+          "interparticle forces",
+          "solid state",
+          "liquid state",
+          "exception"
+        ],
+        "context_relation": "The page discusses the melting point of solids and the difference between solid and liquid states.",
+        "limitations": [
+          "No visible text or images on the page.",
+          "No specific content or information provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52291,9 +53750,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52309,9 +53777,41 @@
       "asset_path": "page-0123.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table showing melting points of different materials.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 7.1: Melting points of some solids",
+          "S.No. Material Melting point",
+          "1. Ice 0 °C",
+          "2. Urea 133 °C",
+          "3. Iron 1538 °C"
+        ],
+        "concepts": [
+          "melting point",
+          "interparticle forces",
+          "solid state",
+          "liquid state",
+          "atmospheric pressure",
+          "melting",
+          "solid",
+          "liquid",
+          "particles",
+          "atmospheric pressure",
+          "exception",
+          "strong attractive forces",
+          "high melting points",
+          "examples of solids",
+          "melting points",
+          "Table 7.1"
+        ],
+        "context_relation": "The table provides examples of solids with their melting points, explaining the relationship between interparticle forces and melting points.",
+        "limitations": [
+          "The table does not include all types of solids or their melting points."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52327,9 +53827,21 @@
       "asset_path": "assets/64eb466f93dcdc77cc1581480d21978cb6abb8875c0ca3438423551c53c00f52.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A bottle with a blue liquid inside.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "bottle",
+          "liquid",
+          "blue",
+          "container"
+        ],
+        "context_relation": "The image is related to the educational content about liquid state.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52345,9 +53857,23 @@
       "asset_path": "assets/0cce39c4d6e4ac1b6184dcc3260fe8df1ab7342b7f5e44da1d7950c245a410d0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a pitcher with a handle and a filled section, labeled with a measurement of 100 mL.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "100 mL"
+        ],
+        "concepts": [
+          "liquid state",
+          "container shapes"
+        ],
+        "context_relation": "The image is related to the educational content about liquid state and container shapes in the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the liquid state or container shapes beyond the measurement of 100 mL."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52363,9 +53889,23 @@
       "asset_path": "assets/85339651a45adc94597856614933ff60d8f6a309b4a5abe93f991ef1ff40b9fc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass filled with a light blue liquid, likely water, placed on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "liquid state",
+          "container shapes",
+          "water",
+          "glass"
+        ],
+        "context_relation": "The image is related to the educational content about the liquid state and the shapes of containers.",
+        "limitations": [
+          "The image does not provide specific measurements or details about the liquid's properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52381,7 +53921,7 @@
       "asset_path": "assets/73dc0d5b48dd08b25bdbc6212527ca6e95c880b8e3673f43c84412caea9f5e2e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -52399,7 +53939,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -52417,7 +53957,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -52435,7 +53975,7 @@
       "asset_path": "page-0124.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -52453,7 +53993,7 @@
       "asset_path": "assets/734341abbd0a07b80317b8a3cb1b6452352cf821261b0fbc6bdb3cdaab33ecef.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -52471,7 +54011,7 @@
       "asset_path": "assets/8780995cfa17d36c57ecacaa60c34814dc185d879e23700f0ce6ddf216508e59.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -52489,7 +54029,7 @@
       "asset_path": "assets/8d0a1efe47d1fcc1155c04a4ad42c052671213ffc76ea0170467181b1ebde8ac.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,

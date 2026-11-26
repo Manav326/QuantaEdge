@@ -10,6 +10,40 @@ def read(name: str) -> str:
 
 
 class WorkflowResumeEntrypointTests(unittest.TestCase):
+    def test_layer45_serializes_per_class_and_per_pair_without_dropping_other_classes(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        self.assertIn("group: textbook-visual-candidates-v3-${{ inputs.class_no", workflow)
+        self.assertIn("controller must be able to queue Classes 6 and 8 while Class 7 is running", workflow)
+        self.assertIn("group: textbook-layer45-pair-${{ matrix.book_slug }}", workflow)
+        self.assertIn("group: textbook-layer45-shared-visual-catalog-index", workflow)
+        self.assertIn("group: textbook-layer45-completion-markers", workflow)
+        self.assertIn("cancel-in-progress: false", workflow)
+        self.assertIn("max-parallel: 16", workflow)
+
+    def test_layer45_pair_workers_do_not_write_the_shared_visual_catalog_index(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        pair_start = workflow.index("- name: Commit only this bilingual pair's immutable candidate files")
+        pair_end = workflow.index("- name: Start Ollama container and load vision model for Layer 4", pair_start)
+        pair_step = workflow[pair_start:pair_end]
+        self.assertIn("git_checkpoint(", pair_step)
+        self.assertIn("DEFERRED_TO_COORDINATOR", pair_step)
+        self.assertNotIn("update_visual_catalog_index.py", pair_step)
+        self.assertNotIn("git add -A data/textbook-visual-candidates-v3", pair_step)
+        finalize_start = workflow.index("  finalize_visual_catalog_index:")
+        finalize_end = workflow.index("  record-completed-class-markers:", finalize_start)
+        finalize_job = workflow[finalize_start:finalize_end]
+        self.assertIn("needs: [plan, prepare]", finalize_job)
+        self.assertIn("update_visual_catalog_index.py", finalize_job)
+        self.assertIn('git_checkpoint(', finalize_job)
+        self.assertIn("test_textbook_visual_end_to_end_contract.py", finalize_job)
+        self.assertIn("inputs.analysis_mode == 'resume_layers_4_5'", finalize_job)
+        self.assertIn("[resume-visual-layers-4-5-classes-6-8]", finalize_job)
+        class_marker_start = workflow.index("  record-completed-class-markers:")
+        class_marker_end = workflow.index("  wake-resume-coordinator:", class_marker_start)
+        class_marker_job = workflow[class_marker_start:class_marker_end]
+        self.assertIn("finalize_visual_catalog_index", class_marker_job)
+        self.assertIn("needs.finalize_visual_catalog_index.result == 'success' || needs.finalize_visual_catalog_index.result == 'skipped'", class_marker_job)
+
     def test_marked_push_can_reextract_one_class_without_rebuilding_the_other_class(self):
         workflow = read("textbook-extraction-pilot.yml")
         self.assertIn("[reextract-textbook-class-7]", workflow)
@@ -50,10 +84,9 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("source PDF SHA-256 differs", workflow)
         self.assertIn('"publication_allowed": False', workflow)
 
-    def test_class8_targeted_rebuild_replaces_only_the_class8_resume_lane(self):
+    def test_class8_targeted_rebuild_remains_source_scoped_under_shared_lock(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
-        self.assertIn("&& '8')", workflow)
         self.assertIn("[analyze-all-visual-layers-4-5-class-8]", workflow)
         self.assertIn("[analyze-all-visual-layers-4-5-class-8]", planner)
         self.assertIn("cancel-in-progress:", workflow)
@@ -87,7 +120,6 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}", workflow)
         self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}", workflow)
         self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
-        self.assertIn("'classes-7-8-resume'", workflow)
         self.assertIn("BOOK_ID: ${{ matrix.book_id || '' }}", workflow)
 
     def test_marked_push_can_resume_class7_and_class8_independently(self):
@@ -102,8 +134,6 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
             self.assertIn(marker, planner)
         self.assertIn("matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}", workflow)
         self.assertIn("max-parallel: 16", workflow)
-        self.assertIn("&& '7')", workflow)
-        self.assertIn("&& '8')", workflow)
 
     def test_cancelled_class6_to8_run_is_resumed_by_separate_coordinator(self):
         workflow = read("textbook-visual-candidates-v3.yml")
@@ -177,6 +207,18 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("workflow_call:", workflow)
         self.assertIn('options: ["benchmark", "run", "resume", "refresh_benchmark"]', workflow)
         self.assertIn("github.event_name == 'workflow_call'", workflow)
+
+    def test_marked_push_runs_only_the_current_model_benchmark(self):
+        workflow = read("quantaedge-layers-6-8.yml")
+        self.assertIn("[benchmark-l6-l8]", workflow)
+        self.assertIn("execute_marked_benchmark:", workflow)
+        self.assertIn("needs: validate", workflow)
+        self.assertIn('ollama pull qwen3.5:2b', workflow)
+        self.assertIn('ollama pull qwen3.5:4b', workflow)
+        self.assertIn('--models "qwen3.5:2b,qwen3.5:4b"', workflow)
+        self.assertIn("--commit-checkpoints", workflow)
+        self.assertNotIn("ALLOW_EXPERIMENTAL_MODEL", workflow[workflow.index("execute_marked_benchmark:"):workflow.index("  execute:")])
+        self.assertIn("qwen3.5:4b", workflow)
 
     def test_refresh_benchmark_is_in_core_workflow_and_does_not_start_ollama(self):
         workflow = read("quantaedge-layers-6-8.yml")

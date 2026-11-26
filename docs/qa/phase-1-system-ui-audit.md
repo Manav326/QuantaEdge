@@ -148,11 +148,11 @@ Required design principle for the later implementation: a unique installation/ru
 
 ## 8. Workflow scenario mapping
 
-A 72-case starter [workflow scenario register](./phase-1-workflow-scenario-register.csv) defines stable IDs and acceptance contracts for authentication, guardian/minor, tenancy, commerce, content, learning, live media, certificates, HRMS, UX/accessibility and QA-pack lifecycle. After the first QA lifecycle slice, 70 scenarios are `NOT_EXECUTED`; QA-003 (scenario-runner/report coverage) and QA-006 (external-provider sandbox isolation) remain `NOT_IMPLEMENTED`. None is marked passed. All 94 UI inventory rows are `SCENARIO_MAPPED`; the 443-row API inventory includes the eight new QA test-center handlers. Links remain traceability only: source-derived mappings are not endpoint-specific coverage proof.
+A 82-case [workflow scenario register](./phase-1-workflow-scenario-register.csv) defines stable IDs and acceptance contracts for authentication, guardian/minor, tenancy, commerce, content, learning, live media, certificates, HRMS, UX/accessibility and QA-pack lifecycle. Currently, 80 scenarios are `NOT_EXECUTED`; QA-003 (scenario-runner/report coverage) and QA-006 (external-provider sandbox isolation) remain `NOT_IMPLEMENTED`. None is marked passed. All 109 UI inventory rows are `SCENARIO_MAPPED`; the 443-row API inventory includes the eight new QA test-center handlers. Links remain traceability only: source-derived mappings are not endpoint-specific coverage proof.
 
 ## 9. Per-screen state coverage checklist
 
-A 94-row [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv) now tracks the state categories separately rather than allowing one generic “screen passed” label. Each row has a stable screen key, source path, scenario IDs, state checks, runtime status, evidence URL, defect IDs and reviewer notes. Current controls/navigation status remains `SOURCE_SCAN_PARTIAL`; the other state categories remain `NOT_REVIEWED`; runtime remains `NOT_EXECUTED`. This is intentional until the control/state is reviewed or exercised. A reviewer may set `NOT_APPLICABLE` only after confirming the UI does not provide that state and recording why.
+A 109-row [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv) now tracks the state categories separately rather than allowing one generic “screen passed” label. Each row has a stable screen key, source path, scenario IDs, state checks, runtime status, evidence URL, defect IDs and reviewer notes. Current controls/navigation status remains `SOURCE_SCAN_PARTIAL`; the other state categories remain `NOT_REVIEWED`; runtime remains `NOT_EXECUTED`. This is intentional until the control/state is reviewed or exercised. A reviewer may set `NOT_APPLICABLE` only after confirming the UI does not provide that state and recording why.
 
 ## 10. Existing automated quality evidence
 
@@ -188,7 +188,7 @@ No browser E2E framework was positively identified in the inspected package mani
 | QA1-08 | P2 | Source trace now resolves thin student routes to client components and Admin `/legacy-content` to a redirect to `/content`; component-level and runtime verification remain open. | Full action/API/permission trace for the client components plus runtime redirect/navigation evidence; no alias double-counting. |
 | QA1-09 | P2 | Historical UI/UX and localization tracker statuses are tied to old source revisions; older “done” labels may not be current verification. | Revalidate against current SHA; distinguish historical source change from current browser/assistive-tech certification. |
 | QA1-10 | P1 | A tenant/learner starter pack, run/resource/event/check manifest, default-off database/environment gate, verification API and HRMS QA Center are present on a feature branch; broader HRMS/payroll, live-media and provider resources are not included and runtime proof is pending. | Verify exact-head build and disposable PostgreSQL install/check/uninstall tests, including cross-run and protected-baseline preservation; expand only with verified cleanup adapters. See [lifecycle contract](./qa-test-pack-lifecycle.md). |
-| QA1-11 | P1 | The 72-case workflow register now has a starter lifecycle implementation slice, but no runtime scenarios are recorded as passing. QA-003 scenario-runner/report coverage and QA-006 external-provider sandbox isolation remain unimplemented. | Execute cases on disposable migrated PostgreSQL and browser/device, attach exact SHA/results/evidence/cleanup proof, and close each case only after its assertions pass. |
+| QA1-11 | P1 | The 82-case workflow register now has a starter lifecycle implementation slice, but no runtime scenarios are recorded as passing. QA-003 scenario-runner/report coverage and QA-006 external-provider sandbox isolation remain unimplemented. | Execute cases on disposable migrated PostgreSQL and browser/device, attach exact SHA/results/evidence/cleanup proof, and close each case only after its assertions pass. |
 | QA1-12 | P1 | The API route inventory has been source-extracted for 435 mapping annotations. Static guard hints do not prove endpoint-by-endpoint auth, tenant/resource ownership, DB effects or response states. | Review shared filters/helpers and route method body per operation; map exact permissions, DB writes, side effects and scenario IDs; run allow/deny integration tests. |
 | QA1-13 | P1 | Role templates evolve across migrations (including removal of older HR/payroll/team-scope grants); nav visibility may differ from effective API permission. | Verify effective grants on a freshly migrated test database; compare UI affordances with server authorization and include at least one denied request for each sensitive role boundary. |
 
@@ -203,9 +203,9 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Identify current external integration families and the high-risk tenant/role boundaries.
 - [x] Scan the 59 web route-entry files for page-level handlers/direct API literals and map Android route enums through the Compose shell (partial; see source log).
 - [x] Review representative schema migrations for identity, guardian, assessment, certificate, commerce, tenant/course release, learner-history and HRMS relationships; document protected baseline/cleanup findings.
-- [x] Add 72 cross-platform workflow scenarios and link the screen inventory to scenario IDs; all scenarios are still unexecuted.
-- [x] Add a separate 94-row UI state checklist so each screen's loading/error/validation/authorization/responsive/data/destructive states can be independently reviewed and evidenced.
-- [x] Link all 94 screen entries and all 443 extracted API mapping rows to existing scenario IDs; verify no unknown or missing references.
+- [x] Add 82 cross-platform workflow scenarios and link the screen inventory to scenario IDs; all scenarios are still unexecuted.
+- [x] Add a separate 109-row UI state checklist so each screen's loading/error/validation/authorization/responsive/data/destructive states can be independently reviewed and evidenced.
+- [x] Link all 109 screen entries and all 443 extracted API mapping rows to existing scenario IDs; verify no unknown or missing references.
 - [x] Add a runtime execution log with one row per workflow scenario and explicit evidence/cleanup columns.
 - [x] Map source-present automated test evidence to high-risk scenario groups and record the difference between test-source presence, CI execution and true E2E verification.
 - [x] Source-extract 435 REST/STOMP mapping entries from 48 Java files; generated guard hints remain partial and need human review.
@@ -221,7 +221,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [ ] Execute the actual Node route-inventory test and generator on the exact current main SHA; retain the generated artifact and update the historical localization tracker.
 - [ ] Inspect every route file and referenced component: controls, dialogs, tabs, handlers, client-side validation, loading/empty/error/success states, visible role conditions and API calls.
 - [x] Trace all 34 Android destinations through Compose navigation and component composition; document route-specific renderer branches and back/return contracts. [ ] Complete device/emulator lifecycle/back testing and web parity (see Android composition map).
-- [ ] Complete the route action → API method/path → authentication/permission → request/response → persistence model mapping. The 435-row source-derived API route inventory and 72-case scenario/log crosswalk exist, but its guard hints and controller-family scenario links still require endpoint-by-endpoint review.
+- [ ] Complete the route action → API method/path → authentication/permission → request/response → persistence model mapping. The 435-row source-derived API route inventory and 82-case scenario/log crosswalk exist, but its guard hints and controller-family scenario links still require endpoint-by-endpoint review.
 - [ ] Complete schema-wide extraction of foreign keys, unique/check constraints, delete actions and migration history for all tables that will appear in a test pack (initial partial map: [data and cleanup map](./phase-1-data-and-cleanup-map.md)).
 - [ ] Verify the source-derived [role/workspace permission matrix](./phase-1-role-workspace-matrix.md) against the effective migrated database grants and route-by-route API allow/deny behavior (not labels or nav visibility).
 - [ ] Conduct browser walkthroughs at approximately 320, 375/390, 430, 768, 1280 and 1440 CSS pixels; retain screenshots and console/network findings.
@@ -244,11 +244,18 @@ Phase 1 may be signed off only when:
 
 ## 14. Immediate next pass
 
-1. Execute the route-generator test and current route artifact on the exact main SHA; also confirm the new QA-register validator tests in CI. Reconcile generated routes with the 94-row inventory (60 web page entries plus 34 Android destinations).
-2. Continue screen-specific control/API/permission mapping using the 94-row state checklist and 443-row API register, then use the 72-case execution log to drive controlled runtime walkthroughs.
+1. Execute the route-generator test and current route artifact on the exact main SHA; also confirm the new QA-register validator tests in CI. Reconcile generated routes with the 109-row inventory (75 generated Next.js page routes plus 34 Android destinations).
+2. Continue screen-specific control/API/permission mapping using the 109-row state checklist and 443-row API register, then use the 82-case execution log to drive controlled runtime walkthroughs.
 3. Verify current-main CI and record its exact SHA/results.
 4. Close high-priority tenant, role, test-data ownership and external-side-effect design questions; use the [consolidated coverage gap plan](./phase-1-coverage-gaps.md) as the Phase 1 gate before any central data installer is implemented.
 
 ---
 
 **Audit integrity:** This file distinguishes source presence from source review, automated execution and manual/runtime certification. Update status only when supported by reproducible evidence.
+
+
+## Route/component audit baseline update — 2026-10-28
+
+The reconciled UI inventory and state checklist now cover **109 UI entries**: 75 generated Next.js page routes (33 Web, 25 Educational Admin and 17 People Operations/HRMS) plus 34 Android destinations. The workflow scenario register and runtime execution tracker each contain 82 rows after adding notification, institution-operations, payout-statement and course-access scenarios. Shared and route-specific component traceability is maintained in the [route/component audit register](../ui-ux-audit/route-component-audit-register.csv) and [component-instance register](../ui-ux-audit/component-instance-audit-register.csv); the [audit plan](../ui-ux-audit/comprehensive-route-component-audit-plan.md), [findings register](../ui-ux-audit/findings-register.csv), [route-specific review](../ui-ux-audit/route-specific-source-review.md) and [shared-shell review](../ui-ux-audit/shared-shell-source-review.md) define follow-up work.
+
+These counts represent source inventory and scenario tracking, **not runtime pass results**. Browser/device walkthroughs and component-by-component responsiveness, theme, language, accessibility and workflow verification remain open until evidence is recorded against the exact tested commit.

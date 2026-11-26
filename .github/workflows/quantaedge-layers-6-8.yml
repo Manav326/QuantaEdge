@@ -41,12 +41,12 @@ on:
       benchmark_models:
         description: "Comma-separated local Ollama models to benchmark"
         type: string
-        default: "qwen2.5:1.5b,qwen2.5:3b"
+        default: "qwen3.5:2b,qwen3.5:4b"
         required: true
       generation_model:
         description: "Model for experimental draft generation; not a production selection"
         type: string
-        default: "qwen2.5:1.5b"
+        default: "qwen3.5:4b"
         required: true
       max_model_calls:
         description: "Maximum model calls for this resumable run (1-20)"
@@ -104,7 +104,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: qe-layers-6-8-${{ inputs.class_no || '6' }}-${{ inputs.source_book_id || 'validation' }}-${{ ((inputs.mode == 'benchmark' || inputs.mode == 'refresh_benchmark') && 'benchmark') || 'generation' }}
+  group: qe-layers-6-8-${{ inputs.class_no || '6' }}-${{ inputs.source_book_id || 'ncert-c6-english-fecu1' }}-${{ ((inputs.mode == 'benchmark' || inputs.mode == 'refresh_benchmark' || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[benchmark-l6-l8]'))) && 'benchmark') || 'generation' }}
   cancel-in-progress: false
 
 jobs:
@@ -129,6 +129,72 @@ jobs:
           python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
       - name: Validate current canonical lesson store and database-facing IDs
         run: python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
+
+  execute_marked_benchmark:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message || '', '[benchmark-l6-l8]')
+    name: Benchmark current local models against the v8 lesson contract
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main with benchmark checkpoint write permission
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Preflight fixed Class 6 English Curiosity source and Layer 5 evidence
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py preflight \
+            --repo-root "$GITHUB_WORKSPACE" --class-no 6 \
+            --source-book-id ncert-c6-english-fecu1
+      - name: Start loopback-only Ollama for the marked benchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull ollama/ollama:latest
+          docker volume create quantaedge-layers-6-8-models >/dev/null
+          docker run -d --name quantaedge-layers-6-8-ollama \
+            -p 127.0.0.1:11434:11434 \
+            -v quantaedge-layers-6-8-models:/root/.ollama \
+            ollama/ollama:latest
+          ready=false
+          for attempt in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then ready=true; break; fi
+            sleep 2
+          done
+          [[ "$ready" == true ]] || { docker logs quantaedge-layers-6-8-ollama; exit 1; }
+      - name: Pull the two current candidate models
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker exec quantaedge-layers-6-8-ollama ollama pull qwen3.5:2b
+          docker exec quantaedge-layers-6-8-ollama ollama pull qwen3.5:4b
+      - name: Benchmark identical source excerpts with the current prompt and contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py benchmark \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --source-book-id ncert-c6-english-fecu1 \
+            --endpoint http://127.0.0.1:11434 \
+            --models "qwen3.5:2b,qwen3.5:4b" \
+            --sample-segments 2 --request-timeout 300 \
+            --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --commit-checkpoints
+      - name: Preserve benchmark evidence and stop local Ollama
+        if: always()
+        shell: bash
+        run: |
+          docker logs --tail 80 quantaedge-layers-6-8-ollama 2>/dev/null || true
+          docker rm -f quantaedge-layers-6-8-ollama >/dev/null 2>&1 || true
 
   execute:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'

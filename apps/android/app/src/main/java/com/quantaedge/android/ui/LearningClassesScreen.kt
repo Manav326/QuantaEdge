@@ -166,15 +166,11 @@ fun LearningClassesScreen(
         }
 
         if (busy && ((tab == "LIVE" && liveItems.isEmpty()) || (tab == "RECORDED" && recordedItems.isEmpty()))) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(9.dp),
-                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-            ) {
-                androidx.compose.material3.CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
-                Text(t("Loading classes and recordings…", "Classes और recordings लोड हो रही हैं…"),
-                    style = MaterialTheme.typography.bodySmall)
-            }
+            CourseListSkeleton(
+                modifier = Modifier.padding(vertical = 10.dp),
+                rows = 2,
+                loadingDescription = if (language == "hi") "Classes और recordings लोड हो रही हैं" else "Loading classes and recordings",
+            )
         }
         if (error.isNotBlank()) {
             Card(modifier = Modifier.fillMaxWidth()) {

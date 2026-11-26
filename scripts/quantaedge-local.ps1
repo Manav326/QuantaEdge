@@ -68,11 +68,23 @@ function Test-HostPortAvailable {
   }
 }
 
-$script:apiPort = "8080"
-$env:API_PORT = $script:apiPort
-$webPort = if ([string]::IsNullOrWhiteSpace($env:WEB_PORT)) { "3000" } else { $env:WEB_PORT }
+# Dedicated host ports keep Learning isolated from SmartPrint, Lucky Bajaj,
+# and the other local applications sharing this Windows Docker host.
+# Container listener ports remain 8080 (API) and 3000 (web surfaces).
+$script:apiPort = if ([string]::IsNullOrWhiteSpace($env:API_PORT)) { "18082" } else { $env:API_PORT }
+$webPort = if ([string]::IsNullOrWhiteSpace($env:WEB_PORT)) { "13004" } else { $env:WEB_PORT }
 $adminPort = if ([string]::IsNullOrWhiteSpace($env:ADMIN_PORT)) { "3001" } else { $env:ADMIN_PORT }
 $peoplePort = if ([string]::IsNullOrWhiteSpace($env:PEOPLE_PORT)) { "3002" } else { $env:PEOPLE_PORT }
+
+# Pin Compose interpolation to the exact values shown by this launcher.
+$env:API_PORT = [string]$script:apiPort
+$env:WEB_PORT = [string]$webPort
+$env:ADMIN_PORT = [string]$adminPort
+$env:PEOPLE_PORT = [string]$peoplePort
+$env:API_BIND_ADDRESS = if ([string]::IsNullOrWhiteSpace($env:API_BIND_ADDRESS)) { "127.0.0.1" } else { $env:API_BIND_ADDRESS }
+$env:WEB_BIND_ADDRESS = if ([string]::IsNullOrWhiteSpace($env:WEB_BIND_ADDRESS)) { "127.0.0.1" } else { $env:WEB_BIND_ADDRESS }
+$env:ADMIN_BIND_ADDRESS = if ([string]::IsNullOrWhiteSpace($env:ADMIN_BIND_ADDRESS)) { "127.0.0.1" } else { $env:ADMIN_BIND_ADDRESS }
+$env:PEOPLE_BIND_ADDRESS = if ([string]::IsNullOrWhiteSpace($env:PEOPLE_BIND_ADDRESS)) { "127.0.0.1" } else { $env:PEOPLE_BIND_ADDRESS }
 
 function Ensure-ApiPortAvailable {
   $preferredApiPort = 0
@@ -96,7 +108,7 @@ function Ensure-ApiPortAvailable {
       $portsJson = & docker inspect --format '{{json .NetworkSettings.Ports}}' $existingApiId 2>$null
       if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace(($portsJson -join ""))) {
         $ports = (($portsJson -join "`n") | ConvertFrom-Json)
-        $apiBindingsProperty = $ports.PSObject.Properties["$preferredApiPort/tcp"]
+        $apiBindingsProperty = $ports.PSObject.Properties["8080/tcp"]
         if ($null -ne $apiBindingsProperty -and $null -ne $apiBindingsProperty.Value) {
           $apiBindings = @($apiBindingsProperty.Value)
           if ($apiBindings.Count -gt 0) {
@@ -139,6 +151,13 @@ $script:ComposeFiles = if ($BuildLocal) {
   @("-f", "docker-compose.yml")
 } else {
   @("-f", "docker-compose.yml", "-f", "docker-compose.ghcr.yml")
+}
+
+if ($Action -in @("up", "ai", "rebuild", "clean-build", "reset")) {
+  & docker network inspect cloudflare-edge *> $null
+  if ($LASTEXITCODE -ne 0) {
+    throw "The shared Docker network 'cloudflare-edge' is missing. Start the central connector from QuantaEdge-Production with .\scripts\local-ingress.ps1 up."
+  }
 }
 
 function Invoke-Compose {

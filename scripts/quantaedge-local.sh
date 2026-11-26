@@ -70,6 +70,15 @@ if [[ "$BUILD_LOCAL" != true ]]; then
   COMPOSE+=(-f docker-compose.ghcr.yml)
 fi
 
+case "$ACTION" in
+  up|ai|rebuild|clean-build|reset)
+    docker network inspect cloudflare-edge >/dev/null 2>&1 || {
+      echo "The shared Docker network 'cloudflare-edge' is missing. Start the central connector from QuantaEdge-Production with scripts/local-ingress.ps1 up." >&2
+      exit 1
+    }
+    ;;
+esac
+
 compose() {
   "${COMPOSE[@]}" "$@"
 }

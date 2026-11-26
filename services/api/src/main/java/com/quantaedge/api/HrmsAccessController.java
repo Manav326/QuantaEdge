@@ -333,15 +333,27 @@ public class HrmsAccessController {
   }
 
   private List<String> assignedPermissions(long staffId) {
+    // This screen edits only the HRMS workforce/self-service permission namespace.
+    // Keep platform, finance, notification and other specialist grants outside this picker.
     return jdbc.queryForList("""
         select permission_key from staff_permission_grant
         where staff_id=? and workspace_key='HRMS'
+          and (permission_key like 'HR\\_%' escape '\\'
+               or permission_key='HR_SELF_SERVICE_VIEW')
         order by permission_key
         """, String.class, staffId);
   }
 
   private void replaceCustomPermissions(long staffId, List<String> permissions, Long grantedBy) {
-    jdbc.update("delete from staff_permission_grant where staff_id=? and workspace_key='HRMS'", staffId);
+    // Replace only keys owned by this picker. Deleting every HRMS grant here used to
+    // erase specialist grants (for example finance/payout and platform-owner access)
+    // whenever someone edited an employee's ordinary HRMS roles.
+    jdbc.update("""
+        delete from staff_permission_grant
+        where staff_id=? and workspace_key='HRMS'
+          and (permission_key like 'HR\\_%' escape '\\'
+               or permission_key='HR_SELF_SERVICE_VIEW')
+        """, staffId);
     for (String permission : permissions) {
       jdbc.update("""
           insert into staff_permission_grant(staff_id,workspace_key,permission_key,granted_by_staff_id)

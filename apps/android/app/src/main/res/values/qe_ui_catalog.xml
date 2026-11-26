@@ -788,6 +788,7 @@
     <string name="qe_ui_0b533fe7956842ac" formatted="false">Fill in the blank</string>
     <string name="qe_ui_99f25263dc609a99" formatted="false">Filter questions by review status</string>
     <string name="qe_ui_963307a85cb68594" formatted="false">Filter textbook assignments by subject</string>
+    <string name="qe_ui_785fe365de2b07fb" formatted="false">Finance and payouts</string>
     <string name="qe_ui_a7167d0c37eab941" formatted="false">Find a chapter or micro-topic</string>
     <string name="qe_ui_5facc17a93d99cbd" formatted="false">Find a chapter, concept or lesson…</string>
     <string name="qe_ui_8be37e195d472144" formatted="false">Find a course in Marketplace. After enrolment is confirmed, your lessons, practice, tests and progress appear here.</string>
@@ -923,6 +924,7 @@
     <string name="qe_ui_a4bf5f68510d2e7a" formatted="false">Institution management, learner reports, the roster, course releases and source approval are now handled in the Education Admin workspace. The learner website is reserved for finding and consuming learning content.</string>
     <string name="qe_ui_d1897304645be73d" formatted="false">Institution notifications have moved to Admin</string>
     <string name="qe_ui_8685b7e8091524d2" formatted="false">Institutions &amp; enrollments</string>
+    <string name="qe_ui_fb0f9f8197c4acae" formatted="false">Institutions and course management</string>
     <string name="qe_ui_ad6734a0953a05ae" formatted="false">Invalid certificate ID.</string>
     <string name="qe_ui_8c999050eebfc10b" formatted="false">Invalid subject.</string>
     <string name="qe_ui_83dd70c839b26232" formatted="false">Invalid translation JSON.</string>
@@ -1479,7 +1481,7 @@
     <string name="qe_ui_9f36a2c2cfaee532" formatted="false">Payslips are generated from approved payroll runs and stored as immutable, SHA-256-checksummed snapshots.</string>
     <string name="qe_ui_19c4e83b27f638a6" formatted="false">Pending assignment proposal amended; it still requires approval.</string>
     <string name="qe_ui_7db20897053bb278" formatted="false">People</string>
-    <string name="qe_ui_40199f6082ed3b77" formatted="false">People and organization</string>
+    <string name="qe_ui_75c6dbf05d0b57f8" formatted="false">People and organisation</string>
     <string name="qe_ui_bba86d33faae1c4e" formatted="false">People, organised.</string>
     <string name="qe_ui_d9c32278863c9d17" formatted="false">Period &amp; dates</string>
     <string name="qe_ui_cfd81f182d1e5e97" formatted="false">Permission-based access</string>
