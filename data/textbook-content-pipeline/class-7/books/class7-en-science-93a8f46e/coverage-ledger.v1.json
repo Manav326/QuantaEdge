@@ -21548,11 +21548,11 @@
         ],
         "concepts": [
           "exploration",
+          "science",
           "curiosity",
           "questions",
           "unknown",
           "process",
-          "science",
           "environment",
           "responsibility",
           "human activities",
@@ -21562,12 +21562,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the concepts discussed."
+          "The text does not provide specific examples or questions for exploration."
         ]
       },
       "chapter_id": null,
