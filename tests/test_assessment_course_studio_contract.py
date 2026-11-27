@@ -240,8 +240,14 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("previewFingerprintMismatch", hrms_ui)
         self.assertIn("reviewedContentFingerprint", review_controller)
         self.assertIn("savedFingerprint.equals(reviewedFingerprint)", review_controller)
+        self.assertIn("if(approved && !Boolean.TRUE.equals(jdbc.queryForObject(", review_controller)
+        self.assertIn("trim().toLowerCase(Locale.ROOT)", review_controller)
+        self.assertIn("if(approved) {", review_controller)
         self.assertIn("course_release_fingerprint_current(?,?,?)", review_controller)
         self.assertIn("if(approved && \"ASSESSMENT_ONLY\".equals(courseDeliveryMode(programId)))", review_controller)
+        review_method = review_controller[review_controller.index('@PostMapping("/course-releases/{releaseId}/quality-review")'):review_controller.index("  private String courseDeliveryMode", review_controller.index('@PostMapping("/course-releases/{releaseId}/quality-review")'))]
+        self.assertLess(review_method.index("if(approved && !Boolean.TRUE.equals(jdbc.queryForObject("), review_method.index("if(approved) {"))
+        self.assertIn('String next=approved?"QUALITY_APPROVED":"REJECTED";', review_method)
 
     def test_learner_catalogue_exposes_renderer_contract(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/StudentProgramController.java").read_text(encoding="utf-8")
