@@ -745,14 +745,16 @@ public class PlatformInstitutionController {
     if(!"IN_QUALITY_REVIEW".equals(String.valueOf(release.get("release_state"))))
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Only a release awaiting content-quality review can be reviewed.");
     long programId=((Number)release.get("program_id")).longValue();
-    String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
-    if(!Boolean.TRUE.equals(jdbc.queryForObject(
+    String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim().toLowerCase(Locale.ROOT);
+    // A stale submission must remain rejectable: rejection is the recovery path that returns
+    // changed content to its source institution. Only approval requires a current fingerprint.
+    if(approved && !Boolean.TRUE.equals(jdbc.queryForObject(
         "select course_release_fingerprint_current(?,?,?)",Boolean.class,
         programId,savedFingerprint,release.get("updated_at"))))
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Course content changed after submission. The origin institution must submit a fresh release.");
     if(approved) {
       String reviewedFingerprint=body.get("reviewedContentFingerprint")==null
-          ?"":String.valueOf(body.get("reviewedContentFingerprint")).trim();
+          ?"":String.valueOf(body.get("reviewedContentFingerprint")).trim().toLowerCase(Locale.ROOT);
       if(!savedFingerprint.equals(reviewedFingerprint))
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "HRMS must inspect the exact submitted release content and confirm its fingerprint before quality approval.");
