@@ -746,11 +746,11 @@ public class PlatformInstitutionController {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Only a release awaiting content-quality review can be reviewed.");
     long programId=((Number)release.get("program_id")).longValue();
     String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
-    if(!Boolean.TRUE.equals(jdbc.queryForObject(
-        "select course_release_fingerprint_current(?,?,?)",Boolean.class,
-        programId,savedFingerprint,release.get("updated_at"))))
-      throw new ResponseStatusException(HttpStatus.CONFLICT,"Course content changed after submission. The origin institution must submit a fresh release.");
     if(approved) {
+      if(!Boolean.TRUE.equals(jdbc.queryForObject(
+          "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+          programId,savedFingerprint,release.get("updated_at"))))
+        throw new ResponseStatusException(HttpStatus.CONFLICT,"Course content changed after submission. The origin institution must submit a fresh release.");
       String reviewedFingerprint=body.get("reviewedContentFingerprint")==null
           ?"":String.valueOf(body.get("reviewedContentFingerprint")).trim();
       if(!savedFingerprint.equals(reviewedFingerprint))
