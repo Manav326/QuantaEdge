@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "0d2db9554a82f7bd599c5483",
-      "5b3a4e785ff36dd6c859a212",
-      "d1dc814ab60d6579d95a9f91"
+      "e7750454728ba0f58f72fc96",
+      "6ae7f0d5c898ea6b0045802d",
+      "65dd8eeb76b3d99d5e428ab4"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3406,
     "assets_remaining": 4082,
     "assets_completion_percent": 45.5,
-    "assets_failed": 35,
+    "assets_failed": 36,
     "assets_skipped_from_checkpoint": 3406,
     "batch_limit": 5,
     "publication_allowed": false
@@ -10027,7 +10027,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "46046769065",
-      "checkpointed_at": "2026-11-27T19:36:16Z"
+      "checkpointed_at": "2026-11-27T19:44:40Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13531,7 +13531,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "46046769065",
-      "checkpointed_at": "2026-11-27T19:36:47Z"
+      "checkpointed_at": "2026-11-27T19:45:11Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -127825,7 +127825,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46032760963",
+      "run_id": "46046769065",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -127901,7 +127901,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46032760963",
+      "run_id": "46046769065",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -128015,6 +128015,23 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "46032760963",
       "checkpointed_at": "2026-11-27T18:00:10Z"
+    },
+    {
+      "asset_id": "65dd8eeb76b3d99d5e428ab4",
+      "asset_sha256": "476703d08a298b6e32c7d8ea526e878fefd8e66cb77d76ce3bc369d7f25eb599",
+      "page_text_context_sha256": "d3e3cadcb80c04c6fe3e663dc091ca829a182d51d3566fcdd86ea89edf667e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/476703d08a298b6e32c7d8ea526e878fefd8e66cb77d76ce3bc369d7f25eb599.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "46046769065",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
