@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4dc87a56e5f91f1073c9f606d52a3b040b67b2342da762253b10c8d1beeb671f",
+  "raw_analysis_sha256": "b1f096bff73a1b46f077b77af47037680accab75f885fa1a7bdbba8cd2e5f015",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15070,11 +15070,11 @@
         ],
         "concepts": [
           "exploration",
+          "science",
           "curiosity",
           "questions",
           "unknown",
           "process",
-          "science",
           "environment",
           "responsibility",
           "human activities",
@@ -15084,12 +15084,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the concepts discussed."
+          "The text does not provide specific examples or questions for exploration."
         ]
       },
       "vision_input": {
@@ -15106,8 +15106,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45976831433",
-      "checkpointed_at": "2026-11-27T10:57:07Z",
+      "run_id": "45987977714",
+      "checkpointed_at": "2026-11-27T11:15:25Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
@@ -15118,11 +15118,11 @@
         ],
         "concepts": [
           "exploration",
+          "science",
           "curiosity",
           "questions",
           "unknown",
           "process",
-          "science",
           "environment",
           "responsibility",
           "human activities",
@@ -15132,12 +15132,12 @@
           "sustainability",
           "properties of materials",
           "scientific ideas",
-          "discoveries",
-          "questions"
+          "discovery",
+          "interconnectedness"
         ],
         "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the concepts discussed."
+          "The text does not provide specific examples or questions for exploration."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -20303,8 +20303,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45976831433",
-      "checkpointed_at": "2026-11-27T10:57:30Z",
+      "run_id": "45987977714",
+      "checkpointed_at": "2026-11-27T11:16:18Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
         "visual_type": "page_with_multiple_visuals",
@@ -78997,7 +78997,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45976831433",
+      "run_id": "45987977714",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115281,7 +115281,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45976831433",
+      "run_id": "45987977714",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -124733,7 +124733,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "45976831433",
+      "run_id": "45987977714",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
