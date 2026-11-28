@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f96a57619518404db00e68cb3861e4ab123db80485ee6cc8d246bf8d9d5b82a1",
+  "raw_analysis_sha256": "6c7835481e91af0e8e3fb40c6eec75a9c1c258591d599d6e00c9f7fba766e03e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1805,13 +1805,16 @@
           "curiosity",
           "teamwork",
           "inclusive education",
-          "safety precautions",
-          "ever heard of",
-          "step further"
+          "safety",
+          "peer interactions",
+          "assessing understanding",
+          "analyzing concepts",
+          "Ever heard of",
+          "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
         "limitations": [
-          "The page does not provide specific examples or activities for implementing the concepts discussed."
+          "The page does not provide specific examples or exercises for implementing the concepts discussed."
         ]
       },
       "vision_input": {
@@ -1828,8 +1831,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46103287282",
-      "checkpointed_at": "2026-11-28T03:47:41Z",
+      "run_id": "46105684877",
+      "checkpointed_at": "2026-11-28T04:11:41Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their educational benefits.",
         "visual_type": "page_with_multiple_visuals",
@@ -1846,13 +1849,16 @@
           "curiosity",
           "teamwork",
           "inclusive education",
-          "safety precautions",
-          "ever heard of",
-          "step further"
+          "safety",
+          "peer interactions",
+          "assessing understanding",
+          "analyzing concepts",
+          "Ever heard of",
+          "A step further"
         ],
-        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
+        "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in teaching science.",
         "limitations": [
-          "The page does not provide specific examples or activities for implementing the concepts discussed."
+          "The page does not provide specific examples or exercises for implementing the concepts discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29422,28 +29428,25 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgment page for a textbook publication.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
-          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
-          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book.",
-          "Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saed, and Manoj Kumar, DTP Operators (Contractual); and Rajat Subhra Roy, Keshav Kumar, and Jatinder Kumar, Proofreaders (Contractual), Publication Division, NCERT, New Delhi, for "
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript. The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saed, and Manoj Kumar, DTP Operators (Contractual); "
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook",
-          "Contributors",
-          "Roles",
-          "Support",
-          "APC office",
-          "Administrative staff",
-          "Publication process"
+          "Textbook publication",
+          "Freelance Language Editor",
+          "DTP Cell",
+          "Publication Division",
+          "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
+        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "The page does not contain any visual elements, only text."
+          "No specific limitations are mentioned in the visible text.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "vision_input": {
@@ -29460,31 +29463,28 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46103287282",
-      "checkpointed_at": "2026-11-28T03:48:11Z",
+      "run_id": "46105684877",
+      "checkpointed_at": "2026-11-28T04:13:08Z",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgment page for a textbook publication.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
-          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
-          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book.",
-          "Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saed, and Manoj Kumar, DTP Operators (Contractual); and Rajat Subhra Roy, Keshav Kumar, and Jatinder Kumar, Proofreaders (Contractual), Publication Division, NCERT, New Delhi, for "
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript. The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saed, and Manoj Kumar, DTP Operators (Contractual); "
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook",
-          "Contributors",
-          "Roles",
-          "Support",
-          "APC office",
-          "Administrative staff",
-          "Publication process"
+          "Textbook publication",
+          "Freelance Language Editor",
+          "DTP Cell",
+          "Publication Division",
+          "Contractual Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
+        "context_relation": "Acknowledgment and appreciation for various contributors involved in the textbook publication process.",
         "limitations": [
-          "The page does not contain any visual elements, only text."
+          "No specific limitations are mentioned in the visible text.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -32513,7 +32513,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46103287282",
+      "run_id": "46105684877",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -38357,7 +38357,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38383,15 +38383,11 @@
           "environmental problems",
           "microorganisms in the kitchen",
           "yeast",
-          "flour",
-          "bowl",
-          "dough",
-          "environmental protection"
+          "dough"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The page does not provide specific examples of microorganisms used in biogas production or their specific roles in the process.",
-          "The page does not provide specific examples of microorganisms used in environmental protection or their specific roles in the process."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "vision_input": {
@@ -38408,10 +38404,10 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46103287282",
-      "checkpointed_at": "2026-11-28T03:49:00Z",
+      "run_id": "46105684877",
+      "checkpointed_at": "2026-11-28T04:16:34Z",
       "effective_analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their impact on the environment.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -38437,15 +38433,11 @@
           "environmental problems",
           "microorganisms in the kitchen",
           "yeast",
-          "flour",
-          "bowl",
-          "dough",
-          "environmental protection"
+          "dough"
         ],
-        "context_relation": "The page discusses the role of microorganisms in biogas production and their impact on the environment, as well as how microorganisms can be used to solve environmental problems.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
         "limitations": [
-          "The page does not provide specific examples of microorganisms used in biogas production or their specific roles in the process.",
-          "The page does not provide specific examples of microorganisms used in environmental protection or their specific roles in the process."
+          "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -45327,7 +45319,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46103287282",
+      "run_id": "46105684877",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
