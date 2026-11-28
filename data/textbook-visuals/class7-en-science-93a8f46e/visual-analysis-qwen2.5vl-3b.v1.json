@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "19182aa83463f523d90ed77b",
-      "617a7eb962b48f65cc1c1ca8",
-      "4b1298747dc1ec978a226ae5"
+      "4b1298747dc1ec978a226ae5",
+      "5c16577a15e78e04e26b60ff",
+      "3b984cadc98f93c6d948c2a1"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 3406,
@@ -9981,7 +9981,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its exploration of deeper questions.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -9993,7 +9993,6 @@
           "science",
           "curiosity",
           "questions",
-          "unknown",
           "process",
           "environment",
           "responsibility",
@@ -10007,7 +10006,7 @@
           "discovery",
           "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "exploration and understanding of science",
         "limitations": [
           "The text does not provide specific examples or questions for exploration."
         ]
@@ -10027,7 +10026,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "46119745120",
-      "checkpointed_at": "2026-11-28T07:16:55Z"
+      "checkpointed_at": "2026-11-28T07:28:55Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13493,7 +13492,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "visual_summary": "Page from a textbook discussing the understanding of the universe through light and shadows, and the importance of understanding Earth's rotation and the Moon's orbit for phenomena like eclipses and day-night cycles.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -13503,16 +13502,17 @@
           "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
-          "light and its effects",
+          "light and shadows",
           "eclipses",
+          "day and night",
           "Earth's rotation",
           "Moon's orbit",
-          "day and night",
+          "day-night cycle",
           "scientific thinking"
         ],
-        "context_relation": "The page discusses the understanding of light and its effects on the Earth and Moon, including eclipses and the Earth's rotation.",
+        "context_relation": "The page discusses the importance of understanding the Earth's rotation and the Moon's orbit to comprehend phenomena like eclipses and day-night cycles, and encourages readers to think like scientists.",
         "limitations": [
-          "The page does not provide specific examples or experiments to illustrate the concepts."
+          "The page does not provide specific examples or experiments to illustrate the concepts discussed."
         ]
       },
       "vision_input": {
@@ -13530,7 +13530,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "46119745120",
-      "checkpointed_at": "2026-11-28T07:18:59Z"
+      "checkpointed_at": "2026-11-28T07:29:38Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -79297,7 +79297,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
+        "visual_summary": "A page from a textbook discussing the properties of coal, sulfur, wood, and iron, and their impact on the progress of civilization.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A piece of coal or a lump of sulfur does not show this behaviour. They break into pieces and are said to be brittle. On the other hand, wood neither gets flattened into a sheet nor breaks into pieces. Therefore, wood is neither malleable nor brittle.",
@@ -79324,10 +79324,9 @@
           "agricultural tools",
           "musical instruments"
         ],
-        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of India's civilization.",
+        "context_relation": "The page discusses the properties of different materials and their impact on the progress of civilization, specifically focusing on the role of iron in the development of civilization.",
         "limitations": [
-          "The page does not provide specific examples or evidence for the claims made about the impact of iron on the progress of civilization.",
-          "The page does not provide a detailed explanation of the properties of ductility or the reasons why copper was discovered earlier than iron."
+          "The text does not provide specific examples or evidence for the claims made."
         ]
       },
       "vision_input": {
@@ -79345,7 +79344,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "46119745120",
-      "checkpointed_at": "2026-11-28T07:27:49Z"
+      "checkpointed_at": "2026-11-28T07:30:35Z"
     },
     {
       "asset_id": "42e2bad6ce513928f9ecea9b",
@@ -115827,7 +115826,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46111536692",
+      "run_id": "46119745120",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -122434,7 +122433,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46111536692",
+      "run_id": "46119745120",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
