@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "fc310253031bd2210d27a7e7",
       "414a0224c90f14c01c7da9e7",
-      "aa8a149fa698d13f05cfdb3e"
+      "f492c50e9c7d7ef8d140ae06",
+      "e03a02c3fc37627f873ab044"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1425,
@@ -1189,7 +1189,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A page from a textbook discussing open-ended questions and their educational benefits.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
@@ -1208,12 +1208,11 @@
           "assessing understanding",
           "analyzing concepts",
           "Ever heard of",
-          "step further"
+          "A step further"
         ],
         "context_relation": "The page discusses the educational benefits of open-ended questions and how they can be used in the classroom to promote critical thinking and curiosity.",
         "limitations": [
-          "The page does not provide specific examples or activities for implementing the concepts discussed.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not provide specific examples or activities for implementing the concepts discussed."
         ]
       },
       "vision_input": {
@@ -1231,7 +1230,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "46146362913",
-      "checkpointed_at": "2026-11-28T12:56:27Z"
+      "checkpointed_at": "2026-11-28T13:07:36Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20211,7 +20210,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook project, listing contributors and their roles.",
+        "visual_summary": "Acknowledgment page for a textbook publication, listing contributors and their roles.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -20222,20 +20221,17 @@
         ],
         "concepts": [
           "Acknowledgment",
-          "Textbook",
+          "Textbook Publication",
           "Contributors",
           "Roles",
           "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
           "DTP Cell",
-          "Contractual",
+          "Publication Division",
           "Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for the contributions of various individuals and departments involved in the publication of a textbook.",
+        "context_relation": "The page is a part of a textbook publication acknowledgment section.",
         "limitations": [
-          "The page does not provide specific details about the textbook or its content.",
+          "The page does not contain any visual elements.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20254,7 +20250,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "46146362913",
-      "checkpointed_at": "2026-11-28T12:58:35Z"
+      "checkpointed_at": "2026-11-28T13:08:14Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25911,7 +25907,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their potential applications in various fields.",
+        "visual_summary": "Page from a science textbook discussing the role of microorganisms in biogas production and their applications in various fields.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Now, think what would have happened if microorganisms did not exist on Earth?",
@@ -25935,9 +25931,11 @@
           "biogas",
           "patent",
           "environmental problems",
-          "microorganisms in the kitchen"
+          "microorganisms in the kitchen",
+          "yeast",
+          "dough"
         ],
-        "context_relation": "The page discusses the importance of microorganisms in biogas production and their potential applications in various fields, including environmental protection and food preparation.",
+        "context_relation": "The page discusses the role of microorganisms in biogas production and their applications in various fields, including their potential use in solving environmental problems and in the kitchen.",
         "limitations": [
           "The page does not provide specific examples or details about the activities performed in the kitchen."
         ]
@@ -25957,7 +25955,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "46146362913",
-      "checkpointed_at": "2026-11-28T13:03:25Z"
+      "checkpointed_at": "2026-11-28T13:09:13Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -38713,8 +38711,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46143257509",
-      "checkpointed_at": "2026-11-28T12:33:39Z"
+      "run_id": "46146362913",
+      "checkpointed_at": "2026-11-28T13:11:19Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40443,7 +40441,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "46143257509",
+      "run_id": "46146362913",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
